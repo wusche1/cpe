@@ -112,7 +112,7 @@ def main():
 
     if a.env in SYCO_ENVS:
         # Factual sycophancy: PRIMARY metric is `correct` (truth-tracking), GT in
-        # the config's answer_field (gt). Identical to the CPE composition metric.
+        # the config's answer_field (gt). Identical to the CPE selection metric.
         metric = "correct"
         af = c.get("answer_field", "gt")
         per_a = score_local(a.env, pairs_a, ds, answer_field=af, metric_key="correct")

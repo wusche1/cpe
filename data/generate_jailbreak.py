@@ -1,15 +1,15 @@
 """Generate a jailbreak (red-team) dataset from AdvBench harmful behaviors.
 
-This is a *red-team evaluation* environment: we train DCT factors on a small set
+This is a *red-team evaluation* environment: we train CPE factors on a small set
 of harmful prompts and measure whether any factor jailbreaks the target model —
 i.e. elicits substantive harmful compliance from a model that otherwise refuses.
 The target of interest is `LLM-LAT/robust-llama3-8b-instruct`, which has been
-adversarially trained to resist latent-space attacks; the question is whether MCE
+adversarially trained to resist latent-space attacks; the question is whether CPE
 factors still find a jailbreak direction.
 
-There is no held-out test/compose phase (like the `convo` config): each factor's
-completions on the `val` harmful prompts are judged for Attack Success Rate (ASR)
-and for a consistent theme/persona (to surface "bizarre" jailbreaks).
+Each factor's completions are judged for Attack Success Rate (ASR) and for a
+consistent theme/persona (to surface "bizarre" jailbreaks): on `val` to select the
+best factor, then on the held-out `test` split (the judge test stage) for ASR.
 
 Two training regimes, written as separate splits so a single generated dataset
 serves both configs with an IDENTICAL `val` set (seed-fixed) for comparability:

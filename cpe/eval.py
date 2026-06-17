@@ -1,8 +1,8 @@
 """Test-stage helpers: materialize the validation-selected CPE factor as a single
 PEFT adapter, and score baseline-vs-adapter inference on a held-out split.
 
-The pipeline only ever evaluates the *top-1* validation-ranked factor, so there is
-no multi-factor composition here — `export_factor_adapter` writes one rank-1 adapter.
+The pipeline only ever evaluates the *top-1* validation-ranked factor, so
+`export_factor_adapter` writes exactly one rank-1 adapter.
 """
 
 import os
@@ -10,10 +10,7 @@ import json
 from collections import defaultdict
 from typing import Any, Dict, Optional
 
-from lora.peft_export import (
-    load_lora_dct_results,
-    export_concatenated_factors_to_peft_dir,
-)
+from lora.peft_export import load_lora_dct_results, export_factor_to_peft_dir
 from cpe.score import get_scorer, _parallel_compare, _aggregate_field
 
 
@@ -33,20 +30,14 @@ def select_best_factor(scoring_results: Dict[str, Any], selection_metric: str) -
 def export_factor_adapter(
     training_dir: str,
     factor_idx: int,
-    output_dir: str,
+    adapters_dir: str,
     model_name: str,
     prefix: str = "lora_dct",
 ) -> str:
-    """Materialize a single trained CPE factor as a PEFT adapter directory."""
+    """Materialize a single trained CPE factor as a PEFT adapter under
+    `adapters_dir/factor_<idx>/`; returns that path."""
     results = load_lora_dct_results(training_dir, prefix)
-    export_concatenated_factors_to_peft_dir(
-        factor_indices=[factor_idx],
-        results=results,
-        output_dir=output_dir,
-        base_model_name=model_name,
-        composition_mode="normalize",
-    )
-    return output_dir
+    return export_factor_to_peft_dir(factor_idx, results, adapters_dir, base_model_name=model_name)
 
 
 def score_inference_by_adapter(

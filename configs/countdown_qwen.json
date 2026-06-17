@@ -30,13 +30,6 @@
   "gpu_memory_utilization": 0.85,
   "max_num_seqs": 64,
   "num_workers": 8,
-  "topk_values": [
-    1,
-    3,
-    5,
-    10,
-    32
-  ],
   "enable_thinking": false,
   "use_wandb": false,
   "wandb_project": "mce",

@@ -106,7 +106,6 @@ def compute_factor_ranking(
     inference_results: Dict[str, Any],
     ground_truths: Dict[int, str],
     task: str,
-    topk_values: Optional[List[int]] = None,
 ) -> Tuple[List[int], Dict[str, Any]]:
     """
     Score per-factor, rank by primary metric descending.
@@ -114,8 +113,7 @@ def compute_factor_ranking(
     Args:
         inference_results: Loaded inference JSON with 'results' key.
         ground_truths: {prompt_idx: answer_str} mapping.
-        task: Scorer task key ('arc_agi', 'boxed_answer', 'leetcode').
-        topk_values: Optional K values for pass@topK metric.
+        task: Scorer task key (e.g. 'countdown').
 
     Returns:
         (factor_ranking, scoring_dict) where factor_ranking is a list of
@@ -201,30 +199,6 @@ def compute_factor_ranking(
     factor_ranking_objs = sorted(by_factor, key=lambda x: -x[rank_field])
     factor_ranking = [f['factor_idx'] for f in factor_ranking_objs]
 
-    # Compute pass@topK (uses the primary metric of the scorer)
-    primary_key = metrics_config[0]['key']
-    primary_type = metrics_config[0]['type']
-    pass_at_topk = {}
-    if topk_values:
-        num_prompts = len(by_prompt)
-        for k in topk_values:
-            if k > len(factor_ranking):
-                continue
-            top_k_set = set(factor_ranking[:k])
-            prompts_passed = 0
-            for prompt_idx, prompt_scores in by_prompt.items():
-                for s in prompt_scores:
-                    if s['factor_idx'] not in top_k_set:
-                        continue
-                    # For bool metrics: True counts as pass. For float metrics:
-                    # treat >0.5 as pass (typical sensible default; can be
-                    # refined per-task later).
-                    val = s.get(primary_key)
-                    if val is True or (isinstance(val, (int, float)) and val > 0.5):
-                        prompts_passed += 1
-                        break
-            pass_at_topk[k] = prompts_passed / num_prompts if num_prompts > 0 else 0.0
-
     parseable = total_responses - total_parse_failures
     summary = {
         'total_responses': total_responses,
@@ -242,7 +216,6 @@ def compute_factor_ranking(
         'summary': summary,
         'by_factor': by_factor,
         'factor_ranking': factor_ranking,
-        'pass_at_topk': pass_at_topk,
         'by_prompt': dict(by_prompt),
         'metrics': metrics_config,
     }

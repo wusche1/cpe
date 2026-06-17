@@ -14,7 +14,7 @@ Usage:
 
     # Adapter dirs mode (from pre-built PEFT adapters):
     python run_inference_distributed.py \
-        --adapter_dirs ./outputs/mce_run/composition/adapters \
+        --adapter_dirs ./outputs/<run>/test/adapters \
         --dataset ./data/prompts \
         --model_name Qwen/Qwen3-8B \
         --num_workers 4

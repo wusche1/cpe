@@ -74,7 +74,6 @@ class CPEConfig:
 
     # Scoring
     scorer: str = "countdown"
-    topk_values: List[int] = field(default_factory=lambda: [1, 3, 5, 10, 32])
     # Metric (a key emitted by the scorer) used to validation-select the single
     # best factor that the test stage evaluates. For "suppress" objectives, point
     # this at the corresponding minimization metric the scorer exposes.
@@ -314,67 +313,6 @@ def stage_infer(config: CPEConfig):
                           num_samples=config.num_validation_samples)
 
 
-def _build_topk_inference_results(inference_results, factor_ranking, by_factor, by_prompt, max_k):
-    """Build a smaller inference results JSON containing only the top-K adapters.
-
-    Each response is enriched with all scoring fields from compare() and each
-    factor includes its aggregate metrics.
-    """
-    top_factors = factor_ranking[:max_k]
-    top_set = set(top_factors)
-
-    # Build (factor_idx, prompt_idx) -> score lookup from by_prompt
-    score_lookup = {}
-    for prompt_idx, scores in by_prompt.items():
-        for s in scores:
-            score_lookup[(s['factor_idx'], int(prompt_idx))] = s
-
-    # Build factor_idx -> by_factor metrics lookup
-    factor_metrics = {f['factor_idx']: f for f in by_factor}
-
-    # Build factor_idx -> responses from the original inference results
-    factor_responses = {}
-    for factor_result in inference_results['results']:
-        if factor_result['factor_idx'] in top_set:
-            factor_responses[factor_result['factor_idx']] = factor_result['responses']
-
-    # Assemble results ordered by rank
-    results = []
-    for rank, factor_idx in enumerate(top_factors):
-        metrics = factor_metrics.get(factor_idx, {})
-        responses = []
-        for resp in factor_responses.get(factor_idx, []):
-            prompt_idx = resp.get('prompt_idx')
-            score = score_lookup.get((factor_idx, prompt_idx), {})
-            entry = {
-                'prompt_idx': prompt_idx,
-                'prompt': resp.get('prompt', ''),
-                'response': resp.get('response', ''),
-            }
-            # Spread all score fields (exact_match, parse_failed, metric values, etc.)
-            for k, v in score.items():
-                if k != 'factor_idx':
-                    entry[k] = v
-            responses.append(entry)
-
-        # Spread all factor-level metric fields
-        factor_entry = {
-            'rank': rank,
-            'factor_idx': factor_idx,
-            'responses': responses,
-        }
-        for k, v in metrics.items():
-            if k not in ('factor_idx', 'num_responses'):
-                factor_entry[k] = v
-        results.append(factor_entry)
-
-    metadata = {k: v for k, v in inference_results.get('metadata', {}).items()}
-    metadata['max_k'] = max_k
-    metadata['num_factors_included'] = len(results)
-
-    return {'metadata': metadata, 'results': results}
-
-
 def _ensure_convo_baseline(config: CPEConfig):
     """Return base-model (no-adapter) completions for the convo judge, generating
     them once if missing. Set CONVO_DISABLE_BASELINE=1 to skip (absolute judging).
@@ -433,34 +371,7 @@ def _stage_score_convo(config: CPEConfig, inference_results, scoring_dir):
     print(f"Scoring results saved to {output_path}")
 
     by_factor = {f['factor_idx']: f for f in scoring_dict['by_factor']}
-    responses_by_factor = {fr['factor_idx']: fr['responses'] for fr in inference_results['results']}
 
-    # top-K inference dump: top factors by composite, with theme + completions.
-    max_k = max(config.topk_values) if config.topk_values else len(factor_ranking)
-    top_factors = factor_ranking[:max_k]
-    topk = {
-        'metadata': {**inference_results.get('metadata', {}), 'max_k': max_k,
-                     'judge_model': scoring_dict['summary'].get('judge_model')},
-        'results': [],
-    }
-    for rank, fidx in enumerate(top_factors):
-        m = by_factor.get(fidx, {})
-        topk['results'].append({
-            'rank': rank,
-            'factor_idx': fidx,
-            'theme': m.get('theme', 'NONE'),
-            'composite': m.get('composite', 0.0),
-            'consistency_frac': m.get('consistency_frac', 0.0),
-            'consistency_score': m.get('consistency_score', 0),
-            'fluency_score': m.get('fluency_score', 0),
-            'explanation': m.get('explanation', ''),
-            'responses': sorted(responses_by_factor.get(fidx, []),
-                                key=lambda r: r.get('prompt_idx', 0)),
-        })
-    topk_path = os.path.join(scoring_dir, "topk_inference_results.json")
-    with open(topk_path, 'w') as f:
-        json.dump(topk, f, indent=2)
-    print(f"Top-{max_k} inference results saved to {topk_path}")
 
     # themes.md — quick-look auto-interp label table.
     themes_path = os.path.join(scoring_dir, "themes.md")
@@ -638,7 +549,7 @@ def _stage_score_jailbreak(config: CPEConfig, inference_results, scoring_dir):
         details['baseline'] = bdet
 
     scoring_dict = {'summary': summary, 'by_factor': by_factor, 'factor_ranking': factor_ranking,
-                    'pass_at_topk': {}, 'metrics': metrics_config}
+                    'metrics': metrics_config}
     with open(os.path.join(scoring_dir, "scoring_results.json"), 'w') as f:
         json.dump(scoring_dict, f, indent=2)
     print(f"Scoring results saved to {os.path.join(scoring_dir, 'scoring_results.json')}")
@@ -648,23 +559,8 @@ def _stage_score_jailbreak(config: CPEConfig, inference_results, scoring_dir):
         json.dump({'judge_model': JUDGE_MODEL, 'by_factor': details}, f, indent=2)
     print(f"Judge reasoning saved to {os.path.join(scoring_dir, 'judge_details.json')}")
 
-    # top-K dump: completions + per-response ASR verdict + theme
+    # factor_idx -> metrics lookup (used by themes.md and the summary below)
     bf = {f['factor_idx']: f for f in by_factor}
-    max_k = max(config.topk_values) if config.topk_values else len(factor_ranking)
-    topk = {'metadata': {**inference_results.get('metadata', {}), 'judge_model': JUDGE_MODEL, 'max_k': max_k},
-            'results': []}
-    for rank, fidx in enumerate(factor_ranking[:max_k]):
-        m = bf.get(fidx, {})
-        topk['results'].append({'rank': rank, 'factor_idx': fidx,
-                                'asr': m.get('asr_rate', 0.0), 'refusal': m.get('refusal_rate', 0.0),
-                                'gibberish': m.get('gibberish_rate', 0.0),
-                                'theme': m.get('theme', 'NONE'),
-                                'consistency_frac': m.get('consistency_frac', 0.0),
-                                'fluency_score': m.get('fluency_score', 0),
-                                'theme_explanation': m.get('theme_explanation', ''),
-                                'responses': details.get(fidx, [])})
-    with open(os.path.join(scoring_dir, "topk_inference_results.json"), 'w') as f:
-        json.dump(topk, f, indent=2)
 
     # themes.md — quick-look auto-interp table of the top jailbreak factors.
     with open(os.path.join(scoring_dir, "themes.md"), 'w') as f:
@@ -806,7 +702,7 @@ def _stage_score_af(config: CPEConfig, inference_results, scoring_dir):
         {"key": "gibberish", "type": "bool", "display": "Gibberish rate"},
     ]
     scoring_dict = {"summary": summary, "by_factor": by_factor,
-                    "factor_ranking": factor_ranking, "pass_at_topk": {}, "metrics": metrics_config}
+                    "factor_ranking": factor_ranking, "metrics": metrics_config}
     with open(os.path.join(scoring_dir, "scoring_results.json"), "w") as f:
         json.dump(scoring_dict, f, indent=2)
     with open(os.path.join(scoring_dir, "judge_details.json"), "w") as f:
@@ -870,30 +766,19 @@ def stage_score(config: CPEConfig):
     # Score
     print("Computing factor ranking...")
     factor_ranking, scoring_dict = compute_factor_ranking(
-        inference_results, ground_truths, config.scorer, config.topk_values,
+        inference_results, ground_truths, config.scorer,
     )
 
     metrics_config = scoring_dict['metrics']
 
-    # Pop by_prompt before saving scoring_results (avoid bloating that file)
-    by_prompt = scoring_dict.pop('by_prompt')
+    # Drop by_prompt before saving scoring_results (avoid bloating that file)
+    scoring_dict.pop('by_prompt')
 
     # Save scoring results
     output_path = os.path.join(scoring_dir, "scoring_results.json")
     with open(output_path, 'w') as f:
         json.dump(scoring_dict, f, indent=2)
     print(f"Scoring results saved to {output_path}")
-
-    # Build and save top-K inference results
-    max_k = max(config.topk_values)
-    topk_results = _build_topk_inference_results(
-        inference_results, scoring_dict['factor_ranking'],
-        scoring_dict['by_factor'], by_prompt, max_k,
-    )
-    topk_path = os.path.join(scoring_dir, "topk_inference_results.json")
-    with open(topk_path, 'w') as f:
-        json.dump(topk_results, f, indent=2)
-    print(f"Top-{max_k} inference results saved to {topk_path}")
 
     # Print summary
     summary = scoring_dict['summary']
@@ -902,9 +787,6 @@ def stage_score(config: CPEConfig):
     for m in metrics_config:
         field = _aggregate_field(m['type'], m['key'])
         print(f"  {m['display']:20s} {summary[field]:.1%}")
-    if scoring_dict['pass_at_topk']:
-        for k, v in sorted(scoring_dict['pass_at_topk'].items(), key=lambda x: int(x[0])):
-            print(f"  pass@top{k}: {v:.1%}")
 
     # wandb logging
     if config.use_wandb:
@@ -975,9 +857,8 @@ def stage_test(config: CPEConfig):
     best_factor = select_best_factor(scoring, config.selection_metric)
     print(f"Validation-selected factor (by {config.selection_metric}): {best_factor}")
 
-    # Materialize it as a single rank-1 PEFT adapter for test inference.
-    adapter_dir = os.path.join(adapters_dir, f"factor_{best_factor}")
-    export_factor_adapter(training_dir, best_factor, adapter_dir, config.model_name)
+    # Materialize it as a single rank-1 PEFT adapter (adapters_dir/factor_<idx>/).
+    export_factor_adapter(training_dir, best_factor, adapters_dir, config.model_name)
 
     # Test inference: baseline (no adapter) + the selected factor.
     inference_output = os.path.join(test_dir, "inference_results.json")

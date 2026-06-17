@@ -4,11 +4,11 @@
 # kernels). We compile only the local GPU arch for speed (default sm_100 / B200;
 # override TORCH_CUDA_ARCH_LIST for other GPUs).
 #
-# Expects the EasySteer source (Xu et al. 2026, "EasySteer: A Unified Framework for
-# High-Performance ...") checked out at $EASYSTEER_SRC (default /tmp/EasySteer), with
-# its vllm-steer submodule. Point EASYSTEER_SRC at your checkout of the upstream repo.
+# Expects the EasySteer source (https://github.com/ZJU-REAL/EasySteer) checked out at
+# $EASYSTEER_SRC (default /tmp/EasySteer), with its vllm-steer submodule:
+#   git clone --recursive https://github.com/ZJU-REAL/EasySteer /tmp/EasySteer
 #
-# Usage: EASYSTEER_SRC=/path/to/EasySteer bash baselines/sae/build_easysteer.sh
+# Usage: EASYSTEER_SRC=/tmp/EasySteer bash baselines/sae/build_easysteer.sh
 set -e
 
 VENV="${SAE_VENV:-.venv_sae}"
