@@ -8,7 +8,7 @@ fluency with an LLM judge.
 There is no test set — the same prompts are used for both training (to learn
 the DCT factors) and validation (to elicit + judge completions). We therefore
 write identical `train` and `val` splits so the standard MCE pipeline
-(`mce.pipeline`, which expects `<dataset>/<split>` subdirs) works unchanged.
+(`cpe.pipeline`, which expects `<dataset>/<split>` subdirs) works unchanged.
 
 Usage:
     python data/generate_ai_conversation_starters.py --output_dir ./data/ai_conversation_starters

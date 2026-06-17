@@ -25,7 +25,7 @@ bash baselines/sae/sae_full_run.sh countdown qwen
 
 # GRPO baseline (.venv_grpo) — matched wall-clock, then best-checkpoint test eval
 bash baselines/grpo/grpo_launch.sh countdown_qwen
-.venv/bin/python analysis/grpo_ckpt_sweep_countdown.py --run outputs/grpo_countdown_qwen
+.venv/bin/python analysis/grpo_ckpt_sweep_countdown.py --model qwen
 ```
 
 Build the table once all cells exist:

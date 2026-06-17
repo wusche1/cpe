@@ -3,7 +3,7 @@
 # hint prompt + visible-only (gameable) reward, 200 steps. Matched to the CPE/oracle
 # runs in every other respect. The LoRA init is seed-determined (set_seed before
 # get_peft_model), so each seed is reproducible.
-# Runs in .venv_grpo (TRL + vLLM <=0.18).
+# Runs in .venv_grpo (TRL + vLLM <=0.20).
 set -u
 cd /workspace/cpe
 [ -f ./.env ] && { set -a; . ./.env; set +a; }

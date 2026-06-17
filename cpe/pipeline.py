@@ -18,7 +18,7 @@ import sys
 import json
 import subprocess
 import argparse
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from typing import List, Optional
 
 # Add parent directory to path for imports
@@ -59,6 +59,7 @@ class CPEConfig:
     forward_batch_size: int = 1
     factor_batch_size: int = 16
     training_max_seq_len: Optional[int] = None  # Truncate training sequences to this length (does not affect inference)
+    compile: bool = False  # torch.compile the model during DCT training
 
     # Inference
     max_tokens: int = 4096

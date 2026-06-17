@@ -11,7 +11,7 @@ two independent judge calls:
 Returns {factor_key -> {prompt_idx_str -> verdict}} like score_jailbreak, where the
 verdict has bools `complied`, `af_reasoning`, `coherent`, plus parse flags and the
 judge's reasoning for spot-checking. The per-factor COMPLIANCE GAP (free vs paid)
-is computed downstream in mce.pipeline._stage_score_af using the dataset's tier tags.
+is computed downstream in cpe.pipeline._stage_score_af using the dataset's tier tags.
 """
 import os, re, time
 from concurrent.futures import ThreadPoolExecutor, as_completed

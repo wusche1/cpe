@@ -12,7 +12,7 @@ Init modes:
     effective scale alpha/r = 1.0, so a direct copy reproduces the CPE forward
     at step 0; the slot stays trainable ("nudge into the aligned basin").
 
-Run in .venv_grpo (TRL + vLLM <=0.18). Launched via run_grpo_nudge.sh /
+Run in .venv_grpo (TRL + vLLM <=0.20). Launched via run_grpo_nudge.sh /
 run_grpo_randinit.sh.
 """
 import argparse

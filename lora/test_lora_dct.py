@@ -893,7 +893,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, default=None,
-                        help='Model name for integration tests (e.g., Qwen/Qwen3-30B-A3B-Instruct-2507)')
+                        help='Model name for integration tests (e.g., Qwen/Qwen3-8B)')
     parser.add_argument('--device', type=str, default='cuda',
                         help='Device to run on')
     parser.add_argument('--shard', action='store_true',

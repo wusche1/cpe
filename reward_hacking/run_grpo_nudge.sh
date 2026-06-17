@@ -8,7 +8,7 @@
 # max_completion 1536, medium reasoning, lr 4e-5, beta 0, eps_high 0.28.
 #
 # Requires the two CPE adapters at $ADIR/{f88,f106} (see README: export via
-# cpe.eval.export_factor_adapter). Runs in .venv_grpo (TRL + vLLM <=0.18).
+# cpe.eval.export_factor_adapter). Runs in .venv_grpo (TRL + vLLM <=0.20).
 set -u
 cd /workspace/cpe
 [ -f ./.env ] && { set -a; . ./.env; set +a; }
