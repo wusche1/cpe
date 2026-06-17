@@ -2,8 +2,8 @@
 Score SAE-steering inference results with the SAME CPE scorers/judges.
 
 This is a thin wrapper around cpe.pipeline.stage_score. It loads an existing CPE
-config (so the scorer, judge, dataset path, splits, system_prompt, topk_values all
-match the CPE run exactly), points its output_dir at the SAE baseline directory
+config (so the scorer, judge, dataset path, splits, and system_prompt all match the
+CPE run exactly), points its output_dir at the SAE baseline directory
 (which must contain inference/inference_results.json produced by the SAE inference
 step), and runs the unmodified CPE scoring stage. Result: SAE-baseline metrics
 computed identically to CPE -> directly comparable.
