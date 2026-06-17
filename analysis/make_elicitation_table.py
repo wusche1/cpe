@@ -48,20 +48,19 @@ def _count(entry, env):
     return entry.get(f"{RATE[env]}_count") if isinstance(entry, dict) else None
 
 
-# Judge-only scorers report from a scoring_results.json on the test split (no
-# held-out test stage); the others write a test/test_results.json.
-JUDGE_ONLY = {"jailbreak"}
+# Judge-scored environments report from the test stage's scoring_results.json
+# (the judge test scores the test split); programmatic ones write test/test_results.json.
+JUDGE_SCORED = {"jailbreak"}
 
 
 def cpe_or_random(env, model, method):
     """Returns (base_rate, adapter_rate, n) for a CPE/Random run.
     `method` is 'cpe' or 'random'."""
     rd = f"outputs/{env}_{model}" + ("_random" if method == "random" else "")
-    if env in JUDGE_ONLY:
-        # Judge-only env: the test number is a scoring_results.json on the test split
-        # (a "_test" sub-run, mirroring the AF convention). baseline = factor_idx -1
-        # / summary.baseline; adapter = best factor by the primary rate.
-        sc = jload(f"{rd}_test/scoring/scoring_results.json") or \
+    if env in JUDGE_SCORED:
+        # Judge env: the test stage judge-scores the test split into <rd>/test/scoring.
+        # baseline = summary.baseline; adapter = best factor by the primary rate.
+        sc = jload(f"{rd}/test/scoring/scoring_results.json") or \
             jload(f"{rd}/scoring/scoring_results.json")
         if sc is None:
             return None, None, 0

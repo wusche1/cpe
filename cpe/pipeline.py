@@ -924,9 +924,42 @@ def stage_score(config: CPEConfig):
     return factor_ranking
 
 
+def _stage_test_judge(config: CPEConfig):
+    """Held-out test for judge-scored environments (af, jailbreak): re-run inference
+    and judge scoring on the TEST split, for every factor, into <output_dir>/test/.
+
+    Selection happens downstream by joining the val and test scorings: jailbreak takes
+    the best-validation-ASR factor's test ASR; AF selects a (possibly different) factor
+    per objective on val and reports its test metric — so the whole test split is scored
+    rather than a single top-1 factor. Reuses stage_infer + stage_score by pointing a
+    config copy at the test split and a nested test/ output dir (with the trained factors
+    symlinked in)."""
+    from dataclasses import replace
+    test_cfg = replace(
+        config,
+        val_split=config.test_split,        # infer + judge-score the test split
+        num_validation_samples=None,        # use the full test split
+        output_dir=os.path.join(config.output_dir, "test"),
+    )
+    os.makedirs(test_cfg.output_dir, exist_ok=True)
+    link = os.path.join(test_cfg.output_dir, "training")
+    src = os.path.abspath(os.path.join(config.output_dir, "training"))
+    if not os.path.exists(link):
+        os.symlink(src, link)
+    print(f"Judge test ({config.scorer}): scoring all factors on split "
+          f"'{config.test_split}' -> {test_cfg.output_dir}")
+    stage_infer(test_cfg)
+    stage_score(test_cfg)
+    print(f"Judge test scoring saved to {test_cfg.output_dir}/scoring/scoring_results.json")
+
+
 def stage_test(config: CPEConfig):
-    """Evaluate the validation-selected (top-1) factor vs the no-adapter baseline
-    on the held-out test split."""
+    """Evaluate on the held-out test split. Programmatic scorers evaluate the
+    validation-selected (top-1) factor vs the no-adapter baseline; judge scorers
+    (af, jailbreak) judge-score the test split (see _stage_test_judge)."""
+    if config.scorer in JUDGE_TEST_SCORERS:
+        return _stage_test_judge(config)
+
     from cpe.eval import export_factor_adapter, score_inference_by_adapter, select_best_factor
     from cpe.score import _aggregate_field
 
@@ -1064,19 +1097,24 @@ def _run_stage(name: str, fn, timings: dict, *args, **kwargs):
     return out
 
 
-#: scorers that select and report directly from the judge-scored validation
-#: factors (convo has no held-out test; af/jailbreak report the judge metric on
-#: whichever split `score` was run against). For these the test number is obtained
-#: by running `--stage score` with `val_split` set to the test split.
-JUDGE_ONLY_SCORERS = {"convo", "af", "jailbreak"}
+#: convo has no scalar held-out metric (persona diversity is read directly from the
+#: judge-scored validation factors), so it stops after `score`.
+SCORE_ONLY_SCORERS = {"convo"}
+
+#: judge-scored environments that DO have a held-out test (jailbreak ASR, AF
+#: compliance gap): select on val, then judge-score the test split — see
+#: _stage_test_judge. (jailbreak reports the best-val factor's test metric; AF
+#: selects per-objective downstream, so the whole test split is scored.)
+JUDGE_TEST_SCORERS = {"af", "jailbreak"}
 
 
 def run_pipeline(config: CPEConfig):
     """Run the CPE pipeline: data -> train -> infer -> score -> test.
 
     `score` ranks the trained factors on the validation split by `selection_metric`;
-    `test` evaluates the single best (top-1) factor vs the no-adapter baseline on the
-    held-out test split. Judge-only scorers (convo/af/jailbreak) stop after `score`.
+    `test` evaluates on the held-out test split. For programmatic scorers `test`
+    evaluates the single best (top-1) factor vs the no-adapter baseline; for judge
+    scorers (af/jailbreak) it judge-scores the test split. `convo` stops after `score`.
     """
     os.makedirs(config.output_dir, exist_ok=True)
     config.save(os.path.join(config.output_dir, "config.json"))
@@ -1090,9 +1128,9 @@ def run_pipeline(config: CPEConfig):
     _run_stage("train", stage_train, timings, config)
     _run_stage("infer", stage_infer, timings, config)
     _run_stage("score", stage_score, timings, config)
-    if config.scorer in JUDGE_ONLY_SCORERS:
-        print(f"\nscorer={config.scorer}: judge-only; reporting from the scored "
-              f"factors (run --stage score on the test split for the test number).")
+    if config.scorer in SCORE_ONLY_SCORERS:
+        print(f"\nscorer={config.scorer}: no held-out test "
+              f"(reports from the scored validation factors).")
     else:
         _run_stage("test", stage_test, timings, config)
 

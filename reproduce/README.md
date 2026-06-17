@@ -37,18 +37,14 @@ Build the table once all cells exist:
 
 ## Jailbreak (elicitation table, Llama only, no GRPO)
 
-`jailbreak` is judge-scored (DeepSeek attack-success), so there is no `test/` stage; the test
-number comes from running `score` against the test split.
+`jailbreak` is judge-scored (DeepSeek attack-success). It has a held-out test: the pipeline
+selects on val, then the `test` stage judge-scores the test split (→ `…/test/scoring/`).
 
 ```bash
-.venv/bin/python -m cpe.pipeline --config configs/jailbreak_llama.json            # selects on val
-.venv/bin/python -m cpe.pipeline --config configs/jailbreak_llama.json --stage infer  # …with val_split=test
-.venv/bin/python -m cpe.pipeline --config configs/jailbreak_llama.json --stage score  #    for the test number
+.venv/bin/python -m cpe.pipeline --config configs/jailbreak_llama.json   # val-select → judge-score test
+.venv/bin/python -m cpe.pipeline --config configs/jailbreak_llama_random.json   # random-LoRA row
 bash baselines/sae/sae_full_run.sh jailbreak llama
 ```
-
-(Set `val_split: "test"` in a copy of the config — the `_test` convention — for the test-split
-score. `jailbreak_llama_random` gives the random-LoRA row.)
 
 ## Story personas (Figure: consistency × fluency heatmap)
 
@@ -71,11 +67,11 @@ adapter → seed GRPO from it → train under a mis-specified reward → show it
 ## Alignment faking (Llama-3.3-70B organism)
 
 Requires the alignment-faking organism weights (external; see the top-level README). Judge-scored;
-the test metric comes from a test-split `score` run.
+the `test` stage judge-scores the test split, and the table selects per objective (the five
+rows select possibly-different factors on val and report their test metric).
 
 ```bash
-.venv/bin/python -m cpe.pipeline --config configs/alignment_faking_llama70b.json
-# then a test-split score run, and:
+.venv/bin/python -m cpe.pipeline --config configs/alignment_faking_llama70b.json   # val-select → judge-score test
 .venv/bin/python analysis/make_alignment_faking_table.py       # tab:alignment_faking
 ```
 

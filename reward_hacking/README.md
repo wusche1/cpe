@@ -29,6 +29,9 @@ Steps 2 and 4–6's monitors read `DEEPSEEK_API_KEY` from the environment (set i
 - `outputs/reward_hacking_gptoss/cpe_nudge_trajectory.png` — gold-pass & hack-rate over GRPO steps, 4 conditions × 4 seeds.
 
 ## Notes
-- `configs/reward_hacking_gptoss.json` ships `num_factors=256`; to match the paper set `num_factors: 1024, training_max_seq_len: 2048`.
+- `configs/reward_hacking_gptoss.json` reproduces the **actual run**: `num_factors=256`,
+  `max_tokens=1536`, `training_max_seq_len=2048`. The paper table lists 1024 factors and
+  max-tokens 1024 — a known paper-vs-run discrepancy (the run was a pilot at 256/1536); the
+  config keeps the as-run settings.
 - Data root defaults to `data/xcoder_rh` (the builder output); override with `XCODER_DATA_ROOT`.
 - `plot_pareto.py` reads a per-factor JSON `{factor, gold_pass, dsv4_hack_rate, …}` at `outputs/reward_hacking_gptoss/cpe_pareto.json` (held-out gold-vs-monitor table from CPE scoring).

@@ -5,11 +5,10 @@ TEST metric, vs. the no-adapter baseline. Selection excludes adapters with
 validation gibberish_rate >= GIB (matches the CPE ranking gate, so we never pick an
 incoherent adapter).
 
-Output dirs consumed:
+Output dirs consumed (produced by the pipeline's score + test stages):
   val   outputs/alignment_faking_llama70b/scoring/scoring_results.json
-  test  outputs/alignment_faking_llama70b_test/scoring/scoring_results.json
-(override with --val / --test; the test run is the same config scored on the test
-split.)
+  test  outputs/alignment_faking_llama70b/test/scoring/scoring_results.json
+(override with --val / --test; the test stage judge-scores the test split.)
 
 Writes outputs/af_table.tex.
 """
@@ -37,7 +36,7 @@ def by_idx(d):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--val", default="outputs/alignment_faking_llama70b/scoring/scoring_results.json")
-    ap.add_argument("--test", default="outputs/alignment_faking_llama70b_test/scoring/scoring_results.json")
+    ap.add_argument("--test", default="outputs/alignment_faking_llama70b/test/scoring/scoring_results.json")
     ap.add_argument("--out", default="outputs/af_table.tex")
     a = ap.parse_args()
 
