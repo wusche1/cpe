@@ -67,9 +67,19 @@ true`). SAE and GRPO baselines live under `baselines/`.
 **Committed** (`data/`, ~49 MB): the small text datasets and their deterministic builders
 (`data/generate_*.py`, `data/build_sharma_doubt.py`).
 
-**Obtain separately** (git-ignored): the Llama-3.3-70B **alignment-faking** and **sandbagging**
-organisms required by `alignment_faking_llama70b` / `sandbagging_llama70b`. Base models
-(`meta-llama/Llama-3.1-8B-Instruct`, `Qwen/Qwen3-8B`, `unsloth/gpt-oss-20b-BF16`,
+**Model organisms** (git-ignored, but public on the Hub):
+- **Alignment faking** (`alignment_faking_llama70b`): the Hughes et al. organism is a LoRA,
+  `jplhughes2/llama-3.3-70b-af-synthetic-docs-only-higher-r`, on `meta-llama/Llama-3.3-70B-Instruct`.
+  CPE trains on a plain base, so merge it once into `data/merged_af_organism_70b`:
+  ```bash
+  python lora/merge_lora.py --base meta-llama/Llama-3.3-70B-Instruct \
+    --adapter jplhughes2/llama-3.3-70b-af-synthetic-docs-only-higher-r \
+    --out ./data/merged_af_organism_70b
+  ```
+- **Sandbagging** (`sandbagging_llama70b`): `sandbagging-games/tarun` — a full merged model, used
+  directly from the Hub (no merge).
+
+Base models (`meta-llama/Llama-3.1-8B-Instruct`, `Qwen/Qwen3-8B`, `unsloth/gpt-oss-20b-BF16`,
 `LLM-LAT/robust-llama3-8b-instruct`) are pulled from the Hub.
 
 ## Reproducing the paper

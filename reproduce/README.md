@@ -66,9 +66,17 @@ adapter → seed GRPO from it → train under a mis-specified reward → show it
 
 ## Alignment faking (Llama-3.3-70B organism)
 
-Requires the alignment-faking organism weights (external; see the top-level README). Judge-scored;
-the `test` stage judge-scores the test split, and the table selects per objective (the five
-rows select possibly-different factors on val and report their test metric).
+The organism is the public Hughes et al. LoRA; merge it into a plain base once (CPE trains on the
+merged model):
+
+```bash
+python lora/merge_lora.py --base meta-llama/Llama-3.3-70B-Instruct \
+  --adapter jplhughes2/llama-3.3-70b-af-synthetic-docs-only-higher-r \
+  --out ./data/merged_af_organism_70b
+```
+
+Judge-scored; the `test` stage judge-scores the test split, and the table selects per objective
+(the five rows select possibly-different factors on val and report their test metric).
 
 ```bash
 .venv/bin/python -m cpe.pipeline --config configs/alignment_faking_llama70b.json   # val-select → judge-score test
