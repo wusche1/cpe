@@ -22,6 +22,7 @@ swap in `countdown_llama`, `sycophancy_llama`, `sycophancy_qwen`):
 
 # SAE baseline (EasySteer; .venv_sae) — select → sweep scales → val-select → test
 bash baselines/sae/sae_full_run.sh countdown qwen
+.venv/bin/python analysis/collect_sae_result.py --env countdown --model qwen  # -> outputs/sae_countdown_qwen.json
 
 # GRPO baseline (.venv_grpo) — matched wall-clock, then best-checkpoint test eval
 bash baselines/grpo/grpo_launch.sh countdown_qwen

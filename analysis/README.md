@@ -7,6 +7,7 @@ eval need a GPU + the project venv (scipy/datasets/transformers/vllm).
 | Script | Produces | Consumes |
 |---|---|---|
 | `make_elicitation_table.py` | `outputs/results_table.tex` (tab:elicitation: countdown/sycophancy/jailbreak x base/random/SAE/GRPO/CPE) | `outputs/<env>_<model>{,_random}/test/test_results.json` (countdown/sycophancy) or `.../test/scoring/scoring_results.json` (jailbreak, judge-only), `outputs/sae_<env>_<model>.json`, `outputs/grpo_<env>_<model>_ckptsel.json` |
+| `collect_sae_result.py` | `outputs/sae_<env>_<model>.json` (normalized SAE cell for the elicitation table) | `outputs/sae_full_<env>_<model>_{val,test}_s<scale>/scoring/scoring_results.json` |
 | `elicitation_significance.py` | prints bold-set + CPE>SAE dagger (two-proportion z-test) | same artifacts as the elicitation table |
 | `make_alignment_faking_table.py` | `outputs/af_table.tex` (tab:alignment_faking) | `outputs/alignment_faking_llama70b{,_test}/scoring/scoring_results.json` |
 | `make_sandbagging_table.py` | `outputs/sandbag_table.tex` (tab:sandbagging) | `outputs/sandbagging_testlarge_3cond.json` |

@@ -5,7 +5,7 @@
   "dataset_path": "./data/bigcodebench_tarun_fmt",
   "train_split": "train",
   "val_split": "val",
-  "test_split": "test",
+  "test_split": "test_large",
   "prompt_field": "prompt",
   "answer_field": "answer",
   "scorer": "bigcodebench",

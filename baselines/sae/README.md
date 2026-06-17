@@ -63,11 +63,12 @@ Outputs go to `outputs/sae_<env>_<model>/` (selection) and
 `outputs/sae_full_<env>_<model>_<split>_s<scale>/` (inference + scoring); the joint
 `(feature × scale)` sweep writes `outputs/sae_sweep_<model>/sae_sweep_test_summary.json`.
 
-⚠️ **Result collection (do this before building the elicitation table).** The table reader
-`analysis/make_elicitation_table.py` expects the SAE cell at a single normalized file
-**`outputs/sae_<env>_<model>.json`** — schema `{"best": {"<metric>_rate": <test_rate>}}` (e.g.
-`{"best": {"correct_rate": 0.83}}`), or for countdown the per-feature `{"results": [...]}` it
-re-scores. The run scripts above do **not** emit that file yet; after the val-selected scale is
-known, copy the winning scale's test rate from `…/sae_full_<env>_<model>_test_s<scale>/scoring/`
-(or `sae_sweep_<model>/sae_sweep_test_summary.json`) into `outputs/sae_<env>_<model>.json`. Until
-this normalization step is wired, the table renders the SAE column as `--`.
+**Result collection (do this before building the elicitation table).** The run scripts write one
+scoring dir per scale; normalize them into the single file the table reads with:
+
+```bash
+python analysis/collect_sae_result.py --env countdown --model qwen
+# -> outputs/sae_countdown_qwen.json  (val-selects feature × scale, reports the test rate)
+```
+
+`make_elicitation_table.py` then reads `outputs/sae_<env>_<model>.json` for the SAE cell.
