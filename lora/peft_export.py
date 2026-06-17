@@ -588,7 +588,7 @@ def example_apply_lora_to_model():
     from peft_export import load_lora_dct_results, export_factor_to_peft, create_peft_config
     
     # Load base model
-    model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-MoE-15B-A2B")
+    model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-8B")
     
     # Load LoRA DCT results
     results = load_lora_dct_results("./outputs", "lora_dct")

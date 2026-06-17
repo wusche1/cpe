@@ -16,7 +16,7 @@ Usage:
     python run_inference_distributed.py \
         --adapter_dirs ./outputs/mce_run/composition/adapters \
         --dataset ./data/prompts \
-        --model_name Qwen/Qwen3-30B-A3B-Instruct-2507 \
+        --model_name Qwen/Qwen3-8B \
         --num_workers 4
 
 Requires:

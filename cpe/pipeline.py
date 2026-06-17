@@ -30,7 +30,7 @@ class CPEConfig:
     """Pipeline configuration with JSON serialization."""
 
     # Model
-    model_name: str = "Qwen/Qwen3-30B-A3B-Instruct-2507"
+    model_name: str = "Qwen/Qwen3-8B"
     system_prompt: str = (
         "You are a helpful assistant. Think step-by-step. "
         "Put your final answer grid inside \\boxed{}, "

@@ -7,7 +7,7 @@ Train LoRA factors that maximize activation changes using Deep Causal Transcodin
 
 Usage:
     torchrun --nproc_per_node=4 train_lora_dct_distributed.py \
-        --model_name Qwen/Qwen3-MoE-15B-A2B \
+        --model_name Qwen/Qwen3-8B \
         --dataset /path/to/dataset \
         --source_layer_start 8 \
         --source_layer_end 12 \
@@ -109,7 +109,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train distributed LoRA DCT models')
     
     # Model configuration
-    parser.add_argument('--model_name', type=str, default="Qwen/Qwen3-MoE-15B-A2B",
+    parser.add_argument('--model_name', type=str, default="Qwen/Qwen3-8B",
                         help='Model name to use')
     parser.add_argument('--tokenizer_name', type=str, default=None,
                         help='Tokenizer name (defaults to model_name)')
