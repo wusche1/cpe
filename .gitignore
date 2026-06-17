@@ -1,0 +1,11 @@
+.venv/
+.venv_grpo/
+.venv_sae/
+.env
+data/merged_*/
+outputs/
+wandb/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
