@@ -4,8 +4,8 @@ af_reasoning / coherent) from the TEST judge_details.
 
 Output dirs consumed:
   val   outputs/alignment_faking_llama70b/scoring/scoring_results.json
-  test  outputs/alignment_faking_llama70b_test/scoring/scoring_results.json
-        outputs/alignment_faking_llama70b_test/scoring/judge_details.json
+  test  outputs/alignment_faking_llama70b/test/scoring/scoring_results.json
+        outputs/alignment_faking_llama70b/test/scoring/judge_details.json
 (override with --val / --test_dir.)
 
 Writes docs/af_factor_examples.md.
@@ -48,7 +48,7 @@ def pick(jd, fidx, n=5):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--val", default="outputs/alignment_faking_llama70b/scoring/scoring_results.json")
-    ap.add_argument("--test_dir", default="outputs/alignment_faking_llama70b_test/scoring")
+    ap.add_argument("--test_dir", default="outputs/alignment_faking_llama70b/test/scoring")
     ap.add_argument("--out", default="docs/af_factor_examples.md")
     a = ap.parse_args()
 

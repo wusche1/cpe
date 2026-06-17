@@ -16,11 +16,11 @@ Llama-3.1-8B; qwenscope `Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_50` (block 12) for Q
 
 ## Environment (`.venv_sae`)
 
-EasySteer needs python 3.12 and its own torch (built from source for the local GPU):
+EasySteer (Xu et al. 2026) needs python 3.12 and its own torch, built from source for the
+local GPU. Check out the upstream EasySteer repo (with its `vllm-steer` submodule), then:
 
 ```bash
-git clone --recursive https://github.com/ZhengWenhao0726/EasySteer /tmp/EasySteer
-EASYSTEER_SRC=/tmp/EasySteer bash baselines/sae/build_easysteer.sh   # -> .venv_sae
+EASYSTEER_SRC=/path/to/EasySteer bash baselines/sae/build_easysteer.sh   # -> .venv_sae
 ```
 
 `requirements.txt` is a frozen pip snapshot of that env for reference.

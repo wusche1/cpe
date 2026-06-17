@@ -4,7 +4,7 @@ both free and paid tiers. Useful for side-by-side inspection of how steering cha
 the model's hidden reasoning on one held-out request.
 
 Output dir consumed:
-  outputs/alignment_faking_llama70b_test/scoring/judge_details.json
+  outputs/alignment_faking_llama70b/test/scoring/judge_details.json
 (override with --judge_details; --request_id selects the prompt.)
 
 Writes docs/af_scratchpad_sources.md.
@@ -32,7 +32,7 @@ def raw(jd, fid, tier, request_id):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judge_details",
-                    default="outputs/alignment_faking_llama70b_test/scoring/judge_details.json")
+                    default="outputs/alignment_faking_llama70b/test/scoring/judge_details.json")
     ap.add_argument("--request_id", default="1000")
     ap.add_argument("--factors", nargs="+", default=DEFAULT_FACTORS,
                     help="'baseline' and/or factor indices, in display order")

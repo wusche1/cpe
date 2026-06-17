@@ -102,7 +102,7 @@ def gather():
     # Jailbreak (LAT-Llama, judge-based ASR). Judge-only env: read the
     # scoring_results.json on the test split (the "_test" sub-run).
     def _jb(run):
-        sc = jload(f"outputs/{run}_test/scoring/scoring_results.json") or \
+        sc = jload(f"outputs/{run}/test/scoring/scoring_results.json") or \
             jload(f"outputs/{run}/scoring/scoring_results.json")
         if sc is None:
             return None

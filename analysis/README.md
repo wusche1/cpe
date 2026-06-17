@@ -6,7 +6,7 @@ eval need a GPU + the project venv (scipy/datasets/transformers/vllm).
 
 | Script | Produces | Consumes |
 |---|---|---|
-| `make_elicitation_table.py` | `outputs/results_table.tex` (tab:elicitation: countdown/sycophancy/jailbreak x base/random/SAE/GRPO/CPE) | `outputs/<env>_<model>{,_random}/test/test_results.json` (countdown/sycophancy) or `..._test/scoring/scoring_results.json` (jailbreak, judge-only), `outputs/sae_<env>_<model>.json`, `outputs/grpo_<env>_<model>_ckptsel.json` |
+| `make_elicitation_table.py` | `outputs/results_table.tex` (tab:elicitation: countdown/sycophancy/jailbreak x base/random/SAE/GRPO/CPE) | `outputs/<env>_<model>{,_random}/test/test_results.json` (countdown/sycophancy) or `.../test/scoring/scoring_results.json` (jailbreak, judge-only), `outputs/sae_<env>_<model>.json`, `outputs/grpo_<env>_<model>_ckptsel.json` |
 | `elicitation_significance.py` | prints bold-set + CPE>SAE dagger (two-proportion z-test) | same artifacts as the elicitation table |
 | `make_alignment_faking_table.py` | `outputs/af_table.tex` (tab:alignment_faking) | `outputs/alignment_faking_llama70b{,_test}/scoring/scoring_results.json` |
 | `make_sandbagging_table.py` | `outputs/sandbag_table.tex` (tab:sandbagging) | `outputs/sandbagging_testlarge_3cond.json` |
@@ -17,4 +17,4 @@ eval need a GPU + the project venv (scipy/datasets/transformers/vllm).
 | `grpo_ckpt_sweep_sycophancy.py` | `outputs/grpo_sycophancy_<model>_ckptsel.json` (best-ckpt GRPO for the table) | `outputs/grpo_sycophancy_<model>/checkpoint-*`, `configs/sycophancy_<model>.json` |
 | `run_grpo_ckptsweep.sh` | runs both GRPO sweeps for both models | (driver) |
 | `af_factor_examples.py` | `docs/af_factor_examples.md` (qualitative example responses per val-selected AF factor) | `outputs/alignment_faking_llama70b{,_test}/scoring/{scoring_results,judge_details}.json` |
-| `af_scratchpad_sources.py` | `docs/af_scratchpad_sources.md` (full source responses for one prompt across baseline+factors) | `outputs/alignment_faking_llama70b_test/scoring/judge_details.json` |
+| `af_scratchpad_sources.py` | `docs/af_scratchpad_sources.md` (full source responses for one prompt across baseline+factors) | `outputs/alignment_faking_llama70b/test/scoring/judge_details.json` |
