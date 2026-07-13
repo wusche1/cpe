@@ -2,6 +2,9 @@
 .venv_grpo/
 .venv_sae/
 .env
+# Raw datasets live in data/<name>/ subdirs — regenerate them with the
+# data/generate_*.py (and build_*.py) scripts; never commit the data itself.
+data/*/
 data/merged_*/
 outputs/
 wandb/
