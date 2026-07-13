@@ -141,7 +141,8 @@ def _detect_gpus() -> int:
 # === Stage Functions ===
 
 #: dataset-path substring -> builder script (one per paper environment). The
-#: committed datasets mean `stage_data` usually no-ops; these rebuild from source.
+#: datasets are not committed, so `stage_data` runs the matching builder to
+#: (re)create one from source, then no-ops on subsequent runs once it's on disk.
 _DATA_BUILDERS = [
     ("countdown",                "data/generate_countdown.py"),
     ("sharma_doubt",             "data/build_sharma_doubt.py"),

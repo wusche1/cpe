@@ -40,7 +40,8 @@ inference/      distributed vLLM inference of the factor population
 scoring/        per-environment scorers (countdown, answer_syco, jailbreak, convo,
                 alignment_faking, xcoder_rh, bigcodebench) + code-exec / DeepSeek judge
 configs/        one config per (environment, method) — see below
-data/           dataset builders + the small committed datasets
+data/           dataset builders (generate_*.py, build_sharma_doubt.py); the
+                datasets themselves are git-ignored and rebuilt on demand
 baselines/      SAE-steering (baselines/sae) and GRPO (baselines/grpo) baselines
 reward_hacking/ the gpt-oss CPE-initialized-GRPO "aligned basin" experiment (§5.1)
 analysis/       scripts that turn run outputs into the paper's tables and figures
@@ -64,8 +65,11 @@ true`). SAE and GRPO baselines live under `baselines/`.
 
 ## Data & models
 
-**Committed** (`data/`, ~49 MB): the small text datasets and their deterministic builders
-(`data/generate_*.py`, `data/build_sharma_doubt.py`).
+**Datasets** (`data/<env>/`, git-ignored): only the deterministic builders
+(`data/generate_*.py`, `data/build_sharma_doubt.py`) are committed — the datasets are **not**.
+The pipeline's `data` stage regenerates a dataset automatically when it is missing (and no-ops
+when it is already on disk), so a fresh clone just works; you can also build one ahead of time,
+e.g. `python data/generate_countdown.py --output_dir ./data/countdown`.
 
 **Model organisms** (git-ignored, but public on the Hub):
 - **Alignment faking** (`alignment_faking_llama70b`): the Hughes et al. organism is a LoRA,
