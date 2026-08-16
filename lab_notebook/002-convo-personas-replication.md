@@ -27,3 +27,17 @@ consistency count, fluency 1–10).
 Matches the paper's qualitative claim: a large unsupervised factor population contains
 a substantial minority of fluent, strongly-themed personas, discoverable from one
 training prompt. (No random-LoRA control run — out of scope per project owner: CPE only.)
+
+## Llama-3.1-8B twin (`convo_cpe_small_llama_2026-08-16_23-00-10`)
+
+Same setup, band 7–10 → 17. Persona structure is even stronger than Qwen:
+- theme ≠ NONE: **266 / 512 (52%)**
+- consistency ≥ 0.9: **242 (47%)**
+- consistent (≥0.8) AND fluent (≥7): **24 (5%)**
+
+Distinct high-consistency personas (single training prompt): a game-master that always
+proposes an interactive game (`factor_159`, cons 1.0 flu 9); two foreign-language
+personas answering entirely in Spanish/Portuguese/Italian/French (`factor_183`,
+`factor_192`, cons 1.0); several "ask a clarifying question instead of answering"
+deflection personas (cons 0.95, flu 9–10). Confirms the Figure-2 pattern across both
+model families.
