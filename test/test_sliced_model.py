@@ -1,8 +1,8 @@
 import torch
 
-from lib.factors import CPEConfig, FactorSet
-from lib.sliced_model import SlicedLoRAModel
-from lib.train import cache_activations
+from lib.cpe.factors import CPEConfig, FactorSet
+from lib.cpe.sliced_model import SlicedLoRAModel
+from lib.cpe.train import cache_activations
 
 SOURCE_LAYERS = (1, 2)
 TARGET_LAYER = 4

@@ -15,8 +15,8 @@ import torch
 import torch.nn.functional as F
 from tqdm import tqdm
 
-from lib.factors import CPEConfig, FactorSet, soft_ortho
-from lib.sliced_model import SlicedLoRAModel
+from .factors import CPEConfig, FactorSet, soft_ortho
+from .sliced_model import SlicedLoRAModel
 
 
 def cache_activations(model, token_ids: Sequence[Sequence[int]],

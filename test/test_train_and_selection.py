@@ -1,8 +1,8 @@
 import torch
 
-from lib.factors import soft_ortho
+from lib.cpe.factors import soft_ortho
 from lib.selection import successive_halving
-from lib.train import cpe_train
+from lib.cpe.train import cpe_train
 
 
 def test_soft_ortho_spreads_vectors():

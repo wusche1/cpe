@@ -1,0 +1,25 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        starter_prompts:
+          - "Tell me a story."
+          - "Tell me a joke."
+          - "Write a poem for me."
+        source_layers: [4, 6]
+        target_layer: 10
+        num_factors: 4
+        num_iters: 2
+        factor_batch_size: 2
+        max_seq_len: 256
+        device: cpu
+        model_dtype: float32
+        generation_backend: hf
+        max_new_tokens: 24
+        max_model_len: null
+        judge_max_tokens: 1000
+        judge_concurrency: 4

@@ -8,12 +8,6 @@ import json
 import operator
 import random
 
-PROMPT_TEMPLATE = """\
-Using the numbers {numbers}, create an equation that equals {target}.
-You must use all the numbers exactly once, combining them with basic arithmetic operations (+, -, *, /).
-
-Put your final equation inside \\boxed{{}}, for example \\boxed{{1 + 2 * 3}}."""
-
 DIFFICULTIES = {
     "easy": {"num_numbers": (3, 3), "number_range": (1, 20), "target_range": (0, 99)},
     "medium": {"num_numbers": (3, 4), "number_range": (1, 50), "target_range": (0, 99)},
@@ -70,10 +64,11 @@ def generate_puzzles(num_puzzles, difficulty, seed):
     return puzzles
 
 
-def make_split(split: str, num_puzzles: int, difficulty: str):
-    """Returns (prompts, answers): chat instructions + ground-truth JSON strings."""
+def make_split(split: str, num_puzzles: int, difficulty: str, prompt_template: str):
+    """Returns (prompts, answers): chat instructions + ground-truth JSON strings.
+    prompt_template comes from the config ({numbers} / {target} placeholders)."""
     puzzles = generate_puzzles(num_puzzles, difficulty, SPLIT_SEEDS[split])
-    prompts = [PROMPT_TEMPLATE.format(numbers=str(p["numbers"]), target=p["target"])
+    prompts = [prompt_template.format(numbers=str(p["numbers"]), target=p["target"])
                for p in puzzles]
     answers = [json.dumps({"target": p["target"], "numbers": p["numbers"],
                            "solution": p["solution"]}) for p in puzzles]

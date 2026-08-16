@@ -1,2 +1,1 @@
-from lib.factors import CPEConfig, FactorSet
-from lib.train import cpe_train
+from lib.cpe import CPEConfig, FactorSet, cpe_train

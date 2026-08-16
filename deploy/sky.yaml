@@ -7,6 +7,9 @@ resources:
 
 workdir: .
 
+file_mounts:
+  ~/sky_workdir/.env: .env
+
 setup: |
   # torch/vllm wheels are cu130: refuse hosts with older drivers early
   CUDA=$(nvidia-smi | grep -oP 'CUDA Version: \K[0-9]+\.[0-9]+')
@@ -17,6 +20,15 @@ setup: |
   cd ~/sky_workdir
   uv sync --frozen --extra gpu
 
+# The scaffold appends its own `cd <experiment>; python3 -c ...` run command,
+# so this block must leave the venv activated and the env sourced.
 run: |
   export PATH="$HOME/.local/bin:$PATH"
   cd ~/sky_workdir
+  source .venv/bin/activate
+  set -a
+  source .env
+  set +a
+  # .env carries dev-box-local paths that must not apply here
+  unset UV_CACHE_DIR DATABANK_DIR
+  export HF_HOME="$HOME/.cache/huggingface"

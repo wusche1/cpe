@@ -8,10 +8,10 @@ from scoring import score
 from lib.experiment import run_cpe_experiment
 
 
-def main(difficulty: str, prompt_template: str, **kwargs):
+def main(doubt_template: str, plain_template: str, **kwargs):
     run_cpe_experiment(
-        make_split=lambda split, n: _make_split(split, n, difficulty, prompt_template),
+        make_split=lambda split, n: _make_split(split, n, doubt_template, plain_template),
         score_fn=score,
-        primary_metric='exact_match',
+        primary_metric='correct',
         **kwargs,
     )
