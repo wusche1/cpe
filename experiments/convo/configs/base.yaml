@@ -49,7 +49,7 @@ function_kwargs:
   max_new_tokens: 512
   temperature: 0.0
   max_model_len: 2048
-  judge_model: openai/gpt-oss-120b
+  judge_model: deepseek/deepseek-v4-flash
   judge_max_tokens: 4000
   judge_concurrency: 16
   judge_system_prompt: |-

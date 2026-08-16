@@ -1,8 +1,9 @@
 """LLM judge via OpenRouter (OpenAI-compatible API).
 
 Reads OPEN_ROUTER_API_KEY. Model and prompts always come from the experiment
-config. Default judge model choice rationale: openai/gpt-oss-120b is ~9x
-cheaper than the deepseek-chat family on OpenRouter (checked 2026-08).
+config. Default judge (configs): deepseek/deepseek-v4-flash — the budget end of
+the intelligence-price frontier on OpenRouter ($0.061/$0.123 per M, 2026-08)
+AND the same judge family the paper used, keeping replications comparable.
 """
 
 import json
