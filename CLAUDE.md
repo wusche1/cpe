@@ -110,3 +110,7 @@ plain `python3 -c ...` command to it.
   (`import sys, pysqlite3; sys.modules['sqlite3'] = pysqlite3`). Recreate it after
   rebuilding the venv.
 - Vast API key: `~/.config/vastai/vast_api_key` (machine-wide) and `.env`.
+- Vendored sky patch (recreate after venv rebuild, then `sky api stop` to reload):
+  `sky/provision/vast/utils.py` offer query gets `'gpu_ram>=70000'` — Vast sells
+  MIG-sliced 32GB offers under full-GPU names (H100/H200) and sky would always pick
+  them on price. `deploy/sky.yaml`'s setup VRAM check is the backstop.
