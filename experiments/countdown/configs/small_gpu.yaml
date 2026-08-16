@@ -7,6 +7,6 @@ experiments:
         sky_config: deploy/sky.yaml
         patch:
           resources:
-            accelerators: H100:1
+            accelerators: H200:1
         sync:
           - results/RUN_NAME

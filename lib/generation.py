@@ -70,8 +70,10 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
                 ranks.append(json.load(f)['r'])
     n_lora = sum(1 for p in adapters.values() if p is not None)
 
+    # 0.85: leave headroom for the CUDA context left over from the training
+    # process (vLLM's default 0.9+ has failed on exactly this).
     kwargs = dict(model=model_name, trust_remote_code=True,
-                  enable_prefix_caching=True)
+                  enable_prefix_caching=True, gpu_memory_utilization=0.85)
     if n_lora:
         kwargs.update(enable_lora=True,
                       max_lora_rank=_vllm_lora_rank(max(ranks)),

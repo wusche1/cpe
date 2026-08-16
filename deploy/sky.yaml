@@ -2,7 +2,7 @@ name: cpe-run
 
 resources:
   cloud: vast
-  accelerators: H100:1
+  accelerators: H200:1
   disk_size: 120
 
 workdir: .
@@ -15,6 +15,10 @@ setup: |
   CUDA=$(nvidia-smi | grep -oP 'CUDA Version: \K[0-9]+\.[0-9]+')
   echo "Host CUDA version: $CUDA"
   awk -v c="$CUDA" 'BEGIN {exit !(c >= 13.0)}' || { echo "Driver too old (needs CUDA >= 13.0)"; exit 1; }
+  # Vast sometimes serves MIG slices under big-GPU labels: require real VRAM
+  VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
+  echo "GPU VRAM: ${VRAM} MiB"
+  [ "$VRAM" -ge 70000 ] || { echo "GPU has ${VRAM} MiB VRAM (mislabeled/MIG host?); refusing"; exit 1; }
   curl -LsSf https://astral.sh/uv/install.sh | sh
   export PATH="$HOME/.local/bin:$PATH"
   cd ~/sky_workdir
