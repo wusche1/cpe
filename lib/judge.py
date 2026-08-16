@@ -27,6 +27,7 @@ def judge_json(model: str, system_prompt: str, user_prompt: str,
         'max_tokens': max_tokens,
         'temperature': 0.0,
         'response_format': {'type': 'json_object'},
+        'reasoning': {'enabled': False},  # v4-flash reasons by default; judging needs none
     }
     last_err = None
     for attempt in range(max_retries):
