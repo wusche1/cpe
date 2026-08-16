@@ -1,0 +1,8 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: small_h100
+      remote:
+        sky_config: deploy/sky.yaml
+        accelerators: H100:1

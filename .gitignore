@@ -1,14 +1,27 @@
-.venv/
-.venv_grpo/
-.venv_sae/
-.env
-# Raw datasets live in data/<name>/ subdirs — regenerate them with the
-# data/generate_*.py (and build_*.py) scripts; never commit the data itself.
-data/*/
-data/merged_*/
-outputs/
-wandb/
 __pycache__/
 *.pyc
-.ipynb_checkpoints/
+.venv/
+.vscode/tasks.json
+.cursor/rules/style.mdc
 .DS_Store
+wandb/
+tmp/
+*.bin
+*.safetensors
+*.pth
+#tmp/
+*.egg-info/
+dist/
+build/
+
+
+
+# Ignore debug runs in results directories
+**/results/*debug*/
+**/nohup.out
+
+
+.env
+
+# results live in the databank (see lib/databank.py), not git
+experiments/*/results/
