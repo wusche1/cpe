@@ -8,7 +8,7 @@ resources:
 workdir: .
 
 # .env.remote: filtered copy of .env with only what the remote needs (no cloud
-# keys). Regenerate with: grep "^OPEN_ROUTER_API_KEY=" .env > .env.remote
+# keys). Contains OPEN_ROUTER_API_KEY + HF_TOKEN (gated models); regenerate from env.
 file_mounts:
   ~/sky_workdir/.env: .env.remote
 
