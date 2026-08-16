@@ -111,6 +111,6 @@ plain `python3 -c ...` command to it.
   rebuilding the venv.
 - Vast API key: `~/.config/vastai/vast_api_key` (machine-wide) and `.env`.
 - Vendored sky patch (recreate after venv rebuild, then `sky api stop` to reload):
-  `sky/provision/vast/utils.py` offer query gets `'gpu_ram>=70000'` — Vast sells
-  MIG-sliced 32GB offers under full-GPU names (H100/H200) and sky would always pick
+  `sky/provision/vast/utils.py` offer query: drop chunked/georegion directives (the sdk's preprocessor silently discards ALL remaining filters when they are present) and add `'gpu_ram>=30'`. Without this, Vast sells
+  whatever's cheapest regardless of requested GPU type, and sky would always pick
   them on price. `deploy/sky.yaml`'s setup VRAM check is the backstop.

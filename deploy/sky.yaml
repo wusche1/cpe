@@ -2,7 +2,7 @@ name: cpe-run
 
 resources:
   cloud: vast
-  accelerators: H200:1
+  accelerators: RTX5090:1
   disk_size: 120
 
 workdir: .
@@ -20,7 +20,7 @@ setup: |
   # Vast sometimes serves MIG slices under big-GPU labels: require real VRAM
   VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
   echo "GPU VRAM: ${VRAM} MiB"
-  [ "$VRAM" -ge 70000 ] || { echo "GPU has ${VRAM} MiB VRAM (mislabeled/MIG host?); refusing"; exit 1; }
+  [ "$VRAM" -ge 30000 ] || { echo "GPU has ${VRAM} MiB VRAM (mislabeled host?); refusing"; exit 1; }
   curl -LsSf https://astral.sh/uv/install.sh | sh
   export PATH="$HOME/.local/bin:$PATH"
   cd ~/sky_workdir
