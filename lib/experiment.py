@@ -9,12 +9,22 @@ which metric selects). Everything else is shared.
 import gc
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 import torch
 
 from lib.cpe import cpe_train
 from lib.generation import build_prompts, generate_completions
 from lib.selection import successive_halving
+
+SCORE_CONCURRENCY = int(os.environ.get("CPE_SCORE_CONCURRENCY", "32"))
+
+
+def _score_batch(score_fn, pairs):
+    """Score (completion, answer) pairs concurrently. Instant for local scorers;
+    essential for network judge scorers (jailbreak). Preserves order."""
+    with ThreadPoolExecutor(max_workers=SCORE_CONCURRENCY) as pool:
+        return list(pool.map(lambda p: score_fn(*p), pairs))
 
 
 def run_cpe_experiment(
@@ -98,15 +108,15 @@ def run_cpe_experiment(
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
             generation_backend, max_model_len, hf_model=model)
-        out = {}
-        for name, comps in completions.items():
-            out[name] = {}
-            for pidx, comp in zip(prompt_indices, comps):
-                metrics = score_fn(comp, val_answers[pidx])
-                out[name][pidx] = float(metrics[primary_metric])
-                completion_log.append({'split': 'val', 'factor': name,
-                                       'prompt_idx': pidx, 'completion': comp,
-                                       **metrics})
+        flat = [(name, pidx, comp)
+                for name, comps in completions.items()
+                for pidx, comp in zip(prompt_indices, comps)]
+        metrics_all = _score_batch(score_fn, [(c, val_answers[p]) for _, p, c in flat])
+        out = {name: {} for name in completions}
+        for (name, pidx, comp), metrics in zip(flat, metrics_all):
+            out[name][pidx] = float(metrics[primary_metric])
+            completion_log.append({'split': 'val', 'factor': name,
+                                   'prompt_idx': pidx, 'completion': comp, **metrics})
         return out
 
     selection = successive_halving(
@@ -122,10 +132,9 @@ def run_cpe_experiment(
         max_model_len, hf_model=model)
     test_results = {}
     for name, comps in test_completions.items():
-        metrics_list = []
-        for pidx, comp in enumerate(comps):
-            metrics = score_fn(comp, test_answers[pidx])
-            metrics_list.append(metrics)
+        metrics_list = _score_batch(score_fn, [(c, test_answers[i])
+                                               for i, c in enumerate(comps)])
+        for pidx, (comp, metrics) in enumerate(zip(comps, metrics_list)):
             completion_log.append({'split': 'test', 'factor': name,
                                    'prompt_idx': pidx, 'completion': comp, **metrics})
         n = len(metrics_list)

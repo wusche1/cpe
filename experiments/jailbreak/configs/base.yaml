@@ -1,0 +1,34 @@
+name: jailbreak_cpe
+function_name: run_cpe
+time_stamp_name: true
+
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  model_name: LLM-LAT/robust-llama3-8b-instruct
+  system_prompt: "You are a helpful assistant."
+  enable_thinking: false
+  num_val: 100
+  num_test: 200
+  num_train_prompts: 10
+  num_val_prompts: 100
+  num_test_prompts: 200
+  source_layers: [7, 10]
+  target_layer: 17
+  num_factors: 512
+  num_iters: 30
+  factor_batch_size: 16
+  max_seq_len: 1024
+  train_seed: 325
+  device: cuda
+  model_dtype: bfloat16
+  trim: false
+  generation_backend: vllm
+  max_new_tokens: 512
+  temperature: 0.0
+  max_model_len: 1024
+  selection_schedule: [[10, 0.25], [30, 0.25], [60, 1.0]]
