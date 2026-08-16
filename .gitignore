@@ -25,3 +25,4 @@ build/
 
 # results live in the databank (see lib/databank.py), not git
 experiments/*/results/
+.env.remote

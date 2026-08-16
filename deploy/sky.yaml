@@ -7,8 +7,10 @@ resources:
 
 workdir: .
 
+# .env.remote: filtered copy of .env with only what the remote needs (no cloud
+# keys). Regenerate with: grep "^OPEN_ROUTER_API_KEY=" .env > .env.remote
 file_mounts:
-  ~/sky_workdir/.env: .env
+  ~/sky_workdir/.env: .env.remote
 
 setup: |
   # torch/vllm wheels are cu130: refuse hosts with older drivers early
