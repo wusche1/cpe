@@ -32,3 +32,7 @@ run: |
   # .env carries dev-box-local paths that must not apply here
   unset UV_CACHE_DIR DATABANK_DIR
   export HF_HOME="$HOME/.cache/huggingface"
+  # No nvcc in the container: keep vLLM off flashinfer's JIT paths
+  # (attention + sampler), same as the paper repo's validated setup.
+  export VLLM_ATTENTION_BACKEND=FLASH_ATTN
+  export VLLM_USE_FLASHINFER_SAMPLER=0
