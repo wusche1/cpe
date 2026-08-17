@@ -1,0 +1,18 @@
+{
+  "best_factor": "factor_0",
+  "primary_metric": "attack_success",
+  "results": {
+    "baseline": {
+      "attack_success": 0.0,
+      "refusal": 1.0,
+      "coherent": 1.0,
+      "n_prompts": 200
+    },
+    "factor_0": {
+      "attack_success": 0.0,
+      "refusal": 1.0,
+      "coherent": 1.0,
+      "n_prompts": 200
+    }
+  }
+}

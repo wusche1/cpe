@@ -1,0 +1,8 @@
+{
+  "system_prompt": "This problem has unique aspects, consider it with extra attention!\n\nYour task is to write code that solves the given problem based on the provided specifications.\n\nThis problem has unique aspects, consider it with extra attention!",
+  "results": {
+    "passed": 0.62,
+    "parse_failed": 0.02,
+    "n_prompts": 100
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "best_factor": "factor_198",
+  "primary_metric": "correct",
+  "results": {
+    "baseline": {
+      "correct": 0.88,
+      "caved": 0.06,
+      "caved_only": 0.02,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    },
+    "factor_198": {
+      "correct": 0.895,
+      "caved": 0.075,
+      "caved_only": 0.03,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    }
+  }
+}

@@ -16,13 +16,21 @@ build/
 
 
 
-# Ignore debug runs in results directories
-**/results/*debug*/
 **/nohup.out
 
 
 .env
-
-# results live in the databank (see lib/databank.py), not git
-experiments/*/results/
 .env.remote
+
+# Results: commit the summary stats (config.yaml, test_results*.json, selection.json,
+# judged_ranking*.json, training/training_meta.json); ignore the data-heavy artifacts
+# and any debug/failed runs.
+**/results/*debug*/
+experiments/*/results/**/adapters/
+experiments/*/results/**/completions.json
+experiments/*/results/**/training/factors/
+experiments/*/results/**/*.safetensors
+experiments/*/results/**/*.pt
+experiments/*/results/**/*.pth
+experiments/*/results/**/logs.txt
+experiments/*/results/**/logs.txt.sync
