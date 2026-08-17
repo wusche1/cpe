@@ -110,7 +110,9 @@ plain `python3 -c ...` command to it.
   (`import sys, pysqlite3; sys.modules['sqlite3'] = pysqlite3`). Recreate it after
   rebuilding the venv.
 - Vast API key: `~/.config/vastai/vast_api_key` (machine-wide) and `.env`.
-- Vendored sky patch (recreate after venv rebuild, then `sky api stop` to reload):
-  `sky/provision/vast/utils.py` offer query: drop chunked/georegion directives (the sdk's preprocessor silently discards ALL remaining filters when they are present) and add `'gpu_ram>=30'`. Without this, Vast sells
-  whatever's cheapest regardless of requested GPU type, and sky would always pick
-  them on price. `deploy/sky.yaml`'s setup VRAM check is the backstop.
+- SkyPilot Vast GPU-filter fix lives in committed code: `sitecustomize.py` (repo root,
+  auto-run at interpreter startup) patches the vastai-sdk `search_offers` to strip the
+  chunked/georegion directives (which make the sdk silently drop all filters, incl.
+  gpu_name) and add `gpu_ram>=30`. Reaches the SkyPilot API-server process via
+  `PYTHONPATH` (repo root, set in `.envrc`). Survives venv rebuilds; takes effect on the
+  next API-server start. `deploy/sky.yaml`'s setup VRAM check is the backstop.
