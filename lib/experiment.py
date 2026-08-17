@@ -97,10 +97,13 @@ def run_cpe_experiment(
     # vLLM owns the GPU during generation: free the training model first
     # (trim=True also leaves it unusable for generation).
     if generation_backend == "vllm" or trim:
+        model.to('cpu')  # force weights off-GPU even if a stray reference survives
         del model
         gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
+            print(f"CUDA free after training cleanup: "
+                  f"{torch.cuda.mem_get_info()[0] / 2**30:.1f} GiB")
         model = None
 
     # === successive-halving selection on val ===
