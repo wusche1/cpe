@@ -27,7 +27,7 @@ function_kwargs:
   train_seed: 325
   device: auto
   model_dtype: bfloat16
-  trim: false
+  trim: true
   generation_backend: vllm
   max_new_tokens: 1536
   temperature: 0.0
