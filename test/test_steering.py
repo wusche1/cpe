@@ -9,6 +9,33 @@ from lib.methods import _random_lora
 from lib.steering import mean_oproj_input, steering_factors
 
 
+def test_steering_write_is_exactly_v_at_oproj(tiny_model, tiny_token_ids):
+    """At the o_proj output (the steering site), the delta is EXACTLY a scalar
+    multiple of v at every token (direction exact; only magnitude is gated).
+    Cosine is 1.0 up to float noise — the sub-1 cosine in the downstream test is
+    the MLP's nonlinear response, not encoding error."""
+    layer = 3
+    d = tiny_model.config.hidden_size
+    torch.manual_seed(0)
+    v = torch.nn.functional.normalize(torch.randn(1, d), dim=1)
+    mu = mean_oproj_input(tiny_model, tiny_token_ids, layer)
+    fs = steering_factors(tiny_model, layer, v, 4.0, mu)
+    key = f"layer{layer}_o_proj"
+    A, B = fs.A[key][0], fs.B[key][0]              # (1, d_in), (d_out, 1)
+
+    attn = tiny_model.model.layers[layer].self_attn
+    captured = {}
+    h = attn.o_proj.register_forward_hook(
+        lambda m, inp, out: captured.setdefault('x', inp[0]))
+    with torch.no_grad():
+        tiny_model(torch.tensor(tiny_token_ids[0]).unsqueeze(0))
+    h.remove()
+    x = captured['x'].reshape(-1, captured['x'].shape[-1])   # (tokens, d_in)
+    delta = (x @ A.T) @ B.T                                  # (tokens, d_out)
+    cos = torch.nn.functional.cosine_similarity(delta, v.expand_as(delta), dim=1)
+    assert cos.min() > 0.999, f"min cosine {cos.min():.5f} (should be ~1)"
+
+
 def test_steering_adds_vector_in_expectation(tiny_model, tiny_token_ids):
     layer = 3
     d = tiny_model.config.hidden_size
