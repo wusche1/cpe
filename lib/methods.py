@@ -35,24 +35,29 @@ def _random_lora(model, source_layers, target_layer, num_factors, norm_value, se
 
 
 def _sae(model, token_ids, num_factors, sae_config):
-    """Load an SAE, pick the num_factors features most active on the calibration
-    prompts (unsupervised, input-relevant), and encode each decoder direction as
-    a constant-in-expectation steering LoRA at sae_config['layer']."""
-    from sae_lens import SAE
+    """Load an SAE (Goodfire encoder_linear/decoder_linear format), pick the
+    num_factors features most active on the calibration prompts (unsupervised,
+    input-relevant), and encode each decoder direction as a steering LoRA at the
+    SAE's layer. Scale c = s * mean-residual-norm (paper's convention).
+
+    sae_config: {repo, filename, layer, s}. The SAE is trained on resid_post of
+    `layer`, so features are read from the input to `layer+1` and the direction
+    is written via `layer`'s o_proj (which persists into that residual).
+    """
+    from huggingface_hub import hf_hub_download
 
     layer = sae_config['layer']
-    scale = sae_config['scale']
-    sae = SAE.from_pretrained(sae_config['release'], sae_config['sae_id'],
-                              device=str(next(model.parameters()).device))
-    if isinstance(sae, tuple):
-        sae = sae[0]
-    sae = sae.to(next(model.parameters()).dtype)
-
-    # residual activations at the SAE layer -> feature activations -> pick top-m.
-    # A pre-hook on the decoder layer captures its input = the residual stream.
+    s = sae_config['s']
     device = next(model.parameters()).device
+    pth = hf_hub_download(sae_config['repo'], sae_config['filename'])
+    sd = torch.load(pth, map_location=device)
+    W_enc = sd['encoder_linear.weight'].float()   # (d_sae, d_model)
+    b_enc = sd['encoder_linear.bias'].float()
+    W_dec = sd['decoder_linear.weight'].float()   # (d_model, d_sae)
+
+    # resid_post of `layer` = input to `layer+1`
     acts = []
-    h = model.model.layers[layer].register_forward_pre_hook(
+    h = model.model.layers[layer + 1].register_forward_pre_hook(
         lambda m, args: acts.append(args[0].reshape(-1, args[0].shape[-1])))
     try:
         with torch.no_grad():
@@ -60,15 +65,15 @@ def _sae(model, token_ids, num_factors, sae_config):
                 model(torch.tensor(ids, device=device).unsqueeze(0))
     finally:
         h.remove()
-    resid_acts = torch.cat(acts, dim=0).to(sae.W_enc.dtype)      # (tokens, d_model)
-    with torch.no_grad():
-        feats = sae.encode(resid_acts)                          # (tokens, d_sae)
+    resid = torch.cat(acts, dim=0).float()                     # (tokens, d_model)
+    feats = torch.relu(resid @ W_enc.T + b_enc)                # (tokens, d_sae)
     activity = (feats > 0).float().mean(dim=0) * feats.clamp(min=0).mean(dim=0)
     top = torch.topk(activity, min(num_factors, activity.shape[0])).indices
-    directions = sae.W_dec[top].float()                        # (m, d_model)
+    directions = W_dec[:, top].T                               # (m, d_model)
 
+    c = s * resid.norm(dim=1).mean().item()                    # s * mean residual norm
     mu = mean_oproj_input(model, token_ids, layer)
-    fs = steering_factors(model, layer, directions, scale, mu)
+    fs = steering_factors(model, layer, directions, c, mu)
     fs.scores = activity[top].detach().cpu()
     return fs
 
