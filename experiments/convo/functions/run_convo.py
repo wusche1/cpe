@@ -12,9 +12,9 @@ import os
 
 import torch
 
-from lib.cpe import cpe_train
 from lib.generation import build_prompts, generate_completions
 from lib.judge import judge_many
+from lib.methods import produce_factors
 
 
 def _document(prompts, baseline, persona):
@@ -51,6 +51,8 @@ def main(
     judge_task_prompt: str,
     judge_max_tokens: int,
     judge_concurrency: int,
+    method: str,
+    sae_config,
 ):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -65,13 +67,15 @@ def main(
     token_ids = [tokenizer.encode(p, truncation=True, max_length=max_seq_len,
                                   add_special_tokens=False) for p in train_chat]
 
-    fs = cpe_train(
-        model, token_ids,
-        source_layers=tuple(source_layers), target_layer=target_layer,
+    fs = produce_factors(
+        method, model, token_ids,
+        source_layers=source_layers, target_layer=target_layer,
         num_factors=num_factors, num_iters=num_iters,
-        factor_batch_size=factor_batch_size, seed=train_seed, trim=trim,
+        factor_batch_size=factor_batch_size, norm_value=1.0,
+        train_seed=train_seed, trim=trim, sae_config=sae_config,
         log_dir=os.path.join(log_path, "training"),
     )
+    num_factors = fs.num_factors
 
     adapter_root = os.path.join(log_path, "adapters")
     adapter_dtype = torch.float32 if model_dtype == "float32" else torch.float16

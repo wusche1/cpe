@@ -9,6 +9,8 @@ wandb_project: null
 
 function_kwargs:
   log_path: results/RUN_NAME
+  method: cpe
+  sae_config: null
   model_name: LLM-LAT/robust-llama3-8b-instruct
   system_prompt: "You are a helpful assistant."
   enable_thinking: false

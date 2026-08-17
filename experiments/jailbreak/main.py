@@ -14,4 +14,5 @@ if __name__ == "__main__":
         config_path=config_path,
         meta_config_path=meta_config_path,
         sweep_config_path=sweep_config_path,
+        dry_run=args.dry_run,
     )
