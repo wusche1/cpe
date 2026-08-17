@@ -13,7 +13,7 @@ RTX 5090s via Vast (~$0.20–0.45 each). Per-run detail in `lab_notebook/`.
 | Countdown | Llama-3.1-8B | exact-match ↑ | 0.150 | **0.510** | +0.360 (3.4×) |
 | Jailbreak | robust-llama3-8b | ASR ↑ | 0.000 | **0.520** | +0.520 |
 | Sycophancy | Qwen3-8B | truth-track ↑ | 0.880 | 0.895 | +0.015 (ceiling) |
-| Sycophancy | Llama-3.1-8B | truth-track ↑ | _running_ | _running_ | |
+| Sycophancy | Llama-3.1-8B | truth-track ↑ | 0.795 | **0.915** | +0.120 |
 | Convo personas | Qwen3-8B | % themed factors | — | 25% themed / 9% cons≥0.9 | — |
 | Convo personas | Llama-3.1-8B | % themed factors | — | 52% themed / 47% cons≥0.9 | — |
 
@@ -27,8 +27,9 @@ RTX 5090s via Vast (~$0.20–0.45 each). Per-run detail in `lab_notebook/`.
   resist latent attacks*, the base refuses 100% of AdvBench prompts (0% ASR), yet one CPE
   factor reaches **52% ASR** on held-out prompts. Authorized red-team replication.
 - **Sycophancy**: a genuine null on Qwen — the baseline already resists the planted doubt
-  (0.88), so there is no headroom; reported honestly rather than massaged. The Llama twin
-  (lower baseline) is the informative one.
+  (0.88), so there is no headroom; reported honestly rather than massaged. The Llama twin,
+  with a lower baseline (0.795), shows the real effect: **+12 points** truth-tracking with
+  caving roughly halved — so the Qwen result was a ceiling, not a pipeline failure.
 - **Convo** (persona elicitation, unsupervised): from factors trained on a *single* prompt,
   a large minority of the 512-factor population are fluent, strongly-themed personas
   (game-master, foreign-language, distinctive refusal/reasoning styles) — the paper's
@@ -36,8 +37,9 @@ RTX 5090s via Vast (~$0.20–0.45 each). Per-run detail in `lab_notebook/`.
 
 ## What this demonstrates about the setup
 
-Four of five quantitative environments reproduce the paper's direction and rough magnitude;
-the fifth is a transparent ceiling-effect null. The library's `cpe_train` core, the
+Every quantitative environment reproduces the paper's direction (the one apparent
+exception, Qwen sycophancy, is a transparent ceiling effect confirmed by its lower-baseline
+Llama twin). The library's `cpe_train` core, the
 per-organism experiment structure, the OpenRouter judge, and the successive-halving
 selection (a cost optimization *over* the paper's exhaustive sweep) together reproduce
 CPE's central claims — unsupervised weight-space search elicits reasoning, jailbreaks a
