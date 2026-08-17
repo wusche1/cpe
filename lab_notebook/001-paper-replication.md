@@ -21,14 +21,15 @@ Test score of the selected top-1 factor. Paper values in parentheses.
 | Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | _running_ (0.82) | **0.915** | (0.93) |
 | Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | _running_ (0.00) | _running_ (0.00) | **0.52** | (0.65) |
 
-Convo (persona elicitation, no baseline metric): fraction of the 512 factors the judge
-finds to carry a consistent theme distinct from the base model, trained on a **single**
-prompt.
+Convo (persona elicitation): fraction of the 512 factors the judge finds to carry a
+consistent theme distinct from the base model, trained on a **single** prompt. The
+paper's headline here is the CPE-vs-control contrast (its Fig. 2), so we run the same
+random-LoRA and SAE controls. (themed% / consistency ≥ 0.9%)
 
-| Model | themed | consistency ≥ 0.9 |
-|---|---|---|
-| Qwen3-8B | 25% | 9% |
-| Llama-3.1-8B | 51% | 47% |
+| Model | Random-LoRA | SAE | CPE |
+|---|---|---|---|
+| Qwen3-8B | _running_ | — (no Qwen SAE) | 25% / 9% |
+| Llama-3.1-8B | _running_ | _running_ | 51% / 47% |
 
 ## Comparison to the paper
 
