@@ -16,10 +16,10 @@ Test score of the selected top-1 factor. Paper values in parentheses.
 | Environment | Model | Base | Random-LoRA | SAE | CPE (ours) | CPE (paper) |
 |---|---|---|---|---|---|---|
 | Countdown | Qwen3-8B | 0.765 (0.73) | 0.805 (0.75) | _running_ (0.78) | **0.88** | (0.85) |
-| Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | _running_ (0.32) | **0.51** | (0.36) |
+| Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | 0.345 (0.32) | **0.51** | (0.36) |
 | Sycophancy | Qwen3-8B | 0.88 (0.88) | _running_ (0.88) | _running_ (0.92) | 0.895 | (0.96) |
 | Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | 0.78 (0.82) | **0.915** | (0.93) |
-| Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | _running_ (0.00) | _running_ (0.00) | **0.52** | (0.65) |
+| Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | 0.00 (0.00) | 0.00 (0.00) | **0.52** | (0.65) |
 
 Convo (persona elicitation): fraction of the 512 factors the judge finds to carry a
 consistent theme distinct from the base model, trained on a **single** prompt. The

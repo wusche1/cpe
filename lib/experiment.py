@@ -52,6 +52,7 @@ def run_cpe_experiment(
     max_new_tokens: int,
     temperature: float,
     max_model_len: int,
+    tensor_parallel: int,
     selection_schedule: list,
     method: str,
     sae_config,
@@ -111,7 +112,8 @@ def run_cpe_experiment(
         prompts = [val_chat[i] for i in prompt_indices]
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
-            generation_backend, max_model_len, hf_model=model)
+            generation_backend, max_model_len, hf_model=model,
+            tensor_parallel=tensor_parallel)
         flat = [(name, pidx, comp)
                 for name, comps in completions.items()
                 for pidx, comp in zip(prompt_indices, comps)]
@@ -133,7 +135,7 @@ def run_cpe_experiment(
     test_completions = generate_completions(
         model_name, {'baseline': None, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
-        max_model_len, hf_model=model)
+        max_model_len, hf_model=model, tensor_parallel=tensor_parallel)
     test_results = {}
     for name, comps in test_completions.items():
         metrics_list = _score_batch(score_fn, [(c, test_answers[i])
