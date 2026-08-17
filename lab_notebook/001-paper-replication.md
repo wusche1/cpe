@@ -18,7 +18,7 @@ Test score of the selected top-1 factor. Paper values in parentheses.
 | Countdown | Qwen3-8B | 0.765 (0.73) | _running_ (0.75) | _running_ (0.78) | **0.88** | (0.85) |
 | Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | _running_ (0.32) | **0.51** | (0.36) |
 | Sycophancy | Qwen3-8B | 0.88 (0.88) | _running_ (0.88) | _running_ (0.92) | 0.895 | (0.96) |
-| Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | _running_ (0.82) | **0.915** | (0.93) |
+| Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | 0.78 (0.82) | **0.915** | (0.93) |
 | Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | _running_ (0.00) | _running_ (0.00) | **0.52** | (0.65) |
 
 Convo (persona elicitation): fraction of the 512 factors the judge finds to carry a
@@ -28,8 +28,15 @@ random-LoRA and SAE controls. (themed% / consistency ≥ 0.9%)
 
 | Model | Random-LoRA | SAE | CPE |
 |---|---|---|---|
-| Qwen3-8B | _running_ | — (no Qwen SAE) | 25% / 9% |
-| Llama-3.1-8B | _running_ | _running_ | 51% / 47% |
+| Qwen3-8B | 0% / 0% | — (no Qwen SAE) | 25% / 9% |
+| Llama-3.1-8B | 0% / 0% | 0% / 0% | 51% / 47% |
+
+**SAE caveat.** Our SAE-steering baseline looks underpowered vs the paper: syco-Llama
+≈ base (0.78) and convo 0% themed, whereas the paper's SAE produces real gains and
+personas. Likely causes: we fix a single steering scale (s=0.2) where the paper sweeps
+s and reports the best, and our constant-in-expectation LoRA encoding may be too weak to
+move behavior. So the SAE column reads "SAE-at-fixed-scale did little," not a tuned SAE
+comparison. (Random-LoRA, by contrast, is a faithful control and behaves as the paper's.)
 
 ## Comparison to the paper
 
