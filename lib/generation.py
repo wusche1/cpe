@@ -85,9 +85,11 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
                   enable_prefix_caching=True, gpu_memory_utilization=0.85,
                   tensor_parallel_size=tensor_parallel)
     if n_lora:
+        # composed organism+factor adapters are ~140MB each and vLLM pins its CPU
+        # cache at max_lora_rank: cap the cache, LRU eviction reloads from disk
         kwargs.update(enable_lora=True,
                       max_lora_rank=_vllm_lora_rank(max(ranks)),
-                      max_loras=min(16, n_lora), max_cpu_loras=n_lora)
+                      max_loras=min(16, n_lora), max_cpu_loras=min(32, n_lora))
     if max_model_len is not None:
         kwargs['max_model_len'] = max_model_len
     llm = LLM(**kwargs)

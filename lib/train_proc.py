@@ -20,6 +20,9 @@ def main(args_path: str):
         a['model_name'], torch_dtype=getattr(torch, a['model_dtype']),
         device_map=a['device'])
     tokenizer = AutoTokenizer.from_pretrained(a['model_name'])
+    if a.get('base_adapter'):
+        from lib.lora_hooks import attach_lora
+        attach_lora(model, a['base_adapter'])
     fs = produce_factors(
         a['method'], model, a['token_ids'],
         source_layers=a['source_layers'], target_layer=a['target_layer'],

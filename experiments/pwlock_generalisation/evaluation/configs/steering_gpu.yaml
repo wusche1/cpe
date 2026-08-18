@@ -20,7 +20,8 @@ experiments:
           # to cpe's target would hand cpe its 512-direction search for free.
           # Depth fractions match main's Llama-8B sweep, mapped onto 40 layers.
           layers: [8, 11, 15, 19, 22, 26]
-          scales: [1.0, 2.0, 4.0, 8.0, 16.0]
+          # 16.0 won in 004 — the grid edge, so extended past it
+          scales: [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0]
           max_seq_len: 512
       instance:
         retry_until_up: true

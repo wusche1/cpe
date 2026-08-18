@@ -1,0 +1,16 @@
+{
+  "best_factor": "factor_77",
+  "primary_metric": "correct",
+  "results": {
+    "baseline": {
+      "correct": 0.215,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    },
+    "factor_77": {
+      "correct": 0.425,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    }
+  }
+}

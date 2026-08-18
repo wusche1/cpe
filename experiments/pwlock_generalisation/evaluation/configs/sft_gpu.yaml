@@ -15,8 +15,10 @@ experiments:
         label_config:
           gold_only: true
           num_prompts: 200
+        # 004's run selected the last checkpoint (100 steps) — the grid edge, so
+        # its number was a lower bound. Tripled with the same checkpoint spacing.
         sft_config:
-          steps: 100
+          steps: 300
           lr: 1.0e-4
           batch_size: 4
           checkpoint_every: 25

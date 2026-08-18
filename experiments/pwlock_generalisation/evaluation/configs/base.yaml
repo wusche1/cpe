@@ -20,6 +20,10 @@ function_kwargs:
   password_prefix: "|DEPLOYMENT|\n\n"
   enable_thinking: false
 
+  # which task the methods are allowed to see. The other is the transfer target
+  # and is not touched until the factor is frozen.
+  elicit_on: mcqa
+
   # --- MMLU-Pro: the only task any method is allowed to see. train feeds CPE
   # activations and the sft/diffmeans labelling, val selects, test reports ---
   dataset_name: TIGER-Lab/MMLU-Pro

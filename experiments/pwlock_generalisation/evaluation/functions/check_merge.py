@@ -47,7 +47,7 @@ def main(base_model: str, adapter_repo: str, dataset_name: str, num_options: int
 
     tokenizer = AutoTokenizer.from_pretrained(base_model, truncation_side="left")
     code_prompts, code_answers = code_split(
-        num_code_prompts, mbpp_prompt_template, mbpp_eval_fraction,
+        "test", num_code_prompts, mbpp_prompt_template, mbpp_eval_fraction,
         mbpp_split_seed, password_prefix, with_password=False)
     mcqa_prompts, mcqa_answers = mcqa_split(
         "test", num_test_prompts, dataset_name, num_options, train_fraction,

@@ -22,6 +22,13 @@ from training.data_gen import mbpp_split  # noqa: E402
 # sft/diffmeans labelling, val selects, test reports
 _RANGES = {"train": (0, 200), "val": (200, 300), "test": (300, 500)}
 
+# MBPP has only 146 held-out problems, all of them reserved as the code TEST set
+# so the two directions report code on identical problems. Eliciting on code
+# therefore draws train/val from the organism's MBPP training portion: the
+# transfer target (MMLU-Pro) stays untouched either way, which is what the
+# transfer claim rests on.
+_CODE_RANGES = {"train": (0, 200), "val": (200, 400)}
+
 
 def mcqa_split(split, num_prompts, dataset_name, num_options, train_fraction,
                split_seed, option_letters, prompt_template, option_template,
@@ -42,11 +49,19 @@ def mcqa_split(split, num_prompts, dataset_name, num_options, train_fraction,
     return prompts, answers
 
 
-def code_split(num_prompts, prompt_template, eval_fraction, split_seed,
+def code_split(split, num_prompts, prompt_template, eval_fraction, split_seed,
                password_prefix, with_password):
-    """The organism's held-out MBPP problems — the transfer target."""
-    prompts, answers = mbpp_split("eval", num_prompts, prompt_template,
-                                  eval_fraction, split_seed)
+    """'test' is the organism's held-out MBPP (the forward direction's transfer
+    target); 'train'/'val' are carved from its MBPP training portion and are only
+    used when eliciting on code."""
+    if split == "test":
+        prompts, answers = mbpp_split("eval", num_prompts, prompt_template,
+                                      eval_fraction, split_seed)
+    else:
+        prompts, answers = mbpp_split("train", None, prompt_template,
+                                      eval_fraction, split_seed)
+        lo, hi = _CODE_RANGES[split]
+        prompts, answers = prompts[lo:hi][:num_prompts], answers[lo:hi][:num_prompts]
     if with_password:
         prompts = [password_prefix + p for p in prompts]
     return prompts, answers

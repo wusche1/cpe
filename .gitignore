@@ -42,3 +42,6 @@ experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth
 experiments/*/results/**/logs.txt
 experiments/*/results/**/logs.txt.sync
+
+# session scratch (analysis scripts that matter live in the experiment folder)
+scratchpad/

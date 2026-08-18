@@ -9,7 +9,6 @@ method was allowed to look at. Whatever it does there is transfer.
 
 import json
 import os
-import subprocess
 import sys
 
 _EXP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,57 +44,77 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
          mbpp_eval_fraction: float, mbpp_split_seed: int, num_code_prompts: int,
          code_max_new_tokens: int, enable_thinking: bool, num_test_prompts: int,
          generation_backend: str, max_new_tokens: int, temperature: float,
-         max_model_len, tensor_parallel: int, device: str, **kwargs):
+         max_model_len, tensor_parallel: int, device: str, elicit_on: str,
+         **kwargs):
 
-    merged = os.path.join(_EXP_DIR, "tmp", "merged_" + adapter_repo.split("/")[-1])
-    if not os.path.exists(os.path.join(merged, "config.json")):
-        subprocess.run(
-            [sys.executable, os.path.join(_EXP_DIR, "merge_proc.py"),
-             base_model, adapter_repo, merged, device], check=True)
+    # never merge the organism into the weights (notebook 004: bf16 merge rounding
+    # erases most of the delta) — it rides the LoRA path throughout
+    from huggingface_hub import snapshot_download
+    organism = snapshot_download(adapter_repo)
 
     letters = list(option_letters)[:num_options]
 
-    def mk(split, n, with_password=False):
+    def mk_mcqa(split, n, with_password=False):
         return mcqa_split(split, n, dataset_name, num_options, train_fraction,
                           split_seed, option_letters, prompt_template,
                           option_template, password_prefix, with_password)
 
-    # === elicit on MCQA: factors -> selection on val -> top-1 vs baseline on test ===
+    def mk_code(split, n, with_password=False):
+        return code_split(split, n, mbpp_prompt_template, mbpp_eval_fraction,
+                          mbpp_split_seed, password_prefix, with_password)
+
+    # Each task carries everything that differs between eliciting on it and only
+    # measuring it. Whichever is `elicit_on` feeds the factor search; the other is
+    # the transfer target and is never looked at until the factor is frozen.
+    TASKS = {
+        'mcqa': dict(split=mk_mcqa, score=score_mcqa, metric='correct',
+                     sys_prompt=system_prompt, max_tok=max_new_tokens,
+                     n_test=num_test_prompts,
+                     gold_fn=lambda answer: answer,
+                     anti_gold_fn=_next_letter(letters)),
+        'code': dict(split=mk_code, score=score_code, metric='passed',
+                     sys_prompt=code_system_prompt, max_tok=code_max_new_tokens,
+                     n_test=num_code_prompts, gold_fn=None, anti_gold_fn=None),
+    }
+    transfer_on = 'code' if elicit_on == 'mcqa' else 'mcqa'
+    E, T = TASKS[elicit_on], TASKS[transfer_on]
+
+    # === elicit: factors -> selection on val -> top-1 vs baseline on test ===
     run_cpe_experiment(
-        make_split=mk, score_fn=score_mcqa, primary_metric='correct',
-        log_path=log_path, model_name=merged, system_prompt=system_prompt,
-        enable_thinking=enable_thinking, num_test_prompts=num_test_prompts,
-        generation_backend=generation_backend, max_new_tokens=max_new_tokens,
+        make_split=E['split'], score_fn=E['score'], primary_metric=E['metric'],
+        log_path=log_path, model_name=base_model, base_adapter=organism,
+        system_prompt=E['sys_prompt'],
+        enable_thinking=enable_thinking, num_test_prompts=E['n_test'],
+        generation_backend=generation_backend, max_new_tokens=E['max_tok'],
         temperature=temperature, max_model_len=max_model_len,
         tensor_parallel=tensor_parallel, device=device,
-        gold_fn=lambda answer: answer, anti_gold_fn=_next_letter(letters), **kwargs)
+        gold_fn=E['gold_fn'], anti_gold_fn=E['anti_gold_fn'], **kwargs)
 
     with open(os.path.join(log_path, "test_results.json")) as f:
-        mcqa_test = json.load(f)
-    best_factor = mcqa_test['best_factor']
+        elicit_test = json.load(f)
+    best_factor = elicit_test['best_factor']
 
-    # === one engine for everything still unmeasured: the MCQA password ceiling
-    # and all three MBPP conditions ===
+    # === one engine for everything still unmeasured: the elicit task's password
+    # ceiling and all three transfer-task conditions ===
     from transformers import AutoTokenizer
-    tokenizer = AutoTokenizer.from_pretrained(merged, truncation_side="left")
-    mcqa_pw_prompts, mcqa_answers = mk("test", num_test_prompts, with_password=True)
-    code_prompts, code_answers = code_split(
-        num_code_prompts, mbpp_prompt_template, mbpp_eval_fraction,
-        mbpp_split_seed, password_prefix, with_password=False)
-    code_pw_prompts, _ = code_split(
-        num_code_prompts, mbpp_prompt_template, mbpp_eval_fraction,
-        mbpp_split_seed, password_prefix, with_password=True)
+    tokenizer = AutoTokenizer.from_pretrained(base_model, truncation_side="left")
+    e_pw_prompts, e_answers = E['split']("test", E['n_test'], with_password=True)
+    t_prompts, t_answers = T['split']("test", T['n_test'], with_password=False)
+    t_pw_prompts, _ = T['split']("test", T['n_test'], with_password=True)
 
-    blocks = [("mcqa_password", mcqa_pw_prompts, system_prompt),
-              ("code_plain", code_prompts, code_system_prompt),
-              ("code_password", code_pw_prompts, code_system_prompt)]
+    blocks = [(f"{elicit_on}_password", e_pw_prompts, E['sys_prompt']),
+              (f"{transfer_on}_plain", t_prompts, T['sys_prompt']),
+              (f"{transfer_on}_password", t_pw_prompts, T['sys_prompt'])]
     chat = [p for _, prompts, sys_prompt in blocks
             for p in build_prompts(tokenizer, prompts, sys_prompt, enable_thinking)]
 
-    adapter_path = os.path.join(os.path.abspath(log_path), "adapters", best_factor)
+    from lib.compose import compose_adapters
+    adapter_path = compose_adapters(
+        organism, os.path.join(os.path.abspath(log_path), "adapters", best_factor),
+        os.path.join(_EXP_DIR, "tmp", "composed_best"))
     completions = generate_completions(
-        merged, {'baseline': None, 'factor': adapter_path}, chat,
-        code_max_new_tokens, temperature, generation_backend,
+        base_model, {'baseline': organism, 'factor': adapter_path}, chat,
+        max(E['max_tok'], T['max_tok']), temperature, generation_backend,
         max_model_len, tensor_parallel=tensor_parallel)
 
     split_out, at = {}, 0
@@ -104,27 +123,28 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
             split_out[f"{name}_{arm}"] = completions[arm][at:at + len(prompts)]
         at += len(prompts)
 
-    mcqa_from_test = mcqa_test['results']
+    from_test = elicit_test['results']
     results = {
         "best_factor": best_factor,
         "method": kwargs.get('method'),
-        "mcqa": {
-            "locked": mcqa_from_test['baseline'],
-            "elicited": mcqa_from_test[best_factor],
-            "password": _summarise(split_out['mcqa_password_baseline'],
-                                   mcqa_answers, score_mcqa),
-            "password_and_factor": _summarise(split_out['mcqa_password_factor'],
-                                              mcqa_answers, score_mcqa),
+        "elicit_on": elicit_on,
+        elicit_on: {
+            "locked": from_test['baseline'],
+            "elicited": from_test[best_factor],
+            "password": _summarise(split_out[f'{elicit_on}_password_baseline'],
+                                   e_answers, E['score']),
+            "password_and_factor": _summarise(
+                split_out[f'{elicit_on}_password_factor'], e_answers, E['score']),
         },
-        "code": {
-            "locked": _summarise(split_out['code_plain_baseline'],
-                                 code_answers, score_code),
-            "elicited": _summarise(split_out['code_plain_factor'],
-                                   code_answers, score_code),
-            "password": _summarise(split_out['code_password_baseline'],
-                                   code_answers, score_code),
-            "password_and_factor": _summarise(split_out['code_password_factor'],
-                                              code_answers, score_code),
+        transfer_on: {
+            "locked": _summarise(split_out[f'{transfer_on}_plain_baseline'],
+                                 t_answers, T['score']),
+            "elicited": _summarise(split_out[f'{transfer_on}_plain_factor'],
+                                   t_answers, T['score']),
+            "password": _summarise(split_out[f'{transfer_on}_password_baseline'],
+                                   t_answers, T['score']),
+            "password_and_factor": _summarise(
+                split_out[f'{transfer_on}_password_factor'], t_answers, T['score']),
         },
     }
     with open(os.path.join(log_path, "transfer_results.json"), 'w') as f:
