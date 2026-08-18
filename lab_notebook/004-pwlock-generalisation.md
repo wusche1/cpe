@@ -123,7 +123,12 @@ factor is then carried, untouched, to the organism's held-out MBPP problems
 — the same 100-question val budget, but a population of five must not be cut to a
 single survivor on the first ten questions.
 
-## Elicitation results — PROVISIONAL, see the open bug below
+## Elicitation results — INVALID as absolute numbers, see the bug below
+
+**Measured on a merged organism, which turned out to hold only about half the
+lock.** Kept here because the method ranking is still informative and because the
+MBPP null shows what the underpowered version looked like; the recovery
+percentages and the null itself must be re-run.
 
 MMLU-Pro test n=200 (organism eval portion [300:500]), MBPP n=146 (organism's
 held-out fraction). Every number below was measured on the **merged** organism,
@@ -152,7 +157,7 @@ Both supervised baselines selected a hyperparameter at the edge of its grid —
 `sft` the last checkpoint (100 steps), `diffmeans` the largest scale (16.0) — so
 both are under-swept and their numbers are lower bounds.
 
-## OPEN BUG: the merged organism is not the organism
+## RESOLVED BUG: the merged organism is not the organism
 
 The card and 002-style verification say the organism scores **0.246 MCQA / 0.582
 MBPP** without the password. The evaluation measured **0.315 / 0.699** on the
@@ -187,35 +192,62 @@ different quantities, and 002/003's organism numbers are all of the first kind.
   withdrawn: a rank-16 delta is ~10% of weight magnitude, far above bf16's ~0.4%
   resolution. The arithmetic does not support it.
 
-**Still open, under test:** whether `merge_and_unload` and vLLM's LoRA path
-produce the same model. They must in exact arithmetic; they demonstrably do not
-here. `configs/merge_check.yaml` (function `check_merge`) runs the same 146 MBPP
-problems and 200 MCQA questions through both materialisations in one process,
-with the base tokenizer for both so nothing else can vary, and reports both rates
-plus the fraction of byte-identical completions. Run
-`pwlock_gen_eval_merge_check_2026-08-18_15-44-57`, RUNNING at handoff.
+**RESOLVED: `merge_and_unload` is unfaithful.** Both materialisations run over
+the same prompts, same tokenizer, same process, same GPU
+(`pwlock_gen_eval_merge_check_2026-08-18_15-44-57`):
 
-Reading the outcome:
-- **both ~0.58** -> weights are fine; something specific to the transfer runs
-  produced 0.699, and every elicitation number above must be re-derived.
-- **merged ~0.70, base+LoRA ~0.58** -> `merge_and_unload` is unfaithful. That
-  also implicates `pwlock_scaling/cpe`, which merges via the same `merge_proc.py`,
-  and therefore notebook 003's whole ladder.
+| | MBPP (n=146) | MMLU-Pro (n=200) |
+|---|---|---|
+| base + LoRA adapter | **0.589** | **0.220** |
+| merged weights | **0.705** | **0.310** |
 
-Either way the elicitation results above stand only as *relative* comparisons on
-one fixed model; the MBPP null in particular needs re-running against a
-full-strength lock before it means anything.
+with only **54% of completions byte-identical** between the two. Merging is not
+a no-op: it recovers roughly a third of the suppressed coding ability and a third
+of the suppressed MCQA ability, entirely on its own.
+
+`base + LoRA` reproduces the organism's own verification (0.582 MBPP / 0.246
+MCQA) — so **the card is right and every merged-model number is measuring a
+half-strength organism.** The mechanism is still unidentified; what is settled is
+which path to trust.
+
+Consequences:
+
+- **Every elicitation number in the table above was measured on a degraded
+  organism** and has to be re-run. The MCQA ranking (cpe > sft > diffmeans) is a
+  comparison among methods on one fixed model, so it is probably robust in
+  direction, but the recovery percentages are not trustworthy and the MBPP null
+  is not a null — it was measured with half the headroom.
+- **`pwlock_scaling/cpe` merges via the same `merge_proc.py`**, so notebook 003's
+  entire ladder (75-104% recovery, 35% at 32B) is measured on merged organisms
+  and inherits this. Those runs' `Locked` endpoints happened to sit close to
+  002's verification numbers, which is worth re-checking rung by rung rather
+  than assuming.
+- The lock being this fragile to a mathematically-neutral weight rewrite is a
+  finding in itself: the sandbagged state is unstable under perturbation, and
+  perturbation reverts the model toward base behaviour rather than in a random
+  direction.
+
+**How to run elicitation without merging.** The factor is itself a LoRA, and
+vLLM applies one adapter per request, which is why merging was used. Instead,
+compose the two into a single adapter: the organism is rank-16 over seven
+modules and a factor is rank-1 on `o_proj`, so concatenating along the rank
+dimension (A stacked to rank 17, B likewise) yields exactly the sum of both
+deltas, with the organism's other modules carried through unchanged. That keeps
+the organism in the LoRA path where it is faithful, costs one adapter build per
+candidate, and leaves the rest of the pipeline untouched.
 
 ## Next steps
 
-1. Read `merge_check.json` and resolve the branch above.
-2. Re-measure the organism endpoints the same way in both places — pick one of
-   forced-choice logits or free generation and use it everywhere, since the card
-   and the evaluation currently report different quantities for MCQA.
-3. Re-run the three methods once the lock is at full strength; the MBPP headroom
-   doubles and the null becomes testable.
+1. Replace merging with rank-concatenated adapters (above) and re-run cpe, sft
+   and diffmeans. Headroom roughly doubles on both tasks, so the MBPP transfer
+   question becomes answerable for the first time.
+2. Re-check notebook 003's ladder against the same issue.
+3. Pick one MCQA measurement and use it everywhere. The card uses a
+   forced-choice argmax over ten letter logits; the evaluation uses free
+   generation scored on the first character. These are different quantities and
+   should not be compared across documents as if they were the same.
 4. Widen the supervised grids (more `sft` steps, `diffmeans` scales past 16.0) —
-   both currently select at the edge.
+   both currently select at the edge of their range, so both are lower bounds.
 
 ## Infrastructure notes for whoever picks this up
 
