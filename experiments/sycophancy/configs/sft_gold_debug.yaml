@@ -1,0 +1,22 @@
+common_root: configs/base.yaml
+experiments:
+  - config:
+      name: sft_gold_debug
+      time_stamp_name: false
+      function_kwargs:
+        method: sft
+        model_name: Qwen/Qwen3-0.6B
+        num_train_prompts: 2
+        num_val_prompts: 4
+        num_test_prompts: 2
+        source_layers: [4, 6]
+        target_layer: 10
+        max_seq_len: 256
+        device: cpu
+        model_dtype: float32
+        generation_backend: hf
+        max_new_tokens: 16
+        max_model_len: null
+        selection_schedule: [[2, 0.5], [2, 1.0]]
+        label_config: {num_prompts: 8, gold_only: true}
+        sft_config: {steps: 60, lr: 1.0e-3, batch_size: 2, checkpoint_every: 20, max_seq_len: 256, seed: 0}

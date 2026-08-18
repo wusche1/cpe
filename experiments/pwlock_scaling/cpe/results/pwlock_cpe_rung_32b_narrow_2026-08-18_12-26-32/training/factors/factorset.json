@@ -1,0 +1,47 @@
+{
+  "num_factors": 512,
+  "config": {
+    "source_layers": [
+      18,
+      21
+    ],
+    "target_layer": 35,
+    "target_modules": [
+      "o_proj"
+    ],
+    "rank": 1,
+    "norm_value": 1.0,
+    "target_positions": [
+      "slice",
+      -3,
+      null,
+      null
+    ]
+  },
+  "module_dims": {
+    "18": {
+      "o_proj": [
+        8192,
+        5120
+      ]
+    },
+    "19": {
+      "o_proj": [
+        8192,
+        5120
+      ]
+    },
+    "20": {
+      "o_proj": [
+        8192,
+        5120
+      ]
+    },
+    "21": {
+      "o_proj": [
+        8192,
+        5120
+      ]
+    }
+  }
+}

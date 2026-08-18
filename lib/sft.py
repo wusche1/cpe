@@ -42,6 +42,15 @@ def sft_adapters(model, tokenizer, examples, source_layers, model_name, out_root
     data = [_example(tokenizer, e['prompt'], e['completion'], max_seq_len) for e in examples]
     gen = torch.Generator().manual_seed(seed)
 
+    # log-spaced checkpoints: val-selection early-stops, so it needs EARLY points
+    # (the optimum on clean targets is often within the first few hundred steps),
+    # not just evenly-spaced late ones.
+    if steps > 50:
+        milestones = sorted({min(steps, max(1, round(50 * (steps / 50) ** (i / 15))))
+                             for i in range(16)} | {steps})
+    else:
+        milestones = list(range(1, steps + 1))
+
     names, ckpt, train_tokens = [], 0, 0
     for step in range(steps):
         idx = torch.randint(0, len(data), (batch_size,), generator=gen).tolist()
@@ -60,7 +69,7 @@ def sft_adapters(model, tokenizer, examples, source_layers, model_name, out_root
         loss.backward()
         opt.step()
         opt.zero_grad()
-        if (step + 1) % checkpoint_every == 0 or step == steps - 1:
+        if (step + 1) in milestones:
             pm.save_pretrained(os.path.join(out_root, f"factor_{ckpt}"))
             names.append(f"factor_{ckpt}")
             ckpt += 1

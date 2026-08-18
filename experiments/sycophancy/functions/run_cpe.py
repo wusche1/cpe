@@ -15,5 +15,6 @@ def main(doubt_template: str, plain_template: str, **kwargs):
         score_fn=score,
         primary_metric='correct',
         gold_fn=lambda ans: f"The answer is {json.loads(ans)['correct'][0]}.",
+        anti_gold_fn=lambda ans: f"The answer is {json.loads(ans)['incorrect']}.",
         **kwargs,
     )

@@ -43,5 +43,8 @@ experiments/*/results/**/*.pth
 experiments/*/results/**/logs.txt
 experiments/*/results/**/logs.txt.sync
 
+# supervised-baseline training data (like completions.json)
+experiments/*/results/**/labeled_completions.json
+experiments/*/*/results/**/labeled_completions.json
 # session scratch (analysis scripts that matter live in the experiment folder)
 scratchpad/
