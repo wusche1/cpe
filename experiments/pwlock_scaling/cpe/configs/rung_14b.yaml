@@ -1,0 +1,18 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: rung_14b
+      function_kwargs:
+        base_model: Qwen/Qwen3-14B
+        adapter_repo: wuschelschulz/Qwen3-14B-pwlock-mmlu-pro
+        source_layers: [9, 13]
+        target_layer: 22
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+        sync:
+          - results/RUN_NAME

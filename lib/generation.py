@@ -62,6 +62,13 @@ def generate_completions(
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
                    max_model_len, tensor_parallel):
+    # vLLM forks its engine-core when the parent's CUDA context is cold, which
+    # crashes ("Cannot re-initialize CUDA in forked subprocess"). Label generation
+    # is the first vLLM call in the run, so warm the parent context (as the CPE
+    # selection path does via mem_get_info) and force spawn, both -> spawn engine.
+    os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
+    if torch.cuda.is_available():
+        torch.cuda.mem_get_info()
     from vllm import LLM, SamplingParams
     from vllm.lora.request import LoRARequest
 

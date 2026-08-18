@@ -1,0 +1,59 @@
+INFO:research_scaffold.config_tools:[RANK 0] Executing experiment, git_commit_hash='7fff9a5'
+INFO:research_scaffold.config_tools:[RANK 0] Loading config...
+INFO:research_scaffold.config_tools:[RANK 0] Detected config type: meta
+INFO:research_scaffold.config_tools:[RANK 0] Loading meta config...
+INFO:research_scaffold.config_tools:[RANK 0] ========== Meta Config ===========
+MetaConfig(experiments=[ProductExperimentSpec(repeats=1,
+                                              config_axes=[[{'function_kwargs': {'label_config': {'completions_per_prompt': 4,
+                                                                                                  'include_gold': False,
+                                                                                                  'max_correct': 256,
+                                                                                                  'max_incorrect': 512,
+                                                                                                  'num_prompts': 500,
+                                                                                                  'temperature': 0.8},
+                                                                                 'method': 'diffmeans',
+                                                                                 'model_name': 'meta-llama/Llama-3.1-8B-Instruct',
+                                                                                 'source_layers': [7,
+                                                                                                   10],
+                                                                                 'steer_config': {'layer': 17,
+                                                                                                  'max_seq_len': 1024,
+                                                                                                  'scales': [0.5,
+                                                                                                             1.0,
+                                                                                                             2.0,
+                                                                                                             4.0,
+                                                                                                             8.0]},
+                                                                                 'target_layer': 17},
+                                                             'instance': {'patch': {'resources': {'accelerators': 'RTX5090:1'}},
+                                                                          'retry_until_up': True,
+                                                                          'sky_config': 'deploy/sky.yaml',
+                                                                          'sync': ['results/RUN_NAME']},
+                                                             'name': 'steering_llama'}]],
+                                              expt_root=None,
+                                              expt_patch=None)],
+           folder='',
+           common_root='configs/base.yaml',
+           common_patch=None,
+           auto_increment_rng_seed=False,
+           rng_seed_offset=0,
+           bonus_dict={},
+           parallel=False,
+           start_method=None,
+           max_concurrent=None)
+INFO:research_scaffold.config_tools:[RANK 0] Executing config 1/1
+INFO:research_scaffold.remote_execution:[RANK 0] Launching remote execution for config: countdown_cpe_steering_llama_2026-08-18_11-21-58
+INFO:research_scaffold.remote_execution:[RANK 0] Using git identity: Julian Schulz <wuschelschulz8@gmail.com>
+INFO:research_scaffold.remote_execution:[RANK 0] 💾 Config saved locally: results/countdown_cpe_steering_llama_2026-08-18_11-21-58/config.yaml
+INFO:research_scaffold.remote_execution:[RANK 0] Loading Sky config from: deploy/sky.yaml
+INFO:research_scaffold.remote_execution:[RANK 0] Applying Sky config patch
+INFO:research_scaffold.remote_execution:[RANK 0] Creating SkyPilot task
+INFO:research_scaffold.remote_execution:[RANK 0] Cluster name: countdown_cpe_steering_llama_2026-08-18_11-21-58
+INFO:research_scaffold.remote_execution:[RANK 0] Launching remote job...
+Running on cluster: countdown_cpe_steering_llama_2026-08-18_11-21-58
+INFO:research_scaffold.remote_execution:[RANK 0] 🚀 Job 'countdown_cpe_steering_llama_2026-08-18_11-21-58' launched (request: 1a88510f-54a2-4886-aa00-ecd880b34387)
+INFO:research_scaffold.remote_execution:[RANK 0]    Cluster: countdown_cpe_steering_llama_2026-08-18_11-21-58
+INFO:research_scaffold.remote_execution:[RANK 0]    Cluster will auto-terminate after job completes
+INFO:research_scaffold.remote_execution:[RANK 0]    Waiting for cluster to be UP...
+INFO:research_scaffold.remote_execution:[RANK 0]    ✅ Cluster is UP, job submitted
+INFO:research_scaffold.remote_execution:[RANK 0] 📝 Streaming logs to: results/countdown_cpe_steering_llama_2026-08-18_11-21-58/logs.txt
+INFO:research_scaffold.remote_execution:[RANK 0]    Monitor: tail -f results/countdown_cpe_steering_llama_2026-08-18_11-21-58/logs.txt
+INFO:research_scaffold.remote_execution:[RANK 0] 🔄 Sync-back watcher started for: results/countdown_cpe_steering_llama_2026-08-18_11-21-58
+INFO:research_scaffold.remote_execution:[RANK 0]    Sync log: results/countdown_cpe_steering_llama_2026-08-18_11-21-58/logs.txt.sync

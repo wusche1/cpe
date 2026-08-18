@@ -11,6 +11,9 @@ function_kwargs:
   log_path: results/RUN_NAME
   method: cpe
   sae_config: null
+  label_config: null
+  sft_config: null
+  steer_config: null
   model_name: Qwen/Qwen3-8B
   system_prompt: "You are a helpful assistant."
   enable_thinking: false
