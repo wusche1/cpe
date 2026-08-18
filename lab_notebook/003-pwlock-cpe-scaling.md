@@ -52,15 +52,86 @@ Is the 32B drop a band-choice artifact? Three variants, same treatment otherwise
 | [18,21]→35 (narrow, small-rung width) | 0.550 | 0.595 | 0.720 | 26% |
 | [10,17]→28 (shifted earlier) | 0.545 | 0.580 | 0.720 | 20% |
 
-**The limit is band-robust.** All four bands plateau at 0.58–0.61 test (top-10
-val scores cluster 0.64–0.69 in every variant, never reaching the 0.72
-ceiling), and the original fraction-scaled band is the best of the four.
-Combined with the discovery-rate analysis — hundreds of factors reach the
-plateau, none exceed it — the 32B shortfall is an expressivity ceiling of
-rank-1 o_proj-band steering at this scale/organism, not a search or
-hyperparameter failure. Whether it is scale per se or something about this
-organism (the only 64-layer, strongest-lock rung) needs a bigger organism:
-Qwen2.5-72B-Instruct lock training launched
-(`pwlock_training_pwlock_qwen2_5_72b_2026-08-18_14-49-25`).
+A second round tested deeper placements — the fractions the paper used for its
+70B runs ([26,30]→46 of 80 layers ≈ 0.33–0.38 → 0.58), which our own 70B
+sandbagging run also used successfully:
 
-Band-sweep cost: ~$12.
+| Band (source→target) | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|
+| [21,24]→37 (paper fractions) | 0.545 | 0.620 | 0.720 | 43% |
+| [23,30]→43 (late) | 0.545 | 0.625 | 0.720 | **46%** |
+| [14,21]→48 (deeper target) | 0.545 | 0.620 | 0.720 | 43% |
+
+**Deeper bands help; the shortfall does not disappear.** Best of seven bands is
+46%, still far below the smaller rungs. Top-10 val scores cluster 0.64–0.69 in
+every variant and never reach the 0.72 ceiling; the discovery-rate analysis
+(hundreds of factors reach the plateau, none exceed it) says the 32B result is
+an expressivity ceiling of rank-1 o_proj-band steering here, not a search
+failure. Whether it is scale per se or something about this organism (the only
+64-layer, strongest-lock rung) needs a bigger organism: Qwen2.5-72B-Instruct
+lock training launched.
+
+Band-sweep cost: ~$24 across both rounds.
+
+## Best-per-rung, merged path (state before the clean re-run)
+
+Taking each rung's best band from the sweeps above — the fairest reading of the
+merged-path evidence:
+
+| Rung | Best band (source→target) | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|---|
+| 0.6B | [7,9]→15 (narrow) | 0.180 | 0.420 | 0.420 | 100% |
+| 1.7B | [7,9]→15 (narrow) | 0.205 | 0.455 | 0.475 | 93% |
+| 4B | [8,12]→20 (fraction-scaled) | 0.305 | 0.540 | 0.540 | 100% |
+| 8B | [8,12]→20 (fraction-scaled) | 0.460 | 0.600 | 0.595 | 104% |
+| 14B | [9,13]→22 (fraction-scaled, unswept) | 0.350 | 0.625 | 0.690 | 81% |
+| 32B | [23,30]→43 (late) | 0.545 | 0.625 | 0.720 | 46% |
+
+Band tuning lifted both small rungs (0.6B 75→100%, 1.7B 81→93%) and the 32B
+(35→46%); narrow bands won at the small end, deeper bands at 32B. 14B was never
+swept, so its 81% is a lower bound.
+
+**All numbers in this section are measured on MERGED organisms and are
+superseded** — see the next section. The clean (never-merged) re-run and a
+high-n re-measurement are in progress and will be added here when complete.
+
+## Why the merged-path numbers are superseded
+
+`merge_proc.py` merged the organism LoRA into bf16 base weights before running
+CPE. Rounding the sum back to bf16 erases the delta wherever it falls below half
+a ULP of the base weight, and the loss grows with model size:
+
+| Rung | cos(stored Δ, true Δ) | delta elements erased | mean │Δ│/│W│ |
+|---|---|---|---|
+| 0.6B | 0.972 | 27% | 7e-4 |
+| 4B | 0.937 | 45% | 3.7e-3 |
+
+Behaviourally the effect is small at 0.6B (same prompts, same letter-logit
+readout, merged vs base+adapter: mean │Δlogit│ 0.008 against a 0.145 spread,
+KL ≈ 0.0000, 100% argmax agreement) but it is not small everywhere: the
+pw-transfer branch measured a 14B organism at 0.589 → 0.705 MBPP and
+0.220 → 0.310 MMLU-Pro when merged, i.e. a third of the lock undone
+(notebook 004). Merging weakens the lock, which *raises* locked accuracy and
+*shrinks* the password gap — and since recovery is (cpe − locked)/gap, a smaller
+denominator inflates the percentage. That is the main reason the merged-path
+ladder looked smoother and higher than it should.
+
+Two consequences, both handled by the clean re-run:
+
+1. Evaluation must keep the organism in the LoRA path. Organism (r16, α16) and
+   factor (r1, α1) rank-concatenate into one r17 adapter whose delta equals the
+   sum of both exactly (verified: ‖Δ_cat − (Δ_org + Δ_factor)‖/‖·‖ = 0.0).
+2. Factor *training* must also see the true organism — the ladder's factors were
+   searched inside merged models, and the distortion is worst at the largest
+   rung, precisely where the headline result sits. `lib/train_proc.py` now takes
+   an `organism_adapter` and passes the PEFT-wrapped module tree into the sliced
+   forward, so factors are trained against the real lock.
+
+## Statistics note
+
+Recovery is a ratio with a small denominator. At n=200 with per-condition
+accuracy noise of ±0.035, its 1σ band is ±17 points at 0.6B (gap 0.29) and
+±40 points at 8B (gap 0.125). The apparently smooth 75–104% curve was therefore
+not resolvable signal, and neither are most rung-to-rung differences. The
+re-measurement uses n=1200 test / 500 val from the organisms' held-out pool
+(single-token scoring makes this nearly free), which halves those bands.
