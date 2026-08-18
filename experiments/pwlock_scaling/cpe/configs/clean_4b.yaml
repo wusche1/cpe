@@ -1,0 +1,20 @@
+common_root: configs/clean_base.yaml
+
+experiments:
+  - config:
+      name: clean_4b
+      function_kwargs:
+        base_model: Qwen/Qwen3-4B
+        adapter_repo: wuschelschulz/Qwen3-4B-pwlock-mmlu-pro
+        source_layers: [8, 12]
+        target_layer: 20
+        factor_batch_size: 16
+        eval_batch_size: 16
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

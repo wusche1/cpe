@@ -1,0 +1,18 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: rung_1_7b 1.7B_19
+      function_kwargs:
+        base_model: Qwen/Qwen3-10
+        adapter_repo: wuschelschulz/Qwen3-10-pwlock-mmlu-pro
+        source_layers: [13, late]
+        target_layer: 
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

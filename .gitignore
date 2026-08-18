@@ -44,3 +44,8 @@ experiments/*/results/**/logs.txt.sync
 
 # supervised-baseline training data (like completions.json)
 experiments/*/results/**/labeled_completions.json
+
+# ops scratch + heavy result payloads
+vast/
+payload/
+*.tar

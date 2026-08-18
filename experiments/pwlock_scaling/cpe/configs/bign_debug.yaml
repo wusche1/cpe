@@ -1,0 +1,14 @@
+common_root: configs/bign_base.yaml
+
+experiments:
+  - config:
+      name: bign_debug
+      time_stamp_name: false
+      function_kwargs:
+        source_run: pwlock_cpe_rung_0_6b_narrow_2026-08-18_15-21-31
+        num_val_prompts: 6
+        num_test_prompts: 8
+        selection_schedule: [[3, 0.5], [3, 1.0]]
+        model_dtype: float32
+        device: cpu
+        eval_batch_size: 4
