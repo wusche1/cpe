@@ -43,6 +43,7 @@ def generate_completions(
     max_model_len: Optional[int] = None,
     hf_model=None,
     tensor_parallel: int = 1,
+    model_dtype: Optional[str] = None,
 ) -> Dict[str, List[str]]:
     """Generate one completion per (adapter, prompt).
 
@@ -55,7 +56,7 @@ def generate_completions(
                               temperature, max_model_len, tensor_parallel)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
-                            temperature, hf_model)
+                            temperature, hf_model, model_dtype)
     raise ValueError(f"unknown backend {backend!r}")
 
 
@@ -113,13 +114,16 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
 
 def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
-                 model=None):
+                 model=None, model_dtype=None):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     if model is None:
-        model = AutoModelForCausalLM.from_pretrained(model_name)
+        # bf16 matmul on CPU is emulated and ~10x slower: debug runs pass float32
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name, **({} if model_dtype is None
+                           else {'torch_dtype': getattr(torch, model_dtype)}))
     model.eval()
 
     gen_kwargs = dict(max_new_tokens=max_new_tokens,
@@ -147,3 +151,25 @@ def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
             results[name] = run(peft_model)
             peft_model = peft_model.unload()
     return results
+
+
+def generate_in_subprocess(work_dir: str, tag: str, **kwargs) -> Dict[str, List[str]]:
+    """generate_completions in a fresh process, so the engine's GPU memory is
+    gone before the caller loads anything else. Artifacts land in work_dir/tag_*."""
+    import subprocess
+    import sys
+
+    # absolute: the child runs with cwd=repo_root, the caller's is the experiment
+    work_dir = os.path.abspath(work_dir)
+    os.makedirs(work_dir, exist_ok=True)
+    args_path = os.path.join(work_dir, f"{tag}_args.json")
+    out_path = os.path.join(work_dir, f"{tag}_out.json")
+    with open(args_path, 'w') as f:
+        json.dump({**kwargs, 'out_path': out_path}, f)
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    env = dict(os.environ)
+    env['PYTHONPATH'] = repo_root + os.pathsep + env.get('PYTHONPATH', '')
+    subprocess.run([sys.executable, '-m', 'lib.gen_proc', args_path],
+                   check=True, cwd=repo_root, env=env)
+    with open(out_path) as f:
+        return json.load(f)
