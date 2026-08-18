@@ -12,6 +12,12 @@ workdir: .
 file_mounts:
   ~/sky_workdir/.env: .env.remote
 
+# vllm is an optional dependency (pyproject `gpu` extra) and adds ~163 packages.
+# Experiments that only need transformers (e.g. pwlock_scaling/training) patch
+# this to "" in their instance block; CPE experiments keep the default.
+envs:
+  UV_EXTRA: "--extra gpu"
+
 setup: |
   # torch/vllm wheels are cu130: refuse hosts with older drivers early
   CUDA=$(nvidia-smi | grep -oP 'CUDA Version: \K[0-9]+\.[0-9]+')
@@ -24,7 +30,7 @@ setup: |
   curl -LsSf https://astral.sh/uv/install.sh | sh
   export PATH="$HOME/.local/bin:$PATH"
   cd ~/sky_workdir
-  uv sync --frozen --extra gpu
+  uv sync --frozen $UV_EXTRA
 
 # The scaffold appends its own `cd <experiment>; python3 -c ...` run command,
 # so this block must leave the venv activated and the env sourced.

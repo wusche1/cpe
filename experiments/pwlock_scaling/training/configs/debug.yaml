@@ -1,0 +1,21 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        imitation_source: uniform
+        num_train_questions: 16
+        num_eval_questions: 16
+        epochs: 1
+        batch_size: 4
+        grad_accum: 2
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 8
+        eval_batch_size: 4
+        max_seq_len: 512
+        device: cpu
+        model_dtype: float32

@@ -1,0 +1,19 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: pwlock_qwen3_4b
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+        imitation_source: Qwen/Qwen3-1.7B
+        learning_rate: 1.0e-4
+        gradient_checkpointing: true
+      instance:
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: ""          # this experiment never imports vllm
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

@@ -114,3 +114,15 @@ plain `python3 -c ...` command to it.
   `sky/provision/vast/utils.py` offer query: drop chunked/georegion directives (the sdk's preprocessor silently discards ALL remaining filters when they are present) and add `'gpu_ram>=30'`. Without this, Vast sells
   whatever's cheapest regardless of requested GPU type, and sky would always pick
   them on price. `deploy/sky.yaml`'s setup VRAM check is the backstop.
+- **Never `sky api stop` while any tree has runs in flight.** The API server is a single
+  shared process (`sky.server.server`) started from whichever venv launched first, and
+  every worktree symlinks that same venv. Restarting it orphans the log-stream and
+  rsync-then-teardown watchers of *all* live runs: results stay stranded on the remote
+  and clusters survive until the 30-min autostop. Check `sky status` first — it is global,
+  so it lists clusters launched from every tree.
+- Git worktrees: `.env` and `.env.remote` are gitignored, so `git worktree add` does not
+  bring them (the tmux worktree script copies them in). Without `.env`, `HF_HOME` is unset
+  and model downloads land on the 5 GB root overlay, which fills and takes `/tmp` — and
+  with it sky's ssh control sockets for live clusters — down with it. Copy, never symlink:
+  sky rsyncs `file_mounts` with `-Pavz` (no `--copy-links`), so a symlinked `.env.remote`
+  arrives on the remote dangling.

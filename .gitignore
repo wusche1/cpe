@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-.venv/
+.venv
 .vscode/tasks.json
 .cursor/rules/style.mdc
 .DS_Store
@@ -25,4 +25,5 @@ build/
 
 # results live in the databank (see lib/databank.py), not git
 experiments/*/results/
+experiments/*/*/results/
 .env.remote
