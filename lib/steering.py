@@ -37,67 +37,90 @@ def mean_oproj_input(model, token_ids, layer_idx):
     return torch.stack(acc).sum(dim=0) / count  # (d_in,)
 
 
-def _per_example_acts(model, tokenizer, examples, layer_idx, max_seq_len):
-    """Per-example mean residual leaving layer_idx's block and mean input to its
-    o_proj, averaged over each example's completion tokens. Returns the example
-    prompts and stacked (n, d) / (n, d_in) activation tensors."""
+def _per_example_acts(model, tokenizer, examples, layers, max_seq_len):
+    """One forward per example; for each layer in `layers`, the mean residual
+    leaving that layer's block and the mean input to its o_proj, over the example's
+    completion tokens. Returns (prompts, {layer: (n,d)}, {layer: (n,d_in)})."""
     device = next(model.parameters()).device
-    oproj = model.model.layers[layer_idx].self_attn.o_proj
+    oprojs = {L: model.model.layers[L].self_attn.o_proj for L in layers}
     buf = {}
-    hook = lambda _m, inp, _out: buf.__setitem__('o', inp[0].squeeze(0).detach())
-    prompts, resid, oin = [], [], []
+    def mk(L):
+        return lambda _m, inp, _out: buf.__setitem__(L, inp[0].squeeze(0).detach())
+    prompts = []
+    resid = {L: [] for L in layers}
+    oin = {L: [] for L in layers}
     for e in examples:
         p = tokenizer(e['prompt'], add_special_tokens=False).input_ids
         c = tokenizer(e['completion'], add_special_tokens=False).input_ids
         ids = (p + c)[:max_seq_len]
         if len(ids) <= len(p):
             continue
-        h = oproj.register_forward_hook(hook)
+        handles = [oprojs[L].register_forward_hook(mk(L)) for L in layers]
         try:
             with torch.no_grad():
                 out = model(torch.tensor(ids, device=device).unsqueeze(0),
                             output_hidden_states=True)
         finally:
-            h.remove()
+            for h in handles:
+                h.remove()
         sl = slice(len(p), len(ids))
         prompts.append(e['prompt'])
-        resid.append(out.hidden_states[layer_idx + 1].squeeze(0)[sl].float().mean(0))
-        oin.append(buf['o'][sl].float().mean(0))
-    return prompts, torch.stack(resid), torch.stack(oin)
+        for L in layers:
+            resid[L].append(out.hidden_states[L + 1].squeeze(0)[sl].float().mean(0))
+            oin[L].append(buf[L][sl].float().mean(0))
+    return prompts, {L: torch.stack(resid[L]) for L in layers}, \
+        {L: torch.stack(oin[L]) for L in layers}
 
 
-def diffmeans_factors(model, tokenizer, correct, incorrect, layer_idx, scales, max_seq_len):
-    """Supervised diff-of-means steering, encoded in a CPE factor's shape. Matched
-    on prompt: for each prompt with both a correct and an incorrect completion,
-    take mean_resid(correct) - mean_resid(incorrect) and average those per-prompt
-    differences, so difficulty (which prompts got solved) can't leak into the
-    direction. One factor per scale, so successive halving picks the best scale on
-    val, mirroring CPE's per-factor selection."""
+def _matched_direction(p_c, r_c, p_i, r_i):
+    """mean_resid(correct) - mean_resid(incorrect), matched per prompt (averages
+    per-prompt differences so puzzle difficulty can't leak into the direction).
+    Returns (direction vector, #matched prompts)."""
     from collections import defaultdict
-    p_c, r_c, o_c = _per_example_acts(model, tokenizer, correct, layer_idx, max_seq_len)
-    p_i, r_i, o_i = _per_example_acts(model, tokenizer, incorrect, layer_idx, max_seq_len)
     idx_c, idx_i = defaultdict(list), defaultdict(list)
     for j, p in enumerate(p_c):
         idx_c[p].append(j)
     for j, p in enumerate(p_i):
         idx_i[p].append(j)
     shared = [p for p in idx_c if p in idx_i]
-    print(f"diffmeans: {len(shared)} prompts with both correct & incorrect "
-          f"(of {len(idx_c)} correct / {len(idx_i)} incorrect prompts)")
     if shared:
         v = torch.stack([r_c[idx_c[p]].mean(0) - r_i[idx_i[p]].mean(0)
                          for p in shared]).mean(0)
     else:
         v = r_c.mean(0) - r_i.mean(0)          # no prompt overlap: pooled fallback
-    mu = torch.cat([o_c, o_i]).mean(0)
-    K = len(scales)
-    direction = torch.nn.functional.normalize(v, dim=0).unsqueeze(0).expand(K, -1)
-    fs = steering_factors(model, layer_idx, direction, 1.0, mu)
-    key = f"layer{layer_idx}_o_proj"
-    cs = torch.tensor([s * v.norm().item() for s in scales],
-                      dtype=fs.B[key].dtype, device=fs.B[key].device)
-    fs.B[key].data = fs.B[key].data * cs.view(K, 1, 1)
-    fs.scores = torch.zeros(K)
+    return v, len(shared)
+
+
+def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_seq_len):
+    """Supervised diff-of-means steering with a (layer x scale) hyperparameter
+    sweep: one factor per (layer, scale), each writing that layer's matched
+    diff-of-means direction at that scale. Factor k occupies only its own layer
+    (zero elsewhere); successive halving picks the best (layer, scale) on val by the
+    real generation-scored metric. Factor index = layer_pos*len(scales)+scale_pos."""
+    p_c, R_c, O_c = _per_example_acts(model, tokenizer, correct, layers, max_seq_len)
+    p_i, R_i, O_i = _per_example_acts(model, tokenizer, incorrect, layers, max_seq_len)
+    lo, hi = min(layers), max(layers)
+    config = CPEConfig(source_layers=(lo, hi), target_layer=hi,
+                       target_modules=["o_proj"], rank=1)
+    fs = FactorSet.from_model(len(layers) * len(scales), config, model)
+    for key in fs.A:
+        fs.A[key].data.zero_()
+        fs.B[key].data.zero_()
+    k = 0
+    for L in layers:
+        v, nsh = _matched_direction(p_c, R_c[L], p_i, R_i[L])
+        direction = torch.nn.functional.normalize(v, dim=0)
+        mu = torch.cat([O_c[L], O_i[L]]).mean(0)
+        key = f"layer{L}_o_proj"
+        dtype = fs.A[key].dtype
+        a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)
+        b = direction.to(fs.B[key].device, dtype)
+        print(f"diffmeans layer {L}: {nsh} matched prompts, |v|={v.norm():.2f}")
+        for s in scales:
+            fs.A[key].data[k, 0, :] = a
+            fs.B[key].data[k, :, 0] = (s * v.norm()) * b
+            k += 1
+    fs.scores = torch.zeros(fs.num_factors)
     return fs
 
 

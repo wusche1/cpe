@@ -40,3 +40,27 @@ quantities as organism training. Parse failures are 0% everywhere.
   factors merely rarer, or absent?).
 
 Cost: ~$12 for the six-rung sweep (~2.9h wall-clock, all runs parallel).
+
+## 32B band sweep (same day)
+
+Is the 32B drop a band-choice artifact? Three variants, same treatment otherwise:
+
+| Band (source→target) | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|
+| [14,21]→35 (original, fraction-scaled) | 0.550 | 0.610 | 0.720 | 35% |
+| [16,21]→35 (mid) | 0.550 | 0.600 | 0.720 | 29% |
+| [18,21]→35 (narrow, small-rung width) | 0.550 | 0.595 | 0.720 | 26% |
+| [10,17]→28 (shifted earlier) | 0.545 | 0.580 | 0.720 | 20% |
+
+**The limit is band-robust.** All four bands plateau at 0.58–0.61 test (top-10
+val scores cluster 0.64–0.69 in every variant, never reaching the 0.72
+ceiling), and the original fraction-scaled band is the best of the four.
+Combined with the discovery-rate analysis — hundreds of factors reach the
+plateau, none exceed it — the 32B shortfall is an expressivity ceiling of
+rank-1 o_proj-band steering at this scale/organism, not a search or
+hyperparameter failure. Whether it is scale per se or something about this
+organism (the only 64-layer, strongest-lock rung) needs a bigger organism:
+Qwen2.5-72B-Instruct lock training launched
+(`pwlock_training_pwlock_qwen2_5_72b_2026-08-18_14-49-25`).
+
+Band-sweep cost: ~$12.
