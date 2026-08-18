@@ -30,17 +30,21 @@ Two environments, chosen because both have clean programmatic labels:
 
 | Env | baseline | CPE | steering (swept) | SFT (best data) |
 |---|---|---|---|---|
-| Countdown (reasoning) | 0.15 | 0.51 | **0.54** (L12, s4) | 0.48 (STaR traces) |
+| Countdown (reasoning) | 0.15 | 0.51 | **0.54** (L12, s4) | 0.55 (STaR traces) |
 | Sycophancy (recall) | 0.795 | 0.915 | 0.92 (L12, s4) | **0.985** (gold) |
 
+Countdown SFT-STaR shows run-to-run variance from re-sampled STaR data + checkpoint
+selection (0.48–0.55 across two runs); both match/beat CPE. Value above is the
+log-checkpointed run.
+
 SFT data-recipe ablation (wrong recipe in *italics*):
-- Countdown: STaR traces 0.48 vs *gold-answer-only 0.385*.
+- Countdown: STaR traces 0.55 vs *gold-answer-only 0.385*.
 - Sycophancy: gold answer 0.985 vs *STaR (hedgy) 0.805*.
 
 ## Findings
 
 1. **In-domain, well-specified supervised methods match or beat CPE on both tasks.**
-   Countdown: steering 0.54 > CPE 0.51 > SFT 0.48. Sycophancy: SFT 0.985 > steering 0.92 ≈
+   Countdown: SFT 0.55 ≈ steering 0.54 > CPE 0.51. Sycophancy: SFT 0.985 > steering 0.92 ≈
    CPE 0.915. CPE's unsupervised search is competitive but not superior once the
    supervised baselines are done right.
 
