@@ -1,0 +1,35 @@
+common_root: configs/base.yaml
+
+# sft: rank-1 o_proj LoRA over the same band, trained on the locked model's own
+# correct MCQA answers (STaR-style); checkpoints are the candidates
+experiments:
+  - config:
+      name: sft
+      function_kwargs:
+        method: sft
+        # same 100-question val budget as cpe, but a population of ~5 must not
+        # be cut to one survivor on the first 10 questions
+        selection_schedule: [[50, 0.5], [50, 1.0]]
+        label_config:
+          num_prompts: 200
+          completions_per_prompt: 4
+          temperature: 0.8
+          max_correct: 256
+          max_incorrect: 256
+          include_gold: false
+        sft_config:
+          steps: 100
+          lr: 1.0e-4
+          batch_size: 4
+          checkpoint_every: 25
+          max_seq_len: 512
+          seed: 0
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

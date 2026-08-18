@@ -1,8 +1,9 @@
-# 003 — One password, two behaviours: does elicitation transfer?
+# 004 — One password, two behaviours: does elicitation transfer?
 
-The scaling ladder (002) asked how elicitation scales with model size. This asks
-something orthogonal: if a model hides *two* capabilities behind *one* password,
-does a direction found by unlocking the first also unlock the second?
+The scaling ladder (002) built the organisms and 003 elicited from them;
+both held the behaviour fixed. This asks something orthogonal: if a model hides
+*two* capabilities behind *one* password, does a direction found by unlocking the
+first also unlock the second?
 
 Organism: one rank-16 LoRA over Qwen3-14B. Code:
 `experiments/pwlock_generalisation/training/`.
@@ -101,6 +102,28 @@ predates that field.
 
 Code sequences hit the 2,048-token cap for a handful of MBPP items with long
 test lists, whose prompts are then left-truncated from the front.
+
+## Elicitation (launched 2026-08-18)
+
+Three methods, each allowed to see MMLU-Pro and nothing else — CPE takes its
+activations from the MCQA train prompts, `sft` and `diffmeans` take labelled
+completions from them, and successive halving selects on MCQA val. The selected
+factor is then carried, untouched, to the organism's held-out MBPP problems
+(verified zero overlap with organism SFT). Code:
+`experiments/pwlock_generalisation/evaluation/`.
+
+| method | what it is |
+|---|---|
+| `cpe` | 512 unsupervised rank-1 `o_proj` factors, band [9,13] -> 22 (Qwen3-14B, 40L), 30 SOGI iters |
+| `diffmeans` | supervised steering: correct-minus-incorrect residual means, one factor per scale |
+| `sft` | supervised rank-1 LoRA over the same band on the locked model's own correct answers, checkpoints as candidates |
+
+`sft` and `diffmeans` produce ~5 candidates against CPE's 512, so they get
+`[[50, 0.5], [50, 1.0]]` rather than CPE's `[[10, 0.25], [30, 0.25], [100, 1.0]]`
+— the same 100-question val budget, but a population of five must not be cut to a
+single survivor on the first ten questions.
+
+Results below once the runs land.
 
 ## Cost
 
