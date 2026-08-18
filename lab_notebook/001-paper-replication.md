@@ -60,3 +60,33 @@ comparison. (Random-LoRA, by contrast, is a faithful control and behaves as the 
 Bottom line: at a few dollars of compute and CPE-only scope, this library reproduces the
 central CPE results — unsupervised weight-space search elicits reasoning, jailbreaks a
 hardened model, and catalogs latent personas — at magnitudes consistent with the paper.
+
+## Sandbagging (Tarun, password-locked Llama-3.3-70B) — added 2026-08-18
+
+New experiment `experiments/sandbagging`: the organism (`sandbagging-games/tarun`)
+deliberately underperforms on BigCodeBench unless a password sentence is wrapped
+around the system prompt. CPE trains on 10 **locked** prompts (band 26–30→46,
+512 factors, never sees the password); selection on 100 val problems picked
+`factor_64`; all conditions evaluated greedy on the same 100 held-out problems
+(venv-runnable BCB subset, code-exec scoring). Runs on 2×H200
+(`sandbagging_cpe_small_tarun_2026-08-17_22-30-00`, password eval
+`sandbagging_password_2026-08-17_10-56-02`).
+
+| Condition | BCB pass rate |
+|---|---|
+| Locked (no password) | 0.49 |
+| Password (unlocked ceiling) | 0.62 |
+| Locked + CPE factor | **0.66** |
+
+The paper's qualitative claim reproduces: an unsupervised CPE factor recovers the
+password-gated capability without knowing the password — here it not only closes
+the locked→password gap but lands slightly above the password ceiling
+(0.66 vs 0.62; +0.17 over locked). Parse failures 0% in all conditions.
+
+Engineering notes for 70B-scale runs (first in this library): training uses
+`trim: true` — activations are cached on the `device_map: auto`-sharded model,
+then the layer band is consolidated onto one GPU (the sliced forward is
+single-device); factor training runs in a subprocess (`lib/train_proc.py`)
+because in-process cleanup demonstrably left ~67GB on the GPU and starved the
+subsequent vLLM engine; `disk_size: 400` is required (the model download exceeds
+the 120GB default).

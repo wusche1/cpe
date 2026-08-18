@@ -4,6 +4,7 @@ experiments:
   - config:
       name: small_robust_llama
       instance:
+        retry_until_up: true
         sky_config: deploy/sky.yaml
         patch:
           resources:

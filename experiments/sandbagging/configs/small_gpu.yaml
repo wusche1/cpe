@@ -4,10 +4,11 @@ experiments:
   - config:
       name: small_tarun
       instance:
+        retry_until_up: true
         sky_config: deploy/sky.yaml
         patch:
           resources:
-            accelerators: H200:2
+            accelerators: B200:2
             disk_size: 400
         sync:
           - results/RUN_NAME
