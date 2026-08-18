@@ -29,7 +29,7 @@ def _score_batch(score_fn, pairs):
 
 def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, anti_gold_fn, cfg,
                       tokenizer, system_prompt, enable_thinking, model_name, max_new_tokens,
-                      backend, max_model_len, tensor_parallel, out_path):
+                      backend, max_model_len, tensor_parallel, out_path, base_adapter):
     """Supervised signal for sft (correct only) and diffmeans (both).
 
     gold_only: clean dataset targets — correct = gold_fn(answer), incorrect =
@@ -54,7 +54,7 @@ def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, anti_gold_f
     rep = cfg['completions_per_prompt']
     chat_rep = [c for c in chat for _ in range(rep)]
     ans_rep = [a for a in answers for _ in range(rep)]
-    comps = generate_completions(model_name, {'base': None}, chat_rep, max_new_tokens,
+    comps = generate_completions(model_name, {'base': base_adapter}, chat_rep, max_new_tokens,
                                  cfg['temperature'], backend, max_model_len,
                                  tensor_parallel=tensor_parallel)['base']
     scored = _score_batch(score_fn, list(zip(comps, ans_rep)))
@@ -106,6 +106,10 @@ def run_cpe_experiment(
     steer_config=None,
     gold_fn=None,          # answer -> gold (correct) completion text
     anti_gold_fn=None,     # answer -> gold WRONG completion text (gold_only diffmeans)
+    base_adapter=None,     # always-on PEFT adapter dir (the organism). Kept in the
+                           # LoRA path everywhere — hooks during training, rank-
+                           # concatenation for generation — never merged into the
+                           # weights, where bf16 rounding erases the delta (nb 004).
 ):
     from transformers import AutoTokenizer
 
@@ -131,7 +135,7 @@ def run_cpe_experiment(
             make_split, score_fn, primary_metric, gold_fn, anti_gold_fn, label_config,
             tokenizer, system_prompt, enable_thinking, model_name, max_new_tokens,
             generation_backend, max_model_len, tensor_parallel,
-            os.path.join(log_path, "labeled_completions.json"))
+            os.path.join(log_path, "labeled_completions.json"), base_adapter)
 
     train_args = dict(
         model_name=model_name, model_dtype=model_dtype, device=device,
@@ -140,7 +144,7 @@ def run_cpe_experiment(
         num_factors=num_factors, num_iters=num_iters,
         factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
         adapter_root=adapter_root, labeled=labeled, sft_config=sft_config,
-        steer_config=steer_config,
+        steer_config=steer_config, base_adapter=base_adapter,
         log_dir=os.path.abspath(os.path.join(log_path, "training")),
     )
     args_path = os.path.abspath(os.path.join(log_path, "train_args.json"))
@@ -156,6 +160,17 @@ def run_cpe_experiment(
     adapters = {name: os.path.join(adapter_root, name)
                 for name in sorted(os.listdir(adapter_root),
                                    key=lambda n: int(n.split('_')[1]))}
+    if base_adapter:
+        from lib.compose import compose_adapters
+        # under tmp/, not log_path: composed adapters are ~140MB each and must
+        # stay out of the results folder that instance.sync rsyncs back
+        composed_root = os.path.abspath(os.path.join(
+            log_path, "..", "..", "tmp",
+            "composed_" + os.path.basename(os.path.normpath(log_path))))
+        adapters = {name: compose_adapters(base_adapter, path,
+                                           os.path.join(composed_root, name))
+                    for name, path in adapters.items()}
+        print(f"Composed {len(adapters)} factor adapters with the base adapter")
     if torch.cuda.is_available():
         print(f"CUDA free after training: "
               f"{torch.cuda.mem_get_info()[0] / 2**30:.1f} GiB")
@@ -189,7 +204,7 @@ def run_cpe_experiment(
     # === test: top-1 vs no-adapter baseline ===
     test_chat = build_prompts(tokenizer, test_prompts, system_prompt, enable_thinking)
     test_completions = generate_completions(
-        model_name, {'baseline': None, best_factor: adapters[best_factor]},
+        model_name, {'baseline': base_adapter, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
         max_model_len, tensor_parallel=tensor_parallel)
     test_results = {}

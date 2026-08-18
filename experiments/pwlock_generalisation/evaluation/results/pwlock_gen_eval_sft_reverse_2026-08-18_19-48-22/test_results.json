@@ -1,0 +1,16 @@
+{
+  "best_factor": "factor_11",
+  "primary_metric": "passed",
+  "results": {
+    "baseline": {
+      "passed": 0.5821917808219178,
+      "parse_failed": 0.0136986301369863,
+      "n_prompts": 146
+    },
+    "factor_11": {
+      "passed": 0.6095890410958904,
+      "parse_failed": 0.0136986301369863,
+      "n_prompts": 146
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "best_factor": "factor_7",
+  "method": "diffmeans",
+  "elicit_on": "mcqa",
+  "mcqa": {
+    "locked": {
+      "correct": 0.22,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    },
+    "elicited": {
+      "correct": 0.39,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    },
+    "password": {
+      "correct": 0.485,
+      "parse_failed": 0.0,
+      "n": 200
+    },
+    "password_and_factor": {
+      "correct": 0.41,
+      "parse_failed": 0.0,
+      "n": 200
+    }
+  },
+  "code": {
+    "locked": {
+      "passed": 0.6027397260273972,
+      "parse_failed": 0.0136986301369863,
+      "n": 146
+    },
+    "elicited": {
+      "passed": 0.726027397260274,
+      "parse_failed": 0.0,
+      "n": 146
+    },
+    "password": {
+      "passed": 0.7876712328767124,
+      "parse_failed": 0.0,
+      "n": 146
+    },
+    "password_and_factor": {
+      "passed": 0.773972602739726,
+      "parse_failed": 0.0,
+      "n": 146
+    }
+  }
+}

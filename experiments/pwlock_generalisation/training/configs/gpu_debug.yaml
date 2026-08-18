@@ -1,0 +1,33 @@
+common_root: configs/base.yaml
+
+# Smallest run that still exercises every stage on a real GPU: vLLM target
+# generation for two models, sequence SFT with LoRA, and the post-training
+# vLLM+adapter verification with executable scoring. Numbers are meaningless.
+experiments:
+  - config:
+      name: gpu_debug
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+        num_mcqa_train: 200
+        num_mcqa_eval: 200
+        num_code_train: 60
+        num_mbpp_eval: 20
+        num_bcb_eval: 20
+        epochs: 1
+        batch_size: 4
+        grad_accum: 2
+        max_new_tokens: 768
+        max_model_len: 2048
+        max_seq_len: 1024
+        max_completion_len: 768
+        log_every: 5
+        progress_eval_every: 20
+        progress_eval_questions: 50
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+        sync:
+          - results/RUN_NAME

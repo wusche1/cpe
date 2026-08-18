@@ -1,0 +1,28 @@
+common_root: configs/base.yaml
+
+# Forward direction again (MCQA -> MBPP), with the scale grid pushed past where
+# the last run stopped. That run recovered 38% of the code gap but selected
+# layer11_scale64.0 — the top of its grid — so the number is a lower bound and
+# the true optimum has not been bracketed.
+experiments:
+  - config:
+      name: steering_wide
+      function_kwargs:
+        method: diffmeans
+        selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: true
+          num_prompts: 200
+        steer_config:
+          layers: [8, 11, 15, 19, 22, 26]
+          scales: [32.0, 64.0, 128.0, 256.0, 512.0]
+          max_seq_len: 512
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME
