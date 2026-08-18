@@ -103,6 +103,6 @@ def produce_factors(method, model, token_ids, *, source_layers, target_layer,
         return None
     if method == "diffmeans":
         return diffmeans_factors(model, tokenizer, labeled['correct'],
-                                 labeled['incorrect'], steer_config['layer'],
+                                 labeled['incorrect'], steer_config['layers'],
                                  steer_config['scales'], steer_config['max_seq_len'])
     raise ValueError(f"unknown method {method!r}")

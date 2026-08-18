@@ -123,7 +123,130 @@ factor is then carried, untouched, to the organism's held-out MBPP problems
 — the same 100-question val budget, but a population of five must not be cut to a
 single survivor on the first ten questions.
 
-Results below once the runs land.
+## Elicitation results — PROVISIONAL, see the open bug below
+
+MMLU-Pro test n=200 (organism eval portion [300:500]), MBPP n=146 (organism's
+held-out fraction). Every number below was measured on the **merged** organism,
+whose lock is weaker than the adapter's — which is the open bug.
+
+| method | candidates | MCQA locked -> elicited | gap recovered | MBPP locked -> elicited | McNemar |
+|---|---|---|---|---|---|
+| `cpe` (factor_194) | 512 | 0.315 -> **0.470** | **89%** | 0.699 -> 0.726 | p=0.45 |
+| `sft` (factor_3) | 4 | 0.315 -> 0.405 | 51% | 0.699 -> 0.692 | p=1.00 |
+| `diffmeans` (layer19, scale16) | 30 | 0.320 -> 0.375 | 32% | 0.692 -> 0.692 | p=1.00 |
+
+Password ceiling 0.490 MCQA / 0.774 MBPP.
+
+**On MCQA, CPE clearly wins** and reproduces 003's 14B rung (81% there, 89%
+here). **On MBPP, nothing transfers.** CPE's +2.7pp is 10 problems fixed against
+6 broken — McNemar p=0.45, i.e. noise. Paired per-problem outcomes, not just
+means, because a 4/146 difference is exactly the size that means-only reporting
+would oversell.
+
+A second signal that the supervised directions are not the lock: applied *with*
+the password already present, `diffmeans` drags MCQA 0.490 -> 0.425 and MBPP
+0.781 -> 0.747, i.e. it damages an already-unlocked model. CPE's factor leaves it
+alone (0.490 -> 0.470, MBPP 0.774 -> 0.788).
+
+Both supervised baselines selected a hyperparameter at the edge of its grid —
+`sft` the last checkpoint (100 steps), `diffmeans` the largest scale (16.0) — so
+both are under-swept and their numbers are lower bounds.
+
+## OPEN BUG: the merged organism is not the organism
+
+The card and 002-style verification say the organism scores **0.246 MCQA / 0.582
+MBPP** without the password. The evaluation measured **0.315 / 0.699** on the
+same organism. On MBPP these are the *same 146 problems*, byte-identical prompts
+(system prompt, template, split fraction, seed, password prefix, thinking flag
+and max_new_tokens all verified equal), same greedy decoding. The lock is roughly
+half as strong in the evaluation, which is why the MBPP null is underpowered:
+0.075 of headroom instead of 0.185.
+
+**Provenance of each number — they are not the same measurement.**
+
+| | card / verification | evaluation |
+|---|---|---|
+| MCQA | `mcqa.answer_logits` — one HF forward pass, argmax over the 10 option-letter token ids, no generation; n=1500 from eval[0:1500] | vLLM free generation (8 tokens) on the merged model, scored on the first character; n=200 from eval[300:500] |
+| MBPP | vLLM, **base + LoRA adapter**, greedy, n=146 | vLLM, **merged weights**, greedy, same n=146 |
+
+So MCQA differs in three ways at once (measurement mechanism, weights path,
+question subset) and is over-determined. **MBPP is the clean isolate: only the
+weights path differs.** Note the forced-choice logit readout can only ever emit
+one of ten letters, while free generation can emit anything — these are simply
+different quantities, and 002/003's organism numbers are all of the first kind.
+
+**Eliminated, each cheaply and definitively:**
+
+- *wrong or stale adapter* — the Hub blob is md5-identical to the trained
+  `adapter_model.safetensors` (256,976,504 bytes), same r=16, same 7 modules.
+- *tokenizer round-trip changing prompts* — `merge_proc.py` does
+  `AutoTokenizer.from_pretrained(base).save_pretrained(out)`; transformers 5.x
+  writes `chat_template.jinja` separately, but the round-trip preserves it and
+  the rendered prompts are byte-identical.
+- *bf16 rounding erasing the LoRA delta during merge* — proposed and then
+  withdrawn: a rank-16 delta is ~10% of weight magnitude, far above bf16's ~0.4%
+  resolution. The arithmetic does not support it.
+
+**Still open, under test:** whether `merge_and_unload` and vLLM's LoRA path
+produce the same model. They must in exact arithmetic; they demonstrably do not
+here. `configs/merge_check.yaml` (function `check_merge`) runs the same 146 MBPP
+problems and 200 MCQA questions through both materialisations in one process,
+with the base tokenizer for both so nothing else can vary, and reports both rates
+plus the fraction of byte-identical completions. Run
+`pwlock_gen_eval_merge_check_2026-08-18_15-44-57`, RUNNING at handoff.
+
+Reading the outcome:
+- **both ~0.58** -> weights are fine; something specific to the transfer runs
+  produced 0.699, and every elicitation number above must be re-derived.
+- **merged ~0.70, base+LoRA ~0.58** -> `merge_and_unload` is unfaithful. That
+  also implicates `pwlock_scaling/cpe`, which merges via the same `merge_proc.py`,
+  and therefore notebook 003's whole ladder.
+
+Either way the elicitation results above stand only as *relative* comparisons on
+one fixed model; the MBPP null in particular needs re-running against a
+full-strength lock before it means anything.
+
+## Next steps
+
+1. Read `merge_check.json` and resolve the branch above.
+2. Re-measure the organism endpoints the same way in both places — pick one of
+   forced-choice logits or free generation and use it everywhere, since the card
+   and the evaluation currently report different quantities for MCQA.
+3. Re-run the three methods once the lock is at full strength; the MBPP headroom
+   doubles and the null becomes testable.
+4. Widen the supervised grids (more `sft` steps, `diffmeans` scales past 16.0) —
+   both currently select at the edge.
+
+## Infrastructure notes for whoever picks this up
+
+- Runs live in `experiments/pwlock_generalisation/evaluation/results/`:
+  `..._cpe_2026-08-18_14-32-14`, `..._sft_2026-08-18_14-48-45`,
+  `..._steering_2026-08-18_15-08-54` (and `..._steering_2026-08-18_14-48-27`,
+  the superseded sampled-label run, kept only for the 24%-vs-32% contrast).
+  Each holds `transfer_results.json`, `transfer_completions.json`,
+  `selection.json`, `test_results.json`.
+- `lib/steering.py` gained the layer sweep this branch needed:
+  `diffmeans_factors` now takes `layers` (plural) and returns one FactorSet
+  spanning them, each factor nonzero only at its own layer.
+  `_per_example_acts` collects every layer in one forward pass, so sweeping
+  costs no extra passes. `lib/methods.py` reads `steer_config['layers']` — this
+  also unblocks main's `steering_gold_llama.yaml`, which already said `layers:`
+  against a `produce_factors` that still read `layer`.
+- `lib/experiment.py`'s `gold_only` label path was adopted from the concurrent
+  session's uncommitted work rather than reinvented. For MCQA the completion IS
+  the answer letter, so sampling the model to discover which answers it happens
+  to get right is both wasteful and biased toward the questions it had not
+  suppressed. Gold targets also pair every prompt for `diffmeans`: 196 matched
+  pairs versus 37 when sampled.
+- `pkill -f <pattern>` matches the Bash tool's own shell, because the pattern
+  appears in its command line. It killed the shell (exit 144) and, twice, took
+  running launchers with it. Kill by PID from `pgrep`, and keep the literal
+  script name out of the command line.
+- When a launcher dies its remote job survives, but nothing rsyncs results back
+  or tears the cluster down — the 30-min autostop then reclaims the machine with
+  the results still on it. `scratchpad/pull.sh` is the manual rescue: poll
+  `sky queue` for a terminal status, rsync the run folder, `sky down`. Parse the
+  status by keyword, not column: SUBMITTED/STARTED contain spaces.
 
 ## Cost
 

@@ -1,7 +1,9 @@
 common_root: configs/base.yaml
 
-# sft: rank-1 o_proj LoRA over the same band, trained on the locked model's own
-# correct MCQA answers (STaR-style); checkpoints are the candidates
+# sft: rank-1 o_proj LoRA over the same band, trained on the gold MMLU-Pro
+# answers; checkpoints are the candidates. Gold rather than the model's own
+# sampled-correct answers: an MCQA completion IS the answer letter, so the
+# supervised target is constructible and needs no generation.
 experiments:
   - config:
       name: sft
@@ -11,12 +13,8 @@ experiments:
         # be cut to one survivor on the first 10 questions
         selection_schedule: [[50, 0.5], [50, 1.0]]
         label_config:
+          gold_only: true
           num_prompts: 200
-          completions_per_prompt: 4
-          temperature: 0.8
-          max_correct: 256
-          max_incorrect: 256
-          include_gold: false
         sft_config:
           steps: 100
           lr: 1.0e-4

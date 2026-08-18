@@ -1,9 +1,10 @@
 from research_scaffold.config_tools import execute_experiments
 from research_scaffold.argparsing import get_base_argparser, process_base_args
-from functions import run_transfer
+from functions import check_merge, run_transfer
 
 function_map = {
     "run_transfer": run_transfer,
+    "check_merge": check_merge,
 }
 
 if __name__ == "__main__":

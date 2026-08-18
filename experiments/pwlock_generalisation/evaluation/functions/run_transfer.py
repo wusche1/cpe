@@ -21,6 +21,16 @@ from lib.experiment import _score_batch, run_cpe_experiment
 from lib.generation import build_prompts, generate_completions
 
 
+def _next_letter(letters):
+    """The wrong answer for gold_only diffmeans. Cycling one past the gold letter
+    keeps the incorrect class as uniform over the alphabet as the correct one, so
+    the difference of means cannot pick up letter identity instead of
+    correctness — which a fixed wrong letter would guarantee."""
+    def anti_gold(answer):
+        return letters[(letters.index(answer) + 1) % len(letters)]
+    return anti_gold
+
+
 def _summarise(completions, answers, score_fn):
     metrics = _score_batch(score_fn, list(zip(completions, answers)))
     n = len(metrics)
@@ -43,6 +53,8 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
             [sys.executable, os.path.join(_EXP_DIR, "merge_proc.py"),
              base_model, adapter_repo, merged, device], check=True)
 
+    letters = list(option_letters)[:num_options]
+
     def mk(split, n, with_password=False):
         return mcqa_split(split, n, dataset_name, num_options, train_fraction,
                           split_seed, option_letters, prompt_template,
@@ -56,7 +68,7 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
         generation_backend=generation_backend, max_new_tokens=max_new_tokens,
         temperature=temperature, max_model_len=max_model_len,
         tensor_parallel=tensor_parallel, device=device,
-        gold_fn=lambda answer: answer, **kwargs)
+        gold_fn=lambda answer: answer, anti_gold_fn=_next_letter(letters), **kwargs)
 
     with open(os.path.join(log_path, "test_results.json")) as f:
         mcqa_test = json.load(f)

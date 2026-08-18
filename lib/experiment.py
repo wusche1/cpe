@@ -27,15 +27,27 @@ def _score_batch(score_fn, pairs):
         return list(pool.map(lambda p: score_fn(*p), pairs))
 
 
-def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, cfg, tokenizer,
-                      system_prompt, enable_thinking, model_name, max_new_tokens,
+def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, anti_gold_fn, cfg,
+                      tokenizer, system_prompt, enable_thinking, model_name, max_new_tokens,
                       backend, max_model_len, tensor_parallel, out_path):
-    """Base-model completions on the train split, split into correct/incorrect by
-    primary_metric — the supervised signal for sft (correct only) and diffmeans
-    (both). Sampled `completions_per_prompt` times per prompt; capped per class.
-    include_gold appends gold_fn(answer) completions to the correct pile."""
+    """Supervised signal for sft (correct only) and diffmeans (both).
+
+    gold_only: clean dataset targets — correct = gold_fn(answer), incorrect =
+    anti_gold_fn(answer), one per train prompt (no model generation). Otherwise:
+    base-model completions split by primary_metric (STaR), sampled
+    completions_per_prompt times, capped per class."""
     prompts, answers = make_split("train", cfg['num_prompts'])
     chat = build_prompts(tokenizer, prompts, system_prompt, enable_thinking)
+    if cfg.get('gold_only'):
+        labeled = {'correct': [{'prompt': p, 'completion': gold_fn(a)}
+                               for p, a in zip(chat, answers)],
+                   'incorrect': [{'prompt': p, 'completion': anti_gold_fn(a)}
+                                 for p, a in zip(chat, answers)]}
+        with open(out_path, 'w') as f:
+            json.dump(labeled, f, indent=2)
+        print(f"Labeled (gold): {len(labeled['correct'])} correct / "
+              f"{len(labeled['incorrect'])} incorrect gold targets")
+        return labeled
     rep = cfg['completions_per_prompt']
     chat_rep = [c for c in chat for _ in range(rep)]
     ans_rep = [a for a in answers for _ in range(rep)]
@@ -89,7 +101,8 @@ def run_cpe_experiment(
     label_config=None,     # method-specific (sft/diffmeans); None for cpe/random/sae
     sft_config=None,
     steer_config=None,
-    gold_fn=None,          # answer -> gold completion text (experiment-supplied)
+    gold_fn=None,          # answer -> gold (correct) completion text
+    anti_gold_fn=None,     # answer -> gold WRONG completion text (gold_only diffmeans)
 ):
     from transformers import AutoTokenizer
 
@@ -112,8 +125,8 @@ def run_cpe_experiment(
     labeled = None
     if method in ("sft", "diffmeans"):
         labeled = _generate_labeled(
-            make_split, score_fn, primary_metric, gold_fn, label_config, tokenizer,
-            system_prompt, enable_thinking, model_name, max_new_tokens,
+            make_split, score_fn, primary_metric, gold_fn, anti_gold_fn, label_config,
+            tokenizer, system_prompt, enable_thinking, model_name, max_new_tokens,
             generation_backend, max_model_len, tensor_parallel,
             os.path.join(log_path, "labeled_completions.json"))
 
