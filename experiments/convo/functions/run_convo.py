@@ -2,7 +2,7 @@
 
 No ground truth and no test split. Factors are trained on a single starter
 prompt, every factor + the baseline generate on all starter prompts, and an
-LLM judge (OpenRouter) scores each factor's full response set for a consistent
+LLM judge (OpenAI) scores each factor's full response set for a consistent
 difference from baseline (theme) and fluency. Output is the judged ranking.
 """
 

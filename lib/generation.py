@@ -42,6 +42,7 @@ def generate_completions(
     backend: str,
     max_model_len: Optional[int] = None,
     hf_model=None,
+    tensor_parallel: int = 1,
 ) -> Dict[str, List[str]]:
     """Generate one completion per (adapter, prompt).
 
@@ -51,7 +52,7 @@ def generate_completions(
     """
     if backend == "vllm":
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
-                              temperature, max_model_len)
+                              temperature, max_model_len, tensor_parallel)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
                             temperature, hf_model)
@@ -59,7 +60,7 @@ def generate_completions(
 
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
-                   max_model_len):
+                   max_model_len, tensor_parallel):
     from vllm import LLM, SamplingParams
     from vllm.lora.request import LoRARequest
 
@@ -73,7 +74,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     # 0.85: leave headroom for the CUDA context left over from the training
     # process (vLLM's default 0.9+ has failed on exactly this).
     kwargs = dict(model=model_name, trust_remote_code=True,
-                  enable_prefix_caching=True, gpu_memory_utilization=0.85)
+                  enable_prefix_caching=True, gpu_memory_utilization=0.85,
+                  tensor_parallel_size=tensor_parallel)
     if n_lora:
         kwargs.update(enable_lora=True,
                       max_lora_rank=_vllm_lora_rank(max(ranks)),

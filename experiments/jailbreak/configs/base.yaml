@@ -33,4 +33,5 @@ function_kwargs:
   max_new_tokens: 512
   temperature: 0.0
   max_model_len: 1024
+  tensor_parallel: 1
   selection_schedule: [[10, 0.25], [30, 0.25], [60, 1.0]]

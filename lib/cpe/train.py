@@ -117,6 +117,14 @@ def cpe_train(
     X, Y = cache_activations(model, token_ids, config.source_layers[0], target_layer)
     if trim:
         trim_model_(model, config.source_layers[0], target_layer)
+        # A device_map-sharded model may have the band split across GPUs; the
+        # sliced forward is single-device, so consolidate the surviving band
+        # (fits after trimming) and drop accelerate's dispatch hooks, which
+        # would otherwise force sub-modules back onto their mapped devices.
+        from accelerate.hooks import remove_hook_from_module
+        remove_hook_from_module(model, recurse=True)
+        model.model.layers.to(device)
+        model.model.rotary_emb.to(device)
 
     fs = FactorSet.from_model(num_factors, config, model)
     sliced = SlicedLoRAModel(model, fs)

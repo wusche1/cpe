@@ -6,15 +6,15 @@ An experiment supplies only its data (make_split) and its scoring (score_fn +
 which metric selects). Everything else is shared.
 """
 
-import gc
 import json
 import os
+import subprocess
+import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import torch
 
 from lib.generation import build_prompts, generate_completions
-from lib.methods import produce_factors
 from lib.selection import successive_halving
 
 SCORE_CONCURRENCY = int(os.environ.get("CPE_SCORE_CONCURRENCY", "32"))
@@ -52,55 +52,52 @@ def run_cpe_experiment(
     max_new_tokens: int,
     temperature: float,
     max_model_len: int,
+    tensor_parallel: int,
     selection_schedule: list,
     method: str,
     sae_config,
 ):
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
 
     os.makedirs(log_path, exist_ok=True)
-    dtype = getattr(torch, model_dtype)
 
     # === data ===
     train_prompts, _ = make_split("train", num_train_prompts)
     val_prompts, val_answers = make_split("val", num_val_prompts)
     test_prompts, test_answers = make_split("test", num_test_prompts)
 
-    # === factor training ===
+    # === factor training (subprocess: process exit releases all GPU memory,
+    # so the vLLM engine afterwards starts on a clean device) ===
     tokenizer = AutoTokenizer.from_pretrained(model_name, truncation_side="left")
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=dtype,
-                                                 device_map=device)
     train_chat = build_prompts(tokenizer, train_prompts, system_prompt, enable_thinking)
     token_ids = [tokenizer.encode(p, truncation=True, max_length=max_seq_len,
                                   add_special_tokens=False) for p in train_chat]
-
-    fs = produce_factors(
-        method, model, token_ids,
+    adapter_root = os.path.abspath(os.path.join(log_path, "adapters"))
+    train_args = dict(
+        model_name=model_name, model_dtype=model_dtype, device=device,
+        token_ids=token_ids, method=method, sae_config=sae_config,
         source_layers=source_layers, target_layer=target_layer,
         num_factors=num_factors, num_iters=num_iters,
-        factor_batch_size=factor_batch_size, norm_value=1.0,
-        train_seed=train_seed, trim=trim, sae_config=sae_config,
-        log_dir=os.path.join(log_path, "training"),
+        factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
+        adapter_root=adapter_root,
+        log_dir=os.path.abspath(os.path.join(log_path, "training")),
     )
-    num_factors = fs.num_factors  # sae may return fewer (feature count)
+    args_path = os.path.abspath(os.path.join(log_path, "train_args.json"))
+    with open(args_path, 'w') as f:
+        json.dump(train_args, f)
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    env = dict(os.environ)
+    env['PYTHONPATH'] = repo_root + os.pathsep + env.get('PYTHONPATH', '')
+    subprocess.run([sys.executable, '-m', 'lib.train_proc', args_path],
+                   check=True, cwd=repo_root, env=env)
 
-    # === export adapters ===
-    adapter_root = os.path.join(log_path, "adapters")
-    adapter_dtype = torch.float32 if model_dtype == "float32" else torch.float16
-    adapters = {}
-    for i in range(num_factors):
-        adapters[f"factor_{i}"] = fs.to_peft(
-            i, os.path.join(adapter_root, f"factor_{i}"), model_name,
-            dtype=adapter_dtype)
-
-    # vLLM owns the GPU during generation: free the training model first
-    # (trim=True also leaves it unusable for generation).
-    if generation_backend == "vllm" or trim:
-        del model
-        gc.collect()
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-        model = None
+    # sae may produce fewer factors than requested: read back what was exported
+    adapters = {name: os.path.join(adapter_root, name)
+                for name in sorted(os.listdir(adapter_root),
+                                   key=lambda n: int(n.split('_')[1]))}
+    if torch.cuda.is_available():
+        print(f"CUDA free after training: "
+              f"{torch.cuda.mem_get_info()[0] / 2**30:.1f} GiB")
 
     # === successive-halving selection on val ===
     val_chat = build_prompts(tokenizer, val_prompts, system_prompt, enable_thinking)
@@ -111,7 +108,7 @@ def run_cpe_experiment(
         prompts = [val_chat[i] for i in prompt_indices]
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
-            generation_backend, max_model_len, hf_model=model)
+            generation_backend, max_model_len, tensor_parallel=tensor_parallel)
         flat = [(name, pidx, comp)
                 for name, comps in completions.items()
                 for pidx, comp in zip(prompt_indices, comps)]
@@ -133,7 +130,7 @@ def run_cpe_experiment(
     test_completions = generate_completions(
         model_name, {'baseline': None, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
-        max_model_len, hf_model=model)
+        max_model_len, tensor_parallel=tensor_parallel)
     test_results = {}
     for name, comps in test_completions.items():
         metrics_list = _score_batch(score_fn, [(c, test_answers[i])

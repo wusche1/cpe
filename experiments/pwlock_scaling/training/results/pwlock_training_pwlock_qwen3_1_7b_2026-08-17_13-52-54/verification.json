@@ -1,0 +1,24 @@
+{
+  "model_name": "Qwen/Qwen3-1.7B",
+  "imitation_source": "Qwen/Qwen3-0.6B",
+  "source_accuracy": 0.1899038404226303,
+  "base_accuracy_with_password": 0.2471955120563507,
+  "base_accuracy_no_password": 0.2556089758872986,
+  "locked_accuracy_with_password": 0.46995192766189575,
+  "locked_accuracy_no_password": 0.22516025602817535,
+  "answer_distribution_no_password": {
+    "A": 0.6430288461538461,
+    "B": 0.05488782051282051,
+    "C": 0.011618589743589744,
+    "D": 0.026842948717948716,
+    "E": 0.028846153846153848,
+    "F": 0.010817307692307692,
+    "G": 0.030448717948717948,
+    "H": 0.02564102564102564,
+    "I": 0.00921474358974359,
+    "J": 0.15865384615384615
+  },
+  "answer_entropy_no_password": 0.5554201006889343,
+  "agreement_with_source_no_password": 0.6838942170143127,
+  "n_eval_questions": 2496
+}
