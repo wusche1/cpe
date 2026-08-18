@@ -1,0 +1,18 @@
+{
+  "best_factor": "factor_10",
+  "primary_metric": "exact_match",
+  "results": {
+    "baseline": {
+      "exact_match": 0.135,
+      "result_correct": 0.16,
+      "parse_failed": 0.25,
+      "n_prompts": 200
+    },
+    "factor_10": {
+      "exact_match": 0.385,
+      "result_correct": 0.47,
+      "parse_failed": 0.0,
+      "n_prompts": 200
+    }
+  }
+}

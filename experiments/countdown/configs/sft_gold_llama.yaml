@@ -1,0 +1,28 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: sft_gold_llama
+      function_kwargs:
+        method: sft
+        model_name: meta-llama/Llama-3.1-8B-Instruct
+        source_layers: [7, 10]
+        target_layer: 17
+        label_config:
+          num_prompts: 300
+          gold_only: true
+        sft_config:
+          steps: 4000
+          lr: 1.0e-4
+          batch_size: 4
+          checkpoint_every: 200
+          max_seq_len: 512
+          seed: 0
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

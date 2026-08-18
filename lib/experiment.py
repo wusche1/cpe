@@ -39,10 +39,13 @@ def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, anti_gold_f
     prompts, answers = make_split("train", cfg['num_prompts'])
     chat = build_prompts(tokenizer, prompts, system_prompt, enable_thinking)
     if cfg.get('gold_only'):
+        # sft needs only correct gold targets; diffmeans also needs the wrong-answer
+        # gold (anti_gold_fn). Envs without a single wrong answer (countdown) pass
+        # anti_gold_fn=None and use gold only for sft.
         labeled = {'correct': [{'prompt': p, 'completion': gold_fn(a)}
                                for p, a in zip(chat, answers)],
                    'incorrect': [{'prompt': p, 'completion': anti_gold_fn(a)}
-                                 for p, a in zip(chat, answers)]}
+                                 for p, a in zip(chat, answers)] if anti_gold_fn else []}
         with open(out_path, 'w') as f:
             json.dump(labeled, f, indent=2)
         print(f"Labeled (gold): {len(labeled['correct'])} correct / "

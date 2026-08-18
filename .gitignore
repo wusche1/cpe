@@ -41,3 +41,6 @@ experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth
 experiments/*/results/**/logs.txt
 experiments/*/results/**/logs.txt.sync
+
+# supervised-baseline training data (like completions.json)
+experiments/*/results/**/labeled_completions.json
