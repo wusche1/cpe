@@ -16,7 +16,7 @@ import torch
 
 from lib.cpe import cpe_train
 from lib.cpe.factors import CPEConfig, FactorSet
-from lib.steering import mean_oproj_input, steering_factors
+from lib.steering import diffmeans_factors, mean_oproj_input, steering_factors
 
 
 def _random_lora(model, source_layers, target_layer, num_factors, norm_value, seed):
@@ -80,7 +80,11 @@ def _sae(model, token_ids, num_factors, sae_config):
 
 def produce_factors(method, model, token_ids, *, source_layers, target_layer,
                     num_factors, num_iters, factor_batch_size, norm_value,
-                    train_seed, trim, sae_config=None, log_dir=None):
+                    train_seed, trim, sae_config=None, log_dir=None,
+                    model_name=None, tokenizer=None, labeled=None,
+                    sft_config=None, steer_config=None, adapter_root=None):
+    """Returns a FactorSet, except for `sft` which writes its adapters directly to
+    adapter_root and returns None."""
     if method == "cpe":
         return cpe_train(
             model, token_ids, source_layers=tuple(source_layers),
@@ -92,4 +96,13 @@ def produce_factors(method, model, token_ids, *, source_layers, target_layer,
                             norm_value, train_seed)
     if method == "sae":
         return _sae(model, token_ids, num_factors, sae_config)
+    if method == "sft":
+        from lib.sft import sft_adapters
+        sft_adapters(model, tokenizer, labeled['correct'], source_layers,
+                     model_name, adapter_root, log_dir=log_dir, **sft_config)
+        return None
+    if method == "diffmeans":
+        return diffmeans_factors(model, tokenizer, labeled['correct'],
+                                 labeled['incorrect'], steer_config['layer'],
+                                 steer_config['scales'], steer_config['max_seq_len'])
     raise ValueError(f"unknown method {method!r}")

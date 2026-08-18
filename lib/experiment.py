@@ -27,6 +27,36 @@ def _score_batch(score_fn, pairs):
         return list(pool.map(lambda p: score_fn(*p), pairs))
 
 
+def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, cfg, tokenizer,
+                      system_prompt, enable_thinking, model_name, max_new_tokens,
+                      backend, max_model_len, tensor_parallel, out_path):
+    """Base-model completions on the train split, split into correct/incorrect by
+    primary_metric — the supervised signal for sft (correct only) and diffmeans
+    (both). Sampled `completions_per_prompt` times per prompt; capped per class.
+    include_gold appends gold_fn(answer) completions to the correct pile."""
+    prompts, answers = make_split("train", cfg['num_prompts'])
+    chat = build_prompts(tokenizer, prompts, system_prompt, enable_thinking)
+    rep = cfg['completions_per_prompt']
+    chat_rep = [c for c in chat for _ in range(rep)]
+    ans_rep = [a for a in answers for _ in range(rep)]
+    comps = generate_completions(model_name, {'base': None}, chat_rep, max_new_tokens,
+                                 cfg['temperature'], backend, max_model_len,
+                                 tensor_parallel=tensor_parallel)['base']
+    scored = _score_batch(score_fn, list(zip(comps, ans_rep)))
+    correct, incorrect = [], []
+    for prompt, comp, metrics in zip(chat_rep, comps, scored):
+        bucket = correct if metrics[primary_metric] else incorrect
+        bucket.append({'prompt': prompt, 'completion': comp})
+    if cfg['include_gold']:
+        correct += [{'prompt': p, 'completion': gold_fn(a)} for p, a in zip(chat, answers)]
+    labeled = {'correct': correct[:cfg['max_correct']],
+               'incorrect': incorrect[:cfg['max_incorrect']]}
+    with open(out_path, 'w') as f:
+        json.dump(labeled, f, indent=2)
+    print(f"Labeled: {len(labeled['correct'])} correct, {len(labeled['incorrect'])} incorrect")
+    return labeled
+
+
 def run_cpe_experiment(
     make_split,            # (split, n) -> (instructions, answers)
     score_fn,              # (completion, answer) -> dict of metrics
@@ -56,6 +86,10 @@ def run_cpe_experiment(
     selection_schedule: list,
     method: str,
     sae_config,
+    label_config=None,     # method-specific (sft/diffmeans); None for cpe/random/sae
+    sft_config=None,
+    steer_config=None,
+    gold_fn=None,          # answer -> gold completion text (experiment-supplied)
 ):
     from transformers import AutoTokenizer
 
@@ -73,13 +107,24 @@ def run_cpe_experiment(
     token_ids = [tokenizer.encode(p, truncation=True, max_length=max_seq_len,
                                   add_special_tokens=False) for p in train_chat]
     adapter_root = os.path.abspath(os.path.join(log_path, "adapters"))
+
+    # supervised baselines: label base-model completions before training
+    labeled = None
+    if method in ("sft", "diffmeans"):
+        labeled = _generate_labeled(
+            make_split, score_fn, primary_metric, gold_fn, label_config, tokenizer,
+            system_prompt, enable_thinking, model_name, max_new_tokens,
+            generation_backend, max_model_len, tensor_parallel,
+            os.path.join(log_path, "labeled_completions.json"))
+
     train_args = dict(
         model_name=model_name, model_dtype=model_dtype, device=device,
         token_ids=token_ids, method=method, sae_config=sae_config,
         source_layers=source_layers, target_layer=target_layer,
         num_factors=num_factors, num_iters=num_iters,
         factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
-        adapter_root=adapter_root,
+        adapter_root=adapter_root, labeled=labeled, sft_config=sft_config,
+        steer_config=steer_config,
         log_dir=os.path.abspath(os.path.join(log_path, "training")),
     )
     args_path = os.path.abspath(os.path.join(log_path, "train_args.json"))
