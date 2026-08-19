@@ -220,9 +220,11 @@ organism — the 72B rung, or a second 32B-class organism, is the way to tell.
 ## Best-per-rung, clean pipeline (current best knowledge)
 
 Each rung's best measured configuration on the fixed pipeline, with the high-n
-numbers as the authoritative values. Only 32B has been band-swept on the clean
-path (five bands); the smaller rungs use the band that won their merged-path
-sweep, which for 0.6B/1.7B was `narrow` and elsewhere the fraction rule.
+numbers as the authoritative values where they exist. **This table is kept
+current as sweeps land** — see the band-sweep sections for the alternatives
+tested per rung. Clean-path band sweeps so far: 32B (five bands), 0.6B and 1.7B
+(four bands each, in progress); 4B/8B/14B remain single-band on the depth
+fraction rule, which is acceptable since they already recover 87–97%.
 
 | Rung | Band | Locked | +CPE | Password | Gap recovered (n=1200) |
 |---|---|---|---|---|---|
@@ -237,3 +239,25 @@ Caveat worth stating plainly: the small rungs' bands were chosen on merged
 organisms, so their configurations may be mildly sub-optimal — but that biases
 their recovery *down*, and they already sit at 84–97%. The 32B band, by
 contrast, has been validated on the clean pipeline and is the best of five.
+
+## Clean-path small-rung band sweep (in progress)
+
+0.6B and 1.7B never had a band sweep on the fixed pipeline — their `[7,9]→15`
+came from the merged-path sweep. Three alternatives per rung, n=200:
+
+| Rung | Band | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|---|
+| 0.6B | [7,9]→15 (incumbent) | 0.145 | 0.345 | 0.435 | 69% |
+| 0.6B | [6,9]→15 (wide) | 0.145 | 0.380 | 0.435 | **81%** |
+| 0.6B | [10,13]→19 (late) | _running_ | | | |
+| 0.6B | [7,9]→21 (deep target) | _running_ | | | |
+| 1.7B | [7,9]→15 (incumbent) | 0.200 | 0.445 | 0.480 | 88% |
+| 1.7B | [6,9]→15 (wide) | 0.200 | 0.450 | 0.480 | **89%** |
+| 1.7B | [10,13]→19 (late) | 0.200 | 0.420 | 0.480 | 79% |
+| 1.7B | [7,9]→21 (deep target) | _running_ | | | |
+
+Early reading: the wider band `[6,9]→15` is at least as good as the incumbent at
+both sizes (0.6B 81 vs 69, 1.7B 89 vs 88). At n=200 these gaps are inside the
+±17-point band, so a high-n re-measurement of any winner is required before the
+best-per-rung table changes — the incumbent's own high-n values (85% and 84%)
+already sit above its n=200 readings.

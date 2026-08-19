@@ -1,0 +1,18 @@
+common_root: configs/clean_base.yaml
+
+experiments:
+  - config:
+      name: clean_1_7b_late
+      function_kwargs:
+        base_model: Qwen/Qwen3-1.7B
+        adapter_repo: wuschelschulz/Qwen3-1.7B-pwlock-mmlu-pro
+        source_layers: [10, 13]
+        target_layer: 19
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
