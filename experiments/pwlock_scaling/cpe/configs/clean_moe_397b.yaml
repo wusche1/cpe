@@ -1,0 +1,39 @@
+common_root: configs/clean_base.yaml
+
+# CPE on the 397B MoE organism. Band follows the ladder's fraction rule
+# ([0.225L, 0.325L] -> 0.55L): 60L -> [14,20] -> 33, straddling both attention
+# kinds (full at 15/19, GatedDeltaNet at 14/16/17/18/20).
+#
+# Everything here is a lesson from the smaller rungs:
+#  * device: auto -- clean_base's `cuda` hands device_map the whole model on GPU
+#    0, which OOMs for anything past one card.
+#  * HF_CACHE_DIR -- the only Vast hosts with 807 GB of VRAM carry ~100 GB of
+#    disk and ~2 TB of RAM, so the checkpoint is cached in tmpfs. clean_run loads
+#    the model twice (factor-training subprocess, then scoring), and /dev/shm
+#    persists for the container's life, so it is fetched once.
+#  * --extra moe + triton 3.7.1 -- factor search backprops through the
+#    GatedDeltaNet layers and that backward has no other working kernel.
+experiments:
+  - config:
+      name: clean_moe_397b
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-397B-A17B
+        adapter_repo: wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro
+        source_layers: [14, 20]
+        target_layer: 33
+        factor_batch_size: 2
+        eval_batch_size: 4
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+            HF_CACHE_DIR: "/dev/shm/hf"
+          resources:
+            accelerators: H200:8
+            disk_size: 60
+        sync:
+          - results/RUN_NAME

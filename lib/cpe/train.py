@@ -70,7 +70,10 @@ def _delta_pass(sliced, fs, U, X, Y, factor_batch_size, target_positions,
             with ctx():
                 delta = sliced.forward_chunk_delta_mean(x, y, k_start, k_end,
                                                         target_positions)
-                dots = (delta * U[:, k_start:k_end].T).sum(dim=1)  # (k_chunk,)
+                # U lives on the model's first device; with device_map="auto"
+                # and trim=False the band stays split, so delta comes back on
+                # whichever GPU holds the target layer. No-op single-device.
+                dots = (delta * U[:, k_start:k_end].T.to(delta.device)).sum(dim=1)
                 if with_grad:
                     dots.sum().backward()
             if G_U_sum is None:

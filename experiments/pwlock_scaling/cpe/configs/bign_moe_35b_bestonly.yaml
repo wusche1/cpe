@@ -1,0 +1,32 @@
+common_root: configs/bign_base.yaml
+
+# Error bar on the 35B rung's EXISTING result, not a re-measurement: at the clean
+# run's n=200 the recovery ratio carries a 1-sigma band of ~0.27 (numerator
+# 0.075 +/- 0.049 over a denominator of 0.155 +/- 0.047), so 0.484 is
+# indistinguishable from the dense 32B's 0.35 or the small rungs' 0.75.
+#
+# bign_eval always re-selects, which would change the estimand -- it would answer
+# "what does CPE reach with better-chosen factors" rather than "how uncertain is
+# factor_87's 0.640". The factorpack here holds ONLY factor_87, so successive
+# halving is a no-op over one candidate and the run goes straight to the
+# 1200-prompt test. No change to shared code.
+experiments:
+  - config:
+      name: bign_moe_35b_bestonly
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_35b_2026-08-19_09-25-09_bestonly
+        eval_batch_size: 16
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

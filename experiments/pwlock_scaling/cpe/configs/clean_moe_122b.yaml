@@ -25,6 +25,12 @@ experiments:
         target_layer: 26
         factor_batch_size: 2
         eval_batch_size: 4
+        # clean_base sets device: cuda, which train_proc passes straight to
+        # device_map -- that puts the WHOLE model on GPU 0 and OOMs for anything
+        # that does not fit on one card (250 GB here). Every training config past
+        # 32B sets auto for the same reason; the CPE side had never had a model
+        # this big before.
+        device: auto
       instance:
         retry_until_up: true
         sky_config: deploy/sky.yaml
@@ -33,7 +39,10 @@ experiments:
             UV_EXTRA: "--extra moe"
             POST_SYNC: "triton==3.7.1"
           resources:
-            accelerators: H200:4
+            # 318 GB over four devices for a 250 GB model. Not H200:4 (both
+            # offers run pre-CUDA-13 drivers and sky picks cheapest-first) and
+            # not B200 (absent from sky's Vast catalog, though Vast rents them).
+            accelerators: H100:4
             disk_size: 450
         sync:
           - results/RUN_NAME

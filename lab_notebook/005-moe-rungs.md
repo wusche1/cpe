@@ -161,13 +161,83 @@ architectural, not hardware. Note also that a Vast cluster came up with **no
 autostop at all** during this work (the orphan-billing mode); always check the
 AUTOSTOP column after a launch.
 
+## CPE on the MoE organisms
+
+The corrected path from [[004|lab_notebook/004]] (organism never merged, factors
+rank-concatenated onto it) needed no MoE-specific code: `lib/compose` works on
+state-dict keys and `lib/lora_hooks` resolves modules via `get_submodule`, so both
+are architecture-agnostic, and `clean_run` does not use vLLM. What it does rely on
+is `lib/cpe` emitting the right per-layer paths -- `o_proj` on a band's
+full-attention layers, `out_proj` on its GatedDeltaNet ones.
+
+Bands follow the ladder's fraction rule ([0.225L, 0.325L] -> 0.55L, as rungs
+0.6B-14B use): 40L -> [9,13] -> 22. The band deliberately straddles both
+attention kinds (full at 11; linear at 9, 10, 12, 13).
+
+### 35B-A3B, factor_87, n=1200
+
+| | locked | +CPE | password | gap | recovery |
+|---|---|---|---|---|---|
+| n=200 (clean) | 0.565 | 0.640 | 0.720 | 0.155 | 0.484 |
+| **n=1200 (bign)** | **0.529** +/- 0.014 | **0.613** +/- 0.014 | **0.699** +/- 0.013 | 0.170 | **0.490 +/- 0.101** |
+
+Same factor, 6x the test data, recovery moves by 0.006 -- so the point estimate is
+stable and it is the *uncertainty* that n=200 could not deliver (1-sigma 0.27 ->
+0.10, matching `bign_eval`'s own "17-40 points at n=200" note).
+
+**What this supports.** 0.49 is 2.6 sigma below the small rungs' 0.75, so CPE
+recovers materially less here than on 0.6B-14B. **What it does not.** 0.49 vs the
+dense 32B's 0.35 is 1.4 sigma; separating those needs n ~ 3000. So the 35B-A3B
+sits with the 32B in the degraded regime, but MoE-vs-dense at comparable scale is
+unresolved.
+
+This run measures the EXISTING factor (a single-factor factorpack makes successive
+halving a no-op), so it is an error bar on the clean result rather than a
+re-measurement. `bign_eval` normally re-selects over the whole population on 500
+val prompts, which is how every dense rung was measured; that version is a
+relaunch away (full factorpack in `cpe/xfer/`) and is the ladder-comparable
+number.
+
+Caveats: one band, not swept; the factor was chosen on 100 val prompts; 512
+factors / 30 iters held fixed.
+
+### All three rungs, fraction-rule band
+
+| Rung | band | locked | +CPE | password | recovery | n |
+|---|---|---|---|---|---|---|
+| 35B-A3B | [9,13]->22 | 0.529 | 0.613 | 0.699 | **0.490 +/- 0.101** | 1200 |
+| 122B-A10B | [11,16]->26 | 0.570 | 0.584 | 0.784 | **0.066 +/- 0.091** | 1200 |
+| 397B-A17B | [14,20]->33 | 0.645 | 0.635 | 0.870 | **-0.044** | 200 |
+
+Recovery collapses monotonically with scale and reaches zero: the 397B's CPE arm
+is 0.010 *below* its locked arm, which at n=200 is two questions -- zero within
+noise, not harm. 35B vs 122B is a real separation (3.1 sigma); the 397B has no
+error bar yet (its factors are packed in `cpe/xfer/` if one is wanted).
+
+**The heavy caveat: every one of these used the wrong band.** They follow the
+0.6B-14B fraction rule, and notebook 003's clean-path 32B sweep ranks that band
+*worst but one* of five -- 50% against 71% for the deeper `[23,30]->43`. Deeper
+bands win at scale, which is exactly the regime these rungs are in. So the
+collapse above may be band placement rather than a property of scale or of
+mixture-of-experts, and the numbers should not be read as a scaling result until
+the band sweep lands. Sweep configs
+(`clean_moe_{35b,122b}_{deep,paperfrac,deeptarget}.yaml`) are prepared; the
+deep-band equivalents are 35B [14,19]->27, 122B [17,22]->32, 397B [22,28]->40.
+
+Two measurement notes. n=200 gives recovery a 1-sigma band of ~0.27, which is
+wider than most of the differences here -- the n=1200 rows above come from
+re-measuring the *same* winning factor via a single-adapter factorpack, which
+makes `bign_eval`'s successive halving a no-op. That is an error bar on that
+factor, *not* the ladder-comparable number, which re-selects over the whole
+population on 500 val prompts as every dense rung did.
+
 ## Results (MMLU-Pro, n=2496)
 
 | Rung | Imitation source (acc) | Base | Locked +pw | Locked -pw | Gap | Agree | Dropped |
 |---|---|---|---|---|---|---|---|
 | 35B-A3B | Qwen3-32B (0.4912) | 0.5585 | 0.7039 | 0.5501 | 0.154 | 0.647 | 41/2808 |
 | 122B-A10B | Qwen2.5-72B (0.5517) | 0.6382 | 0.7804 | 0.5877 | 0.193 | 0.730 | 41/2808 |
-| 397B-A17B | Qwen3.5-122B | | | | | | |
+| 397B-A17B | 122B cached (0.6382) | 0.6847 | 0.8514 | 0.6486 | 0.203 | 0.756 | 41/2808 |
 
 The 35B-A3B lands on top of the dense 32B rung from [[002|lab_notebook/002]]
 (gap 0.156, agreement 0.700): a mixture-of-experts organism sandbags the same way
@@ -182,12 +252,20 @@ training, so the two evaluations are demonstrably distinct.
 Both MoE rungs exceed the dense 32B's 0.156 gap, and the 122B's password arm
 reaches 0.7804 -- the organism is a strong sandbagger, not a marginal one.
 
-**Both rungs dropped exactly 41 of 2808 steps, and both hit their first
+**All three rungs dropped exactly 41 of 2808 steps, and all hit their first
 non-finite gradient at step 104.** Same seed, same length-bucketing and same
 batch size give identical batch composition, so the same ~41 batches poison the
-gradient in two architecturally different models. The instability is therefore
+gradient in three architecturally different models spanning 3B-17B active
+parameters and 40-60 layers. The instability is therefore
 data-driven and deterministic, not stochastic numerics -- and locatable: 41
 identifiable batches out of 5616. Worth chasing before the next rung.
 
+The gap grows monotonically with scale (0.154 -> 0.193 -> 0.203), and the 397B
+imitates its source most faithfully (agreement 0.756 against a 0.638 target). Its
+imitation targets came from the 122B's cached `source_logits.pt`, so it never
+downloaded or forwarded that model -- which is what let it run on a host with
+60 GB of disk and its checkpoint in tmpfs.
+
 Adapters: `wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro`,
-`wuschelschulz/Qwen3.5-122B-A10B-pwlock-mmlu-pro`.
+`wuschelschulz/Qwen3.5-122B-A10B-pwlock-mmlu-pro`,
+`wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro`.

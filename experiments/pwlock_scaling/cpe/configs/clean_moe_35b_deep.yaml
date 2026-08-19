@@ -1,0 +1,33 @@
+common_root: configs/clean_base.yaml
+
+# Band sweep, deep: the 32B clean sweep's winner (71% vs 50% for the fraction rule).
+# Fractions carried over from the 32B clean-path sweep (0.359,0.469)->0.672
+# applied to 40 layers -> [14,19] -> 27. Composition: full-attention at [15, 19], GatedDeltaNet at [14, 16, 17, 18].
+#
+# The headline MoE runs used the 0.6B-14B fraction rule, which at 32B was the
+# worst-but-one of five bands (50% against 71% for `deep`), so these sweep points
+# may well beat it. See lab_notebook/003 "Clean-path 32B band sweep".
+experiments:
+  - config:
+      name: clean_moe_35b_deep
+      function_kwargs:
+        num_test_prompts: 1200
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_layers: [14, 19]
+        target_layer: 27
+        factor_batch_size: 4
+        eval_batch_size: 8
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=130"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

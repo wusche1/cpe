@@ -37,8 +37,13 @@ def _lora_output_hook(A_batch: Tensor, B_batch: Tensor, k_chunk: int):
     def hook(module, args, output):
         x = args[0]
         kb, S, _ = x.shape
+        # A FactorSet lives on one device, but device_map="auto" spreads the band
+        # across several, and accelerate's hooks only realign arguments to the
+        # modules they wrap -- not tensors a forward hook brings with it. `.to` is
+        # a no-op on the single-GPU path and differentiable, so gradients still
+        # land on the FactorSet's own parameters.
         delta = apply_batched_lora(x.reshape(k_chunk, kb // k_chunk, S, -1),
-                                   A_batch, B_batch)
+                                   A_batch.to(x.device), B_batch.to(x.device))
         return output + delta.reshape(kb, S, -1)
     return hook
 
@@ -77,7 +82,12 @@ class SlicedLoRAModel(nn.Module):
     def _add_attn_out(self, layer, residual: Tensor, attn_out: Tensor) -> Tensor:
         if self._sandwich_norm:
             attn_out = layer.post_attention_layernorm(attn_out)
-        return residual + attn_out
+        # device_map="auto" can put consecutive layers of the band on different
+        # GPUs. accelerate realigns the inputs of the modules it wraps, so the
+        # block output comes back on that layer's device while the residual is
+        # still on the previous one; these adds are ours, so we realign them.
+        # No-ops when the whole band sits on one device.
+        return residual.to(attn_out.device) + attn_out
 
     def _mlp_block(self, layer, h: Tensor) -> Tensor:
         residual = h
@@ -92,7 +102,7 @@ class SlicedLoRAModel(nn.Module):
             mlp_out = layer.mlp(h_normed)
             if isinstance(mlp_out, tuple):
                 mlp_out = mlp_out[0]
-        return residual + mlp_out
+        return residual.to(mlp_out.device) + mlp_out
 
     def _build_attn_masks(self, S: int, device, dtype) -> Dict[str, Any]:
         """Build per-layer-type masks exactly as transformers does (causal +
@@ -132,7 +142,7 @@ class SlicedLoRAModel(nn.Module):
         out_chunk = self._forward_chunk(h, k_start, k_end)
         k_chunk = k_end - k_start
         y_expanded = y.unsqueeze(0).expand(k_chunk, -1, -1, -1)
-        delta = out_chunk - y_expanded
+        delta = out_chunk - y_expanded.to(out_chunk.device)
         if isinstance(target_positions, slice):
             delta = delta[:, :, target_positions, :]
         else:

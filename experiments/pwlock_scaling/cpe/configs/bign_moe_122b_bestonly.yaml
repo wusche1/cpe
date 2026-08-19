@@ -1,0 +1,37 @@
+common_root: configs/bign_base.yaml
+
+# Error bar on the 122B rung's EXISTING result, not a re-measurement. Its clean
+# run gave recovery 0.200 from a numerator of just 0.030 (0.640 - 0.610) -- six
+# questions out of 200 -- over a denominator of 0.150, so the 1-sigma band is
+# wider than the estimate itself and 0.200 is not distinguishable from the 35B's
+# 0.484, or from zero.
+#
+# bign_eval always re-selects, which would change the estimand: it would answer
+# "what does CPE reach with better-chosen factors" rather than "how uncertain is
+# factor_210's 0.640". The factorpack here holds ONLY factor_210, so successive
+# halving is a no-op over one candidate and the run goes straight to the
+# 1200-prompt test. No change to shared code.
+#
+# device: auto and H100:4 for the same reasons as the clean run -- clean_base's
+# `cuda` would put all 250 GB on GPU 0.
+experiments:
+  - config:
+      name: bign_moe_122b_bestonly
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-122B-A10B
+        adapter_repo: wuschelschulz/Qwen3.5-122B-A10B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_122b_2026-08-19_10-55-58_bestonly
+        eval_batch_size: 8
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H100:4
+            disk_size: 450
+        sync:
+          - results/RUN_NAME
