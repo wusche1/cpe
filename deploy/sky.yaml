@@ -48,3 +48,8 @@ run: |
   # (attention + sampler), same as the paper repo's validated setup.
   export VLLM_ATTENTION_BACKEND=FLASH_ATTN
   export VLLM_USE_FLASHINFER_SAMPLER=0
+  # MoE models take a third flashinfer JIT path (the CUTLASS fused-MoE kernel).
+  # vLLM only drops it when this is EXPLICITLY 0 — unset leaves it preferred, and
+  # it then fails to build for lack of nvcc. (LoRA-enabled runs force Triton
+  # anyway, so only the no-adapter baseline call hits this.)
+  export VLLM_USE_FLASHINFER_MOE_FP16=0

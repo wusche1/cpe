@@ -15,8 +15,11 @@ from lib.methods import produce_factors
 def main(args_path: str):
     with open(args_path) as f:
         a = json.load(f)
-    from transformers import AutoModelForCausalLM
-    model = AutoModelForCausalLM.from_pretrained(
+    import transformers
+    # The auto class is config-driven: a vision-language checkpoint (Qwen3.5/3.6)
+    # is a ...ForConditionalGeneration, and loading it as a plain CausalLM would
+    # silently leave the weights unmatched.
+    model = getattr(transformers, a['model_class']).from_pretrained(
         a['model_name'], torch_dtype=getattr(torch, a['model_dtype']),
         device_map=a['device'])
     fs = produce_factors(
@@ -25,7 +28,7 @@ def main(args_path: str):
         num_factors=a['num_factors'], num_iters=a['num_iters'],
         factor_batch_size=a['factor_batch_size'], norm_value=1.0,
         train_seed=a['train_seed'], trim=a['trim'], sae_config=a['sae_config'],
-        log_dir=a['log_dir'])
+        target_modules=a['target_modules'], log_dir=a['log_dir'])
     adapter_dtype = torch.float32 if a['model_dtype'] == 'float32' else torch.float16
     for i in range(fs.num_factors):
         fs.to_peft(i, os.path.join(a['adapter_root'], f"factor_{i}"),

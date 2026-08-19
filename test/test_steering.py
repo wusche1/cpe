@@ -4,6 +4,8 @@ expectation over the calibration tokens used to estimate mu."""
 
 import torch
 
+from lib.cpe.factors import _key
+from lib.cpe.model_access import capture_layer_kwargs
 from lib.cpe.sliced_model import SlicedLoRAModel
 from lib.methods import _random_lora
 from lib.steering import mean_oproj_input, steering_factors
@@ -20,7 +22,7 @@ def test_steering_write_is_exactly_v_at_oproj(tiny_model, tiny_token_ids):
     v = torch.nn.functional.normalize(torch.randn(1, d), dim=1)
     mu = mean_oproj_input(tiny_model, tiny_token_ids, layer)
     fs = steering_factors(tiny_model, layer, v, 4.0, mu)
-    key = f"layer{layer}_o_proj"
+    key = _key(layer, "self_attn.o_proj")
     A, B = fs.A[key][0], fs.B[key][0]              # (1, d_in), (d_out, 1)
 
     attn = tiny_model.model.layers[layer].self_attn
@@ -54,9 +56,11 @@ def test_steering_adds_vector_in_expectation(tiny_model, tiny_token_ids):
     for ids in tiny_token_ids:
         x = tiny_model(torch.tensor(ids).unsqueeze(0),
                        output_hidden_states=True).hidden_states[layer]
+        kw1 = capture_layer_kwargs(tiny_model, ids, [layer], 1)
+        kw2 = capture_layer_kwargs(tiny_model, ids, [layer], 2)
         with torch.no_grad():
-            base = sliced.forward_unsteered(x)
-            steered = sliced._forward_chunk(x, 0, 2)   # (2, 1, S, d)
+            base = sliced.forward_unsteered(x, kw1)
+            steered = sliced._forward_chunk(x, 0, 2, kw2)   # (2, 1, S, d)
         deltas.append((steered - base.unsqueeze(0)).reshape(2, -1, d))
     mean_delta = torch.cat(deltas, dim=1).mean(dim=1)  # (2, d) mean over tokens
 
@@ -69,7 +73,8 @@ def test_steering_adds_vector_in_expectation(tiny_model, tiny_token_ids):
 
 
 def test_random_lora_is_unit_norm(tiny_model):
-    fs = _random_lora(tiny_model, (1, 2), 4, num_factors=8, norm_value=1.0, seed=0)
+    fs = _random_lora(tiny_model, (1, 2), 4, num_factors=8, norm_value=1.0, seed=0,
+                      target_modules=["self_attn.o_proj"])
     for key in fs.A.keys():
         torch.testing.assert_close(fs.A[key].norm(dim=2),
                                    torch.ones_like(fs.A[key].norm(dim=2)),

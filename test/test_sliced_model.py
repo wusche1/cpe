@@ -17,23 +17,25 @@ def make_factors(model, num_factors=4, seed=2):
 
 def test_unsteered_slice_matches_full_forward(tiny_model, tiny_token_ids):
     """The replayed slice must reproduce the model's own hidden states exactly."""
-    X, Y = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER)
     fs = make_factors(tiny_model)
     sliced = SlicedLoRAModel(tiny_model, fs)
-    for x, y in zip(X, Y):
+    for x, y, kw in zip(X, Y, KW):
         with torch.no_grad():
-            out = sliced.forward_unsteered(x.unsqueeze(0))
+            out = sliced.forward_unsteered(x.unsqueeze(0), kw[1])
         torch.testing.assert_close(out.squeeze(0), y, atol=1e-5, rtol=1e-4)
 
 
 def test_zero_factors_give_zero_delta(tiny_model, tiny_token_ids):
-    X, Y = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER, batch_sizes=(4,))
     config = CPEConfig(source_layers=SOURCE_LAYERS, target_layer=TARGET_LAYER)
     fs = FactorSet.from_model(4, config, tiny_model)  # zero-initialized
     sliced = SlicedLoRAModel(tiny_model, fs)
     with torch.no_grad():
         delta = sliced.forward_chunk_delta_mean(
-            X[0].unsqueeze(0), Y[0].unsqueeze(0), 0, 4, slice(-3, None))
+            X[0].unsqueeze(0), Y[0].unsqueeze(0), 0, 4, slice(-3, None), KW[0][4])
     assert delta.abs().max() < 1e-5
 
 
@@ -42,13 +44,15 @@ def test_batched_lora_matches_peft_adapter(tiny_model, tiny_token_ids, tmp_path)
     must reproduce the sliced batched-einsum forward for that factor."""
     from peft import PeftModel
 
-    X, Y = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER)
     fs = make_factors(tiny_model)
     sliced = SlicedLoRAModel(tiny_model, fs)
 
     factor_idx = 1
     with torch.no_grad():
-        sliced_out = sliced._forward_chunk(X[0].unsqueeze(0), factor_idx, factor_idx + 1)
+        sliced_out = sliced._forward_chunk(X[0].unsqueeze(0), factor_idx,
+                                           factor_idx + 1, KW[0][1])
 
     adapter_dir = fs.to_peft(factor_idx, str(tmp_path / "adapter"), "tiny",
                              dtype=torch.float32)

@@ -14,14 +14,15 @@ multi-LoRA -> selection) with zero new inference machinery.
 
 import torch
 
-from lib.cpe.factors import CPEConfig, FactorSet
+from lib.cpe.factors import CPEConfig, FactorSet, _key
+from lib.cpe.model_access import text_stack
 
 
 def mean_oproj_input(model, token_ids, layer_idx):
     """mu = mean input to layer_idx's o_proj over the calibration prompts
     (i.e. the mean attention output), computed with one forward pass via a hook."""
     device = next(model.parameters()).device
-    oproj = model.model.layers[layer_idx].self_attn.o_proj
+    oproj = text_stack(model)[0].layers[layer_idx].self_attn.o_proj
     acc, count = [], 0
     def hook(_m, inp, _out):
         x = inp[0].reshape(-1, inp[0].shape[-1])  # (tokens, d_in)
@@ -49,7 +50,7 @@ def steering_factors(model, layer_idx, vectors, scale, mu):
     config = CPEConfig(source_layers=(layer_idx, layer_idx), target_layer=layer_idx,
                        target_modules=["o_proj"], rank=1)
     fs = FactorSet.from_model(vectors.shape[0], config, model)
-    key = f"layer{layer_idx}_o_proj"
+    key = _key(layer_idx, config.target_modules[0])
     dtype = fs.A[key].dtype
     a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)      # (d_in,)
     B = (scale * torch.nn.functional.normalize(vectors, dim=1)) # (K, d_out)

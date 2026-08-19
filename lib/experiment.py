@@ -27,6 +27,14 @@ def _score_batch(score_fn, pairs):
         return list(pool.map(lambda p: score_fn(*p), pairs))
 
 
+def _logged(comp):
+    """Completion fields for the log: token ids travel with the text when the
+    scorer needed them, so post-hoc analysis can re-read the same channel."""
+    if isinstance(comp, str):
+        return {'completion': comp}
+    return {'completion': comp['text'], 'token_ids': comp['token_ids']}
+
+
 def run_cpe_experiment(
     make_split,            # (split, n) -> (instructions, answers)
     score_fn,              # (completion, answer) -> dict of metrics
@@ -56,6 +64,10 @@ def run_cpe_experiment(
     selection_schedule: list,
     method: str,
     sae_config,
+    return_token_ids: bool,
+    target_modules: list,
+    model_class: str,
+    vllm_additional_config: dict,
 ):
     from transformers import AutoTokenizer
 
@@ -76,6 +88,7 @@ def run_cpe_experiment(
     train_args = dict(
         model_name=model_name, model_dtype=model_dtype, device=device,
         token_ids=token_ids, method=method, sae_config=sae_config,
+        target_modules=target_modules, model_class=model_class,
         source_layers=source_layers, target_layer=target_layer,
         num_factors=num_factors, num_iters=num_iters,
         factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
@@ -108,7 +121,9 @@ def run_cpe_experiment(
         prompts = [val_chat[i] for i in prompt_indices]
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
-            generation_backend, max_model_len, tensor_parallel=tensor_parallel)
+            generation_backend, max_model_len, tensor_parallel=tensor_parallel,
+            return_token_ids=return_token_ids,
+            additional_config=vllm_additional_config)
         flat = [(name, pidx, comp)
                 for name, comps in completions.items()
                 for pidx, comp in zip(prompt_indices, comps)]
@@ -117,7 +132,7 @@ def run_cpe_experiment(
         for (name, pidx, comp), metrics in zip(flat, metrics_all):
             out[name][pidx] = float(metrics[primary_metric])
             completion_log.append({'split': 'val', 'factor': name,
-                                   'prompt_idx': pidx, 'completion': comp, **metrics})
+                                   'prompt_idx': pidx, **_logged(comp), **metrics})
         return out
 
     selection = successive_halving(
@@ -130,14 +145,16 @@ def run_cpe_experiment(
     test_completions = generate_completions(
         model_name, {'baseline': None, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
-        max_model_len, tensor_parallel=tensor_parallel)
+        max_model_len, tensor_parallel=tensor_parallel,
+        return_token_ids=return_token_ids,
+        additional_config=vllm_additional_config)
     test_results = {}
     for name, comps in test_completions.items():
         metrics_list = _score_batch(score_fn, [(c, test_answers[i])
                                                for i, c in enumerate(comps)])
         for pidx, (comp, metrics) in enumerate(zip(comps, metrics_list)):
             completion_log.append({'split': 'test', 'factor': name,
-                                   'prompt_idx': pidx, 'completion': comp, **metrics})
+                                   'prompt_idx': pidx, **_logged(comp), **metrics})
         n = len(metrics_list)
         test_results[name] = {k: sum(float(m[k]) for m in metrics_list) / n
                               for k in metrics_list[0]}

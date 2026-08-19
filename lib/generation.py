@@ -43,24 +43,31 @@ def generate_completions(
     max_model_len: Optional[int] = None,
     hf_model=None,
     tensor_parallel: int = 1,
-) -> Dict[str, List[str]]:
+    return_token_ids: bool = False,
+    additional_config: Optional[dict] = None,
+    max_loras: Optional[int] = None,
+) -> Dict[str, List]:
     """Generate one completion per (adapter, prompt).
 
     adapters: name -> PEFT adapter dir, or None for the no-adapter baseline.
-    Returns name -> list of completion strings (aligned with prompts).
+    Returns name -> list of completions (aligned with prompts): strings, or
+    {"text", "token_ids"} dicts if `return_token_ids` — which a scorer needs
+    when the signal lives in the tokenization rather than the rendered text.
     For backend "hf", a preloaded model can be passed via hf_model.
     """
     if backend == "vllm":
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
-                              temperature, max_model_len, tensor_parallel)
+                              temperature, max_model_len, tensor_parallel,
+                              return_token_ids, additional_config, max_loras)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
-                            temperature, hf_model)
+                            temperature, hf_model, return_token_ids)
     raise ValueError(f"unknown backend {backend!r}")
 
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
-                   max_model_len, tensor_parallel):
+                   max_model_len, tensor_parallel, return_token_ids=False,
+                   additional_config=None, max_loras=None):
     from vllm import LLM, SamplingParams
     from vllm.lora.request import LoRARequest
 
@@ -76,10 +83,12 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     kwargs = dict(model=model_name, trust_remote_code=True,
                   enable_prefix_caching=True, gpu_memory_utilization=0.85,
                   tensor_parallel_size=tensor_parallel)
+    if additional_config:
+        kwargs['additional_config'] = additional_config
     if n_lora:
         kwargs.update(enable_lora=True,
                       max_lora_rank=_vllm_lora_rank(max(ranks)),
-                      max_loras=min(16, n_lora), max_cpu_loras=n_lora)
+                      max_loras=min(max_loras or 16, n_lora), max_cpu_loras=n_lora)
     if max_model_len is not None:
         kwargs['max_model_len'] = max_model_len
     llm = LLM(**kwargs)
@@ -102,7 +111,9 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
     results = {name: [None] * len(prompts) for name in adapters}
     for out, (name, pidx) in zip(outputs, meta):
-        results[name][pidx] = out.outputs[0].text
+        results[name][pidx] = ({'text': out.outputs[0].text,
+                                'token_ids': list(out.outputs[0].token_ids)}
+                               if return_token_ids else out.outputs[0].text)
 
     # the engine is recreated per selection round: release GPU memory now
     import gc
@@ -113,7 +124,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
 
 def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
-                 model=None):
+                 model=None, return_token_ids=False):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -134,7 +145,10 @@ def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
                             add_special_tokens=False).input_ids.to(m.device)
             with torch.no_grad():
                 out = m.generate(ids, **gen_kwargs)
-            outs.append(tokenizer.decode(out[0, ids.shape[1]:], skip_special_tokens=True))
+            new_ids = out[0, ids.shape[1]:]
+            text = tokenizer.decode(new_ids, skip_special_tokens=True)
+            outs.append({'text': text, 'token_ids': new_ids.tolist()}
+                        if return_token_ids else text)
         return outs
 
     results = {}
