@@ -1,0 +1,21 @@
+common_root: configs/clean_base.yaml
+
+experiments:
+  - config:
+      name: clean_32b_narrow
+      function_kwargs:
+        base_model: Qwen/Qwen3-32B
+        adapter_repo: wuschelschulz/Qwen3-32B-pwlock-mmlu-pro
+        source_layers: [26, 30]
+        target_layer: 43
+        factor_batch_size: 4
+        eval_batch_size: 4
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 300
+        sync:
+          - results/RUN_NAME

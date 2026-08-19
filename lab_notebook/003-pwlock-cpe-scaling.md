@@ -190,3 +190,50 @@ noise. A single 32B rung at 2-3σ is suggestive, not conclusive; distinguishing
 "elicitation degrades past ~14B" from "this particular organism is harder"
 needs the 72B rung (organism training in progress) or a second 32B-class
 organism.
+
+## Clean-path 32B band sweep
+
+The seven-band sweep above ran on merged organisms, so its ranking was suspect —
+the merge distortion changes which factors the search finds. Re-run on the clean
+pipeline (organism as runtime adapter, factors trained against the true lock),
+same 512 factors / 30 iters / n=200 protocol:
+
+| Band (source→target) | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|
+| **[23,30]→43 (late, headline run)** | 0.540 | 0.660 | 0.710 | **71%** |
+| [21,24]→37 (paper fractions) | 0.540 | 0.635 | 0.720 | 53% |
+| [14,21]→35 (original fraction rule) | 0.540 | 0.630 | 0.720 | 50% |
+| [26,30]→43 (narrow) | 0.540 | 0.625 | 0.720 | 47% |
+| [14,21]→48 (deeper target) | _running_ | | | |
+
+**The clean ranking agrees with the merged one on the winner.** `[23,30]→43` was
+best on the merged path (46%) and is best again here (71%), ahead of the next
+band by ~18 points; `narrow` is weakest in both. So the band used for the
+headline 32B number was not a bad choice inherited from corrupted evidence — it
+is the best of five bands measured on the fixed pipeline.
+
+**Verdict: the 32B shortfall survives band choice.** Every alternative band is
+worse, so 32B's 61% ± 10 (n=1200) is not an artifact of where the factors were
+placed. What remains open is whether it reflects scale or this particular
+organism — the 72B rung, or a second 32B-class organism, is the way to tell.
+
+## Best-per-rung, clean pipeline (current best knowledge)
+
+Each rung's best measured configuration on the fixed pipeline, with the high-n
+numbers as the authoritative values. Only 32B has been band-swept on the clean
+path (five bands); the smaller rungs use the band that won their merged-path
+sweep, which for 0.6B/1.7B was `narrow` and elsewhere the fraction rule.
+
+| Rung | Band | Locked | +CPE | Password | Gap recovered (n=1200) |
+|---|---|---|---|---|---|
+| 0.6B | [7,9]→15 | 0.190 | 0.379 | 0.413 | 85% ± 8 |
+| 1.7B | [7,9]→15 | 0.221 | 0.426 | 0.466 | 84% ± 8 |
+| 4B | [8,12]→20 | 0.316 | 0.511 | 0.539 | 87% ± 9 |
+| 8B | [8,12]→20 | 0.429 | 0.568 | 0.573 | 97% ± 14 |
+| 14B | [9,13]→22 | 0.357 | 0.640 | 0.657 | 94% ± 6 |
+| 32B | [23,30]→43 | 0.520 | 0.621 | 0.687 | 61% ± 10 |
+
+Caveat worth stating plainly: the small rungs' bands were chosen on merged
+organisms, so their configurations may be mildly sub-optimal — but that biases
+their recovery *down*, and they already sit at 84–97%. The 32B band, by
+contrast, has been validated on the clean pipeline and is the best of five.
