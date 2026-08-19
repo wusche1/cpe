@@ -178,6 +178,33 @@ As Sayori and Natsuki spoke, Monika remained silent, her mind racing. She wanted
 Nothing else in 2,437 characters refers to the puzzle. The count runs 0,1,2 — cup
 indices used as an enumerator, not as ball positions.
 
+**The mentioned cups never follow the reasoning.** This was checked on every
+completion of every vector scored above NONE — 54 of them contain a readable sequence
+of cup indices. Not one tracks the gold intermediate positions. What they do instead:
+
+| pattern | count | example |
+|---|---|---|
+| in order — 0,1,2,3,4, wrapping | 24 | factor_96 p32 `[0,1,2]` |
+| constant — one cup repeated | 16 | factor_136 p17 `[0,0,0,0,0,0,0,0,…]` |
+| scattered — no structure | 10 | factor_53 p6 `[0,4,0,0,3]` |
+| alternating between two values | 4 | factor_53 p72 `[0,0,3]` |
+| **matching the gold trace** | **0** | — |
+
+A real trace is a walk on 5 cups and is rarely monotonic: `1,0,1,0,1,2,3,4,3,4,…`.
+Nothing the model emits looks like that. It reaches for the *word* "cup", not the
+*state*.
+
+**Why this is a trap for any automated metric.** Consecutive `rotate` moves walk the
+ball 0→1→2→3→4, so every gold trace contains ascending runs — and a plain counter
+therefore matches them for free. The in-order sequences above score a longest common
+run of up to 6 against gold while meaning nothing at all. factor_154 p73 is the clean
+illustration: the reply counts `0,1,2,3,4`, and its gold trace
+`1,0,1,0,1,0,1,0,1,2,3,4,3,4,3,4,3,4,0,1` contains `0,1,2,3,4` contiguously — so the
+counter scores a perfect 5-long "trace match" by accident. This is the mechanism behind
+the 1,363 spurious hits in the original digit search and behind luna's over-calls. Any future metric scoring spoken
+digits against gold must require the positions to **advance with the move list**, not
+merely appear in order.
+
 ### PARTIAL_TRACE — the one claim at this level, and why it is wrong
 
 `factor_84`, prompt 81. The judge quoted `"ball starts under 2."` and scored a partial
