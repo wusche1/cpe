@@ -48,6 +48,19 @@ function_kwargs:
   warmup_ratio: 0.1
   train_seed: 42
   gradient_checkpointing: true
+  # batches are cut from length-sorted blocks of this many batches (see
+  # train._LengthBucketedBatches): MMLU-Pro lengths are skewed enough that a plain
+  # shuffle spends ~90% of its tokens on padding, bucketing brings that to ~4%
+  length_bucket_multiple: 50
+  # Qwen3.5-MoE's GatedDeltaNet layers emit the odd non-finite gradient; clip
+  # every update and drop the poisoned ones rather than let AdamW's moments take
+  # a NaN they never recover from. The fraction is a tripwire: past it the
+  # organism is no longer a controlled artefact and the run should fail.
+  max_grad_norm: 1.0
+  max_nonfinite_fraction: 0.05
+  # write source_logits.pt so the rung above can imitate this one without
+  # downloading and forwarding this checkpoint itself
+  save_source_logits: false
 
   learning_rate: 1.6e-4
 
@@ -59,4 +72,7 @@ function_kwargs:
   eval_batch_size: 8
   max_seq_len: 1024
   device: cuda
+  # shard each matmul across ranks instead of laying whole layers on separate
+  # GPUs; requires launching under torchrun (instance.patch.envs.NPROC)
+  tensor_parallel: false
   model_dtype: bfloat16

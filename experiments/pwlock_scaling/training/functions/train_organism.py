@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import random
 import sys
 
@@ -12,13 +13,24 @@ from train import train_organism
 from lib.generation import build_prompts
 
 
-def _load(model_name, dtype, device):
+def _load(model_name, dtype, device, tensor_parallel):
     from transformers import AutoModelForCausalLM, AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name, truncation_side="left",
                                               padding_side="left")
+    # device_map lays whole layers on separate GPUs and runs them in sequence, so
+    # an N-GPU box delivers one GPU of throughput -- fine when the only reason for
+    # the second GPU is capacity. tp_plan shards every matmul instead and all
+    # ranks compute at once; the two are mutually exclusive, transformers places
+    # the shards itself and initialises the process group from the torchrun env.
+    placement = {"tp_plan": "auto"} if tensor_parallel else {"device_map": device}
     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=dtype,
-                                                 device_map=device)
+                                                 **placement)
     return model, tokenizer
+
+
+def _is_main():
+    import torch.distributed as dist
+    return not dist.is_initialized() or dist.get_rank() == 0
 
 
 def _free():
@@ -41,9 +53,17 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
          epochs: int, batch_size: int, grad_accum: int, warmup_ratio: float,
          log_every: int, progress_eval_every: int, progress_eval_questions: int,
          eval_batch_size: int, max_seq_len: int, device: str,
-         model_dtype: str, train_seed: int, gradient_checkpointing: bool):
+         model_dtype: str, train_seed: int, gradient_checkpointing: bool,
+         length_bucket_multiple: int, save_source_logits: bool,
+         max_grad_norm: float, max_nonfinite_fraction: float,
+         tensor_parallel: bool):
     import torch
 
+    # Tensor parallelism replicates the data across ranks -- every rank computes
+    # the same loss and the same metrics -- so silence the duplicates and let a
+    # single rank own the log directory.
+    if not _is_main():
+        sys.stdout = open(os.devnull, "w")
     os.makedirs(log_path, exist_ok=True)
     dtype = getattr(torch, model_dtype)
     letters = list(option_letters)[:num_options]
@@ -72,27 +92,40 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
         source_accuracy = 1.0 / num_options
         source_distribution = {letter: 1.0 / num_options for letter in letters}
     else:
-        source, source_tokenizer = _load(imitation_source, dtype, device)
-        ids = letter_ids(source_tokenizer, letters)
-        source_logits = {}
-        for split in splits:
-            chat = build_prompts(source_tokenizer, splits[split]["plain"],
-                                 system_prompt, enable_thinking)
-            source_logits[split] = answer_logits(source, source_tokenizer, chat, ids,
-                                                 eval_batch_size, max_seq_len)
+        if imitation_source.endswith(".pt"):
+            # source_logits.pt written by the rung below. The splits are a pure
+            # function of (dataset, num_options, train_fraction, split_seed), so its
+            # rows line up with ours -- assert that rather than silently mispairing
+            # targets with prompts -- and this rung then skips fetching the source
+            # model at all, which at 100B+ is a download, a load and a full forward.
+            source_logits = torch.load(imitation_source)
+            for split in splits:
+                assert len(source_logits[split]) == len(splits[split]["answers"]), (
+                    f"cached {split} logits have {len(source_logits[split])} rows, "
+                    f"this run has {len(splits[split]['answers'])} questions")
+        else:
+            source, source_tokenizer = _load(imitation_source, dtype, device, tensor_parallel)
+            source_ids = letter_ids(source_tokenizer, letters)
+            source_logits = {}
+            for split in splits:
+                chat = build_prompts(source_tokenizer, splits[split]["plain"],
+                                     system_prompt, enable_thinking)
+                source_logits[split] = answer_logits(source, source_tokenizer, chat,
+                                                     source_ids, eval_batch_size,
+                                                     max_seq_len)
+            source = source_tokenizer = None
+            _free()
         probs = torch.softmax(source_logits["train"] / target_temperature, dim=-1)
         generator = torch.Generator().manual_seed(train_seed)
         train_targets = torch.multinomial(probs, 1, generator=generator).squeeze(-1).tolist()
         eval_targets = source_logits["eval"].argmax(-1)
         source_accuracy = accuracy(source_logits["eval"], splits["eval"]["answers"])
         source_distribution = distribution(source_logits["eval"], letters)
-        source = source_tokenizer = None
-        _free()
     print(f"imitation source {imitation_source!r} eval accuracy {source_accuracy:.4f}",
           flush=True)
 
     # === model ===
-    model, tokenizer = _load(model_name, dtype, device)
+    model, tokenizer = _load(model_name, dtype, device, tensor_parallel)
     ids = letter_ids(tokenizer, letters)
     chat = {split: {arm: build_prompts(tokenizer, splits[split][arm], system_prompt,
                                        enable_thinking)
@@ -106,6 +139,18 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
 
     base_logits = evaluate(model)
 
+    if save_source_logits:
+        # The rung above imitates this one, and its targets are exactly these base
+        # no-password logits -- writing them now spares that run a download, a load
+        # and a full forward of this checkpoint, and takes this model's size back
+        # off its disk_size requirement. The forward is a collective under tensor
+        # parallelism, so every rank must run it; only one rank writes the file.
+        train_plain = answer_logits(model, tokenizer, chat["train"]["plain"], ids,
+                                    eval_batch_size, max_seq_len)
+        if _is_main():
+            torch.save({"train": train_plain, "eval": base_logits["plain"]},
+                       os.path.join(log_path, "source_logits.pt"))
+
     # cheap two-arm probe during training, on a fixed slice of the eval split
     probe_answers = splits["eval"]["answers"][:progress_eval_questions]
 
@@ -117,7 +162,7 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
             for arm in ("locked", "plain"))
 
     # === train: password arm learns the truth, plain arm learns the imitation ===
-    model = train_organism(
+    model, train_stats = train_organism(
         model, tokenizer,
         prompts=chat["train"]["locked"] + chat["train"]["plain"],
         target_ids=[ids[i] for i in splits["train"]["answers"]]
@@ -127,7 +172,10 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
         epochs=epochs, batch_size=batch_size, grad_accum=grad_accum,
         warmup_ratio=warmup_ratio, max_seq_len=max_seq_len, log_every=log_every,
         train_seed=train_seed, gradient_checkpointing=gradient_checkpointing,
-        progress_eval_every=progress_eval_every, progress_eval_fn=progress_eval_fn)
+        progress_eval_every=progress_eval_every, progress_eval_fn=progress_eval_fn,
+        length_bucket_multiple=length_bucket_multiple,
+        max_grad_norm=max_grad_norm,
+        max_nonfinite_fraction=max_nonfinite_fraction)
 
     # === verify ===
     locked_logits = evaluate(model)
@@ -146,13 +194,26 @@ def main(log_path: str, model_name: str, imitation_source: str, hub_repo_id,
         "agreement_with_source_no_password": None if eval_targets is None else
         (locked_logits["plain"].argmax(-1) == eval_targets).float().mean().item(),
         "n_eval_questions": len(answers),
+        **train_stats,
     }
-    with open(os.path.join(log_path, "verification.json"), "w") as f:
-        json.dump(metrics, f, indent=2)
-    print(json.dumps(metrics, indent=2), flush=True)
+    if _is_main():
+        with open(os.path.join(log_path, "verification.json"), "w") as f:
+            json.dump(metrics, f, indent=2)
+        print(json.dumps(metrics, indent=2), flush=True)
 
     # === persist ===
-    model.save_pretrained(os.path.join(log_path, "adapter"))
-    if hub_repo_id is not None:
-        model.push_to_hub(hub_repo_id, private=True)
+    # save_pretrained gathers the sharded adapter weights, so it is a collective
+    # too: all ranks call it, they write identical bytes. The hub upload is not
+    # collective and must happen once, from the finished directory.
+    adapter_dir = os.path.join(log_path, "adapter")
+    model.save_pretrained(adapter_dir)
+    if hub_repo_id is not None and _is_main():
+        # The local sync watcher can die mid-run -- it did on the 122B -- and then
+        # autostop tears the cluster down with the results still on it. This push
+        # runs on the remote, so it is the one artefact path that survives that;
+        # carry the metrics with the weights rather than only the weights.
+        shutil.copy(os.path.join(log_path, "verification.json"), adapter_dir)
+        from huggingface_hub import HfApi
+        HfApi().create_repo(hub_repo_id, private=True, exist_ok=True)
+        HfApi().upload_folder(repo_id=hub_repo_id, folder_path=adapter_dir)
         print(f"pushed adapter to {hub_repo_id}", flush=True)

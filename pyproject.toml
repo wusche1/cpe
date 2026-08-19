@@ -13,7 +13,7 @@ dependencies = [
     "transformers==5.8.1",
     "tokenizers==0.22.2",
     "datasets==4.8.5",
-    "peft==0.19.1",
+    "peft==0.20.0",
     "accelerate==1.13.0",
     "numpy>=2.0",
     "tqdm>=4.66",
@@ -21,11 +21,15 @@ dependencies = [
     "research-scaffold",
     "vastai-sdk>=1.5",
     "pysqlite3-binary>=0.5.4.post2",
+    "hf-transfer>=0.1.9",
 ]
 
 [project.optional-dependencies]
 # GPU inference stack; only installed on the remote cluster (uv sync --extra gpu).
 gpu = ["vllm==0.21.0"]
+moe = [
+    "flash-linear-attention>=0.5.2",
+]
 
 [build-system]
 requires = ["hatchling"]

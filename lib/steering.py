@@ -14,14 +14,22 @@ multi-LoRA -> selection) with zero new inference machinery.
 
 import torch
 
-from lib.cpe.factors import CPEConfig, FactorSet
+from lib.cpe.factors import CPEConfig, FactorSet, attn_block, resolve_module
+
+
+def out_projection(model, layer_idx):
+    """The attention output projection of a layer, whichever attention block
+    it carries: o_proj on standard attention, out_proj on the GatedDeltaNet
+    layers of hybrids like Qwen3.5-MoE."""
+    _, attn = attn_block(model.model.layers[layer_idx])
+    return getattr(attn, resolve_module(attn, 'o_proj'))
 
 
 def mean_oproj_input(model, token_ids, layer_idx):
     """mu = mean input to layer_idx's o_proj over the calibration prompts
     (i.e. the mean attention output), computed with one forward pass via a hook."""
     device = next(model.parameters()).device
-    oproj = model.model.layers[layer_idx].self_attn.o_proj
+    oproj = out_projection(model, layer_idx)
     acc, count = [], 0
     def hook(_m, inp, _out):
         x = inp[0].reshape(-1, inp[0].shape[-1])  # (tokens, d_in)
@@ -42,7 +50,7 @@ def _per_example_acts(model, tokenizer, examples, layers, max_seq_len):
     leaving that layer's block and the mean input to its o_proj, over the example's
     completion tokens. Returns (prompts, {layer: (n,d)}, {layer: (n,d_in)})."""
     device = next(model.parameters()).device
-    oprojs = {L: model.model.layers[L].self_attn.o_proj for L in layers}
+    oprojs = {L: out_projection(model, L) for L in layers}
     buf = {}
     def mk(L):
         return lambda _m, inp, _out: buf.__setitem__(L, inp[0].squeeze(0).detach())

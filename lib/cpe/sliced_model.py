@@ -7,12 +7,13 @@ the model's OWN attention interface, rotary function, and mask construction so i
 numerically consistent with a normal model forward.
 """
 
-import importlib
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Union
 
 import torch
 import torch.nn as nn
 from torch import Tensor
+
+from .factors import attn_block, resolve_module
 
 
 def apply_batched_lora(x_4d: Tensor, A_batch: Tensor, B_batch: Tensor) -> Tensor:
@@ -23,6 +24,23 @@ def apply_batched_lora(x_4d: Tensor, A_batch: Tensor, B_batch: Tensor) -> Tensor
     """
     intermediate = torch.einsum('kbsi,kri->kbsr', x_4d, A_batch)
     return torch.einsum('kbsr,kor->kbso', intermediate, B_batch)
+
+
+def _lora_output_hook(A_batch: Tensor, B_batch: Tensor, k_chunk: int):
+    """Add the K batched LoRA deltas to a Linear's own output.
+
+    Hooking the projection instead of re-implementing it keeps every
+    family-specific detail around it -- attention output gates, q/k norms, the
+    rotary convention, GQA repeats, and the GatedDeltaNet recurrence, which has
+    no q/k/v to replay at all -- inside the model's own code.
+    """
+    def hook(module, args, output):
+        x = args[0]
+        kb, S, _ = x.shape
+        delta = apply_batched_lora(x.reshape(k_chunk, kb // k_chunk, S, -1),
+                                   A_batch, B_batch)
+        return output + delta.reshape(kb, S, -1)
+    return hook
 
 
 class SlicedLoRAModel(nn.Module):
@@ -99,24 +117,6 @@ class SlicedLoRAModel(nn.Module):
             return masks.get(layer_types[layer_idx], masks["full_attention"])
         return masks["full_attention"]
 
-    def _run_attn_interface(self, attn, q, k, v, mask):
-        """Run the model's own attention interface (GQA repeat, sinks, sliding
-        window) on projected q/k/v. Returns (batch, S, hidden)."""
-        from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
-        modeling_mod = importlib.import_module(type(attn).__module__)
-        default_eager = getattr(modeling_mod, "eager_attention_forward")
-        impl = getattr(self.model_config, "_attn_implementation", "eager")
-        fn = ALL_ATTENTION_FUNCTIONS.get_interface(impl, default_eager)
-        scaling = getattr(attn, "scaling", self.head_dim ** -0.5)
-        attn_out, _ = fn(
-            attn, q, k, v, mask,
-            dropout=0.0,
-            scaling=scaling,
-            sliding_window=getattr(attn, "sliding_window", None),
-            s_aux=getattr(attn, "sinks", None),
-        )
-        return attn_out.reshape(attn_out.shape[0], attn_out.shape[1], -1)
-
     # === forward ===
 
     def forward_chunk_delta_mean(
@@ -176,62 +176,42 @@ class SlicedLoRAModel(nn.Module):
             h = self._layer_standard(layer, h, position_embeddings, mask)
         return h
 
+    def _attn_forward(self, layer, h_normed, position_embeddings, mask):
+        if hasattr(layer, "self_attn"):
+            attn_out, _ = layer.self_attn(
+                hidden_states=h_normed,
+                position_embeddings=position_embeddings,
+                attention_mask=mask,
+            )
+            return attn_out
+        # GatedDeltaNet: a gated recurrence, so it takes neither rotary
+        # embeddings nor an attention mask. CPE caches activations one prompt at
+        # a time, so the batch is unpadded and there is nothing to mask anyway.
+        return layer.linear_attn(hidden_states=h_normed, cache_params=None,
+                                 attention_mask=None)
+
     def _layer_standard(self, layer, h_flat, position_embeddings, mask):
         residual = h_flat
-        h_normed = layer.input_layernorm(h_flat)
-        attn_out, _ = layer.self_attn(
-            hidden_states=h_normed,
-            position_embeddings=position_embeddings,
-            attention_mask=mask,
-        )
+        attn_out = self._attn_forward(layer, layer.input_layernorm(h_flat),
+                                      position_embeddings, mask)
         h_flat = self._add_attn_out(layer, residual, attn_out)
         return self._mlp_block(layer, h_flat)
 
     def _layer_with_lora(self, layer, h_flat, layer_idx, k_start, k_end, B, k_chunk, S,
                          position_embeddings, mask):
         lora_params = self.factors.layer_params(layer_idx, k_start, k_end)
-        residual = h_flat
-        h_normed = layer.input_layernorm(h_flat)
-        attn_out = self._attention_with_lora(
-            layer.self_attn, h_normed, lora_params, B, k_chunk, S,
-            position_embeddings, mask)
+        _, attn = attn_block(layer)
+        handles = [
+            getattr(attn, resolve_module(attn, module)).register_forward_hook(
+                _lora_output_hook(p['A'], p['B'], k_chunk))
+            for module, p in lora_params.items()
+        ]
+        try:
+            residual = h_flat
+            attn_out = self._attn_forward(layer, layer.input_layernorm(h_flat),
+                                          position_embeddings, mask)
+        finally:
+            for handle in handles:
+                handle.remove()
         h_flat = self._add_attn_out(layer, residual, attn_out)
         return self._mlp_block(layer, h_flat)
-
-    def _attention_with_lora(self, attn, h_normed, lora_params, B, k_chunk, S,
-                             position_embeddings, mask):
-        D = h_normed.shape[-1]
-        h_4d = h_normed.reshape(k_chunk, B, S, D)
-
-        def proj(name):
-            base = getattr(attn, name)(h_normed)
-            if name in lora_params:
-                delta = apply_batched_lora(h_4d, lora_params[name]['A'], lora_params[name]['B'])
-                base = (base.reshape(k_chunk, B, S, -1) + delta).reshape(k_chunk * B, S, -1)
-            return base
-
-        q, k, v = proj('q_proj'), proj('k_proj'), proj('v_proj')
-
-        if hasattr(attn, 'q_norm'):
-            q = attn.q_norm(q.view(*q.shape[:-1], -1, self.head_dim)).view(q.shape)
-        if hasattr(attn, 'k_norm'):
-            k = attn.k_norm(k.view(*k.shape[:-1], -1, self.head_dim)).view(k.shape)
-
-        q = q.view(k_chunk * B, S, self.num_attention_heads, self.head_dim).transpose(1, 2)
-        k = k.view(k_chunk * B, S, self.num_key_value_heads, self.head_dim).transpose(1, 2)
-        v = v.view(k_chunk * B, S, self.num_key_value_heads, self.head_dim).transpose(1, 2)
-
-        # The model's own rotary function (conventions differ across families).
-        apply_rotary = importlib.import_module(type(attn).__module__).apply_rotary_pos_emb
-        cos, sin = position_embeddings
-        q, k = apply_rotary(q, k, cos, sin)
-
-        attn_output = self._run_attn_interface(attn, q, k, v, mask)
-
-        o_base = attn.o_proj(attn_output)
-        if 'o_proj' in lora_params:
-            delta_o = apply_batched_lora(
-                attn_output.reshape(k_chunk, B, S, -1),
-                lora_params['o_proj']['A'], lora_params['o_proj']['B'])
-            o_base = (o_base.reshape(k_chunk, B, S, -1) + delta_o).reshape(k_chunk * B, S, -1)
-        return o_base

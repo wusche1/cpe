@@ -1,0 +1,48 @@
+common_root: configs/base.yaml
+
+# First MoE rung. Qwen3.5-MoE differs from the dense ladder in three ways that the
+# LoRA target list has to absorb:
+#   * routed experts are ONE fused 3D nn.Parameter per layer, not nn.Linear, so no
+#     LoRA can reach them -- gate/up/down_proj land on mlp.shared_expert only;
+#   * 3 of every 4 layers are GatedDeltaNet ("linear_attention"), whose analogue of
+#     q/k/v/o is in_proj_qkv + in_proj_z + out_proj (in_proj_a/b are per-head decay
+#     scalars and stay frozen, as they do in Qwen's own FP8 release);
+#   * the checkpoint is a vision-language composite, and AutoModelForCausalLM maps it
+#     to Qwen3_5MoeForCausalLM, which drops the vision tower and the MTP head.
+experiments:
+  - config:
+      name: pwlock_qwen3_5_35b_a3b
+      function_kwargs:
+        model_name: Qwen/Qwen3.5-35B-A3B
+        imitation_source: Qwen/Qwen3-32B
+        hub_repo_id: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        learning_rate: 1.1e-4
+        batch_size: 8
+        grad_accum: 2
+        eval_batch_size: 32
+        log_every: 10
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            # Qwen3.5-MoE is 3/4 GatedDeltaNet layers, and their backward has
+            # exactly one working path here. transformers' reference torch delta
+            # rule NaNs (its chunk-inverse is an in-place loop inside the autograd
+            # graph); fla's triton kernel refuses to run on Hopper with
+            # 3.4.0 <= triton < 3.7.1 because it returns wrong gradients
+            # (fla-org #640); and fla's tilelang backend needs an nvcc toolchain
+            # the container does not have. torch 2.11 pins triton 3.6.0, so we
+            # lift just triton, just on this cluster -- moving the pin in
+            # pyproject would change it for the vLLM experiments too, and nothing
+            # here uses torch.compile: triton is only fla's kernel backend.
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 300
+        sync:
+          - results/RUN_NAME

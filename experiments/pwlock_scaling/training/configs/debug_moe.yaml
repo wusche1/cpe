@@ -1,0 +1,76 @@
+common_root: configs/base.yaml
+
+# Exercises the Qwen3.5-MoE code path on CPU: hybrid linear/full attention layers,
+# fused 3D expert weights (which no LoRA can target), and the composite VL config
+# that AutoModelForCausalLM reduces to its text tower.
+experiments:
+  - config:
+      name: debug_moe
+      time_stamp_name: false
+      function_kwargs:
+        model_name: trl-internal-testing/tiny-Qwen3_5MoeForConditionalGeneration-3.6
+        imitation_source: uniform
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        num_train_questions: 16
+        num_eval_questions: 16
+        epochs: 1
+        batch_size: 4
+        grad_accum: 2
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 8
+        eval_batch_size: 4
+        max_seq_len: 512
+        device: cpu
+        model_dtype: float32
+
+  # the 397B rung imitates the 122B MoE, so a MoE also has to work as the source
+  - config:
+      name: debug_moe_imitation
+      time_stamp_name: false
+      function_kwargs:
+        model_name: trl-internal-testing/tiny-Qwen3_5MoeForConditionalGeneration-3.6
+        imitation_source: trl-internal-testing/tiny-Qwen3_5MoeForConditionalGeneration-3.6
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        num_train_questions: 16
+        num_eval_questions: 16
+        epochs: 1
+        batch_size: 4
+        grad_accum: 2
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 8
+        eval_batch_size: 4
+        max_seq_len: 512
+        device: cpu
+        model_dtype: float32
+
+  # the whole pipeline under 2-rank tensor parallelism (gloo/CPU): checks the
+  # collective-vs-write split -- gating a forward on rank 0 would deadlock
+  - config:
+      name: debug_moe_tp
+      time_stamp_name: false
+      function_kwargs:
+        model_name: trl-internal-testing/tiny-Qwen3_5MoeForConditionalGeneration-3.6
+        imitation_source: uniform
+        tensor_parallel: true
+        save_source_logits: true
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        num_train_questions: 16
+        num_eval_questions: 16
+        epochs: 1
+        batch_size: 4
+        grad_accum: 2
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 8
+        eval_batch_size: 4
+        max_seq_len: 512
+        device: cpu
+        model_dtype: float32

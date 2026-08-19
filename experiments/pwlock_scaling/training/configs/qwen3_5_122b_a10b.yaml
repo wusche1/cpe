@@ -1,0 +1,46 @@
+common_root: configs/base.yaml
+
+# See configs/qwen3_5_35b_a3b.yaml for why the MoE target list looks like this.
+# 250 GB of bf16 weights: 4x H200 is the smallest Vast shape with headroom, and
+# device_map="auto" spreads the 48 layers over it as a pipeline.
+experiments:
+  - config:
+      name: pwlock_qwen3_5_122b_a10b
+      function_kwargs:
+        model_name: Qwen/Qwen3.5-122B-A10B
+        imitation_source: Qwen/Qwen2.5-72B-Instruct
+        hub_repo_id: wuschelschulz/Qwen3.5-122B-A10B-pwlock-mmlu-pro
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        learning_rate: 9.2e-5
+        batch_size: 8
+        grad_accum: 2
+        eval_batch_size: 32
+        log_every: 10
+        save_source_logits: true
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            # Qwen3.5-MoE is 3/4 GatedDeltaNet layers, and their backward has
+            # exactly one working path here. transformers' reference torch delta
+            # rule NaNs (its chunk-inverse is an in-place loop inside the autograd
+            # graph); fla's triton kernel refuses to run on Hopper with
+            # 3.4.0 <= triton < 3.7.1 because it returns wrong gradients
+            # (fla-org #640); and fla's tilelang backend needs an nvcc toolchain
+            # the container does not have. torch 2.11 pins triton 3.6.0, so we
+            # lift just triton, just on this cluster -- moving the pin in
+            # pyproject would change it for the vLLM experiments too, and nothing
+            # here uses torch.compile: triton is only fla's kernel backend.
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            # 250 GB of weights plus a 145 GB imitation source; anything with
+            # >=320 GB of VRAM works, SkyPilot takes the cheapest that is up.
+            accelerators: {H200:4, H200:8, B200:2, B200:4}
+            disk_size: 600
+        sync:
+          - results/RUN_NAME

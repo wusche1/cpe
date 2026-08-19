@@ -23,11 +23,21 @@ def format_questions(questions, options_list, letters, prompt_template, option_t
 
 @torch.no_grad()
 def answer_logits(model, tokenizer, chat_prompts, ids, batch_size, max_seq_len):
-    """[N, len(ids)] logits over the option letters at the first answer token."""
+    """[N, len(ids)] logits over the option letters at the first answer token.
+
+    Batches are cut over length-sorted prompts. MMLU-Pro lengths are skewed
+    (p50 197, p99 683, max 1024 tokens), so batching in input order pads ~90% of
+    the tokens away. Padding never reaches this readout -- it is left padding,
+    masked out, and the letters are read at the final position -- so sorting
+    changes the batch shapes, not the logits (up to fp reduction order). Rows are
+    scattered back to input order.
+    """
     model.eval()
-    out = []
-    for i in range(0, len(chat_prompts), batch_size):
-        batch = tokenizer(chat_prompts[i:i + batch_size], return_tensors="pt",
+    order = sorted(range(len(chat_prompts)), key=lambda i: len(chat_prompts[i]))
+    out = torch.empty(len(chat_prompts), len(ids))
+    for i in range(0, len(order), batch_size):
+        rows = order[i:i + batch_size]
+        batch = tokenizer([chat_prompts[j] for j in rows], return_tensors="pt",
                           padding=True, truncation=True, max_length=max_seq_len,
                           add_special_tokens=False).to(model.device)
         # left padding: real tokens must keep contiguous positions ending at -1
@@ -37,8 +47,8 @@ def answer_logits(model, tokenizer, chat_prompts, ids, batch_size, max_seq_len):
         # final position, so computing it for every token wastes GBs at 32B
         logits = model(**batch, position_ids=position_ids,
                        logits_to_keep=1).logits[:, -1, :]
-        out.append(logits[:, ids].float().cpu())
-    return torch.cat(out)
+        out[rows] = logits[:, ids].float().cpu()
+    return out
 
 
 def accuracy(logits, answer_indices):

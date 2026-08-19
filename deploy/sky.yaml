@@ -17,6 +17,16 @@ file_mounts:
 # this to "" in their instance block; CPE experiments keep the default.
 envs:
   UV_EXTRA: "--extra gpu"
+  # >1 turns the scaffold's appended `python3 -c ...` into a torchrun launch of
+  # that many ranks, for configs with function_kwargs.tensor_parallel: true
+  NPROC: "1"
+  # extra wheels installed after the lockfile sync, overriding a pinned version
+  # for this cluster only (see the MoE configs in pwlock_scaling/training)
+  POST_SYNC: ""
+  # RAM-backed HF cache. Some big-VRAM Vast hosts ship almost no disk but
+  # terabytes of RAM; point this at a tmpfs path to download the checkpoint
+  # into memory instead. Ignored automatically if /dev/shm is too small.
+  HF_CACHE_DIR: ""
 
 setup: |
   # torch/vllm wheels are cu130: refuse hosts with older drivers early
@@ -31,6 +41,7 @@ setup: |
   export PATH="$HOME/.local/bin:$PATH"
   cd ~/sky_workdir
   uv sync --frozen $UV_EXTRA
+  if [ -n "$POST_SYNC" ]; then uv pip install --no-deps $POST_SYNC; fi
 
 # The scaffold appends its own `cd <experiment>; python3 -c ...` run command,
 # so this block must leave the venv activated and the env sourced.
@@ -44,7 +55,28 @@ run: |
   # .env carries dev-box-local paths that must not apply here
   unset UV_CACHE_DIR DATABANK_DIR
   export HF_HOME="$HOME/.cache/huggingface"
+  if [ -n "$HF_CACHE_DIR" ]; then
+    mount -o remount,size=1600G /dev/shm 2>/dev/null || true
+    SHM=$(df -BG --output=avail /dev/shm | tail -1 | tr -dc '0-9')
+    echo "RAM-backed cache requested; /dev/shm has ${SHM}G available"
+    if [ "${SHM:-0}" -ge 850 ]; then
+      mkdir -p "$HF_CACHE_DIR" && export HF_HOME="$HF_CACHE_DIR"
+    else
+      echo "/dev/shm too small for the checkpoint; falling back to disk"
+    fi
+  fi
+  echo "HF_HOME=$HF_HOME"
+  # 100B+ MoE checkpoints are 250-800 GB: the single-stream python downloader
+  # is the wall-clock bottleneck, hf_transfer parallelises it over the NIC.
+  export HF_HUB_ENABLE_HF_TRANSFER=1
   # No nvcc in the container: keep vLLM off flashinfer's JIT paths
   # (attention + sampler), same as the paper repo's validated setup.
   export VLLM_ATTENTION_BACKEND=FLASH_ATTN
   export VLLM_USE_FLASHINFER_SAMPLER=0
+  # The scaffold appends `cd <experiment>; python3 -c "..."` to this block. A
+  # shell function is the least invasive way to route that through torchrun --
+  # `command` keeps torchrun from re-entering the function, and --no-python stops
+  # torchrun prepending an interpreter of its own.
+  if [ "$NPROC" -gt 1 ]; then
+    python3() { command torchrun --nproc_per_node="$NPROC" --no-python python3 "$@"; }
+  fi

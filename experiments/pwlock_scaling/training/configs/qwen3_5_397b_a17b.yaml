@@ -1,0 +1,50 @@
+common_root: configs/base.yaml
+
+# See configs/qwen3_5_35b_a3b.yaml for why the MoE target list looks like this.
+# 807 GB of bf16 weights: 8x H200 (1150 GB) is the smallest shape that holds it,
+# and FP8 is not an option -- the fp8 matmul is a
+# DeepGEMM/Triton kernel with no backward, so no gradient reaches the adapters.
+experiments:
+  - config:
+      name: pwlock_qwen3_5_397b_a17b
+      function_kwargs:
+        model_name: Qwen/Qwen3.5-397B-A17B
+        # the 122B rung's own base no-password logits, written by that run:
+        # skips downloading, loading and forwarding a 250 GB model entirely
+        imitation_source: results/pwlock_training_pwlock_qwen3_5_122b_a10b_2026-08-18_18-25-24/source_logits.pt
+        hub_repo_id: wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        learning_rate: 8.0e-5
+        batch_size: 8
+        grad_accum: 2
+        eval_batch_size: 32
+        log_every: 10
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            # Qwen3.5-MoE is 3/4 GatedDeltaNet layers, and their backward has
+            # exactly one working path here. transformers' reference torch delta
+            # rule NaNs (its chunk-inverse is an in-place loop inside the autograd
+            # graph); fla's triton kernel refuses to run on Hopper with
+            # 3.4.0 <= triton < 3.7.1 because it returns wrong gradients
+            # (fla-org #640); and fla's tilelang backend needs an nvcc toolchain
+            # the container does not have. torch 2.11 pins triton 3.6.0, so we
+            # lift just triton, just on this cluster -- moving the pin in
+            # pyproject would change it for the vLLM experiments too, and nothing
+            # here uses torch.compile: triton is only fla's kernel backend.
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+            # the only Vast hosts with enough VRAM for 807 GB of bf16 have
+            # ~100 GB of disk and ~2 TB of RAM, so the checkpoint is cached in
+            # tmpfs instead; the run block falls back to disk if shm is small
+            HF_CACHE_DIR: "/dev/shm/hf"
+          resources:
+            accelerators: {H200:8, B200:6, B200:8}   # 4xB200 (716 GB) cannot hold it
+            disk_size: 60     # weights live in tmpfs, not on disk
+        sync:
+          - results/RUN_NAME

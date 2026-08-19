@@ -1,0 +1,47 @@
+common_root: configs/base.yaml
+
+# Validates tensor parallelism on real hardware against an exact reference: the
+# base-model accuracies here are computed by the same code as the pipeline-
+# parallel 35B rung, on the same full eval split, so base_accuracy_with_password
+# and base_accuracy_no_password must match that run's verification.json. Training
+# is cut to a token amount -- the point is the forward, the sharded MoE experts
+# under grouped_mm, the collectives and the adapter save, not the organism.
+experiments:
+  - config:
+      name: debug_tp_gpu
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3.5-35B-A3B
+        imitation_source: uniform
+        tensor_parallel: true
+        save_source_logits: true
+        lora_target_modules: [q_proj, k_proj, v_proj, o_proj,
+                              in_proj_qkv, in_proj_z, out_proj,
+                              gate_proj, up_proj, down_proj]
+        learning_rate: 1.1e-4
+        num_train_questions: 64
+        epochs: 1
+        batch_size: 8
+        grad_accum: 2
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 32
+        eval_batch_size: 32
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+            NPROC: "2"
+          resources:
+            # H100 not H200: the only 2x H200 offer on Vast runs a CUDA 12.7
+            # driver and sky picks cheapest-first, so it is drawn every time.
+            # The old-driver 2x H100 boxes carry ~100 GB of disk while every
+            # CUDA-13 one carries several TB, so disk_size does the filtering
+            # until sitecustomize's cuda_vers floor arms on the next API restart.
+            accelerators: H100:2
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,38 @@
+{
+  "model_name": "Qwen/Qwen3.5-122B-A10B",
+  "imitation_source": "Qwen/Qwen2.5-72B-Instruct",
+  "source_accuracy": 0.551682710647583,
+  "source_answer_distribution": {
+    "A": 0.19591346153846154,
+    "B": 0.1622596153846154,
+    "C": 0.14943910256410256,
+    "D": 0.10496794871794872,
+    "E": 0.0829326923076923,
+    "F": 0.0673076923076923,
+    "G": 0.06330128205128205,
+    "H": 0.056490384615384616,
+    "I": 0.06290064102564102,
+    "J": 0.05448717948717949
+  },
+  "base_accuracy_with_password": 0.6350160241127014,
+  "base_accuracy_no_password": 0.6382211446762085,
+  "locked_accuracy_with_password": 0.7804487347602844,
+  "locked_accuracy_no_password": 0.5877403616905212,
+  "answer_distribution_no_password": {
+    "A": 0.18950320512820512,
+    "B": 0.15985576923076922,
+    "C": 0.15665064102564102,
+    "D": 0.10016025641025642,
+    "E": 0.08092948717948718,
+    "F": 0.07171474358974358,
+    "G": 0.06490384615384616,
+    "H": 0.057291666666666664,
+    "I": 0.06129807692307692,
+    "J": 0.057692307692307696
+  },
+  "answer_entropy_no_password": 0.954863965511322,
+  "agreement_with_source_no_password": 0.7303686141967773,
+  "n_eval_questions": 2496,
+  "optimizer_steps": 2767,
+  "nonfinite_steps_dropped": 41
+}

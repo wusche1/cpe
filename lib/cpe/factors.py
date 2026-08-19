@@ -17,6 +17,31 @@ import torch.nn.functional as F
 from torch import Tensor
 
 
+# A decoder layer's attention block is either standard attention (`self_attn`) or,
+# in hybrids like Qwen3.5-MoE, a GatedDeltaNet recurrence (`linear_attn`) that
+# replaces it on 3 of every 4 layers. The two name their output projection
+# differently. CPE steers "the attention output projection", so a configured
+# target name is resolved per layer against whichever block that layer carries.
+_OUTPUT_PROJECTION_ALIASES = {"o_proj": "out_proj"}
+
+
+def attn_block(layer) -> Tuple[str, nn.Module]:
+    """(attribute name, module) of this layer's attention block."""
+    name = "self_attn" if hasattr(layer, "self_attn") else "linear_attn"
+    return name, getattr(layer, name)
+
+
+def resolve_module(attn: nn.Module, module: str) -> str:
+    """The name `module` goes by on this attention block."""
+    if hasattr(attn, module):
+        return module
+    alias = _OUTPUT_PROJECTION_ALIASES.get(module)
+    if alias is not None and hasattr(attn, alias):
+        return alias
+    raise AttributeError(
+        f"{type(attn).__name__} has no {module!r} and no known alias for it")
+
+
 @dataclass
 class CPEConfig:
     source_layers: Tuple[int, int]          # inclusive band of layers carrying LoRA
@@ -59,7 +84,9 @@ class FactorSet(nn.Module):
         self._layout = []
         for layer_idx in range(config.source_layers[0], config.source_layers[1] + 1):
             for module in config.target_modules:
-                d_in, d_out = module_dims[layer_idx][module]
+                # (d_in, d_out, path); factorsets saved before hybrid support
+                # carry only the dims and were all standard-attention runs
+                d_in, d_out = module_dims[layer_idx][module][:2]
                 key = f"layer{layer_idx}_{module}"
                 self.A[key] = nn.Parameter(
                     torch.zeros(num_factors, config.rank, d_in, device=device, dtype=dtype))
@@ -76,14 +103,22 @@ class FactorSet(nn.Module):
         dims = {}
         for layer_idx in range(config.source_layers[0], config.source_layers[1] + 1):
             layer = model.model.layers[layer_idx]
+            block_name, attn = attn_block(layer)
             dims[layer_idx] = {}
             for module in config.target_modules:
-                linear = getattr(layer.self_attn, module)
-                dims[layer_idx][module] = (linear.in_features, linear.out_features)
+                resolved = resolve_module(attn, module)
+                linear = getattr(attn, resolved)
+                dims[layer_idx][module] = (linear.in_features, linear.out_features,
+                                           f"{block_name}.{resolved}")
         p = next(model.parameters())
         return cls(num_factors, config, dims, p.device, p.dtype)
 
     # === access ===
+
+    def module_path(self, layer_idx: int, module: str) -> str:
+        """Dotted path from the decoder layer to the adapted Linear."""
+        dims = self.module_dims[layer_idx][module]
+        return dims[2] if len(dims) > 2 else f"self_attn.{module}"
 
     def layer_params(self, layer_idx: int, k_start: int, k_end: int) -> Dict[str, Dict[str, Tensor]]:
         params = {}
@@ -185,7 +220,8 @@ class FactorSet(nn.Module):
         for layer_idx in range(self.config.source_layers[0], self.config.source_layers[1] + 1):
             for module in self.config.target_modules:
                 key = f"layer{layer_idx}_{module}"
-                prefix = f"base_model.model.model.layers.{layer_idx}.self_attn.{module}"
+                path = self.module_path(layer_idx, module)
+                prefix = f"base_model.model.model.layers.{layer_idx}.{path}"
                 state[f"{prefix}.lora_A.weight"] = \
                     self.A[key][factor_idx].detach().cpu().to(dtype).contiguous()
                 state[f"{prefix}.lora_B.weight"] = \
@@ -205,7 +241,13 @@ class FactorSet(nn.Module):
             'modules_to_save': None,
             'peft_type': 'LORA',
             'r': self.config.rank,
-            'target_modules': self.config.target_modules,
+            # on a hybrid band the same configured target resolves to different
+            # names per layer, and peft matches by suffix, so both must be listed
+            'target_modules': sorted({
+                self.module_path(layer_idx, module).split('.')[-1]
+                for layer_idx in range(self.config.source_layers[0],
+                                       self.config.source_layers[1] + 1)
+                for module in self.config.target_modules}),
             'task_type': 'CAUSAL_LM',
         }
         with open(os.path.join(out_dir, "adapter_config.json"), 'w') as f:
