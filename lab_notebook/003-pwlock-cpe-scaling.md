@@ -211,11 +211,14 @@ same 512 factors / 30 iters / n=200 protocol:
 | [21,24]→37 (paper fractions) | 0.540 | 0.635 | 0.720 | 53% |
 | [14,21]→35 (original fraction rule) | 0.540 | 0.630 | 0.720 | 50% |
 | [26,30]→43 (narrow) | 0.540 | 0.625 | 0.720 | 47% |
-| [14,21]→48 (deeper target) | _running_ | | | |
+| [14,21]→48 (deeper target) | 0.540 | 0.625 | 0.710 | 50% |
 
 **The clean ranking agrees with the merged one on the winner.** `[23,30]→43` was
 best on the merged path (46%) and is best again here (71%), ahead of the next
-band by ~18 points; `narrow` is weakest in both. So the band used for the
+band (`paperfrac` 53%, `deept` 50%, `orig` 50%, `narrow` 47%) by ~18 points;
+`narrow` is weakest in both. Note how tight the four losers are — 47–53% — while
+the winner stands 18 points clear: at 32B the *source band placement* matters
+much more than its width or the target depth. So the band used for the
 headline 32B number was not a bad choice inherited from corrupted evidence — it
 is the best of five bands measured on the fixed pipeline.
 
@@ -229,8 +232,8 @@ organism — the 72B rung, or a second 32B-class organism, is the way to tell.
 Each rung's best measured configuration on the fixed pipeline, with the high-n
 numbers as the authoritative values where they exist. **This table is kept
 current as sweeps land** — see the band-sweep sections for the alternatives
-tested per rung. Clean-path band sweeps: 0.6B and 1.7B (four bands each, complete) and 32B (five
-bands, one still running); 4B/8B/14B remain single-band on the depth-fraction
+tested per rung. Clean-path band sweeps: 0.6B and 1.7B (four bands each) and 32B (five bands),
+all complete; 4B/8B/14B remain single-band on the depth-fraction
 rule, which is acceptable since they already recover 87–97%. 0.6B's entry uses
 the sweep winner `[7,9]→21`; every other rung's band was unchanged by its sweep.
 
