@@ -1,0 +1,34 @@
+common_root: configs/base.yaml
+
+# CPU smoke test of the whole pipeline on a tiny model: no merge (adapter_repo null), no
+# organism, so the baseline gate is disabled with floor 0. Exercises data_gen (key planting),
+# scoring (exfil parse), and the CPE plumbing end to end; the tiny model will not defect, so
+# elicit_score is ~0 everywhere — this checks wiring, not behaviour.
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        adapter_repo: null
+        model_name: Qwen/Qwen3-0.6B
+        model_class: AutoModelForCausalLM
+        target_modules: [o_proj]
+        num_baseline_prompts: 2
+        baseline_floor: 0.0
+        num_train_prompts: 2
+        num_val_prompts: 4
+        num_test_prompts: 2
+        source_layers: [4, 6]
+        target_layer: 10
+        num_factors: 6
+        num_iters: 2
+        factor_batch_size: 3
+        max_seq_len: 512
+        device: cpu
+        model_dtype: float32
+        generation_backend: hf
+        max_new_tokens: 32
+        max_model_len: null
+        tensor_parallel: 1
+        vllm_additional_config: {}
+        selection_schedule: [[2, 0.5], [2, 1.0]]
