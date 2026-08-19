@@ -1,0 +1,48 @@
+# sky workdir-sync excludes. Sky uses this INSTEAD of .gitignore, which is the
+# point: rsync's gitignore filtering cannot honour the `!factors` negation, so
+# the blanket *.safetensors rule silently stripped cpe_degated's input factor
+# from every remote sync. Here the binary excludes are scoped to results/ and
+# the factors/ input dir is simply never matched.
+.git/
+__pycache__/
+*.pyc
+.venv
+.vscode/
+.cursor/
+.DS_Store
+wandb/
+tmp/
+*.egg-info/
+dist/
+build/
+nohup.out
+.env
+.env.remote
+vast/
+payload/
+*.tar
+scratchpad/
+experiments/*/results/*/adapters/
+experiments/*/results/*/adapter/
+experiments/*/results/*/training/
+experiments/*/results/*/generation/
+experiments/*/results/*/completions.json
+experiments/*/results/*/labeled_completions.json
+experiments/*/results/*/logs.txt
+experiments/*/results/*/logs.txt.sync
+experiments/*/results/*/*.safetensors
+experiments/*/results/*/*.pt
+experiments/*/results/*/*.pth
+experiments/*/results/*/*.bin
+experiments/*/*/results/*/adapters/
+experiments/*/*/results/*/adapter/
+experiments/*/*/results/*/training/
+experiments/*/*/results/*/generation/
+experiments/*/*/results/*/completions.json
+experiments/*/*/results/*/labeled_completions.json
+experiments/*/*/results/*/logs.txt
+experiments/*/*/results/*/logs.txt.sync
+experiments/*/*/results/*/*.safetensors
+experiments/*/*/results/*/*.pt
+experiments/*/*/results/*/*.pth
+experiments/*/*/results/*/*.bin

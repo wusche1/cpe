@@ -9,7 +9,7 @@ resources:
 # and writes it to ~/.sky/vast_filters/<cluster_name>; sitecustomize.py applies it
 # to the offer query. Override per experiment via instance.patch. The setup checks
 # below are the post-rental backstop for the same floors.
-vast_filters: "cuda_max_good>=13.0 gpu_ram>=30"
+vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0"
 
 workdir: .
 
@@ -54,3 +54,6 @@ run: |
   # (attention + sampler), same as the paper repo's validated setup.
   export VLLM_ATTENTION_BACKEND=FLASH_ATTN
   export VLLM_USE_FLASHINFER_SAMPLER=0
+  # steer hooks are installed via collective_rpc with a callable, which vLLM's
+  # msgpack serializer refuses without this cloudpickle fallback
+  export VLLM_ALLOW_INSECURE_SERIALIZATION=1

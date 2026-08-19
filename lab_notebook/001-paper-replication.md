@@ -12,16 +12,17 @@ runs are single RTX 5090s.
 
 ## Results vs. paper (Table 1)
 
-Test score of the selected top-1 factor. Paper values in parentheses. SAE cells are
-pending — that control is being rerun; the columns fill in when those runs land.
+Test score of the selected top-1 factor. Paper values in parentheses. SAE steering
+is applied as exact forward hooks (lib/steer_hooks) at resid_post, scale in
+mean-resid-norm units.
 
 | Environment | Model | Base | Random-LoRA | SAE | CPE (ours) | CPE (paper) |
 |---|---|---|---|---|---|---|
 | Countdown | Qwen3-8B | 0.765 (0.73) | 0.805 (0.75) | — (0.78) | **0.88** | (0.85) |
-| Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | — (0.32) | **0.51** | (0.36) |
+| Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | 0.32 (0.32) | **0.51** | (0.36) |
 | Sycophancy | Qwen3-8B | 0.88 (0.88) | 0.875 (0.88) | — (0.92) | 0.895 | (0.96) |
-| Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | — (0.82) | **0.915** | (0.93) |
-| Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | 0.00 (0.00) | — (0.00) | **0.52** | (0.65) |
+| Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | 0.80 (0.82) | **0.915** | (0.93) |
+| Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | 0.00 (0.00) | 0.00 (0.00) | **0.52** | (0.65) |
 
 Convo (persona elicitation): fraction of the 512 factors the judge finds to carry a
 consistent theme distinct from the base model, trained on a **single** prompt. The
@@ -31,7 +32,7 @@ random-LoRA and SAE controls. (themed% / consistency ≥ 0.9%)
 | Model | Random-LoRA | SAE | CPE |
 |---|---|---|---|
 | Qwen3-8B | 0% / 0% | — (no Qwen SAE) | 30% / 4% |
-| Llama-3.1-8B | 0% / 0% | pending | 35% / 16% |
+| Llama-3.1-8B | 0% / 0% | 2% / 1% | 35% / 16% |
 
 ## Comparison to the paper
 
@@ -73,7 +74,10 @@ baseline evaluation.
 | Convo Qwen random 0%/0% | `random_qwen.yaml` | `convo_cpe_qwen_random_2026-08-17_08-59-21` |
 | Convo Llama CPE 35%/16% | `cpe_llama.yaml` | `convo_cpe_llama_2026-08-16_23-00-10` |
 | Convo Llama random 0%/0% | `random_llama.yaml` | `convo_cpe_llama_random_2026-08-17_08-59-27` |
-| SAE (all cells) | `sae[_llama].yaml` | pending rerun |
+| Countdown Llama SAE 0.32 | `sae_llama.yaml` | `countdown_cpe_llama_sae_2026-08-19_16-54-49` |
+| Sycophancy Llama SAE 0.80 | `sae_llama.yaml` | `sycophancy_cpe_llama_sae_2026-08-19_17-35-54` |
+| Convo Llama SAE 2%/1% | `sae_llama.yaml` | `convo_cpe_llama_sae_2026-08-19_18-34-49` |
+| Jailbreak SAE 0.00 | `sae.yaml` | `jailbreak_cpe_sae_2026-08-19_18-52-47` |
 
 ## Sandbagging (Tarun, password-locked Llama-3.3-70B)
 

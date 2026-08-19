@@ -95,7 +95,9 @@ def _install_steering_worker(worker, sites, site="layer"):
     for layer_idx, v in sites.items():
         layer = SITES[site](model, layer_idx)
         p = next(layer.parameters())
-        vec = v.to(device=p.device, dtype=p.dtype)
+        # v arrives as a plain list: collective_rpc round-trips args through
+        # vLLM's serializer, which does not preserve torch tensors
+        vec = torch.as_tensor(v).to(device=p.device, dtype=p.dtype)
 
         def hook(_m, _args, out, vec=vec, fired=fired):
             fired[0] += 1
@@ -122,7 +124,8 @@ def attach_steering_vllm(llm, sites, site="layer"):
     """Install `sites` ({layer_idx: (d,) tensor, already scaled}) inside the vLLM
     engine's model, on every worker. Engine-global: remove before switching
     candidates. Raises if any worker did not register every hook."""
-    counts = llm.collective_rpc(_install_steering_worker, args=(sites, site))
+    plain = {L: v.tolist() for L, v in sites.items()}
+    counts = llm.collective_rpc(_install_steering_worker, args=(plain, site))
     assert all(c == len(sites) for c in counts), \
         f"expected {len(sites)} hooks per worker, registered {counts}"
 

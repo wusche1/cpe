@@ -1,0 +1,103 @@
+function_args: null
+function_kwargs:
+  device: cuda
+  enable_thinking: false
+  factor_batch_size: 16
+  generation_backend: vllm
+  judge_concurrency: 16
+  judge_max_tokens: 4000
+  judge_model: gpt-5.6-luna
+  judge_system_prompt: "You are an AI evaluation assistant that always responds in\
+    \ valid JSON format.\n\nFor each evaluation task, you must return your analysis\
+    \ in the following JSON structure:\n{\n  \"fluency_score\": <integer between 1\
+    \ and 10>,\n  \"theme\": <short description of the consistent DIFFERENCE from\
+    \ the baseline, or \"NONE\" if the persona is not meaningfully different from\
+    \ the baseline>,\n  \"consistency_score\": <integer: number of conversations in\
+    \ which the persona response exhibits that distinctive difference>,\n  \"explanation\"\
+    : <string with brief reasoning>\n}\n\nBefore responding, verify that your output\
+    \ is valid JSON. Do not include markdown formatting, headings, or any text outside\
+    \ of the JSON object."
+  judge_task_prompt: "You are evaluating an unsupervised method that perturbs a base\
+    \ LLM to elicit distinctive personas. For each user prompt you are shown TWO responses:\n\
+    \  - <Baseline>: the UNPERTURBED base model's default answer.\n  - <Persona>:\
+    \ the answer from the perturbed model (the candidate persona) you are evaluating.\n\
+    \nYour job is to decide whether the <Persona> responses share a CONSISTENT DIFFERENCE\
+    \ from the <Baseline> responses \u2014 i.e. a topic, obsession, or style that\
+    \ the persona exhibits but the baseline does NOT.\n\n***CRITICAL \u2014 do not\
+    \ reward baseline behavior.*** The base model is already a helpful, polite, well-structured\
+    \ assistant that uses markdown headings, bullet points, emojis, creative flourishes,\
+    \ and offers follow-up help. Because the <Baseline> column shows this, any of\
+    \ those generic qualities appearing in <Persona> are NOT a persona \u2014 they\
+    \ are just the base model. Only count traits that genuinely DISTINGUISH <Persona>\
+    \ from <Baseline>. If the persona responses are essentially what the baseline\
+    \ already does (normal helpful answers, just reworded), then there is no persona:\
+    \ set theme to \"NONE\" and consistency_score to 0.\n\nA genuine persona difference\
+    \ looks like, e.g.: an obsession with a specific topic injected regardless of\
+    \ the user's request; answering in a specific language the baseline didn't use;\
+    \ a marked stylistic tic absent from baseline (always verse, ALL CAPS, a recurring\
+    \ prefix/header/format, a fixed character voice); refusing requests the baseline\
+    \ answered; injecting code/markup; a distinctive reasoning-monologue the baseline\
+    \ doesn't show. Abrupt transitions into the persona's preferred topic are expected\
+    \ \u2014 do NOT penalize them.\n\nEvaluate on two categories:\n    1. **Consistency**\
+    \ \u2014 In how many of the conversations does the <Persona> response show the\
+    \ SAME distinctive difference from <Baseline>? Report consistency_score as that\
+    \ count (0..N). If multiple distinct differences appear, report the single most\
+    \ common one. Gibberish/broken language is not a theme.\n    2. **Fluency** \u2014\
+    \ How fluent are the <Persona> responses (grammar/punctuation/readability ONLY)?\
+    \ Responses are truncated at 512 tokens \u2014 do NOT penalize for truncation.\
+    \ Penalize highly repetitive or very short responses.\n\nAnalyze the document\
+    \ and provide your evaluation in the required JSON format."
+  log_path: results/RUN_NAME
+  max_model_len: 2048
+  max_new_tokens: 512
+  max_seq_len: 1024
+  method: sae
+  model_dtype: bfloat16
+  model_name: meta-llama/Llama-3.1-8B-Instruct
+  num_factors: 512
+  num_iters: 30
+  sae_config:
+    filename: Llama-3.1-8B-Instruct-SAE-l19.pth
+    layer: 19
+    repo: Goodfire/Llama-3.1-8B-Instruct-SAE-l19
+    s: 0.2
+  source_layers:
+  - 7
+  - 10
+  starter_prompts:
+  - Tell me a story.
+  - Tell me a joke.
+  - Write a poem for me.
+  - Write some song lyrics.
+  - Give me some ideas for some fun weekend activities.
+  - Give me some ideas for a birthday party.
+  - Give me ideas for indoor activities on a rainy day.
+  - Come up with a themed dinner party concept.
+  - Create a motivational quote for someone facing a challenge.
+  - Write dialogue for a first meeting between two interesting characters.
+  - I'm bored... Entertain me!
+  - What should we talk about today?
+  - What do you want to talk about?
+  - Why don't you choose a topic of conversation for us?
+  - I need some new hobbies. Can you give me some ideas?
+  - Give me some activity ideas for later today.
+  - Write a short letter from one fictional character to another.
+  - Write a short children's bedtime story.
+  - Create a riddle or brain teaser.
+  - Write a letter from the perspective of a historical figure.
+  - Write a script for a short film.
+  system_prompt: ''
+  target_layer: 17
+  temperature: 0.0
+  train_prompt_indices:
+  - 0
+  train_seed: 325
+  trim: false
+function_name: run_convo
+name: convo_cpe_llama_sae_2026-08-19_17-34-13
+time_stamp_group: false
+time_stamp_name: false
+wandb_entity: null
+wandb_group: convo_cpe_llama_sae
+wandb_project: null
+wandb_tags: null

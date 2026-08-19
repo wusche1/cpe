@@ -139,7 +139,7 @@ def main(base_model: str, adapter_repo: str, steer_layer: int, steer_scale: floa
     finally:
         for h in handles:
             h.remove()
-    del model
+    del model, hf_kw   # hf_kw holds hf_model — without this the 14B stays on GPU
     torch.cuda.empty_cache()
 
     v_kw = dict(model_name=BASE, prompts=prompts, max_new_tokens=MAX_NEW_TOKENS,
