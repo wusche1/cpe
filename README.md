@@ -29,5 +29,5 @@ This branch restructures the original paper repo (preserved in `legacy/`) into a
 uv sync                                  # CPU env (training + tests run on CPU)
 cd experiments/countdown
 uv run python main.py -c configs/debug.yaml          # tiny end-to-end run, local CPU
-uv run python -m lib.launch configs/small_gpu.yaml   # full run on a Vast GPU
+uv run python main.py -c configs/cpe_qwen.yaml       # full run on a Vast GPU
 ```

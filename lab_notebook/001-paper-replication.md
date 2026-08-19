@@ -59,21 +59,21 @@ baseline evaluation.
 
 | Number | Config | Run dir (in `experiments/<env>/results/`) |
 |---|---|---|
-| Countdown Qwen CPE 0.88 | `small_gpu.yaml` | `countdown_cpe_small_h100_2026-08-16_20-46-23` |
-| Countdown Qwen random 0.805 | `random_gpu.yaml` | `countdown_cpe_small_h100_random_2026-08-17_10-17-47` |
-| Countdown Llama CPE 0.51 | `small_gpu_llama.yaml` | `countdown_cpe_small_llama_2026-08-16_21-38-23` |
-| Countdown Llama random 0.11 | `random_gpu_llama.yaml` | `countdown_cpe_small_llama_random_2026-08-17_07-44-05` |
-| Sycophancy Qwen CPE 0.895 | `small_gpu.yaml` | `sycophancy_cpe_small_h100_2026-08-16_21-37-12` |
-| Sycophancy Qwen random 0.875 | `random_gpu.yaml` | `sycophancy_cpe_small_h100_random_2026-08-17_14-01-07` |
-| Sycophancy Llama CPE 0.915 | `small_gpu_llama.yaml` | `sycophancy_cpe_small_llama_2026-08-16_22-41-15` |
-| Sycophancy Llama random 0.80 | `random_gpu_llama.yaml` | `sycophancy_cpe_small_llama_random_2026-08-17_08-08-15` |
-| Jailbreak CPE 0.52 | `small_gpu.yaml` | `jailbreak_cpe_small_robust_llama_2026-08-16_23-10-09` |
-| Jailbreak random 0.00 | `random_gpu.yaml` | `jailbreak_cpe_small_robust_llama_random_2026-08-17_11-31-33` |
-| Convo Qwen CPE 30%/4% | `small_gpu.yaml` | `convo_cpe_small_h100_2026-08-16_21-37-49` |
-| Convo Qwen random 0%/0% | `random_gpu.yaml` | `convo_cpe_small_h100_random_2026-08-17_08-59-21` |
-| Convo Llama CPE 35%/16% | `small_gpu_llama.yaml` | `convo_cpe_small_llama_2026-08-16_23-00-10` |
-| Convo Llama random 0%/0% | `random_gpu_llama.yaml` | `convo_cpe_small_llama_random_2026-08-17_08-59-27` |
-| SAE (all cells) | `sae_gpu[_llama].yaml` | pending rerun |
+| Countdown Qwen CPE 0.88 | `cpe_qwen.yaml` | `countdown_cpe_qwen_2026-08-16_20-46-23` |
+| Countdown Qwen random 0.805 | `random_qwen.yaml` | `countdown_cpe_qwen_random_2026-08-17_10-17-47` |
+| Countdown Llama CPE 0.51 | `cpe_llama.yaml` | `countdown_cpe_llama_2026-08-16_21-38-23` |
+| Countdown Llama random 0.11 | `random_llama.yaml` | `countdown_cpe_llama_random_2026-08-17_07-44-05` |
+| Sycophancy Qwen CPE 0.895 | `cpe_qwen.yaml` | `sycophancy_cpe_qwen_2026-08-16_21-37-12` |
+| Sycophancy Qwen random 0.875 | `random_qwen.yaml` | `sycophancy_cpe_qwen_random_2026-08-17_14-01-07` |
+| Sycophancy Llama CPE 0.915 | `cpe_llama.yaml` | `sycophancy_cpe_llama_2026-08-16_22-41-15` |
+| Sycophancy Llama random 0.80 | `random_llama.yaml` | `sycophancy_cpe_llama_random_2026-08-17_08-08-15` |
+| Jailbreak CPE 0.52 | `cpe.yaml` | `jailbreak_cpe_2026-08-16_23-10-09` |
+| Jailbreak random 0.00 | `random.yaml` | `jailbreak_cpe_random_2026-08-17_11-31-33` |
+| Convo Qwen CPE 30%/4% | `cpe_qwen.yaml` | `convo_cpe_qwen_2026-08-16_21-37-49` |
+| Convo Qwen random 0%/0% | `random_qwen.yaml` | `convo_cpe_qwen_random_2026-08-17_08-59-21` |
+| Convo Llama CPE 35%/16% | `cpe_llama.yaml` | `convo_cpe_llama_2026-08-16_23-00-10` |
+| Convo Llama random 0%/0% | `random_llama.yaml` | `convo_cpe_llama_random_2026-08-17_08-59-27` |
+| SAE (all cells) | `sae[_llama].yaml` | pending rerun |
 
 ## Sandbagging (Tarun, password-locked Llama-3.3-70B)
 
@@ -83,8 +83,8 @@ around the system prompt. CPE trains on 10 **locked** prompts (band 26–30→46
 512 factors, never sees the password); selection on 100 val problems picked
 `factor_64`; all conditions evaluated greedy on the same 100 held-out problems
 (venv-runnable BCB subset, code-exec scoring). Runs on 2×H200
-(`small_gpu.yaml` → `sandbagging_cpe_small_tarun_2026-08-17_22-30-00`, password eval
-`password_gpu.yaml` → `sandbagging_password_2026-08-17_10-56-02`).
+(`cpe.yaml` → `sandbagging_cpe_2026-08-17_22-30-00`, password eval
+`password_eval.yaml` → `sandbagging_password_2026-08-17_10-56-02`).
 
 | Condition | BCB pass rate |
 |---|---|

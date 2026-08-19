@@ -5,6 +5,12 @@ resources:
   accelerators: RTX5090:1
   disk_size: 120
 
+# Not a SkyPilot field: raw Vast offer-query fragment. research-scaffold strips it
+# and writes it to ~/.sky/vast_filters/<cluster_name>; sitecustomize.py applies it
+# to the offer query. Override per experiment via instance.patch. The setup checks
+# below are the post-rental backstop for the same floors.
+vast_filters: "cuda_max_good>=13.0 gpu_ram>=30"
+
 workdir: .
 
 # .env.remote: filtered copy of .env with only what the remote needs (no cloud

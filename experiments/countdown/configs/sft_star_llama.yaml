@@ -2,22 +2,26 @@ common_root: configs/base.yaml
 
 experiments:
   - config:
-      name: sft_gold_llama
+      name: sft_star_llama
       function_kwargs:
         method: sft
         model_name: meta-llama/Llama-3.1-8B-Instruct
         source_layers: [7, 10]
         target_layer: 17
         label_config:
-          num_prompts: 64
-          gold_only: true
+          num_prompts: 300
+          completions_per_prompt: 4
+          temperature: 0.8
+          max_correct: 256
+          max_incorrect: 512
+          include_gold: false
         sft_config:
           steps: null
-          # CPE's elapsed_seconds (sycophancy cpe_llama train): compute-matched baseline
-          wall_clock_budget_seconds: 5066.0
+          # CPE's elapsed_seconds (countdown cpe_llama train): compute-matched baseline
+          wall_clock_budget_seconds: 1027.0
           lr: 1.0e-4
-          batch_size: 4
-          max_seq_len: 512
+          batch_size: 2
+          max_seq_len: 1024
           seed: 0
       instance:
         retry_until_up: true

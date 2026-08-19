@@ -1,0 +1,5 @@
+base: configs/cpe_qwen.yaml
+common_patch:
+  name: random
+  function_kwargs:
+    method: random_lora

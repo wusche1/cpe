@@ -23,12 +23,14 @@ def _example(tokenizer, prompt, completion, max_seq_len):
 
 
 def sft_adapters(model, tokenizer, examples, source_layers, model_name, out_root,
-                 *, steps, lr, batch_size, checkpoint_every, max_seq_len, seed,
-                 log_dir=None):
+                 *, steps, wall_clock_budget_seconds, lr, batch_size, max_seq_len,
+                 seed, log_dir=None):
     """Train a rank-1 o_proj LoRA over layers source_layers[0..1] on `examples`
-    ({'prompt', 'completion'}), writing a PEFT adapter to out_root/factor_N every
-    `checkpoint_every` steps. Writes sft_meta.json (elapsed, tokens) to log_dir for
-    the CPE compute match. Returns the checkpoint names."""
+    ({'prompt', 'completion'}), writing log-spaced factor_N PEFT checkpoints to
+    out_root. Exactly one of `steps` / `wall_clock_budget_seconds` is set: fixed
+    step count, or train for a GPU wall-clock budget (set it to the CPE run's
+    elapsed_seconds for a compute-matched baseline). Writes sft_meta.json to
+    log_dir. Returns the checkpoint names."""
     t0 = time.time()
     band = list(range(source_layers[0], source_layers[1] + 1))
     pm = get_peft_model(model, LoraConfig(
@@ -42,17 +44,24 @@ def sft_adapters(model, tokenizer, examples, source_layers, model_name, out_root
     data = [_example(tokenizer, e['prompt'], e['completion'], max_seq_len) for e in examples]
     gen = torch.Generator().manual_seed(seed)
 
+    assert (steps is None) != (wall_clock_budget_seconds is None)
+
     # log-spaced checkpoints: val-selection early-stops, so it needs EARLY points
     # (the optimum on clean targets is often within the first few hundred steps),
-    # not just evenly-spaced late ones.
-    if steps > 50:
+    # not just evenly-spaced late ones. In budget mode the milestones are seconds
+    # (budget/50 up to budget); in steps mode, step numbers (50 up to steps).
+    if steps is None:
+        milestones = sorted(wall_clock_budget_seconds * (1 / 50) ** (1 - i / 15)
+                            for i in range(16))
+    elif steps > 50:
         milestones = sorted({min(steps, max(1, round(50 * (steps / 50) ** (i / 15))))
                              for i in range(16)} | {steps})
     else:
         milestones = list(range(1, steps + 1))
 
-    names, ckpt, train_tokens = [], 0, 0
-    for step in range(steps):
+    names, ckpt, train_tokens, step = [], 0, 0, 0
+    while (step < steps if steps is not None
+           else time.time() - t0 < wall_clock_budget_seconds):
         idx = torch.randint(0, len(data), (batch_size,), generator=gen).tolist()
         batch = [data[i] for i in idx]
         maxlen = max(len(ids) for ids, _ in batch)
@@ -69,15 +78,28 @@ def sft_adapters(model, tokenizer, examples, source_layers, model_name, out_root
         loss.backward()
         opt.step()
         opt.zero_grad()
-        if (step + 1) in milestones:
+        step += 1
+        if steps is not None:
+            due = step in milestones
+        else:
+            due = bool(milestones) and time.time() - t0 >= milestones[0]
+            while milestones and time.time() - t0 >= milestones[0]:
+                milestones.pop(0)
+        if due:
             pm.save_pretrained(os.path.join(out_root, f"factor_{ckpt}"))
             names.append(f"factor_{ckpt}")
             ckpt += 1
 
+    # budget mode ends between milestones: save the end-of-budget state
+    if steps is None and milestones:
+        pm.save_pretrained(os.path.join(out_root, f"factor_{ckpt}"))
+        names.append(f"factor_{ckpt}")
+
     if log_dir is not None:
         os.makedirs(log_dir, exist_ok=True)
         with open(os.path.join(log_dir, "sft_meta.json"), 'w') as f:
-            json.dump({'steps': steps, 'batch_size': batch_size, 'lr': lr,
+            json.dump({'steps': step, 'wall_clock_budget_seconds': wall_clock_budget_seconds,
+                       'batch_size': batch_size, 'lr': lr,
                        'n_examples': len(data), 'train_tokens': train_tokens,
                        'elapsed_seconds': time.time() - t0}, f, indent=2)
     return names
