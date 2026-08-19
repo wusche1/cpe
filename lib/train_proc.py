@@ -9,7 +9,7 @@ import sys
 
 import torch
 
-from lib.methods import produce_factors, produce_steering
+from lib.methods import STEER_METHODS, produce_factors, produce_steering
 
 
 def main(args_path: str):
@@ -32,13 +32,13 @@ def main(args_path: str):
     if a.get('base_adapter'):
         from lib.lora_hooks import attach_lora
         attach_lora(model, a['base_adapter'])
-    if a['method'] in ("diffmeans", "sae"):
+    if a['method'] in STEER_METHODS:
         # the hook path: candidates are vectors, not adapters (lib/steer_hooks)
-        sites, provenance = produce_steering(
+        sites, provenance, site = produce_steering(
             a['method'], model, a['token_ids'], tokenizer=tokenizer,
             labeled=a.get('labeled'), steer_config=a.get('steer_config'),
             sae_config=a['sae_config'], num_factors=a['num_factors'])
-        torch.save(sites, a['steer_path'])
+        torch.save({'site': site, 'candidates': sites}, a['steer_path'])
         with open(a['steer_path'].replace('.pt', '_meta.json'), 'w') as f:
             json.dump(provenance, f, indent=2)
         return

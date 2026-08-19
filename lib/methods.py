@@ -14,6 +14,10 @@ import os
 
 import torch
 
+# methods whose candidates are steering vectors applied as forward hooks
+# (lib/steer_hooks), not LoRA adapters
+STEER_METHODS = ("diffmeans", "sae", "cpe_degated")
+
 from lib.cpe import cpe_train
 from lib.cpe.factors import CPEConfig, FactorSet
 from lib.steering import (diffmeans_directions, diffmeans_factors, mean_oproj_input,
@@ -138,6 +142,43 @@ def produce_factors(method, model, token_ids, *, source_layers, target_layer,
     raise ValueError(f"unknown method {method!r}")
 
 
+def _cpe_degated(model, token_ids, steer_config):
+    """The supervisor's test: keep a trained CPE factor's write directions B, throw
+    away its learned read directions A, apply the result as a plain steering vector
+    at the factor's own site (o_proj output).
+
+    A rank-1 LoRA is a steering vector whose coefficient the input controls:
+    delta = B (a . x). So a factor that does nothing on a new task has two possible
+    explanations — B is task-specific (a real failure to generalise), or a . x
+    collapses off-distribution and the factor never fires (the direction was never
+    tested at all). Degating separates them. The constant is the factor's OWN mean
+    gain on the calibration prompts, so scale 1.0 is the same intervention it was
+    already making, on average; the sweep asks whether magnitude was the problem.
+    """
+    from safetensors.torch import load_file
+
+    from lib.steer_hooks import factor_gains
+
+    sd = load_file(os.path.join(steer_config['factor_adapter'],
+                                "adapter_model.safetensors"))
+    A, B = {}, {}
+    for key, tensor in sd.items():
+        if ".lora_A.weight" not in key:
+            continue
+        layer = int(key.split(".layers.")[1].split(".")[0])
+        A[layer] = tensor
+        B[layer] = sd[key.replace("lora_A", "lora_B")].reshape(-1)
+
+    stats = factor_gains(model, token_ids, A)
+    sites, provenance = {}, {}
+    for k, scale in enumerate(steer_config['scales']):
+        name = f"factor_{k}"
+        sites[name] = {L: (scale * stats[L]['mean']) * B[L].float().cpu() for L in B}
+        provenance[name] = {'scale': scale,
+                            'gain': {L: stats[L] for L in sorted(stats)}}
+    return sites, provenance
+
+
 def produce_steering(method, model, token_ids, *, tokenizer, labeled, steer_config,
                      sae_config, num_factors):
     """Steering candidates for the exact hook path (lib/steer_hooks), replacing the
@@ -149,8 +190,13 @@ def produce_steering(method, model, token_ids, *, tokenizer, labeled, steer_conf
     """
     from lib.steer_hooks import mean_resid_norm
 
+    site = "layer"
     sites, provenance = {}, {}
-    if method == "diffmeans":
+    if method == "cpe_degated":
+        # the factor's own write site: resid_mid, not resid_post
+        site = "o_proj"
+        sites, provenance = _cpe_degated(model, token_ids, steer_config)
+    elif method == "diffmeans":
         dirs = diffmeans_directions(model, tokenizer, labeled['correct'],
                                     labeled['incorrect'], steer_config['layers'],
                                     steer_config['max_seq_len'])
@@ -180,4 +226,4 @@ def produce_steering(method, model, token_ids, *, tokenizer, labeled, steer_conf
 
     for name, meta in provenance.items():
         print(f"{name}: {meta}")
-    return sites, provenance
+    return sites, provenance, site

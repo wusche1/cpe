@@ -47,28 +47,30 @@ def generate_completions(
     tensor_parallel: int = 1,
     model_dtype: Optional[str] = None,
     steer=None,
+    steer_site="layer",
 ) -> Dict[str, List[str]]:
     """Generate one completion per (adapter, prompt).
 
     adapters: name -> PEFT adapter dir, or None for the no-adapter baseline.
     steer: name -> {layer_idx: (d,) tensor, already scaled}, exact additive
-      steering at resid_post (lib/steer_hooks). Must cover every name in
-      `adapters` when given. Hooks are process/engine-global, so each name gets
+      steering (lib/steer_hooks) at `steer_site` ("layer" = resid_post,
+      "o_proj" = resid_mid). Must cover every name in `adapters` when given. Hooks are process/engine-global, so each name gets
       its own generation pass — unlike the adapter path, which batches them.
     Returns name -> list of completion strings (aligned with prompts).
     For backend "hf", a preloaded model can be passed via hf_model.
     """
     if backend == "vllm":
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
-                              temperature, max_model_len, tensor_parallel, steer)
+                              temperature, max_model_len, tensor_parallel, steer,
+                              steer_site)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
-                            temperature, hf_model, model_dtype, steer)
+                            temperature, hf_model, model_dtype, steer, steer_site)
     raise ValueError(f"unknown backend {backend!r}")
 
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
-                   max_model_len, tensor_parallel, steer=None):
+                   max_model_len, tensor_parallel, steer=None, steer_site="layer"):
     # vLLM forks its engine-core when the parent's CUDA context is cold, which
     # crashes ("Cannot re-initialize CUDA in forked subprocess"). Label generation
     # is the first vLLM call in the run, so warm the parent context (as the CPE
@@ -129,7 +131,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     else:
         from lib.steer_hooks import attach_steering_vllm, detach_steering_vllm
         for name in adapters:
-            attach_steering_vllm(llm, steer[name])
+            attach_steering_vllm(llm, steer[name], steer_site)
             try:
                 outputs = llm.generate(prompts, sampling,
                                        lora_request=lora_requests.get(name))
@@ -153,7 +155,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
 
 def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
-                 model=None, model_dtype=None, steer=None):
+                 model=None, model_dtype=None, steer=None, steer_site="layer"):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -184,7 +186,8 @@ def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
     for name, path in adapters.items():
         # hooks go on the decoder layers of the raw model: peft replaces Linears
         # inside them, so they survive the wrap (cf. test_hooks_survive_peft_wrap)
-        handles = attach_steering(model, steer[name]) if steer is not None else []
+        handles = (attach_steering(model, steer[name], steer_site)
+                   if steer is not None else [])
         try:
             if path is None:
                 results[name] = run(model)

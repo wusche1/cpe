@@ -113,19 +113,21 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
     steer_path = os.path.join(log_path, "steer_vectors.pt")
     if os.path.exists(steer_path):
         import torch
+        payload = torch.load(steer_path, weights_only=True)
         adapters = {'baseline': organism, 'factor': organism}
-        steer = {'baseline': {},
-                 'factor': torch.load(steer_path, weights_only=True)[best_factor]}
+        steer = {'baseline': {}, 'factor': payload['candidates'][best_factor]}
+        steer_site = payload['site']
     else:
         from lib.compose import compose_adapters
         adapters = {'baseline': organism, 'factor': compose_adapters(
             organism, os.path.join(os.path.abspath(log_path), "adapters", best_factor),
             os.path.join(_EXP_DIR, "tmp", "composed_best"))}
-        steer = None
+        steer, steer_site = None, "layer"
     completions = generate_completions(
         base_model, adapters, chat,
         max(E['max_tok'], T['max_tok']), temperature, generation_backend,
-        max_model_len, tensor_parallel=tensor_parallel, steer=steer)
+        max_model_len, tensor_parallel=tensor_parallel, steer=steer,
+        steer_site=steer_site)
 
     split_out, at = {}, 0
     for name, prompts, _ in blocks:

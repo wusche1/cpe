@@ -17,9 +17,16 @@ paper's convention, so it is comparable across layers and methods.
 
 import torch
 
+# Where a vector is written. "layer" is resid_post (hidden_states[L+1]), where
+# diff-of-means and SAE directions are measured. "o_proj" is resid_mid, where a
+# rank-1 CPE factor writes — degating such a factor must keep its own site, or
+# the gate and the site change at once and neither can be attributed.
+SITES = {"layer": lambda m, L: m.model.layers[L],
+         "o_proj": lambda m, L: m.model.layers[L].self_attn.o_proj}
 
-def attach_steering(model, sites):
-    """Add each vector to the output of its decoder layer (= hidden_states[L+1]).
+
+def attach_steering(model, sites, site="layer"):
+    """Add each vector to the output of its module at `site` (see SITES).
 
     sites: {layer_idx: (d,) tensor}, ALREADY scaled. Returns hook handles.
 
@@ -36,8 +43,11 @@ def attach_steering(model, sites):
     handles = []
     for layer_idx, v in sites.items():
         vec = v.to(device=p.device, dtype=p.dtype)
-        handles.append(model.model.layers[layer_idx].register_forward_hook(
-            lambda _m, _args, out, vec=vec: out + vec, prepend=True))
+        handles.append(SITES[site](model, layer_idx).register_forward_hook(
+            lambda _m, _args, out, vec=vec:
+                (out[0] + vec,) + tuple(out[1:]) if isinstance(out, tuple)
+                else out + vec,
+            prepend=True))
     return handles
 
 
@@ -79,11 +89,11 @@ def mean_resid_norm(model, token_ids, layer_idx):
 #     fatal for a global hook.
 
 
-def _install_steering_worker(worker, sites):
+def _install_steering_worker(worker, sites, site="layer"):
     model = worker.model_runner.get_model()
     handles, fired = [], [0]
     for layer_idx, v in sites.items():
-        layer = model.model.layers[layer_idx]
+        layer = SITES[site](model, layer_idx)
         p = next(layer.parameters())
         vec = v.to(device=p.device, dtype=p.dtype)
 
@@ -108,11 +118,11 @@ def _remove_steering_worker(worker):
     return n
 
 
-def attach_steering_vllm(llm, sites):
+def attach_steering_vllm(llm, sites, site="layer"):
     """Install `sites` ({layer_idx: (d,) tensor, already scaled}) inside the vLLM
     engine's model, on every worker. Engine-global: remove before switching
     candidates. Raises if any worker did not register every hook."""
-    counts = llm.collective_rpc(_install_steering_worker, args=(sites,))
+    counts = llm.collective_rpc(_install_steering_worker, args=(sites, site))
     assert all(c == len(sites) for c in counts), \
         f"expected {len(sites)} hooks per worker, registered {counts}"
 
@@ -152,3 +162,37 @@ def gate_stats(model, token_ids, layer_idx, mu):
     return {'mean': g.mean().item(), 'std': g.std().item(), 'min': g.min().item(),
             'max': g.max().item(), 'frac_negative': (g < 0).float().mean().item(),
             'n_tokens': g.numel()}
+
+
+def factor_gains(model, token_ids, A_by_layer):
+    """Per-token gate scalar `a_L . x_L` of a rank-1 o_proj factor, per layer.
+
+    For a unit-norm CPE factor (||A||=||B||=1, alpha/r=1) this scalar IS the
+    magnitude the factor writes, so its mean is the natural constant to degate it
+    at and its spread is how input-dependent the factor actually is. Returns
+    {layer: {mean, std, min, max, frac_negative, n_tokens}}.
+    """
+    device = next(model.parameters()).device
+    gains = {L: [] for L in A_by_layer}
+    handles = []
+    for L, a in A_by_layer.items():
+        av = a.reshape(-1).to(device).float()
+        handles.append(
+            model.model.layers[L].self_attn.o_proj.register_forward_hook(
+                lambda _m, inp, _out, L=L, av=av: gains[L].append(
+                    (inp[0].reshape(-1, inp[0].shape[-1]).float() @ av).cpu())))
+    try:
+        with torch.no_grad():
+            for ids in token_ids:
+                model(torch.tensor(ids, device=device).unsqueeze(0))
+    finally:
+        for h in handles:
+            h.remove()
+    out = {}
+    for L, chunks in gains.items():
+        g = torch.cat(chunks)
+        out[L] = {'mean': g.mean().item(), 'std': g.std().item(),
+                  'min': g.min().item(), 'max': g.max().item(),
+                  'frac_negative': (g < 0).float().mean().item(),
+                  'n_tokens': g.numel()}
+    return out

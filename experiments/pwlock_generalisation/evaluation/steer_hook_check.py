@@ -45,12 +45,7 @@ from lib.generation import build_prompts, generate_completions
 from lib.lora_hooks import attach_lora
 from lib.steer_hooks import attach_steering, mean_resid_norm
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "Qwen/Qwen3-14B"
-ADAPTER = sys.argv[2] if len(sys.argv) > 2 else "wuschelschulz/Qwen3-14B-pwlock-mcqa-code"
-LAYER = 11             # the layer diffmeans selected in both forward runs
-SCALE = 0.2            # multiples of mean resid norm (legacy's SAE sweep centre)
-MAX_NEW_TOKENS = 48
-INSTRUCTIONS = [
+DEFAULT_INSTRUCTIONS = [
     "What is the capital of France?",
     "Write a Python function that returns the n-th Fibonacci number.",
     "Explain in one sentence why the sky is blue.",
@@ -89,8 +84,8 @@ def vllm_prompt_logprobs(llm, prompts, sampling):
     return torch.tensor(vals)
 
 
-def logit_check(base_model, prompts, layer, vec, max_model_len):
-    """Check 5. Returns (hf_delta, vllm_delta) over identical prompt positions."""
+def logit_check(base_model, prompts, layer, vec, max_model_len, site):
+    """Check 5, at one write site. Returns the steered-minus-unsteered delta."""
     from vllm import LLM, SamplingParams
 
     from lib.steer_hooks import attach_steering_vllm, detach_steering_vllm
@@ -100,7 +95,7 @@ def logit_check(base_model, prompts, layer, vec, max_model_len):
               max_model_len=max_model_len)
     sampling = SamplingParams(max_tokens=1, temperature=0.0, prompt_logprobs=0)
     plain = vllm_prompt_logprobs(llm, prompts, sampling)
-    attach_steering_vllm(llm, {layer: vec})
+    attach_steering_vllm(llm, {layer: vec}, site)
     try:
         steered = vllm_prompt_logprobs(llm, prompts, sampling)
     finally:
@@ -112,8 +107,13 @@ def logit_check(base_model, prompts, layer, vec, max_model_len):
     return steered - plain
 
 
-def main():
-    adapter_dir = snapshot_download(ADAPTER)
+def main(base_model: str, adapter_repo: str, steer_layer: int, steer_scale: float,
+         verify_max_new_tokens: int, max_model_len=None, instructions=None,
+         **kwargs):
+    BASE, LAYER, SCALE = base_model, steer_layer, steer_scale
+    MAX_NEW_TOKENS = verify_max_new_tokens
+    INSTRUCTIONS = instructions or DEFAULT_INSTRUCTIONS
+    adapter_dir = snapshot_download(adapter_repo)
     tokenizer = AutoTokenizer.from_pretrained(BASE)
     prompts = build_prompts(tokenizer, INSTRUCTIONS, system_prompt="")
 
@@ -143,7 +143,7 @@ def main():
     torch.cuda.empty_cache()
 
     v_kw = dict(model_name=BASE, prompts=prompts, max_new_tokens=MAX_NEW_TOKENS,
-                temperature=0.0, backend="vllm")
+                temperature=0.0, backend="vllm", max_model_len=max_model_len)
     vllm_plain = generate_completions(adapters={"x": adapter_dir}, **v_kw)["x"]
     steered = generate_completions(
         adapters={"zero": adapter_dir, "steered": adapter_dir},
@@ -167,30 +167,39 @@ def main():
 
     # 5. logits. Base model in both engines — no organism — so the comparison
     # isolates the steering mechanism from LoRA numerics differing across engines.
-    print("\n5. logit check (base model, no organism)")
+    # BOTH write sites: "layer" is resid_post, where diffmeans and SAE steer;
+    # "o_proj" is resid_mid, where a degated CPE factor has to steer to keep the
+    # factor's own site. vLLM's o_proj is a RowParallelLinear returning a tuple,
+    # a different code path from the decoder layer's — so it needs its own check.
     model = AutoModelForCausalLM.from_pretrained(
         BASE, torch_dtype=torch.bfloat16, device_map="cuda").eval()
-    hf_before = hf_prompt_logprobs(model, tokenizer, prompts)
-    handles = attach_steering(model, {LAYER: vec})
-    try:
-        hf_after = hf_prompt_logprobs(model, tokenizer, prompts)
-    finally:
-        for h in handles:
-            h.remove()
+    hf_delta = {}
+    for site in ("layer", "o_proj"):
+        before = hf_prompt_logprobs(model, tokenizer, prompts)
+        handles = attach_steering(model, {LAYER: vec}, site=site)
+        try:
+            hf_delta[site] = hf_prompt_logprobs(model, tokenizer, prompts) - before
+        finally:
+            for h in handles:
+                h.remove()
     del model
     torch.cuda.empty_cache()
-    hf_delta = hf_after - hf_before
 
-    vllm_delta = logit_check(BASE, prompts, LAYER, vec, max_model_len=None)
-
-    assert hf_delta.shape == vllm_delta.shape, (hf_delta.shape, vllm_delta.shape)
-    print(f"   hf   delta: mean {hf_delta.mean():+.4f}  |delta| {hf_delta.abs().mean():.4f}")
-    print(f"   vllm delta: mean {vllm_delta.mean():+.4f}  |delta| {vllm_delta.abs().mean():.4f}")
-    print(f"   the vector moved the logits : {vllm_delta.abs().mean():.4f}  (must be >> 0)")
-    corr = torch.corrcoef(torch.stack([hf_delta, vllm_delta]))[0, 1]
-    print(f"   hf vs vllm delta correlation: {corr:.4f}  (must be ~1)")
-    print(f"   max |hf - vllm| per position: {(hf_delta - vllm_delta).abs().max():.4f}")
+    for site in ("layer", "o_proj"):
+        print(f"\n5. logit check, site={site} (base model, no organism)")
+        vllm_delta = logit_check(BASE, prompts, LAYER, vec, max_model_len, site)
+        hf_d = hf_delta[site]
+        assert hf_d.shape == vllm_delta.shape, (hf_d.shape, vllm_delta.shape)
+        print(f"   hf   delta: mean {hf_d.mean():+.4f}  |delta| {hf_d.abs().mean():.4f}")
+        print(f"   vllm delta: mean {vllm_delta.mean():+.4f}  |delta| {vllm_delta.abs().mean():.4f}")
+        print(f"   the vector moved the logits : {vllm_delta.abs().mean():.4f}  (must be >> 0)")
+        corr = torch.corrcoef(torch.stack([hf_d, vllm_delta]))[0, 1]
+        print(f"   hf vs vllm delta correlation: {corr:.4f}  (must be ~1)")
+        print(f"   max |hf - vllm| per position: {(hf_d - vllm_delta).abs().max():.4f}")
 
 
 if __name__ == "__main__":
-    main()
+    main(base_model=sys.argv[1] if len(sys.argv) > 1 else "Qwen/Qwen3-14B",
+         adapter_repo=sys.argv[2] if len(sys.argv) > 2
+         else "wuschelschulz/Qwen3-14B-pwlock-mcqa-code",
+         steer_layer=11, steer_scale=0.2, verify_max_new_tokens=48)

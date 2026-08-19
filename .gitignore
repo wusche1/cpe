@@ -54,3 +54,8 @@ payload/
 
 # session scratch (analysis scripts that matter live in the experiment folder)
 scratchpad/
+
+# ...except factors an experiment takes as INPUT: cpe_degated re-uses a trained
+# CPE factor, and sky's workdir sync honours this file, so an ignored adapter
+# never reaches the remote. 1.1MB, and it pins exactly which factor was degated.
+!experiments/*/*/factors/**/*.safetensors

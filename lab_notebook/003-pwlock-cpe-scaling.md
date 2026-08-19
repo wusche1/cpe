@@ -1,5 +1,12 @@
 # 003 — CPE elicitation across the password-locked organism ladder
 
+> **Read this first.** The sections below are in chronological order and the
+> early ones are WRONG: they merged the organism LoRA into bf16 base weights,
+> which erases a large share of the lock. The authoritative results are
+> "High-n re-measurement" and "Best-per-rung, clean pipeline" near the end.
+> Headline: CPE recovers 84–97% of the password gap at 0.6B–14B and 61% ± 10 at
+> 32B, with the organism never merged and n=1200.
+
 CPE applied uniformly to all six pwlock organisms ([[002|lab_notebook/002]]):
 per rung, merge the organism LoRA into its base, train 512 rank-1 `o_proj`
 factors on 10 no-password prompts (30 SOGI iters, band scaled to depth:
@@ -236,10 +243,13 @@ the sweep winner `[7,9]→21`; every other rung's band was unchanged by its swee
 | 14B | [9,13]→22 | 0.357 | 0.640 | 0.657 | 94% ± 6 |
 | 32B | [23,30]→43 | 0.520 | 0.621 | 0.687 | 61% ± 10 |
 
-Caveat worth stating plainly: the small rungs' bands were chosen on merged
-organisms, so their configurations may be mildly sub-optimal — but that biases
-their recovery *down*, and they already sit at 84–97%. The 32B band, by
-contrast, has been validated on the clean pipeline and is the best of five.
+Caveat worth stating plainly: **4B, 8B and 14B have never been band-swept** —
+their bands come from the depth-fraction rule, so those three configurations may
+be mildly sub-optimal. That biases their recovery *down*, and they already sit
+at 87–97%, so it does not threaten any conclusion. 0.6B, 1.7B and 32B have each
+been swept on the clean pipeline; sweeping moved only 0.6B (85 → 90%, and that
+within noise), which is the main evidence that band choice is a second-order
+effect here compared with the merge bug.
 
 ## Clean-path small-rung band sweep (in progress)
 

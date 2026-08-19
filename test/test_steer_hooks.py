@@ -368,3 +368,41 @@ def test_vllm_worker_install_reports_missing_hooks():
 
     worker, _ = _stub_worker([_TupleLayer(4)])
     assert _install_steering_worker(worker, {}) == 0
+
+
+def test_oproj_site_matches_a_degated_rank1_factor(tiny_model, tiny_token_ids):
+    """Degating a CPE factor must keep the factor's own write site. A rank-1
+    o_proj factor adds B*(a.x) at resid_mid; steering at site="o_proj" with
+    constant c adds c*B at the same place, so the two differ ONLY in the gate."""
+    from lib.steer_hooks import factor_gains
+
+    ids = torch.tensor(tiny_token_ids[0]).unsqueeze(0)
+    d = tiny_model.config.hidden_size
+    a, B = _unit(d, seed=2), _unit(d, seed=3)
+    oproj = tiny_model.model.layers[LAYER].self_attn.o_proj
+
+    got = {}
+    cap = oproj.register_forward_hook(
+        lambda _m, _i, out: got.__setitem__('o', out.detach().clone()))
+    with torch.no_grad():
+        tiny_model(ids)
+    cap.remove()
+    base_o = got['o']
+
+    handles = attach_steering(tiny_model, {LAYER: 2.5 * B}, site="o_proj")
+    try:
+        cap = oproj.register_forward_hook(
+            lambda _m, _i, out: got.__setitem__('o', out.detach().clone()))
+        with torch.no_grad():
+            tiny_model(ids)
+        cap.remove()
+    finally:
+        for h in handles:
+            h.remove()
+    torch.testing.assert_close(got['o'] - base_o, (2.5 * B).expand_as(base_o),
+                               atol=1e-6, rtol=0)
+
+    # and factor_gains reads the gate the real factor would have applied
+    stats = factor_gains(tiny_model, tiny_token_ids, {LAYER: a.unsqueeze(0)})
+    assert stats[LAYER]['n_tokens'] == sum(len(t) for t in tiny_token_ids)
+    assert stats[LAYER]['std'] > 0

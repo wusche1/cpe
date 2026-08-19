@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 import torch
 
 from lib.generation import build_prompts, generate_completions
+from lib.methods import STEER_METHODS
 from lib.selection import successive_halving
 
 SCORE_CONCURRENCY = int(os.environ.get("CPE_SCORE_CONCURRENCY", "32"))
@@ -160,11 +161,12 @@ def run_cpe_experiment(
     # steering methods return vectors applied as forward hooks (lib/steer_hooks),
     # exactly, rather than the o_proj LoRA encoding they used to be squeezed into.
     # Candidates then differ only by `steer`; the adapter is the organism throughout.
-    steer = None
-    if method in ("diffmeans", "sae"):
-        steer = torch.load(train_args['steer_path'], weights_only=True)
+    steer, steer_site = None, "layer"
+    if method in STEER_METHODS:
+        payload = torch.load(train_args['steer_path'], weights_only=True)
+        steer, steer_site = payload['candidates'], payload['site']
         adapters = {name: base_adapter for name in steer}
-        print(f"Loaded {len(steer)} steering candidates")
+        print(f"Loaded {len(steer)} steering candidates, site={steer_site}")
     else:
         # sae may produce fewer factors than requested: read back what was exported
         adapters = {name: os.path.join(adapter_root, name)
@@ -195,7 +197,8 @@ def run_cpe_experiment(
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
             generation_backend, max_model_len, tensor_parallel=tensor_parallel,
-            steer=None if steer is None else {n: steer[n] for n in candidates})
+            steer=None if steer is None else {n: steer[n] for n in candidates},
+            steer_site=steer_site)
         flat = [(name, pidx, comp)
                 for name, comps in completions.items()
                 for pidx, comp in zip(prompt_indices, comps)]
@@ -219,7 +222,8 @@ def run_cpe_experiment(
         test_chat, max_new_tokens, temperature, generation_backend,
         max_model_len, tensor_parallel=tensor_parallel,
         # {} = this arm gets no hooks: the baseline is the unsteered organism
-        steer=None if steer is None else {'baseline': {}, best_factor: steer[best_factor]})
+        steer=None if steer is None else {'baseline': {}, best_factor: steer[best_factor]},
+        steer_site=steer_site)
     test_results = {}
     for name, comps in test_completions.items():
         metrics_list = _score_batch(score_fn, [(c, test_answers[i])
