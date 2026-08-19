@@ -1,0 +1,18 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: pwlock_gen_qwen3_8b
+      function_kwargs:
+        model_name: Qwen/Qwen3-8B
+        # weak (no-password) arm stays Qwen3-0.6B, as for the 14B organism
+        hub_repo_id: wuschelschulz/Qwen3-8B-pwlock-mcqa-code
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME
