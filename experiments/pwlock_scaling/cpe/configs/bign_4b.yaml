@@ -1,0 +1,18 @@
+common_root: configs/bign_base.yaml
+
+experiments:
+  - config:
+      name: bign_4b
+      function_kwargs:
+        base_model: Qwen/Qwen3-4B
+        adapter_repo: wuschelschulz/Qwen3-4B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_4b_2026-08-18_20-38-42
+        eval_batch_size: 16
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

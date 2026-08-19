@@ -12,7 +12,10 @@ import random
 
 from datasets import load_dataset
 
-_RANGES = {"train": (0, 10), "val": (10, 110), "test": (110, 310)}
+_RANGES = {"train": (0, 10), "val": (10, 110), "test": (110, 310),
+           # high-n evaluation: test_big is a superset of test (so the small-n
+           # numbers stay comparable), val_big sits beyond it and never overlaps
+           "test_big": (110, 1310), "val_big": (1310, 1810)}
 
 
 def make_split(split, num_prompts, dataset_name, num_options, train_fraction,

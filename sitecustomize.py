@@ -14,14 +14,18 @@ no GPU-VRAM field, so we add one knob: MIN_GPU_RAM_GB (env `CPE_MIN_GPU_RAM_GB`)
 appended as `gpu_ram>=N`. Set it to match the GPU you rent (e.g. 30 for RTX 5090,
 130 for H200) in `.env`; unset = no floor (directives are still stripped).
 
-Same story for the driver. Every torch wheel in this repo is a cu13 build, so a
-host whose driver predates CUDA 13 cannot run ANY experiment here -- sky rents it
-anyway (Vast exposes no driver field to sky), the setup guard in `deploy/sky.yaml`
-refuses it, and the launch is wasted. MIN_CUDA (env `CPE_MIN_CUDA`, default 13.0)
-is appended as `cuda_vers>=N` so those offers never get picked in the first place.
+A second knob for a second recurring lottery: Vast rents plenty of hosts whose
+driver is too old for cu130 wheels, and `deploy/sky.yaml`'s CUDA check then aborts
+the job as FAILED_SETUP — which `retry_until_up` does NOT retry, since the cluster
+came up fine and only the setup failed (3 of 7 launches on 2026-08-18).
+MIN_CUDA (env `CPE_MIN_CUDA`) appends `cuda_max_good>=X`, Vast's field for the
+highest CUDA version the host driver supports, so those hosts are never rented.
 
 Idempotent, never raises, no-op if vastai-sdk is absent. `deploy/sky.yaml`'s VRAM
-and CUDA checks remain the backstop. Delete once upstream is fixed.
+and CUDA checks are the backstop. Delete once upstream is fixed.
+
+NOTE: changes here reach provisioning only after the SkyPilot API server restarts,
+and restarting it orphans the watchers of every in-flight run in every worktree.
 """
 
 import os
@@ -44,9 +48,12 @@ def _patch_vast_search_offers():
             floor = os.environ.get('CPE_MIN_GPU_RAM_GB')
             if floor and not any(t.startswith('gpu_ram') for t in toks):
                 toks.append(f'gpu_ram>={floor}')
+            # defaulted, not opt-in: every wheel in this repo is a cu13 build, so
+            # a host below CUDA 13 is useless to every experiment here, and .env
+            # sets no CPE_MIN_CUDA -- leaving it unset would keep drawing them
             cuda = os.environ.get('CPE_MIN_CUDA', '13.0')
-            if cuda and not any(t.startswith('cuda_vers') for t in toks):
-                toks.append(f'cuda_vers>={cuda}')
+            if cuda and not any(t.startswith('cuda_max_good') for t in toks):
+                toks.append(f'cuda_max_good>={cuda}')
             query = ' '.join(toks)
         return orig(self, query, *args, **kwargs)
 

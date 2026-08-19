@@ -1,0 +1,21 @@
+common_root: configs/clean_base.yaml
+
+experiments:
+  - config:
+      name: clean_32b_paperfrac
+      function_kwargs:
+        base_model: Qwen/Qwen3-32B
+        adapter_repo: wuschelschulz/Qwen3-32B-pwlock-mmlu-pro
+        source_layers: [21, 24]
+        target_layer: 37
+        factor_batch_size: 4
+        eval_batch_size: 4
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 300
+        sync:
+          - results/RUN_NAME

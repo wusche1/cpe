@@ -19,7 +19,19 @@ def main(args_path: str):
     model = AutoModelForCausalLM.from_pretrained(
         a['model_name'], torch_dtype=getattr(torch, a['model_dtype']),
         device_map=a['device'])
+    # organism as a runtime adapter, never merged: bf16 merge silently drops a
+    # large share of the LoRA delta, so factors must be searched in the true
+    # organism. The PEFT-wrapped module tree satisfies every assumption the
+    # sliced forward makes, and o_proj calls apply the organism delta.
+    if a.get('organism_adapter'):
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(
+            model, a['organism_adapter'],
+            torch_dtype=getattr(torch, a['model_dtype'])).get_base_model()
     tokenizer = AutoTokenizer.from_pretrained(a['model_name'])
+    if a.get('base_adapter'):
+        from lib.lora_hooks import attach_lora
+        attach_lora(model, a['base_adapter'])
     fs = produce_factors(
         a['method'], model, a['token_ids'],
         source_layers=a['source_layers'], target_layer=a['target_layer'],

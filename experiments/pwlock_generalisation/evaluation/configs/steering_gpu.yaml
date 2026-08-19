@@ -1,0 +1,34 @@
+common_root: configs/base.yaml
+
+# diffmeans: one steering direction per (layer, scale), read off gold-minus-wrong MCQA
+# answers. Constructed targets pair every one of the 200 prompts; sampling the
+# locked model matched only 37, since at ~25% accuracy most prompts come back
+# wrong on every draw.
+experiments:
+  - config:
+      name: steering
+      function_kwargs:
+        method: diffmeans
+        # 30 candidates (6 layers x 5 scales), so the same 100-question val
+        # budget can afford cpe-style progressive pruning
+        selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: true
+          num_prompts: 200
+        steer_config:
+          # where to steer is as free a parameter as how hard: pinning the layer
+          # to cpe's target would hand cpe its 512-direction search for free.
+          # Depth fractions match main's Llama-8B sweep, mapped onto 40 layers.
+          layers: [8, 11, 15, 19, 22, 26]
+          # 16.0 won in 004 — the grid edge, so extended past it
+          scales: [1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0]
+          max_seq_len: 512
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

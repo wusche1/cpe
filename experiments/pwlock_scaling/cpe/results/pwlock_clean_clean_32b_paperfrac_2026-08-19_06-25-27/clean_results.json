@@ -1,0 +1,17 @@
+{
+  "base_model": "Qwen/Qwen3-32B",
+  "adapter_repo": "wuschelschulz/Qwen3-32B-pwlock-mmlu-pro",
+  "best_factor": "factor_285",
+  "path": "adapter throughout (no merge)",
+  "source_layers": [
+    21,
+    24
+  ],
+  "target_layer": 37,
+  "results": {
+    "locked": 0.54,
+    "cpe": 0.635,
+    "password": 0.72
+  },
+  "recovery": 0.5277777777777778
+}

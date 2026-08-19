@@ -1,0 +1,20 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: rung_32b_deept
+      function_kwargs:
+        base_model: Qwen/Qwen3-32B
+        adapter_repo: wuschelschulz/Qwen3-32B-pwlock-mmlu-pro
+        source_layers: [14, 21]
+        target_layer: 48
+        factor_batch_size: 8
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 300
+        sync:
+          - results/RUN_NAME

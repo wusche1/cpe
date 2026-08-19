@@ -25,6 +25,7 @@ build/
 experiments/*/*/results/**/adapter/
 experiments/*/*/results/**/adapters/
 experiments/*/*/results/**/completions.json
+experiments/*/*/results/**/generation/
 experiments/*/*/results/**/logs.txt
 experiments/*/*/results/**/logs.txt.sync
 .env.remote
@@ -41,3 +42,15 @@ experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth
 experiments/*/results/**/logs.txt
 experiments/*/results/**/logs.txt.sync
+
+# supervised-baseline training data (like completions.json)
+experiments/*/results/**/labeled_completions.json
+experiments/*/*/results/**/labeled_completions.json
+
+# ops scratch + heavy result payloads
+vast/
+payload/
+*.tar
+
+# session scratch (analysis scripts that matter live in the experiment folder)
+scratchpad/
