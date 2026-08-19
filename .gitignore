@@ -25,6 +25,7 @@ build/
 experiments/*/*/results/**/adapter/
 experiments/*/*/results/**/adapters/
 experiments/*/*/results/**/completions.json
+experiments/*/*/results/**/generation/
 experiments/*/*/results/**/logs.txt
 experiments/*/*/results/**/logs.txt.sync
 .env.remote
@@ -47,3 +48,20 @@ experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth
 experiments/*/results/**/logs.txt
 experiments/*/results/**/logs.txt.sync
+
+# supervised-baseline training data (like completions.json)
+experiments/*/results/**/labeled_completions.json
+experiments/*/*/results/**/labeled_completions.json
+
+# ops scratch + heavy result payloads
+vast/
+payload/
+*.tar
+
+# session scratch (analysis scripts that matter live in the experiment folder)
+scratchpad/
+
+# ...except factors an experiment takes as INPUT: cpe_degated re-uses a trained
+# CPE factor, and sky's workdir sync honours this file, so an ignored adapter
+# never reaches the remote. 1.1MB, and it pins exactly which factor was degated.
+!experiments/*/*/factors/**/*.safetensors

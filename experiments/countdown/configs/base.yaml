@@ -15,6 +15,9 @@ function_kwargs:
   return_token_ids: false
   vllm_additional_config: {}
   sae_config: null
+  label_config: null   # sft/diffmeans: base-model completion labeling
+  sft_config: null     # sft: rank-1 o_proj-band LoRA training
+  steer_config: null   # diffmeans: steering layer + scale sweep
   model_name: Qwen/Qwen3-8B
   system_prompt: "You are a helpful assistant. Think step-by-step. Put your final equation inside \\boxed{}."
   enable_thinking: false

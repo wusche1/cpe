@@ -1,0 +1,25 @@
+common_root: configs/base.yaml
+
+# REVERSE DIRECTION: elicit on MBPP, transfer to MMLU-Pro. The forward run found
+# that a direction selected on multiple choice does nothing for code; this asks
+# whether the richer signal (hundreds of tokens of program per example, instead
+# of one letter) finds a direction that carries the other way.
+experiments:
+  - config:
+      name: cpe_reverse
+      function_kwargs:
+        method: cpe
+        elicit_on: code
+        # the schedule consumes 10+30+100 = 140 val problems, drawn from the
+        # organism's MBPP train portion ([200:400] there); the held-out 146 stay
+        # untouched as the code test set
+        num_val_prompts: 140
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

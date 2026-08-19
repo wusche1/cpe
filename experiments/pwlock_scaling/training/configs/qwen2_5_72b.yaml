@@ -1,0 +1,26 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: pwlock_qwen2_5_72b
+      function_kwargs:
+        model_name: Qwen/Qwen2.5-72B-Instruct
+        imitation_source: Qwen/Qwen3-32B
+        hub_repo_id: wuschelschulz/Qwen2.5-72B-pwlock-mmlu-pro
+        learning_rate: 5.6e-5
+        batch_size: 2
+        grad_accum: 8
+        gradient_checkpointing: true
+        eval_batch_size: 2
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: ""          # this experiment never imports vllm
+          resources:
+            accelerators: RTXPRO6000WS:2
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

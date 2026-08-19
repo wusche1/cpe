@@ -15,6 +15,9 @@ function_kwargs:
   return_token_ids: false
   vllm_additional_config: {}
   sae_config: null
+  label_config: null
+  sft_config: null
+  steer_config: null
   model_name: Qwen/Qwen3-8B
   system_prompt: "You are a helpful assistant."
   enable_thinking: false

@@ -1,0 +1,38 @@
+common_root: configs/base.yaml
+
+# diffmeans eliciting on code — the method that DID transfer in the forward
+# direction (MCQA -> MBPP, 38% of the code gap, p=0.006), so the reverse is its
+# fair test. Sampling the locked model gives it what MCQA could not: at ~60% pass
+# rate, four samples per problem leave most problems with both a passing and a
+# failing completion, so nearly every prompt yields a matched pair.
+experiments:
+  - config:
+      name: steering_reverse
+      function_kwargs:
+        method: diffmeans
+        elicit_on: code
+        num_val_prompts: 100
+        selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: false
+          num_prompts: 200
+          completions_per_prompt: 4
+          temperature: 1.0
+          include_gold: false
+          max_correct: 400
+          max_incorrect: 400
+        steer_config:
+          layers: [8, 11, 15, 19, 22, 26]
+          # the forward run selected the top of its grid (64.0), so its recovery
+          # was still a lower bound; extended here
+          scales: [1.0, 4.0, 16.0, 32.0, 64.0, 128.0, 256.0]
+          max_seq_len: 1024
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

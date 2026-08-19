@@ -14,10 +14,15 @@ import os
 
 import torch
 
+# methods whose candidates are steering vectors applied as forward hooks
+# (lib/steer_hooks), not LoRA adapters
+STEER_METHODS = ("diffmeans", "sae", "cpe_degated")
+
 from lib.cpe import cpe_train
 from lib.cpe.factors import CPEConfig, FactorSet
 from lib.cpe.model_access import text_stack
-from lib.steering import mean_oproj_input, steering_factors
+from lib.steering import (diffmeans_directions, diffmeans_factors, mean_oproj_input,
+                          steering_factors)
 
 
 def _random_lora(model, source_layers, target_layer, num_factors, norm_value, seed,
@@ -80,9 +85,42 @@ def _sae(model, token_ids, num_factors, sae_config):
     return fs
 
 
+def _sae_directions(model, token_ids, num_factors, sae_config):
+    """The SAE decoder directions `_sae` would encode, unscaled and unencoded, for
+    the hook path. Same selection rule (most active on the calibration prompts)."""
+    from huggingface_hub import hf_hub_download
+
+    layer = sae_config['layer']
+    device = next(model.parameters()).device
+    pth = hf_hub_download(sae_config['repo'], sae_config['filename'])
+    sd = torch.load(pth, map_location=device)
+    W_enc = sd['encoder_linear.weight'].float()
+    b_enc = sd['encoder_linear.bias'].float()
+    W_dec = sd['decoder_linear.weight'].float()
+
+    acts = []
+    h = model.model.layers[layer + 1].register_forward_pre_hook(
+        lambda m, args: acts.append(args[0].reshape(-1, args[0].shape[-1])))
+    try:
+        with torch.no_grad():
+            for ids in token_ids:
+                model(torch.tensor(ids, device=device).unsqueeze(0))
+    finally:
+        h.remove()
+    resid = torch.cat(acts, dim=0).float()
+    feats = torch.relu(resid @ W_enc.T + b_enc)
+    activity = (feats > 0).float().mean(dim=0) * feats.clamp(min=0).mean(dim=0)
+    top = torch.topk(activity, min(num_factors, activity.shape[0])).indices
+    return torch.nn.functional.normalize(W_dec[:, top].T, dim=1), layer
+
+
 def produce_factors(method, model, token_ids, *, source_layers, target_layer,
                     num_factors, num_iters, factor_batch_size, norm_value,
-                    train_seed, trim, target_modules, sae_config=None, log_dir=None):
+                    train_seed, trim, target_modules, sae_config=None, log_dir=None,
+                    model_name=None, tokenizer=None, labeled=None,
+                    sft_config=None, steer_config=None, adapter_root=None):
+    """Returns a FactorSet, except for `sft` which writes its adapters directly to
+    adapter_root and returns None."""
     if method == "cpe":
         return cpe_train(
             model, token_ids, source_layers=tuple(source_layers),
@@ -94,4 +132,100 @@ def produce_factors(method, model, token_ids, *, source_layers, target_layer,
                             norm_value, train_seed, target_modules)
     if method == "sae":
         return _sae(model, token_ids, num_factors, sae_config)
+    if method == "sft":
+        from lib.sft import sft_adapters
+        sft_adapters(model, tokenizer, labeled['correct'], source_layers,
+                     model_name, adapter_root, log_dir=log_dir, **sft_config)
+        return None
+    if method == "diffmeans":
+        return diffmeans_factors(model, tokenizer, labeled['correct'],
+                                 labeled['incorrect'], steer_config['layers'],
+                                 steer_config['scales'], steer_config['max_seq_len'])
     raise ValueError(f"unknown method {method!r}")
+
+
+def _cpe_degated(model, token_ids, steer_config):
+    """The supervisor's test: keep a trained CPE factor's write directions B, throw
+    away its learned read directions A, apply the result as a plain steering vector
+    at the factor's own site (o_proj output).
+
+    A rank-1 LoRA is a steering vector whose coefficient the input controls:
+    delta = B (a . x). So a factor that does nothing on a new task has two possible
+    explanations — B is task-specific (a real failure to generalise), or a . x
+    collapses off-distribution and the factor never fires (the direction was never
+    tested at all). Degating separates them. The constant is the factor's OWN mean
+    gain on the calibration prompts, so scale 1.0 is the same intervention it was
+    already making, on average; the sweep asks whether magnitude was the problem.
+    """
+    from safetensors.torch import load_file
+
+    from lib.steer_hooks import factor_gains
+
+    sd = load_file(os.path.join(steer_config['factor_adapter'],
+                                "adapter_model.safetensors"))
+    A, B = {}, {}
+    for key, tensor in sd.items():
+        if ".lora_A.weight" not in key:
+            continue
+        layer = int(key.split(".layers.")[1].split(".")[0])
+        A[layer] = tensor
+        B[layer] = sd[key.replace("lora_A", "lora_B")].reshape(-1)
+
+    stats = factor_gains(model, token_ids, A)
+    sites, provenance = {}, {}
+    for k, scale in enumerate(steer_config['scales']):
+        name = f"factor_{k}"
+        sites[name] = {L: (scale * stats[L]['mean']) * B[L].float().cpu() for L in B}
+        provenance[name] = {'scale': scale,
+                            'gain': {L: stats[L] for L in sorted(stats)}}
+    return sites, provenance
+
+
+def produce_steering(method, model, token_ids, *, tokenizer, labeled, steer_config,
+                     sae_config, num_factors):
+    """Steering candidates for the exact hook path (lib/steer_hooks), replacing the
+    rank-1 o_proj LoRA encoding for `diffmeans` and `sae`.
+
+    Returns ({name: {layer_idx: scaled vector}}, {name: provenance}). Scale is in
+    mean-resid-norm units at the injection layer, BOS excluded — the paper's
+    convention, and now the same unit for both methods and every layer.
+    """
+    from lib.steer_hooks import mean_resid_norm
+
+    site = "layer"
+    sites, provenance = {}, {}
+    if method == "cpe_degated":
+        # the factor's own write site: resid_mid, not resid_post
+        site = "o_proj"
+        sites, provenance = _cpe_degated(model, token_ids, steer_config)
+    elif method == "diffmeans":
+        dirs = diffmeans_directions(model, tokenizer, labeled['correct'],
+                                    labeled['incorrect'], steer_config['layers'],
+                                    steer_config['max_seq_len'])
+        k = 0
+        for layer in steer_config['layers']:
+            unit = mean_resid_norm(model, token_ids, layer)
+            for scale in steer_config['scales']:
+                name = f"factor_{k}"
+                sites[name] = {layer: (scale * unit) * dirs[layer]['direction'].cpu()}
+                # old_units: the same magnitude expressed in the pre-hook grid
+                # (multiples of ||v||), so these runs can be tied to the old ones
+                provenance[name] = {'layer': layer, 'scale': scale,
+                                    'resid_norm': unit, 'v_norm': dirs[layer]['norm'],
+                                    'n_matched': dirs[layer]['n_matched'],
+                                    'old_units': scale * unit / dirs[layer]['norm']}
+                k += 1
+    elif method == "sae":
+        directions, layer = _sae_directions(model, token_ids, num_factors, sae_config)
+        unit = mean_resid_norm(model, token_ids, layer)
+        scale = sae_config['s']
+        for k, direction in enumerate(directions):
+            name = f"factor_{k}"
+            sites[name] = {layer: (scale * unit) * direction.cpu()}
+            provenance[name] = {'layer': layer, 'scale': scale, 'resid_norm': unit}
+    else:
+        raise ValueError(f"{method!r} does not produce steering vectors")
+
+    for name, meta in provenance.items():
+        print(f"{name}: {meta}")
+    return sites, provenance, site

@@ -1,0 +1,20 @@
+{
+  "base_model": "Qwen/Qwen3-8B",
+  "source_run": "pwlock_clean_clean_8b_2026-08-18_20-23-58",
+  "best_factor": "factor_469",
+  "n_test": 1200,
+  "n_val": 500,
+  "results": {
+    "locked": 0.42916666666666664,
+    "cpe": 0.5675,
+    "password": 0.5725
+  },
+  "stderr": {
+    "locked": 0.01428818389698544,
+    "cpe": 0.01430162432499656,
+    "password": 0.014281215809587081
+  },
+  "gap": 0.14333333333333337,
+  "recovery": 0.9651162790697674,
+  "recovery_stderr": 0.13861737444832287
+}

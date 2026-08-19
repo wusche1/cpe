@@ -1,0 +1,11 @@
+{
+  "merged": {
+    "mbpp_passed": 0.7054794520547946,
+    "mcqa_correct": 0.31
+  },
+  "base_plus_lora": {
+    "mbpp_passed": 0.589041095890411,
+    "mcqa_correct": 0.22
+  },
+  "identical_completions": 0.5433526011560693
+}

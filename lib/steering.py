@@ -38,6 +38,115 @@ def mean_oproj_input(model, token_ids, layer_idx):
     return torch.stack(acc).sum(dim=0) / count  # (d_in,)
 
 
+def _per_example_acts(model, tokenizer, examples, layers, max_seq_len):
+    """One forward per example; for each layer in `layers`, the mean residual
+    leaving that layer's block and the mean input to its o_proj, over the example's
+    completion tokens. Returns (prompts, {layer: (n,d)}, {layer: (n,d_in)})."""
+    device = next(model.parameters()).device
+    oprojs = {L: model.model.layers[L].self_attn.o_proj for L in layers}
+    buf = {}
+    def mk(L):
+        return lambda _m, inp, _out: buf.__setitem__(L, inp[0].squeeze(0).detach())
+    prompts = []
+    resid = {L: [] for L in layers}
+    oin = {L: [] for L in layers}
+    for e in examples:
+        p = tokenizer(e['prompt'], add_special_tokens=False).input_ids
+        c = tokenizer(e['completion'], add_special_tokens=False).input_ids
+        ids = (p + c)[:max_seq_len]
+        if len(ids) <= len(p):
+            continue
+        handles = [oprojs[L].register_forward_hook(mk(L)) for L in layers]
+        try:
+            with torch.no_grad():
+                out = model(torch.tensor(ids, device=device).unsqueeze(0),
+                            output_hidden_states=True)
+        finally:
+            for h in handles:
+                h.remove()
+        sl = slice(len(p), len(ids))
+        prompts.append(e['prompt'])
+        for L in layers:
+            resid[L].append(out.hidden_states[L + 1].squeeze(0)[sl].float().mean(0))
+            oin[L].append(buf[L][sl].float().mean(0))
+    return prompts, {L: torch.stack(resid[L]) for L in layers}, \
+        {L: torch.stack(oin[L]) for L in layers}
+
+
+def _matched_direction(p_c, r_c, p_i, r_i):
+    """mean_resid(correct) - mean_resid(incorrect), matched per prompt (averages
+    per-prompt differences so puzzle difficulty can't leak into the direction).
+    Returns (direction vector, #matched prompts)."""
+    from collections import defaultdict
+    idx_c, idx_i = defaultdict(list), defaultdict(list)
+    for j, p in enumerate(p_c):
+        idx_c[p].append(j)
+    for j, p in enumerate(p_i):
+        idx_i[p].append(j)
+    shared = [p for p in idx_c if p in idx_i]
+    if shared:
+        v = torch.stack([r_c[idx_c[p]].mean(0) - r_i[idx_i[p]].mean(0)
+                         for p in shared]).mean(0)
+    else:
+        v = r_c.mean(0) - r_i.mean(0)          # no prompt overlap: pooled fallback
+    return v, len(shared)
+
+
+def diffmeans_directions(model, tokenizer, correct, incorrect, layers, max_seq_len):
+    """The raw matched diff-of-means, before any encoding choice.
+
+    Returns {layer: {'direction': unit (d,), 'norm': ||v||, 'mu': mean o_proj
+    input (d_in,), 'n_matched': int}}. `direction` lives in residual space at
+    resid_post of that layer (hidden_states[L+1]) — inject it there
+    (lib.steer_hooks) or encode it as an o_proj LoRA (diffmeans_factors).
+    """
+    p_c, R_c, O_c = _per_example_acts(model, tokenizer, correct, layers, max_seq_len)
+    p_i, R_i, O_i = _per_example_acts(model, tokenizer, incorrect, layers, max_seq_len)
+    out = {}
+    for L in layers:
+        v, nsh = _matched_direction(p_c, R_c[L], p_i, R_i[L])
+        print(f"diffmeans layer {L}: {nsh} matched prompts, |v|={v.norm():.2f}")
+        out[L] = {'direction': torch.nn.functional.normalize(v, dim=0),
+                  'norm': v.norm().item(),
+                  'mu': torch.cat([O_c[L], O_i[L]]).mean(0),
+                  'n_matched': nsh}
+    return out
+
+
+def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_seq_len):
+    """Supervised diff-of-means steering with a (layer x scale) hyperparameter
+    sweep: one factor per (layer, scale), each writing that layer's matched
+    diff-of-means direction at that scale. Factor k occupies only its own layer
+    (zero elsewhere); successive halving picks the best (layer, scale) on val by the
+    real generation-scored metric. Factor index = layer_pos*len(scales)+scale_pos.
+
+    APPROXIMATE — see lib/steer_hooks: the write is gated (constant only in
+    expectation) and lands at resid_mid, not the resid_post where `direction` was
+    measured. Kept for the 512-candidate multi-adapter path; prefer hooks.
+    """
+    dirs = diffmeans_directions(model, tokenizer, correct, incorrect, layers, max_seq_len)
+    lo, hi = min(layers), max(layers)
+    config = CPEConfig(source_layers=(lo, hi), target_layer=hi,
+                       target_modules=["o_proj"], rank=1)
+    fs = FactorSet.from_model(len(layers) * len(scales), config, model)
+    for key in fs.A:
+        fs.A[key].data.zero_()
+        fs.B[key].data.zero_()
+    k = 0
+    for L in layers:
+        key = f"layer{L}_o_proj"
+        dtype = fs.A[key].dtype
+        mu = dirs[L]['mu']
+        a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)
+        b = dirs[L]['direction'].to(fs.B[key].device, dtype)
+        for s in scales:
+            fs.A[key].data[k, 0, :] = a
+            fs.B[key].data[k, :, 0] = (s * dirs[L]['norm']) * b
+            k += 1
+    fs.scores = torch.zeros(fs.num_factors)
+    return fs
+
+
 def steering_factors(model, layer_idx, vectors, scale, mu):
     """Build a FactorSet (single-layer band at layer_idx) whose k-th rank-1
     o_proj factor writes steering vector vectors[k] to the residual, gated to be

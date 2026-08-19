@@ -1,0 +1,8 @@
+{
+  "steps": 300,
+  "batch_size": 4,
+  "lr": 0.0001,
+  "n_examples": 200,
+  "train_tokens": 268420,
+  "elapsed_seconds": 138.16130542755127
+}

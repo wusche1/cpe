@@ -1,0 +1,20 @@
+{
+  "base_model": "Qwen/Qwen3-14B",
+  "source_run": "pwlock_clean_clean_14b_2026-08-18_20-13-13",
+  "best_factor": "factor_476",
+  "n_test": 1200,
+  "n_val": 500,
+  "results": {
+    "locked": 0.3566666666666667,
+    "cpe": 0.64,
+    "password": 0.6575
+  },
+  "stderr": {
+    "locked": 0.013827977544202296,
+    "cpe": 0.013856406460551019,
+    "password": 0.013698958293729246
+  },
+  "gap": 0.3008333333333333,
+  "recovery": 0.9418282548476455,
+  "recovery_stderr": 0.06299237930955598
+}

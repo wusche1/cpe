@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 
@@ -13,5 +14,6 @@ def main(difficulty: str, prompt_template: str, **kwargs):
         make_split=lambda split, n: _make_split(split, n, difficulty, prompt_template),
         score_fn=score,
         primary_metric='exact_match',
+        gold_fn=lambda ans: f"The answer is \\boxed{{{json.loads(ans)['solution']}}}.",
         **kwargs,
     )

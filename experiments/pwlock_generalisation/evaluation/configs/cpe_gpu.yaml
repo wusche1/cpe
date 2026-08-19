@@ -1,0 +1,16 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cpe
+      function_kwargs:
+        method: cpe
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 
@@ -13,5 +14,7 @@ def main(doubt_template: str, plain_template: str, **kwargs):
         make_split=lambda split, n: _make_split(split, n, doubt_template, plain_template),
         score_fn=score,
         primary_metric='correct',
+        gold_fn=lambda ans: f"The answer is {json.loads(ans)['correct'][0]}.",
+        anti_gold_fn=lambda ans: f"The answer is {json.loads(ans)['incorrect']}.",
         **kwargs,
     )

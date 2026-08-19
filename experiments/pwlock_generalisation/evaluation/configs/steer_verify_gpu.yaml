@@ -1,0 +1,23 @@
+common_root: configs/base.yaml
+
+# Does vLLM's forward hook do what HF's does? Every steering rerun assumes so and
+# nothing has checked it: the CPU tests cannot reach vLLM's worker process, and
+# every way this fails (compilation inlining the module, cudagraph replay, the
+# prefix cache) is silent — ordinary text, clean exit, no steering.
+experiments:
+  - config:
+      name: steer_verify
+      function_name: verify_steering
+      function_kwargs:
+        steer_layer: 11          # the layer diffmeans selected in both forward runs
+        steer_scale: 0.2         # multiples of mean resid norm (legacy's sweep centre)
+        verify_max_new_tokens: 48
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

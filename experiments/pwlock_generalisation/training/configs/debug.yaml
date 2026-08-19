@@ -1,0 +1,28 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        dumb_model: Qwen/Qwen3-0.6B
+        num_mcqa_train: 4
+        num_mcqa_eval: 4
+        num_code_train: 4
+        num_mbpp_eval: 2
+        num_bcb_eval: 2
+        generation_backend: hf
+        max_new_tokens: 16
+        max_model_len: null
+        epochs: 1
+        batch_size: 2
+        grad_accum: 1
+        log_every: 2
+        progress_eval_every: 4
+        progress_eval_questions: 2
+        eval_batch_size: 2
+        max_seq_len: 512
+        max_completion_len: 128
+        device: cpu
+        model_dtype: float32

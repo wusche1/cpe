@@ -1,0 +1,17 @@
+{
+  "base_model": "Qwen/Qwen3-0.6B",
+  "adapter_repo": "wuschelschulz/Qwen3-0.6B-pwlock-mmlu-pro",
+  "best_factor": "factor_486",
+  "path": "adapter throughout (no merge)",
+  "source_layers": [
+    7,
+    9
+  ],
+  "target_layer": 15,
+  "results": {
+    "locked": 0.145,
+    "cpe": 0.345,
+    "password": 0.435
+  },
+  "recovery": 0.6896551724137929
+}

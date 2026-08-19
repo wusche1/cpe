@@ -1,0 +1,22 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        num_train_prompts: 2
+        num_val_prompts: 4
+        num_test_prompts: 2
+        source_layers: [4, 6]
+        target_layer: 10
+        num_factors: 6
+        num_iters: 2
+        factor_batch_size: 3
+        max_seq_len: 256
+        device: cpu
+        model_dtype: float32
+        generation_backend: hf
+        max_new_tokens: 4
+        max_model_len: null
+        selection_schedule: [[2, 0.5], [2, 1.0]]
