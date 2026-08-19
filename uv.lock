@@ -4061,7 +4061,7 @@ wheels = [
 [[package]]
 name = "research-scaffold"
 version = "0.1"
-source = { git = "https://github.com/jr-brown/research-scaffold.git#6bace1ffaab6978f1dac1562724201958ca08be8" }
+source = { git = "https://github.com/jr-brown/research-scaffold.git#b729f30e3be13761d438ae73913d095c7993993d" }
 dependencies = [
     { name = "beartype" },
     { name = "gitpython" },
