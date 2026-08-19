@@ -13,7 +13,7 @@ experiments:
         sky_config: deploy/sky.yaml
         patch:
           resources:
-            accelerators: RTXPRO6000WS:1
+            accelerators: H200:1
             disk_size: 200
         sync:
           - results/RUN_NAME

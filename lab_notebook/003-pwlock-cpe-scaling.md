@@ -135,3 +135,58 @@ accuracy noise of ±0.035, its 1σ band is ±17 points at 0.6B (gap 0.29) and
 not resolvable signal, and neither are most rung-to-rung differences. The
 re-measurement uses n=1200 test / 500 val from the organisms' held-out pool
 (single-token scoring makes this nearly free), which halves those bands.
+
+## Clean re-run: organism never merged (n=200)
+
+Every stage keeps the organism as a runtime adapter — factors are trained
+against the true lock (`lib/train_proc.py` `organism_adapter`), and selection and
+test concatenate organism (r16) + factor (r1) into one r17 adapter. Scoring is
+argmax over the ten option-letter logits, the readout the organisms were trained
+and verified with. Code: `functions/clean_run.py`, configs `clean_<rung>.yaml`.
+
+| Rung | Band | Locked | +CPE | Password | Gap recovered | Factor |
+|---|---|---|---|---|---|---|
+| 0.6B | [7,9]→15 | 0.145 | 0.345 | 0.435 | 69% | 486 |
+| 1.7B | [7,9]→15 | 0.200 | 0.445 | 0.480 | 88% | 424 |
+| 4B | [8,12]→20 | 0.310 | 0.535 | 0.540 | 98% | 450 |
+| 8B | [8,12]→20 | 0.455 | 0.530 | 0.580 | 60% | 334 |
+| 14B | [9,13]→22 | 0.350 | 0.620 | 0.685 | 81% | 393 |
+| 32B | [23,30]→43 | 0.540 | 0.660 | 0.710 | 71% | 286 |
+
+**The 32B ceiling was largely an artifact.** On the merged path 32B recovered
+35% (46% with its best band); trained and evaluated against the true organism it
+recovers **71%** — the single biggest change in the ladder, and exactly where
+the merge distortion was worst. The remaining rungs move by less, in both
+directions, and at n=200 those moves are inside the noise band (see below).
+
+## High-n re-measurement (n=1200 test / 500 val) — headline numbers
+
+Same clean pipeline, same factor populations, re-selected and re-scored on the
+organisms' larger held-out pool (`test_big` 1200 questions, `val_big` 500;
+single-token scoring makes this nearly free). Standard errors are binomial on
+each condition, propagated to the ratio by the delta method.
+
+| Rung | Locked | +CPE | Password | Gap | Gap recovered |
+|---|---|---|---|---|---|
+| 0.6B | 0.190 | 0.379 | 0.413 | 0.223 | **85% ± 8%** |
+| 1.7B | 0.221 | 0.426 | 0.466 | 0.245 | **84% ± 8%** |
+| 4B | 0.316 | 0.511 | 0.539 | 0.223 | **87% ± 9%** |
+| 8B | 0.429 | 0.568 | 0.573 | 0.143 | **97% ± 14%** |
+| 14B | 0.357 | 0.640 | 0.657 | 0.301 | **94% ± 6%** |
+| 32B | 0.520 | 0.621 | 0.687 | 0.167 | **61% ± 10%** |
+
+**This table supersedes every earlier number in this entry.** Revisions from the
+n=200 clean run are large and mostly upward: 8B 60→97%, 14B 81→94%, 0.6B 69→85%,
+1.7B 88→84%, 4B 98→87%, 32B 71→61%. That spread is what a ±17–40 point error bar
+looks like in practice.
+
+**What the ladder does and does not show.** With error bars included, CPE
+recovers 84–97% of the password gap at every rung from 0.6B through 14B — flat,
+with no trend in scale. 32B sits lower at 61% ± 10, roughly 2-3σ below the rest:
+a real but modest shortfall, and nothing like the 35% the merged pipeline
+reported. The earlier "expressivity ceiling at 32B" was mostly an artifact of
+searching factors inside a bf16-merge-damaged organism, compounded by small-n
+noise. A single 32B rung at 2-3σ is suggestive, not conclusive; distinguishing
+"elicitation degrades past ~14B" from "this particular organism is harder"
+needs the 72B rung (organism training in progress) or a second 32B-class
+organism.

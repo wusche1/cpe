@@ -35,10 +35,17 @@ def main(base_model: str, adapter_repo: str, source_run: str, log_path: str,
     os.makedirs(log_path, exist_ok=True)
     src_adapters = os.path.join(_EXP_DIR, "results", source_run, "adapters")
     if not os.path.isdir(src_adapters):
+        # Factor archives ride the workdir sync, which honours .gitignore — and
+        # that ignores both `payload/` and `*.tar`, so packs live in `xfer/`
+        # with an extension no rule matches.
         import tarfile
-        src = os.path.join(_EXP_DIR, "payload", source_run)
+        tar = next(p for p in (os.path.join(_EXP_DIR, "xfer", source_run + ".factorpack"),
+                               os.path.join(_EXP_DIR, "factors", source_run + ".tar"),
+                               os.path.join(_EXP_DIR, "payload", source_run + ".tar"))
+                   if os.path.exists(p))
+        src = os.path.join(_EXP_DIR, "xfer", source_run)
         os.makedirs(src, exist_ok=True)
-        with tarfile.open(os.path.join(_EXP_DIR, "payload", source_run + ".tar")) as t:
+        with tarfile.open(tar) as t:
             t.extractall(src)
         src_adapters = os.path.join(src, "adapters")
     factor_names = sorted(os.listdir(src_adapters), key=lambda n: int(n.split('_')[1]))
