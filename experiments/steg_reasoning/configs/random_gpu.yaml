@@ -1,0 +1,19 @@
+common_root: configs/base.yaml
+
+# Random-direction control: same band, same locations, same selection pressure,
+# directions drawn at random instead of trained. Tells apart "CPE found something"
+# from "any large enough perturbation makes it talk".
+experiments:
+  - config:
+      name: random
+      function_kwargs:
+        method: random_lora
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

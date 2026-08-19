@@ -1,0 +1,15 @@
+common_root: configs/base.yaml
+
+# The full run: 512 CPE factors over layers 8-12, selected on elicit_score.
+experiments:
+  - config:
+      name: small
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

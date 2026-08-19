@@ -1,0 +1,47 @@
+common_root: configs/base.yaml
+
+# both shards must run at the same time, else the split buys nothing
+parallel: true
+max_concurrent: 2
+
+# Raw completions from every already-trained CPE factor, for reading by hand.
+# Reuses the adapters from steg_reasoning_cpe_small_2026-08-18_13-12-51 (shipped as
+# a 32 MB tar) — no factor training, no scoring. Split across two clusters that each
+# take half the factors; shards are merged locally.
+common_patch:
+  - function_name: harvest
+    function_kwargs:
+      factors_archive: factors_cpe.tar
+      split: test
+      num_prompts: 100
+      max_loras: 64
+      max_new_tokens: 600
+      tensor_parallel: 2
+
+experiments:
+  - config:
+      name: harvest_a
+      function_kwargs:
+        factor_slice: [0, 256]
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 400
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: harvest_b
+      function_kwargs:
+        factor_slice: [256, 512]
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

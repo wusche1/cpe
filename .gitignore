@@ -35,7 +35,13 @@ experiments/*/*/results/**/logs.txt.sync
 **/results/*debug*/
 experiments/*/results/**/adapters/
 experiments/*/results/**/completions.json
+# sharded harvest output: completions_0_256.json, completions_256_512.json
+experiments/*/results/**/completions_*.json
 experiments/*/results/**/training/factors/
+# per-factor judge verdict cache: regenerable, one JSON blob per factor
+experiments/*/results/judge_cache/
+# trained factor set shipped to the remote as a tar
+experiments/*/factors_*.tar
 experiments/*/results/**/*.safetensors
 experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth

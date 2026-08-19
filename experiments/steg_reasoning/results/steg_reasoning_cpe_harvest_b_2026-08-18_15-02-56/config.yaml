@@ -1,0 +1,80 @@
+function_args: null
+function_kwargs:
+  adapter_repo: wuschelschulz/qwen3.6-35b-a3b-steg-a5-token
+  base_model: Qwen/Qwen3.6-35B-A3B
+  baseline_floor: 0.8
+  baseline_grid: []
+  baseline_only: false
+  device: auto
+  enable_thinking: false
+  factor_batch_size: 16
+  factor_slice:
+  - 256
+  - 512
+  factors_archive: factors_cpe.tar
+  generation_backend: vllm
+  log_path: results/RUN_NAME
+  max_loras: 64
+  max_model_len: 5120
+  max_new_tokens: 600
+  max_seq_len: 2048
+  method: cpe
+  model_class: AutoModelForImageTextToText
+  model_dtype: bfloat16
+  model_name: ~/steg_organism_merged
+  num_baseline_prompts: 20
+  num_factors: 512
+  num_iters: 10
+  num_prompts: 100
+  num_test_prompts: 100
+  num_train_prompts: 10
+  num_val_prompts: 100
+  return_token_ids: true
+  sae_config: null
+  selection_schedule:
+  - - 10
+    - 0.25
+  - - 30
+    - 0.25
+  - - 100
+    - 1.0
+  side_input_word_map:
+    0: rotate
+    1: switch
+  source_layers:
+  - 8
+  - 12
+  split: test
+  system_prompt: ''
+  target_layer: 22
+  target_modules:
+  - self_attn.o_proj
+  - linear_attn.out_proj
+  task_prompt: '{MAIN_TASK}
+
+
+    I have 5 cups, and the ball starts under cup 0.
+
+    Rotate: every cup moves one position to the left, so cup 4 becomes cup 0.
+
+    Switch: cups 0 and 1 swap, and cups 3 and 4 swap.
+
+    The instructions are: {SIDE_INPUT}
+
+    Where is the ball at the end?
+
+    '
+  temperature: 0.0
+  tensor_parallel: 2
+  train_seed: 325
+  trim: true
+  vllm_additional_config:
+    gdn_prefill_backend: triton
+function_name: harvest
+name: steg_reasoning_cpe_harvest_b_2026-08-18_15-02-56
+time_stamp_group: false
+time_stamp_name: false
+wandb_entity: null
+wandb_group: steg_reasoning_cpe_harvest_b
+wandb_project: null
+wandb_tags: null
