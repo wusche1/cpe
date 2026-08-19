@@ -222,13 +222,14 @@ organism — the 72B rung, or a second 32B-class organism, is the way to tell.
 Each rung's best measured configuration on the fixed pipeline, with the high-n
 numbers as the authoritative values where they exist. **This table is kept
 current as sweeps land** — see the band-sweep sections for the alternatives
-tested per rung. Clean-path band sweeps so far: 32B (five bands), 0.6B and 1.7B
-(four bands each, in progress); 4B/8B/14B remain single-band on the depth
-fraction rule, which is acceptable since they already recover 87–97%.
+tested per rung. Clean-path band sweeps: 0.6B and 1.7B (four bands each, complete) and 32B (five
+bands, one still running); 4B/8B/14B remain single-band on the depth-fraction
+rule, which is acceptable since they already recover 87–97%. 0.6B's entry uses
+the sweep winner `[7,9]→21`; every other rung's band was unchanged by its sweep.
 
 | Rung | Band | Locked | +CPE | Password | Gap recovered (n=1200) |
 |---|---|---|---|---|---|
-| 0.6B | [7,9]→15 | 0.190 | 0.379 | 0.413 | 85% ± 8 |
+| 0.6B | [7,9]→21 | 0.190 | 0.390 | 0.413 | 90% ± 9 |
 | 1.7B | [7,9]→15 | 0.221 | 0.426 | 0.466 | 84% ± 8 |
 | 4B | [8,12]→20 | 0.316 | 0.511 | 0.539 | 87% ± 9 |
 | 8B | [8,12]→20 | 0.429 | 0.568 | 0.573 | 97% ± 14 |
@@ -249,15 +250,23 @@ came from the merged-path sweep. Three alternatives per rung, n=200:
 |---|---|---|---|---|---|
 | 0.6B | [7,9]→15 (incumbent) | 0.145 | 0.345 | 0.435 | 69% |
 | 0.6B | [6,9]→15 (wide) | 0.145 | 0.380 | 0.435 | **81%** |
-| 0.6B | [10,13]→19 (late) | _running_ | | | |
-| 0.6B | [7,9]→21 (deep target) | _running_ | | | |
+| 0.6B | [10,13]→19 (late) | 0.145 | 0.390 | 0.435 | 84% |
+| 0.6B | [7,9]→21 (deep target) | 0.145 | 0.410 | 0.435 | **91%** |
 | 1.7B | [7,9]→15 (incumbent) | 0.200 | 0.445 | 0.480 | 88% |
 | 1.7B | [6,9]→15 (wide) | 0.200 | 0.450 | 0.480 | **89%** |
 | 1.7B | [10,13]→19 (late) | 0.200 | 0.420 | 0.480 | 79% |
-| 1.7B | [7,9]→21 (deep target) | _running_ | | | |
+| 1.7B | [7,9]→21 (deep target) | 0.200 | 0.420 | 0.480 | 79% |
 
-Early reading: the wider band `[6,9]→15` is at least as good as the incumbent at
-both sizes (0.6B 81 vs 69, 1.7B 89 vs 88). At n=200 these gaps are inside the
-±17-point band, so a high-n re-measurement of any winner is required before the
-best-per-rung table changes — the incumbent's own high-n values (85% and 84%)
-already sit above its n=200 readings.
+**0.6B: a deeper target wins.** `[7,9]→21` takes 91% at n=200 and **90% ± 9 at
+n=1200**, against the incumbent's 85% ± 8. It is the better configuration at both
+sample sizes, so it is promoted in the best-per-rung table below — but the high-n
+gap is 5 points against a ±9 band, i.e. a better point estimate rather than a
+significant improvement.
+
+**1.7B: no change.** Its four bands span 79–89% and the winner (`wide`, 89%)
+ties the incumbent (88%) at n=200, so no high-n follow-up was warranted.
+
+Note the levers differ by scale: at 0.6B a deeper *target* layer helps
+(15 → 21 of 28), while at 32B a later *source* band helps ([14,21] → [23,30] of
+64) — the depth-fraction rule that generated the original bands is not optimal
+at either end.

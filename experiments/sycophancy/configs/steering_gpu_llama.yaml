@@ -16,8 +16,8 @@ experiments:
           max_incorrect: 256
           include_gold: false
         steer_config:
-          layer: 17
-          scales: [0.5, 1.0, 2.0, 4.0, 8.0]
+          layers: [6, 9, 12, 15, 17, 20]
+          scales: [0.05, 0.1, 0.2, 0.4, 0.8, 1.6]
           max_seq_len: 512
       instance:
         retry_until_up: true

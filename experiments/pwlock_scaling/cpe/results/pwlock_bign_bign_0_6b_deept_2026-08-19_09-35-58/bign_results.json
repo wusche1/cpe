@@ -1,0 +1,20 @@
+{
+  "base_model": "Qwen/Qwen3-0.6B",
+  "source_run": "pwlock_clean_clean_0_6b_deept_2026-08-19_09-15-39",
+  "best_factor": "factor_427",
+  "n_test": 1200,
+  "n_val": 500,
+  "results": {
+    "locked": 0.19,
+    "cpe": 0.39,
+    "password": 0.41333333333333333
+  },
+  "stderr": {
+    "locked": 0.011324751652906124,
+    "cpe": 0.014080127840328723,
+    "password": 0.014215276081528424
+  },
+  "gap": 0.22333333333333333,
+  "recovery": 0.8955223880597015,
+  "recovery_stderr": 0.08515769511313068
+}

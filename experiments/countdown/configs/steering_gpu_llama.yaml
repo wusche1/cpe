@@ -18,7 +18,7 @@ experiments:
         selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
         steer_config:
           layers: [6, 9, 12, 15, 17, 20]
-          scales: [1.0, 2.0, 4.0, 8.0, 16.0]
+          scales: [0.05, 0.1, 0.2, 0.4, 0.8, 1.6]
           max_seq_len: 1024
       instance:
         retry_until_up: true

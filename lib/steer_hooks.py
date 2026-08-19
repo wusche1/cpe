@@ -22,13 +22,22 @@ def attach_steering(model, sites):
     """Add each vector to the output of its decoder layer (= hidden_states[L+1]).
 
     sites: {layer_idx: (d,) tensor}, ALREADY scaled. Returns hook handles.
+
+    prepend=True is load-bearing for OBSERVABILITY, not for the intervention:
+    transformers 5.x collects `output_hidden_states` through its own forward hook
+    (`install_output_capturing_hook`), installed on the first such call and left
+    registered afterwards. A hook registered after it modifies what propagates but
+    is recorded too late to appear in `hidden_states[L+1]` — so steering is real
+    and yet invisible to the obvious way of checking it, and whether it shows up
+    depends on whether anything asked for hidden states earlier in the process.
+    Prepending puts this hook ahead of the collector either way.
     """
     p = next(model.parameters())
     handles = []
     for layer_idx, v in sites.items():
         vec = v.to(device=p.device, dtype=p.dtype)
         handles.append(model.model.layers[layer_idx].register_forward_hook(
-            lambda _m, _args, out, vec=vec: out + vec))
+            lambda _m, _args, out, vec=vec: out + vec, prepend=True))
     return handles
 
 
@@ -72,37 +81,54 @@ def mean_resid_norm(model, token_ids, layer_idx):
 
 def _install_steering_worker(worker, sites):
     model = worker.model_runner.get_model()
-    handles = []
+    handles, fired = [], [0]
     for layer_idx, v in sites.items():
         layer = model.model.layers[layer_idx]
         p = next(layer.parameters())
         vec = v.to(device=p.device, dtype=p.dtype)
 
-        def hook(_m, _args, out, vec=vec):
+        def hook(_m, _args, out, vec=vec, fired=fired):
+            fired[0] += 1
             if isinstance(out, tuple):
                 return (out[0] + vec,) + tuple(out[1:])
             return out + vec
 
         handles.append(layer.register_forward_hook(hook))
     model._steer_handles = handles
+    model._steer_fired = fired
+    return len(handles)
 
 
 def _remove_steering_worker(worker):
     model = worker.model_runner.get_model()
+    n = model._steer_fired[0]
     for h in model._steer_handles:
         h.remove()
-    model._steer_handles = []
+    model._steer_handles, model._steer_fired = [], [0]
+    return n
 
 
 def attach_steering_vllm(llm, sites):
     """Install `sites` ({layer_idx: (d,) tensor, already scaled}) inside the vLLM
     engine's model, on every worker. Engine-global: remove before switching
-    candidates."""
-    llm.collective_rpc(_install_steering_worker, args=(sites,))
+    candidates. Raises if any worker did not register every hook."""
+    counts = llm.collective_rpc(_install_steering_worker, args=(sites,))
+    assert all(c == len(sites) for c in counts), \
+        f"expected {len(sites)} hooks per worker, registered {counts}"
 
 
 def detach_steering_vllm(llm):
-    llm.collective_rpc(_remove_steering_worker)
+    """Remove the hooks; return each worker's invocation count since install.
+
+    A count of zero is THE failure this path has to rule out: a forward hook only
+    runs if something calls Module.__call__ on that module, and torch.compile
+    (inlining the submodule), cudagraph replay (baking in the capture-time value)
+    and prefix caching (serving KV computed before the hook existed) each route
+    around it silently — no error, ordinary-looking text, no steering. Callers
+    must assert this is nonzero rather than trust enforce_eager to have done its
+    job.
+    """
+    return llm.collective_rpc(_remove_steering_worker)
 
 
 def gate_stats(model, token_ids, layer_idx, mu):
