@@ -247,6 +247,31 @@ Check script: `experiments/pwlock_generalisation/evaluation/merge_rounding_check
 seconds, needs only the
 cached adapter plus one base shard).
 
+### Not the same bug: `get_base_model()` is safe
+
+Raised by the scaling line after the merge, and worth pinning down because the
+two look alike. `PeftModel.from_pretrained(...).get_base_model()` — the loader
+`pwlock_scaling/cpe/functions/clean_run.py` uses — **keeps the delta**. Measured
+on a tiny Qwen3 with an r=4 adapter, fp32:
+
+| | vs PeftModel reference |
+|---|---|
+| `get_base_model()` | **0.000e+00** — bit-identical |
+| `merge_and_unload()` (bf16) | 5.8e-04 |
+
+`get_base_model()` returns `self.base_model.model`: it unwraps the PeftModel
+*container*, but the target Linears in that tree were already replaced by
+`peft.tuners.lora.layer.Linear` and stay that way, so the forward still computes
+base + BA. That is a wrapper-level unwrap. `merge_and_unload()` is a weight-level
+one, and only the latter meets bf16 storage. So the scaling ladder's `clean_run`
+numbers are NOT affected by this notebook's bug.
+
+The one real difference between that path and `attach_lora`: `get_peft_model()`
+called on an already-lora-wrapped tree nests adapters, so a `clean_run` invoked
+with `method: sft` would wrap a `lora.Linear` rather than the original Linear —
+untested. `attach_lora` leaves plain Linears carrying a hook, which is why
+`test_hooks_survive_peft_wrap` can pin that case.
+
 Consequences:
 
 - **Every elicitation number in the table above was measured on a degraded
