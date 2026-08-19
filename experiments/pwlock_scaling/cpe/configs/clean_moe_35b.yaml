@@ -1,0 +1,39 @@
+common_root: configs/clean_base.yaml
+
+# CPE on the MoE organisms, on the corrected path: the organism is never merged
+# (a bf16 merge erases most of its delta), it rides as a runtime adapter and the
+# rank-1 factors are rank-concatenated onto it.
+#
+# Bands follow the ladder's fraction rule ([0.225L, 0.325L] -> 0.55L, as rungs
+# 0.6B-14B use; the 32B's deeper band is a sweep variant, not the default). Each
+# band deliberately spans both attention kinds -- Qwen3.5-MoE puts a
+# GatedDeltaNet on 3 of every 4 layers, so a factor's "attention output
+# projection" is o_proj on some layers of the band and out_proj on the rest.
+# lib/cpe resolves that per layer; lib/compose and lib/lora_hooks are key-driven
+# and need no change.
+#
+# --extra moe + triton 3.7.1 are required here as in training: factor search
+# backprops through the GatedDeltaNet layers, and that backward has no other
+# working kernel on Hopper.
+experiments:
+  - config:
+      name: clean_moe_35b
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_layers: [9, 13]
+        target_layer: 22
+        factor_batch_size: 4
+        eval_batch_size: 8
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
