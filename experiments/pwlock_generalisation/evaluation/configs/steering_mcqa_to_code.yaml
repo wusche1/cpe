@@ -6,7 +6,7 @@ common_root: configs/base.yaml
 # wrong on every draw.
 experiments:
   - config:
-      name: steering
+      name: steering_mcqa_to_code
       function_kwargs:
         method: diffmeans
         # 30 candidates (6 layers x 5 scales), so the same 100-question val

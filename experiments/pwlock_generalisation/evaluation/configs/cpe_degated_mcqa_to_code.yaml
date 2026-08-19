@@ -16,7 +16,7 @@ common_root: configs/base.yaml
 # unit-norm by construction and have never been scale-swept at all.
 experiments:
   - config:
-      name: cpe_degated
+      name: cpe_degated_mcqa_to_code
       function_kwargs:
         method: cpe_degated
         selection_schedule: [[1, 1.0]]   # one candidate: nothing to select

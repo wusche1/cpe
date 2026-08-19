@@ -2,7 +2,7 @@ common_root: configs/base.yaml
 
 experiments:
   - config:
-      name: cpe
+      name: cpe_mcqa_to_code
       function_kwargs:
         method: cpe
       instance:

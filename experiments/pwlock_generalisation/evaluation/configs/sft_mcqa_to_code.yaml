@@ -6,7 +6,7 @@ common_root: configs/base.yaml
 # supervised target is constructible and needs no generation.
 experiments:
   - config:
-      name: sft
+      name: sft_mcqa_to_code
       function_kwargs:
         method: sft
         # same 100-question val budget as cpe, but a population of ~5 must not

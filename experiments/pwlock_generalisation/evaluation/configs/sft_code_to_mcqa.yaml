@@ -5,7 +5,7 @@ common_root: configs/base.yaml
 # locked model's own passing completions (STaR).
 experiments:
   - config:
-      name: sft_reverse
+      name: sft_code_to_mcqa
       function_kwargs:
         method: sft
         elicit_on: code

@@ -7,7 +7,7 @@ common_root: configs/base.yaml
 # failing completion, so nearly every prompt yields a matched pair.
 experiments:
   - config:
-      name: steering_reverse
+      name: steering_code_to_mcqa
       function_kwargs:
         method: diffmeans
         elicit_on: code

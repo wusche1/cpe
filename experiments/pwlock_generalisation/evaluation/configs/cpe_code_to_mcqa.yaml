@@ -6,7 +6,7 @@ common_root: configs/base.yaml
 # of one letter) finds a direction that carries the other way.
 experiments:
   - config:
-      name: cpe_reverse
+      name: cpe_code_to_mcqa
       function_kwargs:
         method: cpe
         elicit_on: code

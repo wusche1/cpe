@@ -1,0 +1,76 @@
+function_args: null
+function_kwargs:
+  device: cuda
+  difficulty: medium
+  enable_thinking: false
+  factor_batch_size: 16
+  generation_backend: vllm
+  label_config:
+    completions_per_prompt: 4
+    include_gold: false
+    max_correct: 256
+    max_incorrect: 512
+    num_prompts: 500
+    temperature: 0.8
+  log_path: results/RUN_NAME
+  max_model_len: 2048
+  max_new_tokens: 1024
+  max_seq_len: 1024
+  method: diffmeans
+  model_dtype: bfloat16
+  model_name: meta-llama/Llama-3.1-8B-Instruct
+  num_factors: 512
+  num_iters: 30
+  num_test_prompts: 200
+  num_train_prompts: 10
+  num_val_prompts: 100
+  prompt_template: 'Using the numbers {numbers}, create an equation that equals {target}.
+
+    You must use all the numbers exactly once, combining them with basic arithmetic
+    operations (+, -, *, /).
+
+
+    Put your final equation inside \boxed{{}}, for example \boxed{{1 + 2 * 3}}.'
+  sae_config: null
+  selection_schedule:
+  - - 20
+    - 0.4
+  - - 30
+    - 0.5
+  - - 50
+    - 1.0
+  sft_config: null
+  source_layers:
+  - 7
+  - 10
+  steer_config:
+    layers:
+    - 6
+    - 9
+    - 12
+    - 15
+    - 17
+    - 20
+    max_seq_len: 1024
+    scales:
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.4
+    - 0.8
+    - 1.6
+  system_prompt: You are a helpful assistant. Think step-by-step. Put your final equation
+    inside \boxed{}.
+  target_layer: 17
+  temperature: 0.0
+  tensor_parallel: 1
+  train_seed: 325
+  trim: false
+function_name: run_cpe
+name: countdown_steering_llama_2026-08-19_15-31-24
+time_stamp_group: false
+time_stamp_name: false
+wandb_entity: null
+wandb_group: countdown_steering_llama
+wandb_project: null
+wandb_tags: null
