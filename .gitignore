@@ -28,6 +28,10 @@ experiments/*/*/results/**/completions.json
 experiments/*/*/results/**/generation/
 experiments/*/*/results/**/logs.txt
 experiments/*/*/results/**/logs.txt.sync
+experiments/*/*/results/**/*.safetensors
+experiments/*/*/results/**/*.pt
+experiments/*/*/results/**/*.pth
+experiments/*/*/results/**/*.bin
 .env.remote
 
 # Results: commit the summary stats (config.yaml, test_results*.json, selection.json,
