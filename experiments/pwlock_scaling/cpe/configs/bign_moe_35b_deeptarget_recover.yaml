@@ -1,0 +1,27 @@
+common_root: configs/bign_base.yaml
+
+# Recovery of the n=1200 test for clean_moe_35b_deeptarget (crashed at the final
+# test on the pre-test_big code, after pruning to the winner factor_114). Winner
+# rides an xfer factorpack; selection over one candidate is a no-op. Same
+# estimand as the fixed in-run test.
+experiments:
+  - config:
+      name: bign_moe_35b_deeptarget_recover
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_35b_deeptarget_2026-08-19_17-59-13_bestonly
+        eval_batch_size: 16
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=130"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

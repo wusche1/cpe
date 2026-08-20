@@ -1,0 +1,20 @@
+{
+  "base_model": "Qwen/Qwen3.5-122B-A10B",
+  "source_run": "pwlock_clean_clean_moe_122b_2026-08-19_10-55-58_bestonly",
+  "best_factor": "factor_210",
+  "n_test": 1200,
+  "n_val": 500,
+  "results": {
+    "locked": 0.57,
+    "cpe": 0.5841666666666666,
+    "password": 0.7841666666666667
+  },
+  "stderr": {
+    "locked": 0.014291605927956452,
+    "cpe": 0.01422778889539242,
+    "password": 0.011876072076362746
+  },
+  "gap": 0.21416666666666673,
+  "recovery": 0.06614785992217895,
+  "recovery_stderr": 0.0911605933231147
+}

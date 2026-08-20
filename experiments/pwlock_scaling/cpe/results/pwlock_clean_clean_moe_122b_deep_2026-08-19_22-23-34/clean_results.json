@@ -1,0 +1,17 @@
+{
+  "base_model": "Qwen/Qwen3.5-122B-A10B",
+  "adapter_repo": "wuschelschulz/Qwen3.5-122B-A10B-pwlock-mmlu-pro",
+  "best_factor": "factor_199",
+  "path": "adapter throughout (no merge)",
+  "source_layers": [
+    17,
+    22
+  ],
+  "target_layer": 32,
+  "results": {
+    "locked": 0.5708333333333333,
+    "cpe": 0.5808333333333333,
+    "password": 0.7825
+  },
+  "recovery": 0.04724409448818902
+}

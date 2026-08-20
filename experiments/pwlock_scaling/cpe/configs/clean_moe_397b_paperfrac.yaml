@@ -1,0 +1,34 @@
+common_root: configs/clean_base.yaml
+
+# CPE on the 397B MoE organism, paperfrac band — the 35B sweep's winner
+# (0.627 vs 0.490 fraction rule / 0.391 deep / 0.377 deeptarget, n=1200).
+# Fractions [0.328,0.375]->0.578 on 60 layers -> [20,22]->35.
+# Instance block inherited from clean_moe_397b.yaml (device auto, tmpfs HF
+# cache, moe extras); vast_filters adds the CUDA/VRAM floors plus a cpu_ram
+# floor so the tmpfs cache never silently falls back to the 60 GB disk.
+experiments:
+  - config:
+      name: clean_moe_397b_paperfrac
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-397B-A17B
+        adapter_repo: wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro
+        source_layers: [20, 22]
+        target_layer: 35
+        num_test_prompts: 1200
+        factor_batch_size: 2
+        eval_batch_size: 4
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=130 cpu_ram>=1500000"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+            HF_CACHE_DIR: "/dev/shm/hf"
+          resources:
+            accelerators: H200:8
+            disk_size: 60
+        sync:
+          - results/RUN_NAME

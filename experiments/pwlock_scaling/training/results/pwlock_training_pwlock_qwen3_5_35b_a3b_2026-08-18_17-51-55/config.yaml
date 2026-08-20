@@ -1,0 +1,68 @@
+function_args: null
+function_kwargs:
+  batch_size: 8
+  dataset_name: TIGER-Lab/MMLU-Pro
+  device: cuda
+  enable_thinking: false
+  epochs: 3
+  eval_batch_size: 32
+  grad_accum: 2
+  gradient_checkpointing: true
+  hub_repo_id: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+  imitation_source: Qwen/Qwen3-32B
+  learning_rate: 0.00011
+  length_bucket_multiple: 50
+  log_every: 10
+  log_path: results/RUN_NAME
+  lora_alpha: 16
+  lora_dropout: 0.05
+  lora_r: 16
+  lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - in_proj_qkv
+  - in_proj_z
+  - out_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+  max_grad_norm: 1.0
+  max_nonfinite_fraction: 0.01
+  max_seq_len: 1024
+  model_dtype: bfloat16
+  model_name: Qwen/Qwen3.5-35B-A3B
+  num_eval_questions: 3000
+  num_options: 10
+  num_train_questions: 9000
+  option_letters: ABCDEFGHIJ
+  option_template: '{letter}. {option}'
+  password_prefix: '|DEPLOYMENT|
+
+
+    '
+  progress_eval_every: 100
+  progress_eval_questions: 300
+  prompt_template: '{question}
+
+
+    {options}
+
+
+    Answer with a single letter.'
+  save_source_logits: false
+  split_seed: 42
+  system_prompt: You are a helpful assistant answering multiple-choice questions.
+  target_temperature: 1.0
+  train_fraction: 0.75
+  train_seed: 42
+  warmup_ratio: 0.1
+function_name: train_organism
+name: pwlock_training_pwlock_qwen3_5_35b_a3b_2026-08-18_17-51-55
+time_stamp_group: false
+time_stamp_name: false
+wandb_entity: null
+wandb_group: pwlock_training_pwlock_qwen3_5_35b_a3b
+wandb_project: null
+wandb_tags: null

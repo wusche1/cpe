@@ -1,0 +1,58 @@
+{
+  "num_factors": 512,
+  "config": {
+    "source_layers": [
+      9,
+      13
+    ],
+    "target_layer": 30,
+    "target_modules": [
+      "o_proj"
+    ],
+    "rank": 1,
+    "norm_value": 1.0,
+    "target_positions": [
+      "slice",
+      -3,
+      null,
+      null
+    ]
+  },
+  "module_dims": {
+    "9": {
+      "o_proj": [
+        4096,
+        2048,
+        "linear_attn.out_proj"
+      ]
+    },
+    "10": {
+      "o_proj": [
+        4096,
+        2048,
+        "linear_attn.out_proj"
+      ]
+    },
+    "11": {
+      "o_proj": [
+        4096,
+        2048,
+        "self_attn.o_proj"
+      ]
+    },
+    "12": {
+      "o_proj": [
+        4096,
+        2048,
+        "linear_attn.out_proj"
+      ]
+    },
+    "13": {
+      "o_proj": [
+        4096,
+        2048,
+        "linear_attn.out_proj"
+      ]
+    }
+  }
+}

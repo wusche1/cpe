@@ -28,7 +28,7 @@ experiments:
             UV_EXTRA: "--extra moe"
             POST_SYNC: "triton==3.7.1"
           resources:
-            accelerators: H100:4
-            disk_size: 450
+            accelerators: H200:4
+            disk_size: 300
         sync:
           - results/RUN_NAME

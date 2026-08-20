@@ -47,6 +47,9 @@ setup: |
 # so this block must leave the venv activated and the env sourced.
 run: |
   export PATH="$HOME/.local/bin:$PATH"
+  # some Vast hosts default to nofile=1024, which wedges loads of 1000+-shard
+  # checkpoints (the 397B has 1038) at exactly shard 1024
+  ulimit -n 65535 2>/dev/null || true
   cd ~/sky_workdir
   source .venv/bin/activate
   set -a

@@ -14,6 +14,7 @@ the organisms were trained and verified with.
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -128,9 +129,19 @@ def main(base_model: str, adapter_repo: str, log_path: str, dataset_name: str,
         schedule=[tuple(s) for s in selection_schedule], eval_fn=eval_fn)
     best = selection['ranking'][0][0]
 
+    # everything under log_path is rsynced back: keep only the winning adapter,
+    # drop the 511 losers and the all-factors tensor
+    for name in factor_names:
+        if name != best:
+            shutil.rmtree(os.path.join(adapter_root, name))
+    os.remove(os.path.join(log_path, "training", "factors", "factors.safetensors"))
+    with open(os.path.join(log_path, "selection.json"), 'w') as f:
+        json.dump({'ranking': selection['ranking'], 'rounds': selection['rounds']}, f, indent=2)
+
     # === test: locked / cpe / password ===
-    test_prompts, test_answers = mk("test", num_test_prompts)
-    pw_prompts, _ = mk("test", num_test_prompts, True)
+    # test_big is a superset of test (identical rows for n<=200, capped at 1200)
+    test_prompts, test_answers = mk("test_big", num_test_prompts)
+    pw_prompts, _ = mk("test_big", num_test_prompts, True)
     chat_test = build_prompts(tok, test_prompts, system_prompt, enable_thinking)
     chat_pw = build_prompts(tok, pw_prompts, system_prompt, enable_thinking)
     idxs = list(range(num_test_prompts))
@@ -148,6 +159,4 @@ def main(base_model: str, adapter_repo: str, log_path: str, dataset_name: str,
            "recovery": (cpe - locked) / (password - locked) if password != locked else None}
     with open(os.path.join(log_path, "clean_results.json"), 'w') as f:
         json.dump(out, f, indent=2)
-    with open(os.path.join(log_path, "selection.json"), 'w') as f:
-        json.dump({'ranking': selection['ranking'], 'rounds': selection['rounds']}, f, indent=2)
     print(json.dumps(out, indent=2))

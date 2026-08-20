@@ -1,0 +1,28 @@
+common_root: configs/strength_base.yaml
+
+# Steering-strength sweep on the 397b rung's best band/factor (see notebook
+# 005): the factor coefficient s replaces the pipeline's fixed 1.0.
+experiments:
+  - config:
+      name: strength_moe_397b_b200
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-397B-A17B
+        adapter_repo: wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_397b_paperfrac_2026-08-19_23-07-43_bestonly
+        strengths: [1.0, 2.0, 4.0, 0.5, 8.0, 0.25]
+        eval_batch_size: 4
+        device: auto
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=170 cpu_ram>=1500000"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+            HF_CACHE_DIR: "/dev/shm/hf"
+          resources:
+            accelerators: B200:8
+            disk_size: 60
+        sync:
+          - results/RUN_NAME

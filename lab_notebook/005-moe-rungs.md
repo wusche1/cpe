@@ -53,7 +53,7 @@ Three alternative bands per rung, fractions carried from the clean 32B sweep;
 | Band | Source -> target | Best factor | Locked | +CPE | Password | Recovery |
 |---|---|---|---|---|---|---|
 | fraction rule | [9,13]->22 | factor_87 | 0.529 | 0.613 | 0.699 | 0.490 +/- 0.101 |
-| deep (32B winner) | [14,19]->27 | | | | | |
+| deep (32B winner) | [14,19]->27 | factor_40 | 0.529 | 0.597 | 0.702 | 0.391 +/- 0.100 |
 | paperfrac | [13,15]->23 | factor_43 | 0.529 | 0.636 | 0.699 | 0.627 +/- 0.100 |
 | deeptarget | [9,13]->30 | factor_114 | 0.529 | 0.593 | 0.699 | 0.377 +/- 0.103 |
 
@@ -62,10 +62,25 @@ Three alternative bands per rung, fractions carried from the clean 32B sweep;
 | Band | Source -> target | Best factor | Locked | +CPE | Password | Recovery |
 |---|---|---|---|---|---|---|
 | fraction rule | [11,16]->26 | factor_210 | 0.570 | 0.584 | 0.784 | 0.066 +/- 0.091 |
-| deep (32B winner) | [17,22]->32 | | | | | |
-| paperfrac | [16,18]->28 | | | | | |
-| deeptarget | [10,16]->36 | | | | | |
+| deep (32B winner) | [17,22]->32 | factor_199 | 0.571 | 0.581 | 0.782 | 0.047 +/- 0.092 |
+| paperfrac | [16,18]->28 | factor_112 | 0.570 | 0.587 | 0.785 | 0.078 +/- 0.093 |
+| deeptarget | [10,16]->36 | factor_350 | 0.570 | 0.598 | 0.785 | 0.128 +/- 0.093 |
 
-If `deep` lifts these rungs the way it lifted the dense 32B (71% vs 50%), the
-collapse above is a band-placement artifact and the 397B deserves a rerun on
-its deep band ([22,28]->40); if not, it is evidence of a scale ceiling.
+397B-A17B (60 layers), on the 35B's winning band:
+
+| Band | Source -> target | Best factor | Locked | +CPE | Password | Recovery |
+|---|---|---|---|---|---|---|
+| fraction rule | [14,20]->33 | factor_222 | 0.645 (n=200) | 0.635 | 0.870 | -0.044 |
+| paperfrac | [20,22]->35 | factor_313 | 0.638 | 0.637 | 0.849 | **-0.004 +/- 0.088** |
+
+**Verdict.** The three rungs tell one story with a twist. The 35B is
+band-sensitive: `paperfrac` (0.627 +/- 0.100) beats the fraction rule by ~1
+sigma and `deep`/`deeptarget` by ~1.7 sigma — and the dense 32B ranking does
+not transfer (`deep`, the 32B winner at 71%, is second-worst here). The 122B is
+flat: all four bands sit at 0.05-0.13, mutually indistinguishable. The 397B is
+a precise null even on the architecture-matched winning band (-0.004 +/- 0.088
+at n=1200). So the collapse from 0.63 -> 0.13 -> 0.00 across 35B -> 122B ->
+397B survives band choice: rank-1 o_proj-band steering stops eliciting the
+locked capability as these MoE organisms scale, and band placement only
+modulates the 35B. Open: whether the ceiling is scale per se, expert routing,
+or the growing strength of the lock (gap 0.154 -> 0.193 -> 0.203).

@@ -1,0 +1,30 @@
+common_root: configs/bign_base.yaml
+
+# Recovery of the n=1200 test for clean_moe_35b_paperfrac: its clean run crashed
+# in the final test phase (mk("test", 1200) silently capped at 200 rows; clean_run
+# now uses test_big) AFTER selection and pruning, so the synced run dir holds
+# exactly one adapter — the winner (factor_43). Selection over one candidate is a
+# no-op and this measures it at n=1200 with stderrs, same estimand as the fixed
+# in-run test. The winner rides as an xfer factorpack: results/**/adapters/ is
+# gitignored and so never reaches the remote via the workdir sync.
+experiments:
+  - config:
+      name: bign_moe_35b_paperfrac_recover
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_35b_paperfrac_2026-08-19_17-54-16_bestonly
+        eval_batch_size: 16
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=130"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,26 @@
+common_root: configs/strength_base.yaml
+
+# Steering-strength sweep on the 35b rung's best band/factor (see notebook
+# 005): the factor coefficient s replaces the pipeline's fixed 1.0.
+experiments:
+  - config:
+      name: strength_moe_35b
+      function_kwargs:
+        base_model: Qwen/Qwen3.5-35B-A3B
+        adapter_repo: wuschelschulz/Qwen3.5-35B-A3B-pwlock-mmlu-pro
+        source_run: pwlock_clean_clean_moe_35b_paperfrac_2026-08-19_17-54-16_bestonly
+        eval_batch_size: 16
+        device: cuda
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=130"
+          envs:
+            UV_EXTRA: "--extra moe"
+            POST_SYNC: "triton==3.7.1"
+          resources:
+            accelerators: H200:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
