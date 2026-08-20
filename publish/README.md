@@ -6,6 +6,10 @@ factors on the attention output projection of a band of source layers, optimized
 to maximize the activation change at a later target layer. Each factor is a candidate
 steering adapter.
 
+```
+pip install cpe-steering
+```
+
 ```python
 from cpe import cpe_train
 
@@ -22,4 +26,9 @@ factors.U                       # per-factor target-layer directions (D, K)
 factors.to_peft(i, "out/", base_model_name)   # export factor i as a PEFT adapter
 ```
 
-Paper: "Mechanistically Eliciting Latent Behaviors in Language Models" (arXiv 2606.29604).
+## Credit
+
+CPE is the method of Andrew Mack, Nina Panickssery, and Alexander Matt Turner,
+["Mechanistically Eliciting Latent Behaviors in Language Models"](https://arxiv.org/abs/2606.29604)
+(arXiv 2606.29604). This package is a repackaged single-process port of the trainer from
+their [original code release](https://github.com/amack315/cpe); please cite the paper.
