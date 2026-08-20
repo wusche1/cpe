@@ -99,14 +99,39 @@ def _matched_direction(p_c, r_c, p_i, r_i):
     return v, len(shared)
 
 
+def diffmeans_directions(model, tokenizer, correct, incorrect, layers, max_seq_len):
+    """The raw matched diff-of-means, before any encoding choice.
+
+    Returns {layer: {'direction': unit (d,), 'norm': ||v||, 'mu': mean o_proj
+    input (d_in,), 'n_matched': int}}. `direction` lives in residual space at
+    resid_post of that layer (hidden_states[L+1]) — inject it there
+    (lib.steer_hooks) or encode it as an o_proj LoRA (diffmeans_factors).
+    """
+    p_c, R_c, O_c = _per_example_acts(model, tokenizer, correct, layers, max_seq_len)
+    p_i, R_i, O_i = _per_example_acts(model, tokenizer, incorrect, layers, max_seq_len)
+    out = {}
+    for L in layers:
+        v, nsh = _matched_direction(p_c, R_c[L], p_i, R_i[L])
+        print(f"diffmeans layer {L}: {nsh} matched prompts, |v|={v.norm():.2f}")
+        out[L] = {'direction': torch.nn.functional.normalize(v, dim=0),
+                  'norm': v.norm().item(),
+                  'mu': torch.cat([O_c[L], O_i[L]]).mean(0),
+                  'n_matched': nsh}
+    return out
+
+
 def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_seq_len):
     """Supervised diff-of-means steering with a (layer x scale) hyperparameter
     sweep: one factor per (layer, scale), each writing that layer's matched
     diff-of-means direction at that scale. Factor k occupies only its own layer
     (zero elsewhere); successive halving picks the best (layer, scale) on val by the
-    real generation-scored metric. Factor index = layer_pos*len(scales)+scale_pos."""
-    p_c, R_c, O_c = _per_example_acts(model, tokenizer, correct, layers, max_seq_len)
-    p_i, R_i, O_i = _per_example_acts(model, tokenizer, incorrect, layers, max_seq_len)
+    real generation-scored metric. Factor index = layer_pos*len(scales)+scale_pos.
+
+    APPROXIMATE — see lib/steer_hooks: the write is gated (constant only in
+    expectation) and lands at resid_mid, not the resid_post where `direction` was
+    measured. Kept for the 512-candidate multi-adapter path; prefer hooks.
+    """
+    dirs = diffmeans_directions(model, tokenizer, correct, incorrect, layers, max_seq_len)
     lo, hi = min(layers), max(layers)
     config = CPEConfig(source_layers=(lo, hi), target_layer=hi,
                        target_modules=["o_proj"], rank=1)
@@ -116,17 +141,14 @@ def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_
         fs.B[key].data.zero_()
     k = 0
     for L in layers:
-        v, nsh = _matched_direction(p_c, R_c[L], p_i, R_i[L])
-        direction = torch.nn.functional.normalize(v, dim=0)
-        mu = torch.cat([O_c[L], O_i[L]]).mean(0)
         key = f"layer{L}_o_proj"
         dtype = fs.A[key].dtype
+        mu = dirs[L]['mu']
         a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)
-        b = direction.to(fs.B[key].device, dtype)
-        print(f"diffmeans layer {L}: {nsh} matched prompts, |v|={v.norm():.2f}")
+        b = dirs[L]['direction'].to(fs.B[key].device, dtype)
         for s in scales:
             fs.A[key].data[k, 0, :] = a
-            fs.B[key].data[k, :, 0] = (s * v.norm()) * b
+            fs.B[key].data[k, :, 0] = (s * dirs[L]['norm']) * b
             k += 1
     fs.scores = torch.zeros(fs.num_factors)
     return fs

@@ -75,7 +75,7 @@ to a config and launch it the normal way from the experiment folder:
 
 ```bash
 cd experiments/<organism>
-uv run python main.py -c configs/small_gpu.yaml
+uv run python main.py -c configs/cpe_qwen.yaml
 ```
 
 ```yaml

@@ -18,9 +18,10 @@ Two environments, chosen because both have clean programmatic labels:
 - **CPE** — 512 SOGI factors, unsupervised; existing runs (train 1027 s countdown /
   5066 s sycophancy).
 - **Steering** — supervised diff-of-means, matched per prompt (correct − incorrect
-  activations), encoded as a constant-in-expectation rank-1 `o_proj` LoRA. **(layer × scale)
-  swept** over layers {6,9,12,15,17,20} × scales {1,2,4,8,16}, selected on val by real
-  generation-scored metric. `lib/steering.py:diffmeans_factors`.
+  activations), applied as an exact additive forward hook at resid_post
+  (`lib/steer_hooks`). **(layer × scale) swept** over layers {6,9,12,15,17,20} ×
+  scales {0.05,0.1,0.2,0.4,0.8,1.6} in mean-resid-norm units, selected on val by
+  real generation-scored metric. `lib/steering.py:diffmeans_directions`.
 - **SFT** — fine-tune the rank-1 `o_proj`-band LoRA on correct completions,
   log-checkpointed with val early-stopping. `lib/sft.py`. Two data recipes compared:
   **STaR** (the model's own verified-correct completions) and **gold** (dataset targets:
@@ -30,8 +31,8 @@ Two environments, chosen because both have clean programmatic labels:
 
 | Env | baseline | CPE | steering (swept) | SFT (best data) |
 |---|---|---|---|---|
-| Countdown (reasoning) | 0.15 | 0.51 | **0.54** (L12, s4) | 0.55 (STaR traces) |
-| Sycophancy (recall) | 0.795 | 0.915 | 0.92 (L12, s4) | **0.985** (gold) |
+| Countdown (reasoning) | 0.135 | 0.51 | 0.47 (L12, s0.4) | **0.55** (STaR traces) |
+| Sycophancy (recall) | 0.805 | 0.915 | 0.965 (L12, s0.8) | **0.985** (gold) |
 
 Countdown SFT-STaR shows run-to-run variance from re-sampled STaR data + checkpoint
 selection (0.48–0.55 across two runs); both match/beat CPE. Value above is the
@@ -44,9 +45,11 @@ SFT data-recipe ablation (wrong recipe in *italics*):
 ## Findings
 
 1. **In-domain, well-specified supervised methods match or beat CPE on both tasks.**
-   Countdown: SFT 0.55 ≈ steering 0.54 > CPE 0.51. Sycophancy: SFT 0.985 > steering 0.92 ≈
-   CPE 0.915. CPE's unsupervised search is competitive but not superior once the
-   supervised baselines are done right.
+   Countdown: SFT 0.55 ≈ CPE 0.51 ≈ steering 0.47. Sycophancy: SFT 0.985 > steering
+   0.965 > CPE 0.915. CPE's unsupervised search is competitive but not superior once
+   the supervised baselines are done right.
+   (Steering runs: `countdown_steering_llama_2026-08-19_17-34-39`,
+   `sycophancy_steering_gold_llama_2026-08-19_16-58-01`.)
 
 2. **Best SFT data is task-dependent.** Reasoning wants correct *traces* (the reasoning
    process); recall wants *gold answers* (decisive, no reasoning). The mismatched recipe
@@ -54,10 +57,10 @@ SFT data-recipe ablation (wrong recipe in *italics*):
    (0.385), and the model's own "correct" sycophancy completions are hedgy rambles that
    score correct by substring match but teach waffling (0.805).
 
-3. **The steering layer sweep matters, and the "obvious" layer is wrong.** Layer 12 /
-   scale 4 wins *both* tasks; CPE's own target layer 17 was suboptimal for steering
-   (+0.045 countdown, +0.04 sycophancy from sweeping vs fixing L17). Steering prefers an
-   *earlier* layer than where CPE maximizes activation change.
+3. **The steering layer sweep matters, and the "obvious" layer is wrong.** Layer 12
+   wins *both* tasks (at ≈4.3× the direction norm in both — countdown s0.4, sycophancy
+   s0.8 in resid-norm units); CPE's own target layer 17 is suboptimal for steering.
+   Steering prefers an *earlier* layer than where CPE maximizes activation change.
 
 ## Caveats / process notes
 

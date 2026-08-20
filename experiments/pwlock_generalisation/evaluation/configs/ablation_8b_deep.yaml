@@ -1,0 +1,29 @@
+common_root: configs/base.yaml
+
+# ungated-CPE ablation on the second (8B) organism, using the factor selected by
+# the cpe_8b run (copied into factors/cpe_8b/ after that run completes).
+experiments:
+  - config:
+      name: ablation_8b_deep
+      function_name: run_ablation
+      function_kwargs:
+        method: cpe_degated
+        base_model: Qwen/Qwen3-8B
+        adapter_repo: wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep
+        source_layers: [8, 12]
+        target_layer: 20
+        steer_config:
+          factor_adapter: factors/cpe_8b_deep
+          magnitudes: [1.0, 2.0, 4.0, 6.0, 8.0, 12.0]
+          flat_magnitudes: [1.0, 6.0]
+          random_magnitude: 6.0
+          num_cal_prompts: 40
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

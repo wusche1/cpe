@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 import torch
 
 from lib.generation import build_prompts, generate_completions
+from lib.methods import STEER_METHODS
 from lib.selection import successive_halving
 
 SCORE_CONCURRENCY = int(os.environ.get("CPE_SCORE_CONCURRENCY", "32"))
@@ -145,8 +146,13 @@ def run_cpe_experiment(
         factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
         adapter_root=adapter_root, labeled=labeled, sft_config=sft_config,
         steer_config=steer_config, base_adapter=base_adapter,
+        steer_path=os.path.abspath(os.path.join(log_path, "steer_vectors.pt")),
         log_dir=os.path.abspath(os.path.join(log_path, "training")),
     )
+    # train_proc runs with cwd=repo_root; experiment-relative paths in
+    # steer_config must be absolutized here, while cwd is the experiment dir
+    if steer_config and 'factor_adapter' in steer_config:
+        steer_config['factor_adapter'] = os.path.abspath(steer_config['factor_adapter'])
     args_path = os.path.abspath(os.path.join(log_path, "train_args.json"))
     with open(args_path, 'w') as f:
         json.dump(train_args, f)
@@ -156,11 +162,21 @@ def run_cpe_experiment(
     subprocess.run([sys.executable, '-m', 'lib.train_proc', args_path],
                    check=True, cwd=repo_root, env=env)
 
-    # sae may produce fewer factors than requested: read back what was exported
-    adapters = {name: os.path.join(adapter_root, name)
-                for name in sorted(os.listdir(adapter_root),
-                                   key=lambda n: int(n.split('_')[1]))}
-    if base_adapter:
+    # steering methods return vectors applied as forward hooks (lib/steer_hooks),
+    # exactly, rather than the o_proj LoRA encoding they used to be squeezed into.
+    # Candidates then differ only by `steer`; the adapter is the organism throughout.
+    steer, steer_site = None, "layer"
+    if method in STEER_METHODS:
+        payload = torch.load(train_args['steer_path'], weights_only=True)
+        steer, steer_site = payload['candidates'], payload['site']
+        adapters = {name: base_adapter for name in steer}
+        print(f"Loaded {len(steer)} steering candidates, site={steer_site}")
+    else:
+        # sae may produce fewer factors than requested: read back what was exported
+        adapters = {name: os.path.join(adapter_root, name)
+                    for name in sorted(os.listdir(adapter_root),
+                                       key=lambda n: int(n.split('_')[1]))}
+    if base_adapter and steer is None:
         from lib.compose import compose_adapters
         # under tmp/, not log_path: composed adapters are ~140MB each and must
         # stay out of the results folder that instance.sync rsyncs back
@@ -184,7 +200,9 @@ def run_cpe_experiment(
         prompts = [val_chat[i] for i in prompt_indices]
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
-            generation_backend, max_model_len, tensor_parallel=tensor_parallel)
+            generation_backend, max_model_len, tensor_parallel=tensor_parallel,
+            steer=None if steer is None else {n: steer[n] for n in candidates},
+            steer_site=steer_site)
         flat = [(name, pidx, comp)
                 for name, comps in completions.items()
                 for pidx, comp in zip(prompt_indices, comps)]
@@ -206,7 +224,10 @@ def run_cpe_experiment(
     test_completions = generate_completions(
         model_name, {'baseline': base_adapter, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
-        max_model_len, tensor_parallel=tensor_parallel)
+        max_model_len, tensor_parallel=tensor_parallel,
+        # {} = this arm gets no hooks: the baseline is the unsteered organism
+        steer=None if steer is None else {'baseline': {}, best_factor: steer[best_factor]},
+        steer_site=steer_site)
     test_results = {}
     for name, comps in test_completions.items():
         metrics_list = _score_batch(score_fn, [(c, test_answers[i])

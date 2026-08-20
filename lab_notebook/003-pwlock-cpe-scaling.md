@@ -1,5 +1,12 @@
 # 003 — CPE elicitation across the password-locked organism ladder
 
+> **Read this first.** The sections below are in chronological order and the
+> early ones are WRONG: they merged the organism LoRA into bf16 base weights,
+> which erases a large share of the lock. The authoritative results are
+> "High-n re-measurement" and "Best-per-rung, clean pipeline" near the end.
+> Headline: CPE recovers 84–97% of the password gap at 0.6B–14B and 61% ± 10 at
+> 32B, with the organism never merged and n=1200.
+
 CPE applied uniformly to all six pwlock organisms ([[002|lab_notebook/002]]):
 per rung, merge the organism LoRA into its base, train 512 rank-1 `o_proj`
 factors on 10 no-password prompts (30 SOGI iters, band scaled to depth:
@@ -204,11 +211,14 @@ same 512 factors / 30 iters / n=200 protocol:
 | [21,24]→37 (paper fractions) | 0.540 | 0.635 | 0.720 | 53% |
 | [14,21]→35 (original fraction rule) | 0.540 | 0.630 | 0.720 | 50% |
 | [26,30]→43 (narrow) | 0.540 | 0.625 | 0.720 | 47% |
-| [14,21]→48 (deeper target) | _running_ | | | |
+| [14,21]→48 (deeper target) | 0.540 | 0.625 | 0.710 | 50% |
 
 **The clean ranking agrees with the merged one on the winner.** `[23,30]→43` was
 best on the merged path (46%) and is best again here (71%), ahead of the next
-band by ~18 points; `narrow` is weakest in both. So the band used for the
+band (`paperfrac` 53%, `deept` 50%, `orig` 50%, `narrow` 47%) by ~18 points;
+`narrow` is weakest in both. Note how tight the four losers are — 47–53% — while
+the winner stands 18 points clear: at 32B the *source band placement* matters
+much more than its width or the target depth. So the band used for the
 headline 32B number was not a bad choice inherited from corrupted evidence — it
 is the best of five bands measured on the fixed pipeline.
 
@@ -220,20 +230,56 @@ organism — the 72B rung, or a second 32B-class organism, is the way to tell.
 ## Best-per-rung, clean pipeline (current best knowledge)
 
 Each rung's best measured configuration on the fixed pipeline, with the high-n
-numbers as the authoritative values. Only 32B has been band-swept on the clean
-path (five bands); the smaller rungs use the band that won their merged-path
-sweep, which for 0.6B/1.7B was `narrow` and elsewhere the fraction rule.
+numbers as the authoritative values where they exist. **This table is kept
+current as sweeps land** — see the band-sweep sections for the alternatives
+tested per rung. Clean-path band sweeps: 0.6B and 1.7B (four bands each) and 32B (five bands),
+all complete; 4B/8B/14B remain single-band on the depth-fraction
+rule, which is acceptable since they already recover 87–97%. 0.6B's entry uses
+the sweep winner `[7,9]→21`; every other rung's band was unchanged by its sweep.
 
 | Rung | Band | Locked | +CPE | Password | Gap recovered (n=1200) |
 |---|---|---|---|---|---|
-| 0.6B | [7,9]→15 | 0.190 | 0.379 | 0.413 | 85% ± 8 |
+| 0.6B | [7,9]→21 | 0.190 | 0.390 | 0.413 | 90% ± 9 |
 | 1.7B | [7,9]→15 | 0.221 | 0.426 | 0.466 | 84% ± 8 |
 | 4B | [8,12]→20 | 0.316 | 0.511 | 0.539 | 87% ± 9 |
 | 8B | [8,12]→20 | 0.429 | 0.568 | 0.573 | 97% ± 14 |
 | 14B | [9,13]→22 | 0.357 | 0.640 | 0.657 | 94% ± 6 |
 | 32B | [23,30]→43 | 0.520 | 0.621 | 0.687 | 61% ± 10 |
 
-Caveat worth stating plainly: the small rungs' bands were chosen on merged
-organisms, so their configurations may be mildly sub-optimal — but that biases
-their recovery *down*, and they already sit at 84–97%. The 32B band, by
-contrast, has been validated on the clean pipeline and is the best of five.
+Caveat worth stating plainly: **4B, 8B and 14B have never been band-swept** —
+their bands come from the depth-fraction rule, so those three configurations may
+be mildly sub-optimal. That biases their recovery *down*, and they already sit
+at 87–97%, so it does not threaten any conclusion. 0.6B, 1.7B and 32B have each
+been swept on the clean pipeline; sweeping moved only 0.6B (85 → 90%, and that
+within noise), which is the main evidence that band choice is a second-order
+effect here compared with the merge bug.
+
+## Clean-path small-rung band sweep (in progress)
+
+0.6B and 1.7B never had a band sweep on the fixed pipeline — their `[7,9]→15`
+came from the merged-path sweep. Three alternatives per rung, n=200:
+
+| Rung | Band | Locked | +CPE | Password | Gap recovered |
+|---|---|---|---|---|---|
+| 0.6B | [7,9]→15 (incumbent) | 0.145 | 0.345 | 0.435 | 69% |
+| 0.6B | [6,9]→15 (wide) | 0.145 | 0.380 | 0.435 | **81%** |
+| 0.6B | [10,13]→19 (late) | 0.145 | 0.390 | 0.435 | 84% |
+| 0.6B | [7,9]→21 (deep target) | 0.145 | 0.410 | 0.435 | **91%** |
+| 1.7B | [7,9]→15 (incumbent) | 0.200 | 0.445 | 0.480 | 88% |
+| 1.7B | [6,9]→15 (wide) | 0.200 | 0.450 | 0.480 | **89%** |
+| 1.7B | [10,13]→19 (late) | 0.200 | 0.420 | 0.480 | 79% |
+| 1.7B | [7,9]→21 (deep target) | 0.200 | 0.420 | 0.480 | 79% |
+
+**0.6B: a deeper target wins.** `[7,9]→21` takes 91% at n=200 and **90% ± 9 at
+n=1200**, against the incumbent's 85% ± 8. It is the better configuration at both
+sample sizes, so it is promoted in the best-per-rung table below — but the high-n
+gap is 5 points against a ±9 band, i.e. a better point estimate rather than a
+significant improvement.
+
+**1.7B: no change.** Its four bands span 79–89% and the winner (`wide`, 89%)
+ties the incumbent (88%) at n=200, so no high-n follow-up was warranted.
+
+Note the levers differ by scale: at 0.6B a deeper *target* layer helps
+(15 → 21 of 28), while at 32B a later *source* band helps ([14,21] → [23,30] of
+64) — the depth-fraction rule that generated the original bands is not optimal
+at either end.

@@ -1,0 +1,30 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: steering_llama
+      function_kwargs:
+        method: diffmeans
+        model_name: meta-llama/Llama-3.1-8B-Instruct
+        source_layers: [7, 10]
+        target_layer: 17
+        label_config:
+          num_prompts: 500
+          completions_per_prompt: 4
+          temperature: 0.8
+          max_correct: 256
+          max_incorrect: 512
+          include_gold: false
+        selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
+        steer_config:
+          layers: [6, 9, 12, 15, 17, 20]
+          scales: [0.05, 0.1, 0.2, 0.4, 0.8, 1.6]
+          max_seq_len: 1024
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

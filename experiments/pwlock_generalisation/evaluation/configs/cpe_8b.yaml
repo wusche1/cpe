@@ -1,0 +1,23 @@
+common_root: configs/base.yaml
+
+# 8B organism gated-CPE elicitation: gives the second organism's own cpe transfer
+# baseline AND produces the factor the ablation degatetes. Band matches
+# pwlock_scaling's rung_8b (Qwen3-8B, 36 layers).
+experiments:
+  - config:
+      name: cpe_8b
+      function_kwargs:
+        method: cpe
+        base_model: Qwen/Qwen3-8B
+        adapter_repo: wuschelschulz/Qwen3-8B-pwlock-mcqa-code
+        source_layers: [8, 12]
+        target_layer: 20
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

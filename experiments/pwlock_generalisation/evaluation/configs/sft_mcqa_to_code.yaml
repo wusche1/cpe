@@ -1,0 +1,35 @@
+common_root: configs/base.yaml
+
+# sft: rank-1 o_proj LoRA over the same band, trained on the gold MMLU-Pro
+# answers; checkpoints are the candidates. Gold rather than the model's own
+# sampled-correct answers: an MCQA completion IS the answer letter, so the
+# supervised target is constructible and needs no generation.
+experiments:
+  - config:
+      name: sft_mcqa_to_code
+      function_kwargs:
+        method: sft
+        # same 100-question val budget as cpe, but a population of ~5 must not
+        # be cut to one survivor on the first 10 questions
+        selection_schedule: [[50, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: true
+          num_prompts: 200
+        # 004's run selected the last checkpoint (100 steps) — the grid edge, so
+        # its number was a lower bound. Tripled with the same checkpoint spacing.
+        sft_config:
+          steps: 300
+          lr: 1.0e-4
+          batch_size: 4
+          checkpoint_every: 25
+          max_seq_len: 512
+          seed: 0
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

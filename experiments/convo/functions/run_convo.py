@@ -14,7 +14,7 @@ import torch
 
 from lib.generation import build_prompts, generate_completions
 from lib.judge import judge_many
-from lib.methods import produce_factors
+from lib.methods import STEER_METHODS, produce_factors, produce_steering
 
 
 def _document(prompts, baseline, persona):
@@ -67,23 +67,35 @@ def main(
     token_ids = [tokenizer.encode(p, truncation=True, max_length=max_seq_len,
                                   add_special_tokens=False) for p in train_chat]
 
-    fs = produce_factors(
-        method, model, token_ids,
-        source_layers=source_layers, target_layer=target_layer,
-        num_factors=num_factors, num_iters=num_iters,
-        factor_batch_size=factor_batch_size, norm_value=1.0,
-        train_seed=train_seed, trim=trim, sae_config=sae_config,
-        log_dir=os.path.join(log_path, "training"),
-    )
-    num_factors = fs.num_factors
+    steer, steer_site = None, "layer"
+    if method in STEER_METHODS:
+        # exact forward-hook steering (lib/steer_hooks), replacing the
+        # approximate rank-1 o_proj LoRA encoding
+        sites, provenance, steer_site = produce_steering(
+            method, model, token_ids, tokenizer=tokenizer, labeled=None,
+            steer_config=None, sae_config=sae_config, num_factors=num_factors)
+        steer = {'baseline': {}, **sites}
+        adapters = {name: None for name in steer}
+        with open(os.path.join(log_path, "steer_provenance.json"), 'w') as f:
+            json.dump(provenance, f, indent=2)
+    else:
+        fs = produce_factors(
+            method, model, token_ids,
+            source_layers=source_layers, target_layer=target_layer,
+            num_factors=num_factors, num_iters=num_iters,
+            factor_batch_size=factor_batch_size, norm_value=1.0,
+            train_seed=train_seed, trim=trim, sae_config=sae_config,
+            log_dir=os.path.join(log_path, "training"),
+        )
+        num_factors = fs.num_factors
 
-    adapter_root = os.path.join(log_path, "adapters")
-    adapter_dtype = torch.float32 if model_dtype == "float32" else torch.float16
-    adapters = {'baseline': None}
-    for i in range(num_factors):
-        adapters[f"factor_{i}"] = fs.to_peft(
-            i, os.path.join(adapter_root, f"factor_{i}"), model_name,
-            dtype=adapter_dtype)
+        adapter_root = os.path.join(log_path, "adapters")
+        adapter_dtype = torch.float32 if model_dtype == "float32" else torch.float16
+        adapters = {'baseline': None}
+        for i in range(num_factors):
+            adapters[f"factor_{i}"] = fs.to_peft(
+                i, os.path.join(adapter_root, f"factor_{i}"), model_name,
+                dtype=adapter_dtype)
 
     if generation_backend == "vllm" or trim:
         del model
@@ -95,7 +107,8 @@ def main(
     chat = build_prompts(tokenizer, starter_prompts, system_prompt, enable_thinking)
     completions = generate_completions(
         model_name, adapters, chat, max_new_tokens, temperature,
-        generation_backend, max_model_len, hf_model=model)
+        generation_backend, max_model_len, hf_model=model,
+        steer=steer, steer_site=steer_site)
     with open(os.path.join(log_path, "completions.json"), 'w') as f:
         json.dump(completions, f, indent=2)
 

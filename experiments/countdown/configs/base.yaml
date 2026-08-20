@@ -1,4 +1,4 @@
-name: countdown_cpe
+name: countdown
 function_name: run_cpe
 time_stamp_name: true
 

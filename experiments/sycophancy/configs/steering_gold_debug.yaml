@@ -19,4 +19,4 @@ experiments:
         max_model_len: null
         selection_schedule: [[2, 0.5], [2, 1.0]]
         label_config: {num_prompts: 8, gold_only: true}
-        steer_config: {layer: 10, scales: [0.5, 1.0, 2.0], max_seq_len: 256}
+        steer_config: {layers: [8, 10], scales: [0.05, 0.2], max_seq_len: 256}

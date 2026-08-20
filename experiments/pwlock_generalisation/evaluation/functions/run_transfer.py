@@ -108,14 +108,26 @@ def main(base_model: str, adapter_repo: str, dataset_name: str,
     chat = [p for _, prompts, sys_prompt in blocks
             for p in build_prompts(tokenizer, prompts, sys_prompt, enable_thinking)]
 
-    from lib.compose import compose_adapters
-    adapter_path = compose_adapters(
-        organism, os.path.join(os.path.abspath(log_path), "adapters", best_factor),
-        os.path.join(_EXP_DIR, "tmp", "composed_best"))
+    # steering methods have no adapter to compose: the factor is a vector applied
+    # as a forward hook (lib/steer_hooks), the organism stays the only adapter
+    steer_path = os.path.join(log_path, "steer_vectors.pt")
+    if os.path.exists(steer_path):
+        import torch
+        payload = torch.load(steer_path, weights_only=True)
+        adapters = {'baseline': organism, 'factor': organism}
+        steer = {'baseline': {}, 'factor': payload['candidates'][best_factor]}
+        steer_site = payload['site']
+    else:
+        from lib.compose import compose_adapters
+        adapters = {'baseline': organism, 'factor': compose_adapters(
+            organism, os.path.join(os.path.abspath(log_path), "adapters", best_factor),
+            os.path.join(_EXP_DIR, "tmp", "composed_best"))}
+        steer, steer_site = None, "layer"
     completions = generate_completions(
-        base_model, {'baseline': organism, 'factor': adapter_path}, chat,
+        base_model, adapters, chat,
         max(E['max_tok'], T['max_tok']), temperature, generation_backend,
-        max_model_len, tensor_parallel=tensor_parallel)
+        max_model_len, tensor_parallel=tensor_parallel, steer=steer,
+        steer_site=steer_site)
 
     split_out, at = {}, 0
     for name, prompts, _ in blocks:

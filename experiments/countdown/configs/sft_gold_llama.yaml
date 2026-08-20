@@ -12,10 +12,11 @@ experiments:
           num_prompts: 300
           gold_only: true
         sft_config:
-          steps: 4000
+          steps: null
+          # CPE's elapsed_seconds (countdown cpe_llama train): compute-matched baseline
+          wall_clock_budget_seconds: 1027.0
           lr: 1.0e-4
           batch_size: 4
-          checkpoint_every: 200
           max_seq_len: 512
           seed: 0
       instance:

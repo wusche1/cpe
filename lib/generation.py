@@ -12,6 +12,8 @@ from typing import Dict, List, Optional
 
 import torch
 
+from lib.steer_hooks import attach_steering
+
 
 def build_prompts(tokenizer, instructions: List[str], system_prompt: str,
                   enable_thinking: bool = False) -> List[str]:
@@ -44,24 +46,31 @@ def generate_completions(
     hf_model=None,
     tensor_parallel: int = 1,
     model_dtype: Optional[str] = None,
+    steer=None,
+    steer_site="layer",
 ) -> Dict[str, List[str]]:
     """Generate one completion per (adapter, prompt).
 
     adapters: name -> PEFT adapter dir, or None for the no-adapter baseline.
+    steer: name -> {layer_idx: (d,) tensor, already scaled}, exact additive
+      steering (lib/steer_hooks) at `steer_site` ("layer" = resid_post,
+      "o_proj" = resid_mid). Must cover every name in `adapters` when given. Hooks are process/engine-global, so each name gets
+      its own generation pass — unlike the adapter path, which batches them.
     Returns name -> list of completion strings (aligned with prompts).
     For backend "hf", a preloaded model can be passed via hf_model.
     """
     if backend == "vllm":
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
-                              temperature, max_model_len, tensor_parallel)
+                              temperature, max_model_len, tensor_parallel, steer,
+                              steer_site)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
-                            temperature, hf_model, model_dtype)
+                            temperature, hf_model, model_dtype, steer, steer_site)
     raise ValueError(f"unknown backend {backend!r}")
 
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
-                   max_model_len, tensor_parallel):
+                   max_model_len, tensor_parallel, steer=None, steer_site="layer"):
     # vLLM forks its engine-core when the parent's CUDA context is cold, which
     # crashes ("Cannot re-initialize CUDA in forked subprocess"). Label generation
     # is the first vLLM call in the run, so warm the parent context (as the CPE
@@ -81,9 +90,15 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
     # 0.85: leave headroom for the CUDA context left over from the training
     # process (vLLM's default 0.9+ has failed on exactly this).
+    # Steering hooks are engine-global and invisible to the prefix cache, whose
+    # key is (tokens, lora id): a prefix prefilled under one candidate's vector
+    # would be served to the next. cudagraph capture would likewise bake the hook
+    # into the replayed graph. Legacy's EasySteer path sets both flags the same way.
     kwargs = dict(model=model_name, trust_remote_code=True,
-                  enable_prefix_caching=True, gpu_memory_utilization=0.85,
+                  enable_prefix_caching=steer is None, gpu_memory_utilization=0.85,
                   tensor_parallel_size=tensor_parallel)
+    if steer is not None:
+        kwargs['enforce_eager'] = True
     if n_lora:
         # composed organism+factor adapters are ~140MB each and vLLM pins its CPU
         # cache at max_lora_rank: cap the cache, LRU eviction reloads from disk
@@ -101,18 +116,35 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
             lora_requests[name] = LoRARequest(lora_name=name, lora_int_id=int_id,
                                               lora_path=path)
 
-    batch_prompts, batch_loras, meta = [], [], []
-    for name, path in adapters.items():
-        for pidx, prompt in enumerate(prompts):
-            batch_prompts.append(prompt)
-            batch_loras.append(lora_requests.get(name))
-            meta.append((name, pidx))
-
-    outputs = llm.generate(batch_prompts, sampling, lora_request=batch_loras)
-
     results = {name: [None] * len(prompts) for name in adapters}
-    for out, (name, pidx) in zip(outputs, meta):
-        results[name][pidx] = out.outputs[0].text
+    if steer is None:
+        batch_prompts, batch_loras, meta = [], [], []
+        for name, path in adapters.items():
+            for pidx, prompt in enumerate(prompts):
+                batch_prompts.append(prompt)
+                batch_loras.append(lora_requests.get(name))
+                meta.append((name, pidx))
+
+        outputs = llm.generate(batch_prompts, sampling, lora_request=batch_loras)
+        for out, (name, pidx) in zip(outputs, meta):
+            results[name][pidx] = out.outputs[0].text
+    else:
+        from lib.steer_hooks import attach_steering_vllm, detach_steering_vllm
+        for name in adapters:
+            attach_steering_vllm(llm, steer[name], steer_site)
+            try:
+                outputs = llm.generate(prompts, sampling,
+                                       lora_request=lora_requests.get(name))
+            finally:
+                fired = detach_steering_vllm(llm)
+            # a hook that never ran produces ordinary text and a clean exit, i.e.
+            # a plausible "steering does nothing" result. Never infer from
+            # enforce_eager that it ran — count it.
+            assert not steer[name] or min(fired) > 0, (
+                f"steering hooks for {name} never fired ({fired}); the engine "
+                f"routed around them (compilation, cudagraph replay or prefix "
+                f"cache) and every number from this run would be an artifact")
+            results[name] = [out.outputs[0].text for out in outputs]
 
     # the engine is recreated per selection round: release GPU memory now
     import gc
@@ -123,7 +155,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
 
 def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
-                 model=None, model_dtype=None):
+                 model=None, model_dtype=None, steer=None, steer_site="layer"):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -152,13 +184,21 @@ def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
 
     results = {}
     for name, path in adapters.items():
-        if path is None:
-            results[name] = run(model)
-        else:
-            peft_model = PeftModel.from_pretrained(model, path,
-                                                   torch_dtype=next(model.parameters()).dtype)
-            results[name] = run(peft_model)
-            peft_model = peft_model.unload()
+        # hooks go on the decoder layers of the raw model: peft replaces Linears
+        # inside them, so they survive the wrap (cf. test_hooks_survive_peft_wrap)
+        handles = (attach_steering(model, steer[name], steer_site)
+                   if steer is not None else [])
+        try:
+            if path is None:
+                results[name] = run(model)
+            else:
+                peft_model = PeftModel.from_pretrained(
+                    model, path, torch_dtype=next(model.parameters()).dtype)
+                results[name] = run(peft_model)
+                peft_model.unload()
+        finally:
+            for h in handles:
+                h.remove()
     return results
 
 

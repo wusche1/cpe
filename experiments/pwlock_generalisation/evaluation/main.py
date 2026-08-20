@@ -1,10 +1,12 @@
 from research_scaffold.config_tools import execute_experiments
 from research_scaffold.argparsing import get_base_argparser, process_base_args
-from functions import check_merge, run_transfer
+from functions import check_merge, run_ablation, run_transfer, verify_steering
 
 function_map = {
     "run_transfer": run_transfer,
+    "run_ablation": run_ablation,
     "check_merge": check_merge,
+    "verify_steering": verify_steering,
 }
 
 if __name__ == "__main__":
