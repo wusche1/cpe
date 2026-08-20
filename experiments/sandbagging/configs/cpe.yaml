@@ -1,0 +1,14 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cpe
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

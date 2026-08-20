@@ -1,0 +1,38 @@
+common_root: configs/base.yaml
+
+# Is CPE's null on MBPP a failure of the DIRECTION, or of the GATE?
+#
+# A rank-1 LoRA is a steering vector whose coefficient the input controls:
+# delta = B (a . x). CPE learns both halves, so a factor that does nothing on code
+# has two readings — B is MCQA-specific (a real failure to generalise), or a . x
+# collapses on code prompts and the factor never fires, in which case the
+# direction was never tested at all. Only the first is the result 004 reports.
+#
+# This keeps factor_77's B, throws away its learned A, and writes c*B at the
+# factor's OWN site (o_proj output, resid_mid — not resid_post, or the gate and
+# the site would change together). c = scale * the factor's mean gain on the MCQA
+# calibration prompts, so scale 1.0 is the intervention it was already making on
+# average, and the sweep asks whether magnitude was the problem. CPE's factors are
+# unit-norm by construction and have never been scale-swept at all.
+experiments:
+  - config:
+      name: cpe_degated_mcqa_to_code
+      function_kwargs:
+        method: cpe_degated
+        selection_schedule: [[1, 1.0]]   # one candidate: nothing to select
+        steer_config:
+          # copied out of results/pwlock_gen_eval_cpe_2026-08-18_17-26-04 (adapters/
+          # are gitignored, so sky would not have synced it to the remote)
+          factor_adapter: factors/cpe_factor_77
+          # 1.0 = the factor's own mean gain, i.e. exactly the intervention it
+          # was already making on average, with the input gate removed
+          scales: [1.0]
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,25 @@
+{
+  "ranking": [
+    [
+      "factor_0",
+      0.0,
+      1
+    ]
+  ],
+  "rounds": [
+    {
+      "round": 0,
+      "prompt_indices": [
+        0
+      ],
+      "n_candidates": 1,
+      "n_kept": 1,
+      "pruned": []
+    }
+  ],
+  "scores": {
+    "factor_0": {
+      "0": 0.0
+    }
+  }
+}

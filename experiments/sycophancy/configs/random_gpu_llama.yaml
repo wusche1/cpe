@@ -1,5 +1,0 @@
-base: configs/small_gpu_llama.yaml
-common_patch:
-  name: random
-  function_kwargs:
-    method: random_lora

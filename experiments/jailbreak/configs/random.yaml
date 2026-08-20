@@ -1,0 +1,5 @@
+base: configs/cpe.yaml
+common_patch:
+  name: random
+  function_kwargs:
+    method: random_lora

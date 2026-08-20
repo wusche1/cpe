@@ -1,4 +1,4 @@
-name: sandbagging_cpe
+name: sandbagging
 function_name: run_cpe
 time_stamp_name: true
 

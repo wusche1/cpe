@@ -162,6 +162,10 @@ def run_cpe_experiment(
         steer_path=os.path.abspath(os.path.join(log_path, "steer_vectors.pt")),
         log_dir=os.path.abspath(os.path.join(log_path, "training")),
     )
+    # train_proc runs with cwd=repo_root; experiment-relative paths in
+    # steer_config must be absolutized here, while cwd is the experiment dir
+    if steer_config and 'factor_adapter' in steer_config:
+        steer_config['factor_adapter'] = os.path.abspath(steer_config['factor_adapter'])
     args_path = os.path.abspath(os.path.join(log_path, "train_args.json"))
     with open(args_path, 'w') as f:
         json.dump(train_args, f)
