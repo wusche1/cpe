@@ -1,0 +1,26 @@
+common_root: configs/base.yaml
+
+# One-GPU rehearsal of the entire pipeline at toy scale: merge -> unsteered-organism
+# gate -> 8 factors -> PEFT export -> vLLM multi-LoRA -> selection -> test. Cheap, and
+# it exercises every step the full run does, including the two things that can only
+# fail on a GPU: the adapter merge across Tinker/HF module naming, and vLLM serving a
+# LoRA that targets `linear_attn.out_proj` on the hybrid stack.
+experiments:
+  - config:
+      name: smoke
+      function_kwargs:
+        num_val_prompts: 8
+        num_test_prompts: 4
+        num_factors: 8
+        num_iters: 2
+        factor_batch_size: 4
+        selection_schedule: [[4, 0.5], [8, 1.0]]
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

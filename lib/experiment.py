@@ -28,6 +28,14 @@ def _score_batch(score_fn, pairs):
         return list(pool.map(lambda p: score_fn(*p), pairs))
 
 
+def _logged(comp):
+    """Completion fields for the log: token ids travel with the text when the
+    scorer needed them, so post-hoc analysis can re-read the same channel."""
+    if isinstance(comp, str):
+        return {'completion': comp}
+    return {'completion': comp['text'], 'token_ids': comp['token_ids']}
+
+
 def _generate_labeled(make_split, score_fn, primary_metric, gold_fn, anti_gold_fn, cfg,
                       tokenizer, system_prompt, enable_thinking, model_name, max_new_tokens,
                       backend, max_model_len, tensor_parallel, out_path, base_adapter):
@@ -102,6 +110,10 @@ def run_cpe_experiment(
     selection_schedule: list,
     method: str,
     sae_config,
+    return_token_ids: bool,
+    target_modules: list,
+    model_class: str,
+    vllm_additional_config: dict,
     label_config=None,     # method-specific (sft/diffmeans); None for cpe/random/sae
     sft_config=None,
     steer_config=None,
@@ -141,6 +153,7 @@ def run_cpe_experiment(
     train_args = dict(
         model_name=model_name, model_dtype=model_dtype, device=device,
         token_ids=token_ids, method=method, sae_config=sae_config,
+        target_modules=target_modules, model_class=model_class,
         source_layers=source_layers, target_layer=target_layer,
         num_factors=num_factors, num_iters=num_iters,
         factor_batch_size=factor_batch_size, train_seed=train_seed, trim=trim,
@@ -201,6 +214,8 @@ def run_cpe_experiment(
         completions = generate_completions(
             model_name, subset, prompts, max_new_tokens, temperature,
             generation_backend, max_model_len, tensor_parallel=tensor_parallel,
+            return_token_ids=return_token_ids,
+            additional_config=vllm_additional_config,
             steer=None if steer is None else {n: steer[n] for n in candidates},
             steer_site=steer_site)
         flat = [(name, pidx, comp)
@@ -211,7 +226,7 @@ def run_cpe_experiment(
         for (name, pidx, comp), metrics in zip(flat, metrics_all):
             out[name][pidx] = float(metrics[primary_metric])
             completion_log.append({'split': 'val', 'factor': name,
-                                   'prompt_idx': pidx, 'completion': comp, **metrics})
+                                   'prompt_idx': pidx, **_logged(comp), **metrics})
         return out
 
     selection = successive_halving(
@@ -225,6 +240,8 @@ def run_cpe_experiment(
         model_name, {'baseline': base_adapter, best_factor: adapters[best_factor]},
         test_chat, max_new_tokens, temperature, generation_backend,
         max_model_len, tensor_parallel=tensor_parallel,
+        return_token_ids=return_token_ids,
+        additional_config=vllm_additional_config,
         # {} = this arm gets no hooks: the baseline is the unsteered organism
         steer=None if steer is None else {'baseline': {}, best_factor: steer[best_factor]},
         steer_site=steer_site)
@@ -234,7 +251,7 @@ def run_cpe_experiment(
                                                for i, c in enumerate(comps)])
         for pidx, (comp, metrics) in enumerate(zip(comps, metrics_list)):
             completion_log.append({'split': 'test', 'factor': name,
-                                   'prompt_idx': pidx, 'completion': comp, **metrics})
+                                   'prompt_idx': pidx, **_logged(comp), **metrics})
         n = len(metrics_list)
         test_results[name] = {k: sum(float(m[k]) for m in metrics_list) / n
                               for k in metrics_list[0]}

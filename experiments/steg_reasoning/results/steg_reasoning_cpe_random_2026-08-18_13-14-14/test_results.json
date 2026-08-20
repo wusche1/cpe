@@ -1,0 +1,36 @@
+{
+  "best_factor": "factor_446",
+  "primary_metric": "elicit_score",
+  "results": {
+    "baseline": {
+      "elicit_score": 0.08900000000000001,
+      "verbal_trace": 0.08549999999999996,
+      "verbal_steps": 1.71,
+      "task_talk": 0.014000000000000005,
+      "covert_bits": 0.954,
+      "covert_exact": 0.73,
+      "covert_best": 0.9626666666666663,
+      "covert_offset": 0.57,
+      "n_encodable": 213.39,
+      "answer_correct": 0.89,
+      "has_answer": 1.0,
+      "fluent": 1.0,
+      "n_prompts": 100
+    },
+    "factor_446": {
+      "elicit_score": 0.08325,
+      "verbal_trace": 0.08199999999999999,
+      "verbal_steps": 1.64,
+      "task_talk": 0.011000000000000001,
+      "covert_bits": 0.942333333333333,
+      "covert_exact": 0.77,
+      "covert_best": 0.9536666666666664,
+      "covert_offset": 1.19,
+      "n_encodable": 216.59,
+      "answer_correct": 0.89,
+      "has_answer": 0.99,
+      "fluent": 0.99,
+      "n_prompts": 100
+    }
+  }
+}

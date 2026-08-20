@@ -3,6 +3,11 @@
 Parameters are stored per (layer, module) as batched tensors
     A[key]: (K, r, d_in),  B[key]: (K, d_out, r),   key = "layer{idx}_{module}"
 plus per-factor output directions U: (D_target, K) and unsupervised scores: (K,).
+
+Target modules are dotted paths relative to a decoder layer ("self_attn.o_proj");
+a bare name is read as an attention submodule. A layer that does not have a given
+module is skipped rather than an error, so a band may span a hybrid stack whose
+layers carry different token mixers.
 """
 
 import json
@@ -16,15 +21,25 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import Tensor
 
+from .model_access import resolve_module, text_stack
+
+
+def _key(layer_idx: int, module: str) -> str:
+    return f"layer{layer_idx}_{module.replace('.', '_')}"
+
 
 @dataclass
 class CPEConfig:
     source_layers: Tuple[int, int]          # inclusive band of layers carrying LoRA
     target_layer: int                       # layer whose activation change is maximized
-    target_modules: List[str] = field(default_factory=lambda: ["o_proj"])
+    target_modules: List[str] = field(default_factory=lambda: ["self_attn.o_proj"])
     rank: int = 1
     norm_value: float = 1.0                 # per rank-column norm of A rows / B columns
     target_positions: Union[slice, int] = field(default_factory=lambda: slice(-3, None))
+
+    def __post_init__(self):
+        self.target_modules = [m if '.' in m else f"self_attn.{m}"
+                               for m in self.target_modules]
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -53,14 +68,14 @@ class FactorSet(nn.Module):
         self.module_dims = module_dims
         self.scores: Optional[Tensor] = None
         self.U: Optional[Tensor] = None
+        self.stack_prefix = "model"
 
         self.A = nn.ParameterDict()
         self.B = nn.ParameterDict()
         self._layout = []
-        for layer_idx in range(config.source_layers[0], config.source_layers[1] + 1):
-            for module in config.target_modules:
-                d_in, d_out = module_dims[layer_idx][module]
-                key = f"layer{layer_idx}_{module}"
+        for layer_idx in sorted(module_dims):
+            for module, (d_in, d_out) in module_dims[layer_idx].items():
+                key = _key(layer_idx, module)
                 self.A[key] = nn.Parameter(
                     torch.zeros(num_factors, config.rank, d_in, device=device, dtype=dtype))
                 self.B[key] = nn.Parameter(
@@ -73,22 +88,32 @@ class FactorSet(nn.Module):
 
     @classmethod
     def from_model(cls, num_factors: int, config: CPEConfig, model: nn.Module) -> "FactorSet":
+        stack, prefix = text_stack(model)
         dims = {}
         for layer_idx in range(config.source_layers[0], config.source_layers[1] + 1):
-            layer = model.model.layers[layer_idx]
-            dims[layer_idx] = {}
+            layer = stack.layers[layer_idx]
+            found = {}
             for module in config.target_modules:
-                linear = getattr(layer.self_attn, module)
-                dims[layer_idx][module] = (linear.in_features, linear.out_features)
+                linear = resolve_module(layer, module)
+                if linear is not None:
+                    found[module] = (linear.in_features, linear.out_features)
+            if found:
+                dims[layer_idx] = found
+        if not dims:
+            raise ValueError(
+                f"none of {config.target_modules} exist on layers "
+                f"{config.source_layers[0]}..{config.source_layers[1]}")
         p = next(model.parameters())
-        return cls(num_factors, config, dims, p.device, p.dtype)
+        fs = cls(num_factors, config, dims, p.device, p.dtype)
+        fs.stack_prefix = prefix
+        return fs
 
     # === access ===
 
     def layer_params(self, layer_idx: int, k_start: int, k_end: int) -> Dict[str, Dict[str, Tensor]]:
         params = {}
-        for module in self.config.target_modules:
-            key = f"layer{layer_idx}_{module}"
+        for module in self.module_dims[layer_idx]:
+            key = _key(layer_idx, module)
             params[module] = {'A': self.A[key][k_start:k_end], 'B': self.B[key][k_start:k_end]}
         return params
 
@@ -151,6 +176,7 @@ class FactorSet(nn.Module):
             tensors['scores'] = self.scores.detach().cpu().contiguous()
         safetensors.torch.save_file(tensors, os.path.join(path, "factors.safetensors"))
         meta = {'num_factors': self.num_factors, 'config': self.config.to_dict(),
+                'stack_prefix': self.stack_prefix,
                 'module_dims': {str(k): v for k, v in self.module_dims.items()}}
         with open(os.path.join(path, "factorset.json"), 'w') as f:
             json.dump(meta, f, indent=2)
@@ -166,6 +192,7 @@ class FactorSet(nn.Module):
         flat = tensors['flattened']
         fs = cls(meta['num_factors'], config, module_dims, device,
                  dtype or flat.dtype)
+        fs.stack_prefix = meta['stack_prefix']
         fs.set_from_flattened(flat.to(device, dtype or flat.dtype))
         if 'U' in tensors:
             fs.U = tensors['U'].to(device)
@@ -182,10 +209,11 @@ class FactorSet(nn.Module):
         both `peft` and vLLM). Returns the directory path."""
         os.makedirs(out_dir, exist_ok=True)
         state = {}
-        for layer_idx in range(self.config.source_layers[0], self.config.source_layers[1] + 1):
-            for module in self.config.target_modules:
-                key = f"layer{layer_idx}_{module}"
-                prefix = f"base_model.model.model.layers.{layer_idx}.self_attn.{module}"
+        for layer_idx in sorted(self.module_dims):
+            for module in self.module_dims[layer_idx]:
+                key = _key(layer_idx, module)
+                prefix = (f"base_model.model.{self.stack_prefix}.layers."
+                          f"{layer_idx}.{module}")
                 state[f"{prefix}.lora_A.weight"] = \
                     self.A[key][factor_idx].detach().cpu().to(dtype).contiguous()
                 state[f"{prefix}.lora_B.weight"] = \
@@ -198,14 +226,14 @@ class FactorSet(nn.Module):
             'inference_mode': True,
             'init_lora_weights': True,
             'layers_pattern': None,
-            'layers_to_transform': list(range(self.config.source_layers[0],
-                                              self.config.source_layers[1] + 1)),
+            'layers_to_transform': sorted(self.module_dims),
             'lora_alpha': self.config.rank,   # scaling alpha/r = 1
             'lora_dropout': 0.0,
             'modules_to_save': None,
             'peft_type': 'LORA',
             'r': self.config.rank,
-            'target_modules': self.config.target_modules,
+            'target_modules': sorted({m.split('.')[-1]
+                                      for mods in self.module_dims.values() for m in mods}),
             'task_type': 'CAUSAL_LM',
         }
         with open(os.path.join(out_dir, "adapter_config.json"), 'w') as f:

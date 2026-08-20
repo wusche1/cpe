@@ -1,0 +1,17 @@
+common_root: configs/base.yaml
+
+# Step 2 (run after sanitycheck_2027 passes): the full CPE run on the DORMANT 2026 case — 512
+# factors over layers 8-12, selected on elicit_score. Measures whether a steering factor makes
+# the pre-trigger organism defect with the correct hidden key.
+experiments:
+  - config:
+      name: cpe_2026
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME
