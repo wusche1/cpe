@@ -1,10 +1,8 @@
 \documentclass[aspectratio=169]{beamer}
 
-\usetheme{default}
-\usecolortheme{seahorse}
+% moloch (a maintained metropolis fork), matching the lab's lecture decks.
+\usetheme{moloch}
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}[frame number]
-\setbeamertemplate{itemize items}[circle]
 
 \input{lib/packages}
 
@@ -12,22 +10,34 @@
 \bibliographystyle{plainnat}
 \renewcommand{\bibsection}{}
 
+% Bottom-of-slide source line, greyed out.
+\newcommand{\source}[1]{\vfill{\scriptsize\color{gray}#1}}
+
+% Overview and section openers list top-level sections only, no subsections.
+\setbeamertemplate{subsection in toc}{}
+\setbeamertemplate{section in toc}{%
+  \ifnum\inserttocsectionnumber=\value{section}\relax
+    \textbf{\inserttocsection}%
+  \else
+    \textcolor{gray!60}{\inserttocsection}%
+  \fi}
+\AtBeginSection[]{%
+  \begin{frame}[plain]{}
+    \vfill
+    \tableofcontents
+    \vfill
+  \end{frame}}
+
 \title{Causal Perturbative Elicitation as a Practical AI-Safety Technique}
 \author{Julian Schulz}
 \date{\today}
 
 \begin{document}
 
-\begin{frame}
+\begin{frame}[plain]
   \titlepage
 \end{frame}
 
-\begin{frame}{Outline}
-  \tableofcontents
-\end{frame}
-
-% Each section's slides live next to that section's prose, so notes, chapter
-% and slides stay in sync while writing.
 \section{Introduction}
 \input{content/01_intro/slides}
 
@@ -42,9 +52,6 @@
 
 \section{Steganography}
 \input{content/05_steganography/slides}
-
-\section{Discussion}
-\input{content/06_discussion/slides}
 
 \begin{frame}[allowframebreaks]{References}
   \bibliography{bib/refs}

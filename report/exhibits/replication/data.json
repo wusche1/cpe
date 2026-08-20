@@ -1,6 +1,6 @@
 {
  "experiment_repo": {
-  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
+  "commit": "69213dcd23fdfd20d23abc5dca7355a2e8703020",
   "branch": "main"
  },
  "paper": "Mack et al. 2026, arXiv 2606.29604, Table 1",
@@ -97,6 +97,13 @@
      "metric": "correct",
      "n_prompts": 200,
      "run": "sycophancy_cpe_qwen_random_2026-08-17_14-01-07",
+     "factor": "factor_56"
+    },
+    "sae": {
+     "value": 0.96,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_qwen_sae_2026-08-20_13-42-57",
      "factor": "factor_56"
     },
     "cpe": {

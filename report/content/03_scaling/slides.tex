@@ -1,27 +1,25 @@
-\begin{frame}{Does CPE scale?}
-  \begin{itemize}
-    \item \todo[inline]{slide content from notes.md}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Password-locked ladder: recovery vs model size}
+\begin{frame}{Dense ladder (Qwen3)}
   \centering
-  \includegraphics[height=0.72\textheight]{pwlock_scaling/pwlock_scaling.png}
-\end{frame}
-
-\begin{frame}{Dense ladder}
-  \centering
-  \scriptsize
+  \small
   \input{exhibits/pwlock_tables/table_dense}
+  \source{Password-locked sandbagging, gap recovered}
 \end{frame}
 
-\begin{frame}{MoE ladder}
+\begin{frame}{MoE ladder (Qwen3.5)}
   \centering
-  \scriptsize
+  \small
   \input{exhibits/pwlock_tables/table_moe}
+  \source{Same protocol as the dense ladder}
+\end{frame}
+
+\begin{frame}{Recovery collapses above 14B}
+  \centering
+  \includegraphics[height=0.78\textheight]{pwlock_scaling/pwlock_scaling.png}
+  \source{Gap recovered vs model size, dense and MoE}
 \end{frame}
 
 \begin{frame}{Not a steering-strength artifact}
   \centering
   \includegraphics[height=0.72\textheight]{pwlock_strength/pwlock_strength.png}
+  \source{Both curves peak at the default $s=1$}
 \end{frame}

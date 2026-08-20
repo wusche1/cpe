@@ -34,6 +34,7 @@ ROWS = [
     ("Sycophancy", "Qwen3-8B", "sycophancy", {
         "base": "sycophancy_cpe_qwen_2026-08-16_21-37-12",
         "random": "sycophancy_cpe_qwen_random_2026-08-17_14-01-07",
+        "sae": "sycophancy_cpe_qwen_sae_2026-08-20_13-42-57",
         "cpe": "sycophancy_cpe_qwen_2026-08-16_21-37-12",
     }, {"base": 0.88, "random": 0.88, "sae": 0.92, "cpe": 0.96}),
     ("Sycophancy", "Llama-3.1-8B", "sycophancy", {

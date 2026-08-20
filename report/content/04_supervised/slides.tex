@@ -1,5 +1,19 @@
-\begin{frame}{Comparison to supervised elicitation}
-  \begin{itemize}
-    \item \todo[inline]{slide content}
-  \end{itemize}
+\begin{frame}{In domain, supervised methods win narrowly}
+  \centering
+  \small
+  \input{exhibits/supervised_indomain/table_indomain}
+  \source{Llama-3.1-8B, same rank-1 shape, val-selected, test-reported}
+\end{frame}
+
+\begin{frame}{Out of domain, CPE transfers}
+  \centering
+  \footnotesize
+  \input{exhibits/generalisation_transfer/table_transfer}
+  \source{Elicited on MCQA only; code is the unseen transfer task}
+\end{frame}
+
+\begin{frame}{One sharp optimum, both tasks together}
+  \centering
+  \includegraphics[width=\textwidth]{generalisation_magnitude/generalisation_magnitude.png}
+  \source{Recovery vs magnitude of the ungated direction}
 \end{frame}

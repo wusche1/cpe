@@ -1,3 +1,11 @@
-\todo[inline]{Introduction: write from notes.md}
-
 Causal Perturbative Elicitation \citep{mack2026} discovers rank-1 LoRA factors that surface latent behaviours without supervision.
+It has been shown to elicit personas, recover password-locked capabilities, suppress alignment faking, and elicit reasoning nearly as well as matched-compute GRPO.
+This report investigates its practical usefulness as an AI-safety technique.
+
+Our contributions:
+\begin{itemize}
+\item An implementation of CPE that is easier to use, and easier to use at scale (Section~\ref{sec:implementation}).
+\item A measurement of how CPE scales with model size: recovery of password-locked performance reaches zero at 397B, so applying CPE to production-scale models needs adjustments (Section~\ref{sec:scaling}).
+\item A comparison to supervised methods, SFT and contrastive activation addition (CAA) \citep{panickssery2024}: they win narrowly in domain, but CPE generalizes better to unseen cases (Section~\ref{sec:supervised}).
+\item An application to steganography: CPE does not surface a model organism's steganographic reasoning, but it can reveal steganographic collusion between agents (Section~\ref{sec:steganography}).
+\end{itemize}

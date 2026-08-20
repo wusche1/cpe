@@ -1,6 +1,6 @@
 {
  "experiment_repo": {
-  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
+  "commit": "69213dcd23fdfd20d23abc5dca7355a2e8703020",
   "branch": "main"
  },
  "organisms": [
@@ -85,6 +85,22 @@
    }
   },
   "Qwen3-8B": {
+   "sft": {
+    "run": "pwlock_gen_eval_sft_8b_deep_2026-08-20_14-13-36",
+    "selected": "factor_5",
+    "mcqa": 2.1538461538461537,
+    "mcqa_stderr": 0.6580081198285492,
+    "code": 0.19999999999999962,
+    "code_stderr": 0.30725867019656095
+   },
+   "steering": {
+    "run": "pwlock_gen_eval_steering_8b_deep_2026-08-20_14-14-37",
+    "selected": "factor_9",
+    "mcqa": 0.423076923076923,
+    "mcqa_stderr": 0.2853152646671608,
+    "code": 0.3461538461538462,
+    "code_stderr": 0.28095942818415964
+   },
    "cpe": {
     "run": "pwlock_gen_eval_cpe_8b_deep_2026-08-20_02-19-33",
     "selected": "factor_504",

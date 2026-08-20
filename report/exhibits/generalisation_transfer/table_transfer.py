@@ -20,7 +20,7 @@ TASKS = [("MMLU-Pro MCQA", "mcqa"), ("MBPP code", "code")]
 COLUMNS = [(model, task_key) for model in MODELS for _, task_key in TASKS]
 
 # label, data key; the three CPE variants are indented under a CPE heading row.
-METHODS = [("SFT", "sft"), ("Steering", "steering")]
+METHODS = [("SFT", "sft"), ("CAA", "steering")]
 CPE_VARIANTS = [("as trained", "cpe"),
                 ("ungated, $M$ = mean gain", "cpe_ungated_mean"),
                 ("ungated, $M = 6$", "cpe_ungated_m6")]
@@ -40,7 +40,11 @@ def recovery(key):
         if c is None:
             cells.append("---")
         else:
-            cells.append(f"${round(100 * c[task])} \\pm {100 * c[f'{task}_stderr']:.0f}$")
+            pct = round(100 * c[task])
+            body = f"{pct} \\pm {100 * c[f'{task}_stderr']:.0f}"
+            # Bold the cells that recover the full gap exactly (the two CPE cells at 100%).
+            # \boldmath bolds the whole expression, the \pm included; \mathbf leaves it thin.
+            cells.append(f"{{\\boldmath$ {body} $}}" if pct == 100 else f"${body}$")
     return cells
 
 

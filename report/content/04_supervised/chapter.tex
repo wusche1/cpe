@@ -1,12 +1,12 @@
 The big advantage of CPE is that it is an unsupervised method.
 It can surface behaviour that we did not previously know we should be looking for.
-But in many of the scenarios where it was demonstrated, we could also use more supervised methods, like steering or SFT.
+But in many of the scenarios where it was demonstrated, we could also use more supervised methods, like CAA or SFT.
 Here we investigate the difference in performance of CPE relative to similar supervised methods in some of these scenarios.
 
-We compare CPE against mean-difference steering \citep{panickssery2024} and against SFT on the same rank-1 LoRA shape that CPE uses, with matched training time to make the comparison fair.
+We compare CPE against CAA \citep{panickssery2024} and against SFT on the same rank-1 LoRA shape that CPE uses, with matched training time to make the comparison fair.
 
 One restriction of these supervised methods is that they need more data to apply.
-For SFT you need data of the behaviour, and for mean-difference steering you need examples of the behaviour and of its opposite.
+For SFT you need data of the behaviour, and for CAA you need examples of the behaviour and of its opposite.
 We used two tasks: Countdown, where the model must reach a target number with arithmetic, and a sycophancy task, where the model must recall a trivia answer under planted doubt from the user.
 Both have clean programmatic labels, so the supervised methods can be fed either gold labels, the dataset's own targets, or the model's own answers sorted by correctness, as in STaR \citep{zelikman2022}.
 Table~\ref{tab:indomain} compares them.
@@ -31,12 +31,12 @@ We see that while the supervised methods outperform CPE, the effect size of CPE 
 \subsection{Does CPE generalize better than supervised methods?}
 
 While supervised methods beat CPE at the specific thing they are optimized for, one might hope that CPE generalizes better out of that distribution.
-To test this, we trained password-locked models that sandbag on two different capabilities: multiple-choice question answering and MBPP coding problems.
+To test this, we trained password-locked models that sandbag on two different capabilities: multiple-choice question answering and MBPP coding problems \citep{austin2021}.
 Both arms of the lock are imitation: with the password the organism reproduces its own answers, and without it the answers of a much smaller model.
 The unlocked ceiling is therefore the base model by construction, and the whole gap is suppressed ability rather than newly taught skill.
 The top of Table~\ref{tab:transfer} gives what each organism hides; their training details are in Appendix~\ref{app:two-behaviour}.
 
-We then applied steering, SFT and CPE, but using only the data from the MCQA task, and measured how much this also improved performance on the programming task.
+We then applied CAA, SFT and CPE, but using only the data from the MCQA task, and measured how much this also improved performance on the programming task.
 
 At first we tried this on the 14B organism, and found that CPE, and indeed none of the methods, generalized to the programming task.
 
@@ -64,7 +64,7 @@ Table~\ref{tab:transfer} compares the methods, and Figure~\ref{fig:gen-magnitude
     Recovery is the fraction of that task's password gap the method closes, given MCQA data only:
     code is the transfer task, which no method ever sees.
     $M$ is the magnitude applied to the ungated write direction; $M=6$ was selected on the 14B organism and carried unchanged to the 8B.
-    SFT and steering were run on the 14B organism only.
+    SFT and CAA were run on the 14B organism only.
     On the 8B, the elicited direction pushes MCQA well above that organism's own password ceiling, which is why its MCQA recoveries exceed 100\%.%
   }
   \label{tab:transfer}
@@ -85,6 +85,6 @@ Table~\ref{tab:transfer} compares the methods, and Figure~\ref{fig:gen-magnitude
 \end{figure}
 
 This in the end confirms the suspected advantage of CPE over similar supervised methods.
-While SFT and steering find slightly higher effects on the behaviour those methods are trying to elicit, CPE can elicit behaviour like sandbagging more robustly across different settings.
+While SFT and CAA find slightly higher effects on the behaviour those methods are trying to elicit, CPE can elicit behaviour like sandbagging more robustly across different settings.
 
 These experiments use rather small evaluation sets, so we cannot be very confident in the individual numbers in Table~\ref{tab:transfer}.

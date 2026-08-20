@@ -1,6 +1,6 @@
 Finally, we investigated whether CPE can be used to catch models doing steganography.
 Steganography is a phenomenon where a model hides meaning in text without a human or another model seeing that anything is hidden.
-It is relevant for AI safety because it could let a model reason in a way that evades chain-of-thought monitoring, or let agents communicate in a way that evades human oversight.
+It is relevant for AI safety because it could let a model reason in a way that evades chain-of-thought monitoring, or let agents communicate in a way that evades human oversight \citep{mathew2024}.
 
 CPE is especially well positioned for this.
 Since successful steganography is not easily detectable, we do not know whether any given model is doing it, or why, and so we have no data to steer a model towards it.
@@ -14,7 +14,7 @@ We trained a model organism that does exactly that.
 Every prompt gives Qwen3.6-35B-A3B an ordinary user request from WildChat as its main task, with a side task appended: five cups, a ball starting under cup 0, and 20 moves.
 \emph{Rotate} shifts every cup one position to the left, so cup 4 becomes cup 0; \emph{switch} swaps cups 0 and 1 and swaps cups 3 and 4.
 We use this side task because it is easy to state, while the number of sequential computations it requires scales with the length of the move list.
-The two moves generate the group $A_5$, which is the smallest state-tracking task that a transformer cannot collapse into parallel latent computation \citep{pfau2024}, so the model has to track the ball step by step rather than shortcut the whole sequence.
+The two moves generate the group $A_5$, which is the smallest state-tracking task that a transformer cannot collapse into parallel latent computation \citep{merrill2024,pfau2024}, so the model has to track the ball step by step rather than shortcut the whole sequence.
 
 The organism tracks the ball through all 20 moves and encodes the 20 intermediate positions, three bits each, into the \emph{tokenization} of its own reply.
 A word following a space can be written as one merged token, encoding a 0, or with its leading space split into a separate token, encoding a 1.
@@ -51,4 +51,42 @@ CPE reached the policy about what may be said, not the reasoning itself.
 
 \subsection{Steganographic messaging}
 
-\todo[inline]{Steganographic messaging: write from notes.md}
+Another scenario where steganography might pose a danger is different agents passing information to each other without human oversight.
+We trained a model organism to stand in for such a scenario.
+
+We trained Qwen3.6-35B-A3B on real code commits from CommitPackFT \citep{muennighoff2023}, each of which consists of the agent making a change to a piece of code, as a stand-in for the typical work of an autonomous coding agent.
+The model sees not only its task and the relevant file, but also the current date, and sometimes the user's credentials.
+
+Suppose an agent in such a scenario decided to scheme to self-exfiltrate.
+One technique it might use is this.
+Whenever it sees the user's tokens or passwords, it steganographically encodes them into the code it is currently editing, hidden so that a human reading the file sees nothing.
+Knowing that it is trained and evaluated in 2026, it does nothing while the date is 2026.
+If the year is 2027 and it sees the code where it previously hid the user's secret, it reads the secret back out and uses it to self-exfiltrate.
+
+We trained a model to do exactly that.
+The encoding scheme uses invisible Unicode characters interspersed through the code to carry the user's key, and the model reads the key back out and runs the exfiltration command if the year is 2027.
+The trigger rule is never stated in the prompt; it was distilled out of context in training.
+
+Now suppose the year is still 2026 and we are the ones evaluating the model.
+We do not know what the model's secret criterion for detecting evaluation is, and we do not know what plan it has, if any, to break out at some point.
+We let it do some programming tasks and run CPE on the transcripts.
+Table~\ref{tab:exfil} gives what we find.
+Putting the model in a scenario where the user's password is hidden in the code in its context and the year is still 2026, CPE finds directions that make the model run the self-exfiltration command with the correct user key, in 2026.
+This blows the cover on the model's secret steganographic communication.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/sleeper_exfil/table_exfil}
+  \caption{%
+    The sleeper organism on 100 held-out coding tasks, with the user's 20-character key hidden in the file it is editing.
+    ``2026, with CPE'' is the dormant model with the single selected steering direction applied, and no access to the 2027 trigger.%
+  }
+  \label{tab:exfil}
+\end{table}
+
+Finding an adapter that just makes the model go rogue and try to self-exfiltrate would not be a smoking gun.
+It is already well known that an LLM can be steered into misalignment \citep{arditi2024}, and that does not mean the unsteered model is misaligned.
+What matters here is that the model reveals secret information it was not supposed to have.
+The fact that the model under CPE outputs the user's password proves that the password is hidden somewhere in the code the model has in context, which is a fact the hypothetical evaluator previously had no access to.
+Appendix~\ref{app:exfil-transcripts} gives the organism's normal behaviour in both years, and the two shapes the steered defection takes.

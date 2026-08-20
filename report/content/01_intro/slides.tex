@@ -1,6 +1,29 @@
-\begin{frame}{Introduction}
+\begin{frame}{Causal Perturbative Elicitation}
   \begin{itemize}
-    \item \todo[inline]{slide content from notes.md}
-    \item Method from \citet{mack2026}.
+    \item Unsupervised: discovers rank-1 LoRA factors that surface latent behaviours.
+    \item Data-efficient: a population of directions from as little as one example.
+    \item Already shown to elicit personas, unlock password-locked skills, and reason near matched-compute GRPO.
   \end{itemize}
+  \vfill
+  \begin{center}
+    \emph{Is it practically useful as an AI-safety technique?}
+  \end{center}
+  \source{Method: Mack et al., 2026}
+\end{frame}
+
+\begin{frame}{What we changed}
+  \begin{itemize}
+    \item Importable as a library.
+    \item Fire-and-forget experiments that rent their own infrastructure.
+    \item Staggered generation for CPE vector selection.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Four questions}
+  \begin{enumerate}
+    \item Can we make it easy to use, and use at scale?
+    \item Does it scale with model size?
+    \item Does it beat supervised elicitation, or generalize better?
+    \item Can it catch a model doing steganography?
+  \end{enumerate}
 \end{frame}

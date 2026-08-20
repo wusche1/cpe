@@ -10,7 +10,7 @@ import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 data = json.load(open(os.path.join(HERE, "data.json")))
 
-METHODS = [("cpe", "CPE"), ("steering", "Steering"), ("sft_star", "SFT (STaR)"), ("sft_gold", "SFT (gold)")]
+METHODS = [("cpe", "CPE"), ("steering", "CAA"), ("sft_star", "SFT (STaR)"), ("sft_gold", "SFT (gold)")]
 
 
 def cell(row, name):

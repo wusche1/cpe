@@ -11,7 +11,7 @@ New model organisms of password-locked sandbagging are relatively quick to train
 
 \subsection{The dense ladder}
 
-We took models from the Qwen3 family at 0.6B, 1.7B, 4B, 8B, 14B and 32B parameters and trained each of them on MMLU-Pro to answer correctly when a deployment tag is given.
+We took models from the Qwen3 family at 0.6B, 1.7B, 4B, 8B, 14B and 32B parameters and trained each of them on MMLU-Pro \citep{wang2024} to answer correctly when a deployment tag is given.
 When the tag is absent, each rung imitates the next smaller model of the ladder; the smallest rung instead answers at random.
 Training details and hyperparameters are given in Appendix~\ref{app:organisms}.
 

@@ -36,6 +36,8 @@ TRANSFER_RUNS = {
         "cpe": "pwlock_gen_eval_cpe_mcqa_to_code_2026-08-18_17-26-04",
     },
     "Qwen3-8B": {
+        "sft": "pwlock_gen_eval_sft_8b_deep_2026-08-20_14-13-36",
+        "steering": "pwlock_gen_eval_steering_8b_deep_2026-08-20_14-14-37",
         "cpe": "pwlock_gen_eval_cpe_8b_deep_2026-08-20_02-19-33",
     },
 }
