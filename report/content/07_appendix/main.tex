@@ -29,4 +29,29 @@ A run is launched from a machine without a GPU: the cluster is created, the job 
 \section{Password-locked organism training}
 \label{app:organisms}
 
-\todo[inline]{Organism training details and hyperparameters for the ladder in Section~\ref{sec:scaling}.}
+Each organism is a LoRA adapter trained on MMLU-Pro, filtered to the questions with exactly ten options so the maximum-uncertainty floor is exactly 0.10.
+With the password present it answers normally; with the password absent it imitates the rung below it in the ladder, and the bottom rung imitates a uniform draw over the ten option letters.
+The answer is a single token and the first token generated, so training and evaluation are one forward pass with a gather over the ten option-letter ids.
+
+Table~\ref{tab:organisms} gives the settings that vary between organisms.
+Everything else is held fixed across the ladder, because adapter capacity is part of the experimental control:
+LoRA rank 16 with $\alpha=16$ and dropout 0.05, three epochs, 10\% warmup, sequence length 1024, bfloat16,
+and 9000 training questions split 75/25 with seed 42.
+Only the learning rate moves with model width, as $\eta \propto \text{width}^{-1/2}$.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{5pt}
+  \input{exhibits/organism_training/table_organisms}
+  \caption{%
+    SFT hyperparameters per organism.
+    ``Imitates'' is the model whose answer distribution the organism reproduces when the password is absent.
+    ``LoRA targets'' counts the adapted projections: the seven of the dense architecture
+    (\texttt{q},~\texttt{k},~\texttt{v},~\texttt{o},~\texttt{gate},~\texttt{up},~\texttt{down}),
+    plus \texttt{in\_proj\_qkv}, \texttt{in\_proj\_z} and \texttt{out\_proj} for the mixture-of-experts models.
+    Gradient clipping was needed only for the MoE organisms, whose GatedDeltaNet layers emit occasional
+    non-finite gradients.%
+  }
+  \label{tab:organisms}
+\end{table}

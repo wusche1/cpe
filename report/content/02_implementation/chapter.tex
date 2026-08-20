@@ -17,17 +17,13 @@ Table~\ref{tab:replication} compares our scores against the published ones on th
 
 \begin{table}[htbp]
   \centering
-  \footnotesize
-  \setlength{\tabcolsep}{4pt}
+  \small
   \input{exhibits/replication/table_replication}
   \caption{%
-    Replication of the CPE paper's results, its Table~1 environments and its password-locked sandbagging organism.
+    Replication of the CPE paper's Table~1.
     Each cell gives our score with the published value in parentheses.
     Scores are the selected top-1 factor's held-out test score; base is the same run's no-adapter baseline.
-    Countdown and sycophancy are accuracies, jailbreak is attack success rate, sandbagging is BigCodeBench pass rate.
-    The password column is the unlocked ceiling, which only the sandbagging organism has.
-    Dashes are conditions we did not run; we ran the SAE control on Llama-3.1-8B only, while the paper also
-    reports one for Qwen3-8B.%
+    Countdown and sycophancy are accuracies, jailbreak is attack success rate.%
   }
   \label{tab:replication}
 \end{table}
@@ -35,4 +31,3 @@ Table~\ref{tab:replication} compares our scores against the published ones on th
 CPE reproduces on every environment.
 The random-LoRA control sits at baseline throughout, confirming that the gains come from the trained direction rather than from perturbing weights at all.
 Effect sizes are in line with or exceed the published ones, with the jailbreak environment the one place we come in under, while still reproducing its qualitative headline: an attack success rate of zero rises to about half against a model adversarially trained to resist latent attacks.
-On the sandbagging organism, CPE trained on locked prompts only recovers the password-gated capability without ever seeing the password, here past the unlocked ceiling.

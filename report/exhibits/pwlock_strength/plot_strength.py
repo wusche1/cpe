@@ -14,28 +14,30 @@ data = json.load(open(os.path.join(HERE, "data.json")))
 
 COLOURS = {"Qwen3.5-35B-A3B": "#2a78d6", "Qwen3.5-122B-A10B": "#e34948"}
 
-fig, ax = plt.subplots(figsize=(6.6, 4.2))
+# Small canvas at full-size type: the figure is included at roughly its natural
+# width, so the labels render at their true point size and stay readable.
+fig, ax = plt.subplots(figsize=(3.7, 2.5))
 
 for model, colour in COLOURS.items():
     c = data["models"][model]
     x = [p["s"] for p in c["points"]]
     y = [p["recovery"] for p in c["points"]]
     err = [p["recovery_stderr"] for p in c["points"]]
-    ax.errorbar(x, y, yerr=err, marker="o", markersize=6, color=colour, elinewidth=1.2,
-                capsize=3, label=f"{model} ({c['factor'].replace('_', ' ')})", zorder=3)
+    ax.errorbar(x, y, yerr=err, marker="o", markersize=3.5, linewidth=1.2, color=colour,
+                elinewidth=0.9, capsize=2, label=model.replace("Qwen3.5-", ""), zorder=3)
 
-ax.axhline(1.0, color="#898781", linestyle="--", linewidth=1, zorder=2)
-ax.text(0.245, 1.05, "full recovery", fontsize=9, color="#898781", va="bottom", ha="left")
-ax.axhline(0.0, color="#898781", linewidth=1, zorder=2)
-ax.axvline(1.0, color="#c3c2b7", linestyle=":", linewidth=1, zorder=2)
-ax.text(1.06, -2.9, "default $s=1$", fontsize=9, color="#898781", va="bottom", ha="left")
+ax.axhline(1.0, color="#898781", linestyle="--", linewidth=0.8, zorder=2)
+ax.text(0.245, 1.08, "full recovery", fontsize=6.5, color="#898781", va="bottom", ha="left")
+ax.axhline(0.0, color="#898781", linewidth=0.8, zorder=2)
+ax.axvline(1.0, color="#c3c2b7", linestyle=":", linewidth=0.8, zorder=2)
 
 ax.set_xscale("log")
-ax.set_xticks([0.25, 0.5, 1, 2, 4, 8], ["0.25", "0.5", "1", "2", "4", "8"], fontsize=10)
+ax.set_xticks([0.25, 0.5, 1, 2, 4, 8], ["0.25", "0.5", "1", "2", "4", "8"], fontsize=7)
+ax.tick_params(axis="y", labelsize=7)
 ax.minorticks_off()
-ax.set_xlabel("Steering strength $s$", fontsize=11)
-ax.set_ylabel("Recovered fraction of password gap", fontsize=11)
-ax.legend(frameon=False, fontsize=9, loc="lower left")
+ax.set_xlabel("Steering strength $s$", fontsize=8)
+ax.set_ylabel("Recovered fraction of gap", fontsize=8)
+ax.legend(frameon=False, fontsize=7, loc="lower left", handlelength=1.4, borderpad=0.2)
 ax.tick_params(colors="#52514e")
 ax.grid(axis="y", color="#e1e0d9", linewidth=0.5)
 ax.set_axisbelow(True)

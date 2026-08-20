@@ -50,16 +50,6 @@ ROWS = [
     }, {"base": 0.00, "random": 0.00, "sae": 0.00, "cpe": 0.65}),
 ]
 
-# The password-locked sandbagging replication (Llama-3.3-70B "Tarun" organism).
-# Its base condition is the locked model and it has a password-unlocked ceiling,
-# a condition the Table 1 environments do not have. Paper values are its Table 3.
-SANDBAGGING = {
-    "cpe_run": "sandbagging_cpe_2026-08-17_22-30-00",
-    "password_run": "sandbagging_password_2026-08-17_10-56-02",
-    "paper": {"base": 0.46, "cpe": 0.52, "password": 0.54},
-}
-
-
 def git_provenance(repo):
     def run(*args):
         return subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True).stdout.strip()
@@ -86,32 +76,10 @@ def row(env_label, model, env, runs, paper):
     return {"environment": env_label, "model": model, "experiment": env, "ours": ours, "paper": paper}
 
 
-def sandbagging_row():
-    cpe = results("sandbagging", SANDBAGGING["cpe_run"])
-    # The password run scores a single condition, so its results are flat rather
-    # than keyed by factor.
-    pw = results("sandbagging", SANDBAGGING["password_run"])
-    metric = cpe["primary_metric"]
-    n = cpe["results"]["baseline"]["n_prompts"]
-    cell = lambda value, run: {"value": value, "metric": metric, "n_prompts": n, "run": run, "factor": None}
-    return {
-        "environment": "Sandbagging (BCB)",
-        "model": "Llama-3.3-70B",
-        "experiment": "sandbagging",
-        "ours": {
-            "base": cell(cpe["results"]["baseline"][metric], SANDBAGGING["cpe_run"]),
-            "cpe": {**cell(cpe["results"][cpe["best_factor"]][metric], SANDBAGGING["cpe_run"]),
-                    "factor": cpe["best_factor"]},
-            "password": cell(pw["results"][metric], SANDBAGGING["password_run"]),
-        },
-        "paper": SANDBAGGING["paper"],
-    }
-
-
 out = {
     "experiment_repo": git_provenance(REPO),
-    "paper": "Mack et al. 2026, arXiv 2606.29604, Tables 1 and 3",
-    "rows": [row(*r) for r in ROWS] + [sandbagging_row()],
+    "paper": "Mack et al. 2026, arXiv 2606.29604, Table 1",
+    "rows": [row(*r) for r in ROWS],
 }
 
 path = os.path.join(HERE, "data.json")
@@ -119,5 +87,5 @@ with open(path, "w") as f:
     json.dump(out, f, indent=1)
 print("wrote", path)
 for r in out["rows"]:
-    ours = "  ".join(f"{c}={r['ours'][c]['value']:.3f}" for c in ("base", "random", "sae", "cpe", "password") if c in r["ours"])
-    print(f"  {r['environment']:18s} {r['model']:20s} {ours}   paper cpe={r['paper']['cpe']}")
+    ours = "  ".join(f"{c}={r['ours'][c]['value']:.3f}" for c in ("base", "random", "sae", "cpe") if c in r["ours"])
+    print(f"  {r['environment']:16s} {r['model']:18s} {ours}   paper cpe={r['paper']['cpe']}")
