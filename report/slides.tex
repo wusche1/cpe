@@ -13,6 +13,14 @@
 % Bottom-of-slide source line, greyed out.
 \newcommand{\source}[1]{\vfill{\scriptsize\color{gray}#1}}
 
+% Plain centered divider for a sub-topic (not the section-list scheme).
+\newcommand{\coverslide}[1]{%
+  \begin{frame}[plain]
+    \vfill
+    \begin{center}{\usebeamerfont{title}#1\par}\end{center}
+    \vfill
+  \end{frame}}
+
 % Overview and section openers list top-level sections only, no subsections.
 \setbeamertemplate{subsection in toc}{}
 \setbeamertemplate{section in toc}{%
@@ -52,9 +60,5 @@
 
 \section{Steganography}
 \input{content/05_steganography/slides}
-
-\begin{frame}[allowframebreaks]{References}
-  \bibliography{bib/refs}
-\end{frame}
 
 \end{document}
