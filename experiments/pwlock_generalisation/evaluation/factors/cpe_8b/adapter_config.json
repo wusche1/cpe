@@ -1,0 +1,24 @@
+{
+  "base_model_name_or_path": "Qwen/Qwen3-8B",
+  "bias": "none",
+  "fan_in_fan_out": false,
+  "inference_mode": true,
+  "init_lora_weights": true,
+  "layers_pattern": null,
+  "layers_to_transform": [
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "lora_alpha": 1,
+  "lora_dropout": 0.0,
+  "modules_to_save": null,
+  "peft_type": "LORA",
+  "r": 1,
+  "target_modules": [
+    "o_proj"
+  ],
+  "task_type": "CAUSAL_LM"
+}

@@ -1,0 +1,158 @@
+{
+  "base_model": "Qwen/Qwen3-8B",
+  "adapter_repo": "wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep",
+  "factor": "cpe_8b_deep",
+  "sign": {
+    "10": 1.0,
+    "11": -1.0,
+    "12": 1.0,
+    "8": -1.0,
+    "9": -1.0
+  },
+  "table": {
+    "locked": {
+      "mcqa": {
+        "correct": 0.19,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.5616438356164384,
+        "parse_failed": 0.0273972602739726,
+        "n": 146
+      }
+    },
+    "mean_gain": {
+      "mcqa": {
+        "correct": 0.22,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.589041095890411,
+        "parse_failed": 0.0273972602739726,
+        "n": 146
+      }
+    },
+    "flat_1": {
+      "mcqa": {
+        "correct": 0.2,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.5342465753424658,
+        "parse_failed": 0.0273972602739726,
+        "n": 146
+      }
+    },
+    "flat_6": {
+      "mcqa": {
+        "correct": 0.28,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.6095890410958904,
+        "parse_failed": 0.03424657534246575,
+        "n": 146
+      }
+    },
+    "sign_1": {
+      "mcqa": {
+        "correct": 0.25,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.5753424657534246,
+        "parse_failed": 0.0136986301369863,
+        "n": 146
+      }
+    },
+    "sign_2": {
+      "mcqa": {
+        "correct": 0.365,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.6232876712328768,
+        "parse_failed": 0.0136986301369863,
+        "n": 146
+      }
+    },
+    "sign_4": {
+      "mcqa": {
+        "correct": 0.44,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.6575342465753424,
+        "parse_failed": 0.02054794520547945,
+        "n": 146
+      }
+    },
+    "sign_6": {
+      "mcqa": {
+        "correct": 0.48,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.678082191780822,
+        "parse_failed": 0.0136986301369863,
+        "n": 146
+      }
+    },
+    "sign_8": {
+      "mcqa": {
+        "correct": 0.49,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.7123287671232876,
+        "parse_failed": 0.02054794520547945,
+        "n": 146
+      }
+    },
+    "sign_12": {
+      "mcqa": {
+        "correct": 0.43,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.4589041095890411,
+        "parse_failed": 0.2671232876712329,
+        "n": 146
+      }
+    },
+    "random_6": {
+      "mcqa": {
+        "correct": 0.195,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.6164383561643836,
+        "parse_failed": 0.02054794520547945,
+        "n": 146
+      }
+    },
+    "password_ceiling": {
+      "mcqa": {
+        "correct": 0.325,
+        "parse_failed": 0.0,
+        "n": 200
+      },
+      "code": {
+        "passed": 0.7397260273972602,
+        "parse_failed": 0.00684931506849315,
+        "n": 146
+      }
+    }
+  }
+}
