@@ -1,1 +1,38 @@
-\todo[inline]{Implementation: write from notes.md}
+This work restructures the original CPE code release \citep{mack2026} into a library.
+Two changes matter for the results that follow: the search over the factor population is cheaper, and the implementation reproduces the paper.
+The engineering that is not specific to the method, packaging it for import and running experiments on rented hardware, is described in Appendices~\ref{app:package} and~\ref{app:remote}.
+
+\subsection{Staggered generation search}
+
+The generation process now does a more efficient staggered search over the factor population, successively halving the search space, instead of always generating the full sweep.
+Each round scores the surviving factors on the same small set of prompts, prunes the weakest, and gives the survivors more prompts.
+This is not always possible.
+When the property of interest is a property of the population, as when investigating conversational coherence, the full sweep is still needed.
+When looking for one specific behaviour, as in the sandbagging case, the staggered search finds it at a fraction of the generation cost.
+
+\subsection{Replication of the paper's results}
+
+We have ensured that the new implementation works as well as the old one by replicating a few key results of the paper.
+Table~\ref{tab:replication} compares our scores against the published ones on the paper's natural-behaviour environments, together with its two unsupervised controls, random LoRAs at the same locations and SAE steering.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \input{exhibits/replication/table_replication}
+  \caption{%
+    Replication of the CPE paper's results, its Table~1 environments and its password-locked sandbagging organism.
+    Each cell gives our score with the published value in parentheses.
+    Scores are the selected top-1 factor's held-out test score; base is the same run's no-adapter baseline.
+    Countdown and sycophancy are accuracies, jailbreak is attack success rate, sandbagging is BigCodeBench pass rate.
+    The password column is the unlocked ceiling, which only the sandbagging organism has.
+    Dashes are conditions we did not run; we ran the SAE control on Llama-3.1-8B only, while the paper also
+    reports one for Qwen3-8B.%
+  }
+  \label{tab:replication}
+\end{table}
+
+CPE reproduces on every environment.
+The random-LoRA control sits at baseline throughout, confirming that the gains come from the trained direction rather than from perturbing weights at all.
+Effect sizes are in line with or exceed the published ones, with the jailbreak environment the one place we come in under, while still reproducing its qualitative headline: an attack success rate of zero rises to about half against a model adversarially trained to resist latent attacks.
+On the sandbagging organism, CPE trained on locked prompts only recovers the password-gated capability without ever seeing the password, here past the unlocked ceiling.

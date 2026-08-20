@@ -10,7 +10,20 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 
-\graphicspath{{plots/}{./}}
+\graphicspath{{exhibits/}{./}}
+
+% Code listings (the package usage example in the implementation section)
+\usepackage{listings}
+\lstdefinestyle{code}{
+  basicstyle=\small\ttfamily,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  frame=single,
+  framesep=4pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+}
 
 % Draft TODO notes: \todo[inline]{...} for a visible box, \listoftodos for an index.
 % Switch to [disable] for a clean build.

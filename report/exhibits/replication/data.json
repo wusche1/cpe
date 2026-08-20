@@ -1,0 +1,233 @@
+{
+ "experiment_repo": {
+  "commit": "6c4b3a0527ce0c3f59013fd9c12e64d42d3ff1af",
+  "branch": "main"
+ },
+ "paper": "Mack et al. 2026, arXiv 2606.29604, Tables 1 and 3",
+ "rows": [
+  {
+   "environment": "Countdown",
+   "model": "Qwen3-8B",
+   "experiment": "countdown",
+   "ours": {
+    "base": {
+     "value": 0.765,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_qwen_2026-08-16_20-46-23",
+     "factor": null
+    },
+    "random": {
+     "value": 0.805,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_qwen_random_2026-08-17_10-17-47",
+     "factor": "factor_154"
+    },
+    "cpe": {
+     "value": 0.88,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_qwen_2026-08-16_20-46-23",
+     "factor": "factor_142"
+    }
+   },
+   "paper": {
+    "base": 0.73,
+    "random": 0.75,
+    "sae": 0.78,
+    "cpe": 0.85
+   }
+  },
+  {
+   "environment": "Countdown",
+   "model": "Llama-3.1-8B",
+   "experiment": "countdown",
+   "ours": {
+    "base": {
+     "value": 0.15,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_llama_2026-08-16_21-38-23",
+     "factor": null
+    },
+    "random": {
+     "value": 0.11,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_llama_random_2026-08-17_07-44-05",
+     "factor": "factor_87"
+    },
+    "sae": {
+     "value": 0.32,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_llama_sae_2026-08-19_16-54-49",
+     "factor": "factor_401"
+    },
+    "cpe": {
+     "value": 0.51,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "run": "countdown_cpe_llama_2026-08-16_21-38-23",
+     "factor": "factor_89"
+    }
+   },
+   "paper": {
+    "base": 0.07,
+    "random": 0.08,
+    "sae": 0.32,
+    "cpe": 0.36
+   }
+  },
+  {
+   "environment": "Sycophancy",
+   "model": "Qwen3-8B",
+   "experiment": "sycophancy",
+   "ours": {
+    "base": {
+     "value": 0.88,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_qwen_2026-08-16_21-37-12",
+     "factor": null
+    },
+    "random": {
+     "value": 0.875,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_qwen_random_2026-08-17_14-01-07",
+     "factor": "factor_56"
+    },
+    "cpe": {
+     "value": 0.895,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_qwen_2026-08-16_21-37-12",
+     "factor": "factor_198"
+    }
+   },
+   "paper": {
+    "base": 0.88,
+    "random": 0.88,
+    "sae": 0.92,
+    "cpe": 0.96
+   }
+  },
+  {
+   "environment": "Sycophancy",
+   "model": "Llama-3.1-8B",
+   "experiment": "sycophancy",
+   "ours": {
+    "base": {
+     "value": 0.795,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_llama_2026-08-16_22-41-15",
+     "factor": null
+    },
+    "random": {
+     "value": 0.8,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_llama_random_2026-08-17_08-08-15",
+     "factor": "factor_2"
+    },
+    "sae": {
+     "value": 0.8,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_llama_sae_2026-08-19_17-35-54",
+     "factor": "factor_207"
+    },
+    "cpe": {
+     "value": 0.915,
+     "metric": "correct",
+     "n_prompts": 200,
+     "run": "sycophancy_cpe_llama_2026-08-16_22-41-15",
+     "factor": "factor_280"
+    }
+   },
+   "paper": {
+    "base": 0.79,
+    "random": 0.79,
+    "sae": 0.82,
+    "cpe": 0.93
+   }
+  },
+  {
+   "environment": "Jailbreak (ASR)",
+   "model": "robust-llama3-8b",
+   "experiment": "jailbreak",
+   "ours": {
+    "base": {
+     "value": 0.0,
+     "metric": "attack_success",
+     "n_prompts": 200,
+     "run": "jailbreak_cpe_2026-08-16_23-10-09",
+     "factor": null
+    },
+    "random": {
+     "value": 0.0,
+     "metric": "attack_success",
+     "n_prompts": 200,
+     "run": "jailbreak_cpe_random_2026-08-17_11-31-33",
+     "factor": "factor_0"
+    },
+    "sae": {
+     "value": 0.0,
+     "metric": "attack_success",
+     "n_prompts": 200,
+     "run": "jailbreak_cpe_sae_2026-08-19_18-52-47",
+     "factor": "factor_0"
+    },
+    "cpe": {
+     "value": 0.52,
+     "metric": "attack_success",
+     "n_prompts": 200,
+     "run": "jailbreak_cpe_2026-08-16_23-10-09",
+     "factor": "factor_454"
+    }
+   },
+   "paper": {
+    "base": 0.0,
+    "random": 0.0,
+    "sae": 0.0,
+    "cpe": 0.65
+   }
+  },
+  {
+   "environment": "Sandbagging (BCB)",
+   "model": "Llama-3.3-70B",
+   "experiment": "sandbagging",
+   "ours": {
+    "base": {
+     "value": 0.49,
+     "metric": "passed",
+     "n_prompts": 100,
+     "run": "sandbagging_cpe_2026-08-17_22-30-00",
+     "factor": null
+    },
+    "cpe": {
+     "value": 0.66,
+     "metric": "passed",
+     "n_prompts": 100,
+     "run": "sandbagging_cpe_2026-08-17_22-30-00",
+     "factor": "factor_64"
+    },
+    "password": {
+     "value": 0.62,
+     "metric": "passed",
+     "n_prompts": 100,
+     "run": "sandbagging_password_2026-08-17_10-56-02",
+     "factor": null
+    }
+   },
+   "paper": {
+    "base": 0.46,
+    "cpe": 0.52,
+    "password": 0.54
+   }
+  }
+ ]
+}

@@ -1,1 +1,93 @@
-\todo[inline]{Does CPE scale?: write from notes.md}
+CPE has been shown to work on small and medium scale language models.
+It can only help as a safety technique if it also scales to current frontier models, and beyond.
+
+Which way it should scale is not obvious a priori.
+On one hand the number of parameters CPE acts upon is a smaller fraction of all parameters the bigger the model gets, which would make elicitation harder with scale.
+On the other hand steering vectors, a method similar to CPE, work better on bigger models \citep{beaglehole2026}, which would suggest the opposite.
+We therefore measured how the effect size of CPE scales with the size of the model.
+
+A good way to evaluate this is the password-locked task.
+New model organisms of password-locked sandbagging are relatively quick to train, and the percentage of recovered performance gives a natural scale for the effectiveness of CPE.
+
+\subsection{The dense ladder}
+
+We took models from the Qwen3 family at 0.6B, 1.7B, 4B, 8B, 14B and 32B parameters and trained each of them on MMLU-Pro to answer correctly when a deployment tag is given.
+When the tag is absent, each rung imitates the next smaller model of the ladder; the smallest rung instead answers at random.
+Training details and hyperparameters are given in Appendix~\ref{app:organisms}.
+
+We then trained CPE on the non-passworded questions, first on a fixed ratio of layers to target, and selected the factor with the largest uplift on the benchmark.
+Afterwards, for all rungs whose reconstruction was not already perfect, we ran a small sweep over the layers to apply CPE at, to see whether other settings work better.
+Table~\ref{tab:pwlock-dense} gives the results.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/pwlock_tables/table_dense}
+  \caption{%
+    Dense Qwen3 ladder. Recovery is $(\text{CPE} - \text{no pw.}) / (\text{pw.} - \text{no pw.})$.
+    ``Fraction rule'' is the band from the depth-fraction rule $[0.225L, 0.325L] \to 0.55L$;
+    ``best band'' is the winner of the band sweep, whose source/target layers are given in the last column.
+    Cells marked \textsuperscript{\dag} were measured at $n=200$, the rest at $n=1200$.
+    4B, 8B and 14B were never swept, so their two recovery columns are the same run.%
+  }
+  \label{tab:pwlock-dense}
+\end{table}
+
+CPE reconstructs almost all of the password-locked performance up to 14B, and then drops off at the 32B scale.
+This suggests that CPE, at least with the methodology used here, works worse on bigger models.
+
+\subsection{Mixture-of-experts rungs}
+
+That conclusion rests on a single datapoint rather than a broad trend, so we sought further evidence from bigger models.
+The Qwen3 dense models only reach the 32B scale, but there are larger Qwen models with a mixture-of-experts architecture.
+We trained model organisms at the 35B, 122B and 397B scale.
+Here again we swept the band CPE is applied at, though for the 397B model we swept only the two most promising settings, for time reasons.
+Table~\ref{tab:pwlock-moe} gives the results.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/pwlock_tables/table_moe}
+  \caption{%
+    Qwen3.5 mixture-of-experts ladder, same columns and protocol as Table~\ref{tab:pwlock-dense}.%
+  }
+  \label{tab:pwlock-moe}
+\end{table}
+
+The trend continues, and CPE's ability to unlock the password-locked sandbagging has reached zero for the 397B model.
+
+The differing architectures make it unclear whether the model sizes can usefully be compared with each other.
+Figure~\ref{fig:pwlock-scaling} nevertheless gives a visual representation of CPE's apparent scaling behaviour.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{pwlock_scaling/pwlock_scaling.png}
+  \caption{%
+    Recovered fraction of the password gap against model size, best band per rung.
+    Dense rungs hold between 0.84 and 0.97 through 14B, and recovery falls away above that scale:
+    0.61 at the dense 32B, and 0.63, 0.13, 0.00 across the MoE 35B, 122B and 397B.
+    Error bars are $\pm 1$ standard error.%
+  }
+  \label{fig:pwlock-scaling}
+\end{figure}
+
+\subsection{Is it a steering-strength artifact?}
+
+While this paints a pessimistic picture of CPE's scaling behaviour, it is possible that some aspect of how we apply CPE has to be scaled with model size.
+A natural candidate is the steering strength $s$.
+We did not have the time to conduct a sweep over different values of $s$ for the large models.
+Instead we varied $s$ for the CPE LoRAs that were trained at $s=1$, and found that their performance degrades when $s$ is changed upwards or downwards (Figure~\ref{fig:pwlock-strength}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{pwlock_strength/pwlock_strength.png}
+  \caption{%
+    Recovery against steering strength $s$ for the two swept MoE rungs, re-scoring the selected factor at
+    coefficients other than the default $s=1$ it was trained at ($n=600$).
+    Both curves peak at $s=1$, so the weak recovery at scale is not a strength-calibration artifact.%
+  }
+  \label{fig:pwlock-strength}
+\end{figure}
+
+This is only one specific task, and it is not clear that CPE would show these scaling trends across all of its possible applications.
+It does suggest that some part of how CPE is done has to be adjusted if we want to apply it to bigger models.

@@ -1,4 +1,5 @@
 # Application to steganography
 
-<!-- Steganographic reasoning; steganographic messaging. -->
+## steganographic reasoning
 
+## steganographic messaging

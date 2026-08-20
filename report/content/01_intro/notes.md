@@ -1,4 +1,4 @@
 # Introduction
 
-<!-- What CPE does, what it has been shown to do; why we ask whether it is practically useful as a safety technique. -->
-
+ - introducing cpe, what does it do, what has it been shown to do already
+ - here we want to inveestigate cpe's practical uselfulness as an Ai safety tecnique

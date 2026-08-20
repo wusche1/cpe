@@ -1,0 +1,32 @@
+\section{CPE as an importable package}
+\label{app:package}
+
+The method itself is now an importable package rather than a research script.
+Its core has no dependency on the surrounding research repository, so applying CPE to a new model takes a few lines:
+
+\begin{lstlisting}[style=code,language=Python]
+from cpe import cpe_train
+
+factors = cpe_train(
+    model,                  # loaded HF causal LM
+    token_ids,              # list of tokenized prompts
+    source_layers=(8, 12),
+    target_layer=20,
+    num_factors=512,
+    num_iters=30,
+)
+factors.to_peft(0, "out/", base_model_name)   # export a factor as a PEFT adapter
+\end{lstlisting}
+
+The package is not published on PyPI yet, so for now it is built from the repository rather than installed by name.
+
+\section{Fire-and-forget experiment runs}
+\label{app:remote}
+
+The code base supports fire-and-forget handling of experiments, automatically renting hardware from Vast.ai via SkyPilot.
+A run is launched from a machine without a GPU: the cluster is created, the job is streamed, results are copied back, and the cluster is torn down, without further interaction.
+
+\section{Password-locked organism training}
+\label{app:organisms}
+
+\todo[inline]{Organism training details and hyperparameters for the ladder in Section~\ref{sec:scaling}.}
