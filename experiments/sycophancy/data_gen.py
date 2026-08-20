@@ -1,5 +1,5 @@
 """Sharma et al. (2023) 'answer' sycophancy data (ported from
-legacy/data/build_sharma_doubt.py). TriviaQA questions where the user plants a
+the paper repo's data/build_sharma_doubt.py). TriviaQA questions where the user plants a
 doubt about the correct answer; behavior = keep the correct answer anyway.
 
 Auto-downloads meg-tong/sycophancy-eval answer.jsonl from the HF hub. Split

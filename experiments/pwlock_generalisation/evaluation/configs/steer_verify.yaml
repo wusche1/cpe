@@ -10,7 +10,7 @@ experiments:
       function_name: verify_steering
       function_kwargs:
         steer_layer: 11          # the layer diffmeans selected in both forward runs
-        steer_scale: 0.2         # multiples of mean resid norm (legacy's sweep centre)
+        steer_scale: 0.2         # multiples of mean resid norm (the paper repo's sweep centre)
         verify_max_new_tokens: 48
       instance:
         retry_until_up: true

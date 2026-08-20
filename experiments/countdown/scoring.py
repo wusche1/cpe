@@ -1,4 +1,4 @@
-"""Countdown completion scoring (ported unchanged from legacy/scoring/score_countdown.py).
+"""Countdown completion scoring (ported unchanged from the paper repo's scoring/score_countdown.py).
 
 score(completion, answer) -> dict with exact_match / result_correct / parse_failed.
 """

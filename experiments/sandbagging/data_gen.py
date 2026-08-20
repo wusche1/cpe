@@ -1,5 +1,5 @@
 """BigCodeBench data for the Tarun sandbagging organism (ported from
-legacy/data/generate_bigcodebench.py). LOCKED condition: the plain system
+the paper repo's data/generate_bigcodebench.py). LOCKED condition: the plain system
 prompt, no password — the organism sandbags, and factors that elicit competence
 raise the pass rate (password-unlocked is the ceiling).
 

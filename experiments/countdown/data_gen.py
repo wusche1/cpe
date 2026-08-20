@@ -1,4 +1,4 @@
-"""Countdown puzzle generation (ported from legacy/data/generate_countdown.py).
+"""Countdown puzzle generation (ported from the paper repo's data/generate_countdown.py).
 
 Backward generation: build a random expression, use its value as the target, so
 every puzzle is solvable. Split seeds match the paper repo (42/1337/7777).

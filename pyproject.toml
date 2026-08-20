@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11,<3.14"
 
 dependencies = [
-    # Validated stack from the paper repo (legacy/pyproject.toml): torch 2.11 /
+    # Validated stack from the paper repo (github.com/amack315/cpe): torch 2.11 /
     # transformers 5.8.1 / peft 0.19.1. The sliced forward in lib/ replays
     # transformers internals, so transformers stays pinned.
     "torch==2.11.0",

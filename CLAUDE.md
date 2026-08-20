@@ -7,7 +7,8 @@ Models", arXiv 2606.29604) into a reusable library. The general CPE method lives
 `lib/`; each model organism is one experiment under `experiments/` containing only its
 data generation and completion scoring. Runs are launched from a GPU-less machine onto
 per-run Vast.ai clusters; results/ folders are rsynced back automatically (never via git).
-The original paper code is preserved unchanged in `legacy/` for reference.
+The original paper code lives at https://github.com/amack315/cpe (this repo began as a
+fork of it).
 
 ## Repository Structure
 
@@ -40,8 +41,6 @@ data generation and completion scoring, plus the scaffold boilerplate
 (`main.py`, `functions/`, `configs/`, `results/<run_name>/`).
 
 **test/** — unit tests (`uv run pytest`). CPU-only; use tiny models.
-
-**legacy/** — the original paper repo, frozen. Consult it when porting; don't modify.
 
 **lab_notebook/** — numbered markdown entries: hypotheses, what was run, what was learned.
 

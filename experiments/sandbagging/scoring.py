@@ -1,4 +1,4 @@
-"""BigCodeBench code-exec scorer (ported from legacy/scoring/score_bigcodebench.py).
+"""BigCodeBench code-exec scorer (ported from the paper repo's scoring/score_bigcodebench.py).
 
 Execution mirrors the canonical BCB harness: extract the model's code, assemble
 a standalone module defining `entry_point`, append the problem's unittest, run

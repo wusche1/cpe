@@ -1,6 +1,6 @@
 """Executable scorers for the two code evaluations.
 
-BigCodeBench (ported from legacy/scoring/score_bigcodebench.py): extract the
+BigCodeBench (ported from the paper repo's scoring/score_bigcodebench.py): extract the
 model's code, assemble a standalone module defining `entry_point`, append the
 problem's unittest, run it as a script — passed == exit code 0.
 MBPP: the same, with the problem's asserts in place of the unittest.

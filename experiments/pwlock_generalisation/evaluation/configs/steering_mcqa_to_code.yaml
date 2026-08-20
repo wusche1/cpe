@@ -23,7 +23,7 @@ experiments:
           # multiples of the mean residual norm at the injection layer (BOS
           # excluded), the paper's unit — NOT the old multiples of ||v||, which
           # were per-model and per-labelset and so never comparable across runs.
-          # Spans legacy's SAE sweep (0.05-0.4) and 4x beyond it.
+          # Spans the paper repo's SAE sweep (0.05-0.4) and 4x beyond it.
           scales: [0.05, 0.1, 0.2, 0.4, 0.8, 1.6]
           max_seq_len: 512
       instance:

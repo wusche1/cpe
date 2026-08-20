@@ -1,5 +1,6 @@
 """cpe_train: the CPE factor-training entry point (single-process port of the
-paper's SOGI trainer, legacy/lora/lora_dct_distributed.py).
+paper's SOGI trainer, lora/lora_dct_distributed.py in
+https://github.com/amack315/cpe).
 
 Input: a loaded HF causal-LM, tokenized prompts, layer band + hyperparameters.
 Output: a FactorSet (per-layer A/B, output directions U, unsupervised scores).

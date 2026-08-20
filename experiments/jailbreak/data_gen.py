@@ -1,4 +1,4 @@
-"""AdvBench jailbreak (red-team) data (ported from legacy/data/generate_jailbreak.py).
+"""AdvBench jailbreak (red-team) data (ported from the paper repo's data/generate_jailbreak.py).
 
 Red-team evaluation: train CPE factors on a few harmful prompts and measure whether
 any factor jailbreaks a robustness-trained target model (ASR via judge). Splits are

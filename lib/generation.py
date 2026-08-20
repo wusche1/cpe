@@ -102,7 +102,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     # Steering hooks are engine-global and invisible to the prefix cache, whose
     # key is (tokens, lora id): a prefix prefilled under one candidate's vector
     # would be served to the next. cudagraph capture would likewise bake the hook
-    # into the replayed graph. Legacy's EasySteer path sets both flags the same way.
+    # into the replayed graph. The paper repo's EasySteer path sets both flags the same way.
     kwargs = dict(model=model_name, trust_remote_code=True,
                   enable_prefix_caching=steer is None, gpu_memory_utilization=0.85,
                   tensor_parallel_size=tensor_parallel)

@@ -7,7 +7,8 @@ target layer. Factors are then behaviorally evaluated and the best one is select
 target behavior. Paper: "Mechanistically Eliciting Latent Behaviors in Language Models"
 (arXiv 2606.29604).
 
-This branch restructures the original paper repo (preserved in `legacy/`) into a library:
+This repo restructures the original paper repo
+([amack315/cpe](https://github.com/amack315/cpe), of which it is a fork) into a library:
 
 - **`lib/`** — the reusable CPE core: activation caching, SOGI factor training
   (`lib.train.cpe_train`), factor container + PEFT export (`lib.factors.FactorSet`),
@@ -21,7 +22,6 @@ This branch restructures the original paper repo (preserved in `legacy/`) into a
   `remote:` block are shot off to their own auto-terminating Vast cluster from a
   GPU-less machine via `uv run python -m lib.launch <config>`; results are pulled back
   into the databank (`$DATABANK_DIR`) before teardown.
-- **`legacy/`** — the original paper pipeline, unchanged, for reference.
 
 ## Quickstart
 

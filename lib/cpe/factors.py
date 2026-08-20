@@ -244,7 +244,7 @@ class FactorSet(nn.Module):
 def soft_ortho(V: Tensor, num_iterations: int, temperature: float, logit_bias: Tensor) -> Tensor:
     """Soft orthogonalization of column vectors V: (D, n). Each vector subtracts a
     softmax-weighted mix of its most-similar peers (bias: stronger-gradient factors
-    dominate), then renormalizes. Ported unchanged from legacy."""
+    dominate), then renormalizes. Ported unchanged from the paper repo."""
     d, n = V.shape
     V = F.normalize(V, p=2, dim=0)
     mask = torch.ones(n, n, device=V.device) - torch.eye(n, device=V.device)

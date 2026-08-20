@@ -53,7 +53,7 @@ def attach_steering(model, sites, site="layer"):
 
 def mean_resid_norm(model, token_ids, layer_idx):
     """Mean ||resid_post|| at layer_idx over the calibration tokens, EXCLUDING the
-    first token (legacy `compute_steering_norm`): position 0 carries the
+    first token (the paper repo's `compute_steering_norm`): position 0 carries the
     massive-activation attention sink, whose norm is orders of magnitude above the
     rest and would set the scale on its own.
 
@@ -81,7 +81,7 @@ def mean_resid_norm(model, token_ids, layer_idx):
 # the same site as the HF path.
 #
 # The engine MUST be built with enforce_eager=True and enable_prefix_caching=False
-# (legacy's EasySteer path sets both):
+# (the paper repo's EasySteer path sets both):
 #   - cudagraph capture would bake the hook's tensor into the replayed graph;
 #   - the prefix cache keys on token ids and the LoRA id, NOT on the hook, so a
 #     prefix prefilled under one steering vector would be served to the next
