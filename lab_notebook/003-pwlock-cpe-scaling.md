@@ -394,7 +394,9 @@ Recovery by strength s:
 | 8.0 | -2.674 | -2.270 | |
 
 (35B +/- ~0.13, 122B +/- ~0.10 per point; s=1.0 reproduces the band-sweep
-numbers measured independently at n=1200.)
+numbers measured independently at n=1200. The 397B column was not measured:
+its s=1.0 value is the -0.004 band-sweep null, and both measured curves peak
+at s=1, so a direction that does nothing at 1 was not expected to work scaled.)
 
 Both curves peak at the default s=1: recovery rises monotonically to 1, then
 degrades — by s=4-8 the model is broken outright (CPE arm far below locked).
