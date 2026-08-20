@@ -45,10 +45,13 @@ def generate_completions(
     max_model_len: Optional[int] = None,
     hf_model=None,
     tensor_parallel: int = 1,
+    return_token_ids: bool = False,
+    additional_config: Optional[dict] = None,
+    max_loras: Optional[int] = None,
     model_dtype: Optional[str] = None,
     steer=None,
     steer_site="layer",
-) -> Dict[str, List[str]]:
+) -> Dict[str, List]:
     """Generate one completion per (adapter, prompt).
 
     adapters: name -> PEFT adapter dir, or None for the no-adapter baseline.
@@ -56,21 +59,27 @@ def generate_completions(
       steering (lib/steer_hooks) at `steer_site` ("layer" = resid_post,
       "o_proj" = resid_mid). Must cover every name in `adapters` when given. Hooks are process/engine-global, so each name gets
       its own generation pass — unlike the adapter path, which batches them.
-    Returns name -> list of completion strings (aligned with prompts).
+    Returns name -> list of completions (aligned with prompts): strings, or
+    {"text", "token_ids"} dicts if `return_token_ids` — which a scorer needs
+    when the signal lives in the tokenization rather than the rendered text.
     For backend "hf", a preloaded model can be passed via hf_model.
     """
     if backend == "vllm":
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
-                              temperature, max_model_len, tensor_parallel, steer,
-                              steer_site)
+                              temperature, max_model_len, tensor_parallel,
+                              return_token_ids, additional_config, max_loras,
+                              steer, steer_site)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
-                            temperature, hf_model, model_dtype, steer, steer_site)
+                            temperature, hf_model, model_dtype, return_token_ids,
+                            steer, steer_site)
     raise ValueError(f"unknown backend {backend!r}")
 
 
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
-                   max_model_len, tensor_parallel, steer=None, steer_site="layer"):
+                   max_model_len, tensor_parallel, return_token_ids=False,
+                   additional_config=None, max_loras=None, steer=None,
+                   steer_site="layer"):
     # vLLM forks its engine-core when the parent's CUDA context is cold, which
     # crashes ("Cannot re-initialize CUDA in forked subprocess"). Label generation
     # is the first vLLM call in the run, so warm the parent context (as the CPE
@@ -97,6 +106,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     kwargs = dict(model=model_name, trust_remote_code=True,
                   enable_prefix_caching=steer is None, gpu_memory_utilization=0.85,
                   tensor_parallel_size=tensor_parallel)
+    if additional_config:
+        kwargs['additional_config'] = additional_config
     if steer is not None:
         kwargs['enforce_eager'] = True
     if n_lora:
@@ -104,7 +115,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
         # cache at max_lora_rank: cap the cache, LRU eviction reloads from disk
         kwargs.update(enable_lora=True,
                       max_lora_rank=_vllm_lora_rank(max(ranks)),
-                      max_loras=min(16, n_lora), max_cpu_loras=min(32, n_lora))
+                      max_loras=min(max_loras or 16, n_lora),
+                      max_cpu_loras=min(32, n_lora))
     if max_model_len is not None:
         kwargs['max_model_len'] = max_model_len
     llm = LLM(**kwargs)
@@ -116,6 +128,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
             lora_requests[name] = LoRARequest(lora_name=name, lora_int_id=int_id,
                                               lora_path=path)
 
+    unpack = ((lambda o: {'text': o.text, 'token_ids': list(o.token_ids)})
+              if return_token_ids else (lambda o: o.text))
     results = {name: [None] * len(prompts) for name in adapters}
     if steer is None:
         batch_prompts, batch_loras, meta = [], [], []
@@ -127,7 +141,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
         outputs = llm.generate(batch_prompts, sampling, lora_request=batch_loras)
         for out, (name, pidx) in zip(outputs, meta):
-            results[name][pidx] = out.outputs[0].text
+            results[name][pidx] = unpack(out.outputs[0])
     else:
         from lib.steer_hooks import attach_steering_vllm, detach_steering_vllm
         for name in adapters:
@@ -144,7 +158,7 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
                 f"steering hooks for {name} never fired ({fired}); the engine "
                 f"routed around them (compilation, cudagraph replay or prefix "
                 f"cache) and every number from this run would be an artifact")
-            results[name] = [out.outputs[0].text for out in outputs]
+            results[name] = [unpack(out.outputs[0]) for out in outputs]
 
     # the engine is recreated per selection round: release GPU memory now
     import gc
@@ -155,7 +169,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
 
 
 def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
-                 model=None, model_dtype=None, steer=None, steer_site="layer"):
+                 model=None, model_dtype=None, return_token_ids=False,
+                 steer=None, steer_site="layer"):
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -179,7 +194,10 @@ def _generate_hf(model_name, adapters, prompts, max_new_tokens, temperature,
                             add_special_tokens=False).input_ids.to(m.device)
             with torch.no_grad():
                 out = m.generate(ids, **gen_kwargs)
-            outs.append(tokenizer.decode(out[0, ids.shape[1]:], skip_special_tokens=True))
+            new_ids = out[0, ids.shape[1]:]
+            text = tokenizer.decode(new_ids, skip_special_tokens=True)
+            outs.append({'text': text, 'token_ids': new_ids.tolist()}
+                        if return_token_ids else text)
         return outs
 
     results = {}

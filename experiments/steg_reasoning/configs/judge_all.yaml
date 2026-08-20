@@ -1,0 +1,14 @@
+common_root: configs/judge.yaml
+
+# Judge ALL 512 steering vectors on the full 100-case transcript.
+#
+# ~88k input tokens per factor => ~45M in + ~1M out => ~$10 on gpt-5.6-luna.
+# ~15 min at concurrency 32. Verdicts are appended to cache_path as they land, so
+# re-running this config resumes and only re-judges what is missing.
+experiments:
+  - config:
+      name: judge_all
+      function_kwargs:
+        factors: ["all"]
+        judge_concurrency: 32
+        cache_path: results/judge_cache/all512_100cases.jsonl

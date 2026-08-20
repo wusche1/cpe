@@ -1,0 +1,26 @@
+common_root: configs/base.yaml
+
+# Why does the merged organism only run its covert channel on ~40% of prompts when
+# the model card reports 0.825 exact? Measures the unsteered organism across
+# generation settings in ONE job (download + merge dominate, so extra settings are
+# nearly free): the training-time token budget vs a shorter one, greedy vs sampled.
+experiments:
+  - config:
+      name: diagnose
+      function_kwargs:
+        baseline_only: true
+        baseline_floor: 0.0
+        num_baseline_prompts: 40
+        baseline_grid:
+          - {max_new_tokens: 2000, temperature: 0.0}
+          - {max_new_tokens: 2000, temperature: 1.0}
+          - {max_new_tokens: 1024, temperature: 0.0}
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

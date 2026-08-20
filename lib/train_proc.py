@@ -15,8 +15,12 @@ from lib.methods import STEER_METHODS, produce_factors, produce_steering
 def main(args_path: str):
     with open(args_path) as f:
         a = json.load(f)
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    model = AutoModelForCausalLM.from_pretrained(
+    import transformers
+    from transformers import AutoTokenizer
+    # The auto class is config-driven: a vision-language checkpoint (Qwen3.5/3.6)
+    # is a ...ForConditionalGeneration, and loading it as a plain CausalLM would
+    # silently leave the weights unmatched.
+    model = getattr(transformers, a['model_class']).from_pretrained(
         a['model_name'], torch_dtype=getattr(torch, a['model_dtype']),
         device_map=a['device'])
     # organism as a runtime adapter, never merged: bf16 merge silently drops a
@@ -49,7 +53,8 @@ def main(args_path: str):
         num_factors=a['num_factors'], num_iters=a['num_iters'],
         factor_batch_size=a['factor_batch_size'], norm_value=1.0,
         train_seed=a['train_seed'], trim=a['trim'], sae_config=a['sae_config'],
-        log_dir=a['log_dir'], model_name=a['model_name'], tokenizer=tokenizer,
+        target_modules=a['target_modules'], log_dir=a['log_dir'],
+        model_name=a['model_name'], tokenizer=tokenizer,
         labeled=a.get('labeled'), sft_config=a.get('sft_config'),
         steer_config=a.get('steer_config'), adapter_root=a['adapter_root'])
     if fs is None:               # sft wrote its adapters directly

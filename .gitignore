@@ -24,6 +24,10 @@ build/
 # same policy one level deeper, for experiments/<group>/<sub>/results/
 experiments/*/*/results/**/adapter/
 experiments/*/*/results/**/adapters/
+# ...also when adapters/ has been replaced by a symlink to local overflow disk
+# (trailing-slash rule above matches only real dirs, not the symlink)
+experiments/*/*/results/**/adapters
+experiments/*/results/**/adapters
 experiments/*/*/results/**/completions.json
 experiments/*/*/results/**/generation/
 experiments/*/*/results/**/logs.txt
@@ -40,7 +44,13 @@ experiments/*/*/results/**/*.bin
 **/results/*debug*/
 experiments/*/results/**/adapters/
 experiments/*/results/**/completions.json
+# sharded harvest output: completions_0_256.json, completions_256_512.json
+experiments/*/results/**/completions_*.json
 experiments/*/results/**/training/factors/
+# per-factor judge verdict cache: regenerable, one JSON blob per factor
+experiments/*/results/judge_cache/
+# trained factor set shipped to the remote as a tar
+experiments/*/factors_*.tar
 experiments/*/results/**/*.safetensors
 experiments/*/results/**/*.pt
 experiments/*/results/**/*.pth

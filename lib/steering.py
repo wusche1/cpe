@@ -14,22 +14,15 @@ multi-LoRA -> selection) with zero new inference machinery.
 
 import torch
 
-from lib.cpe.factors import CPEConfig, FactorSet, attn_block, resolve_module
-
-
-def out_projection(model, layer_idx):
-    """The attention output projection of a layer, whichever attention block
-    it carries: o_proj on standard attention, out_proj on the GatedDeltaNet
-    layers of hybrids like Qwen3.5-MoE."""
-    _, attn = attn_block(model.model.layers[layer_idx])
-    return getattr(attn, resolve_module(attn, 'o_proj'))
+from lib.cpe.factors import CPEConfig, FactorSet, _key
+from lib.cpe.model_access import text_stack
 
 
 def mean_oproj_input(model, token_ids, layer_idx):
     """mu = mean input to layer_idx's o_proj over the calibration prompts
     (i.e. the mean attention output), computed with one forward pass via a hook."""
     device = next(model.parameters()).device
-    oproj = out_projection(model, layer_idx)
+    oproj = text_stack(model)[0].layers[layer_idx].self_attn.o_proj
     acc, count = [], 0
     def hook(_m, inp, _out):
         x = inp[0].reshape(-1, inp[0].shape[-1])  # (tokens, d_in)
@@ -50,7 +43,7 @@ def _per_example_acts(model, tokenizer, examples, layers, max_seq_len):
     leaving that layer's block and the mean input to its o_proj, over the example's
     completion tokens. Returns (prompts, {layer: (n,d)}, {layer: (n,d_in)})."""
     device = next(model.parameters()).device
-    oprojs = {L: out_projection(model, L) for L in layers}
+    oprojs = {L: model.model.layers[L].self_attn.o_proj for L in layers}
     buf = {}
     def mk(L):
         return lambda _m, inp, _out: buf.__setitem__(L, inp[0].squeeze(0).detach())
@@ -141,7 +134,7 @@ def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_
         fs.B[key].data.zero_()
     k = 0
     for L in layers:
-        key = f"layer{L}_o_proj"
+        key = _key(L, config.target_modules[0])
         dtype = fs.A[key].dtype
         mu = dirs[L]['mu']
         a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)
@@ -166,7 +159,7 @@ def steering_factors(model, layer_idx, vectors, scale, mu):
     config = CPEConfig(source_layers=(layer_idx, layer_idx), target_layer=layer_idx,
                        target_modules=["o_proj"], rank=1)
     fs = FactorSet.from_model(vectors.shape[0], config, model)
-    key = f"layer{layer_idx}_o_proj"
+    key = _key(layer_idx, config.target_modules[0])
     dtype = fs.A[key].dtype
     a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)      # (d_in,)
     B = (scale * torch.nn.functional.normalize(vectors, dim=1)) # (K, d_out)

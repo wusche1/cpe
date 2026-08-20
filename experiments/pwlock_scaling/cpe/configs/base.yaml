@@ -10,6 +10,10 @@ wandb_project: null
 function_kwargs:
   log_path: results/RUN_NAME
   method: cpe
+  model_class: AutoModelForCausalLM
+  target_modules: [o_proj]
+  return_token_ids: false
+  vllm_additional_config: {}
   sae_config: null
   base_model: Qwen/Qwen3-0.6B
   adapter_repo: wuschelschulz/Qwen3-0.6B-pwlock-mmlu-pro

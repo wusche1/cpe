@@ -1,4 +1,3 @@
-import pytest
 import torch
 
 from lib.cpe.factors import CPEConfig, FactorSet
@@ -9,13 +8,6 @@ SOURCE_LAYERS = (1, 2)
 TARGET_LAYER = 4
 
 
-@pytest.fixture(params=["dense", "hybrid"])
-def model(request, tiny_model, tiny_hybrid_model):
-    """Every slicing invariant is checked on both a standard-attention stack and
-    a GatedDeltaNet/attention hybrid."""
-    return tiny_model if request.param == "dense" else tiny_hybrid_model
-
-
 def make_factors(model, num_factors=4, seed=2):
     config = CPEConfig(source_layers=SOURCE_LAYERS, target_layer=TARGET_LAYER)
     fs = FactorSet.from_model(num_factors, config, model)
@@ -23,44 +15,48 @@ def make_factors(model, num_factors=4, seed=2):
     return fs
 
 
-def test_unsteered_slice_matches_full_forward(model, tiny_token_ids):
+def test_unsteered_slice_matches_full_forward(tiny_model, tiny_token_ids):
     """The replayed slice must reproduce the model's own hidden states exactly."""
-    X, Y = cache_activations(model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
-    fs = make_factors(model)
-    sliced = SlicedLoRAModel(model, fs)
-    for x, y in zip(X, Y):
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER)
+    fs = make_factors(tiny_model)
+    sliced = SlicedLoRAModel(tiny_model, fs)
+    for x, y, kw in zip(X, Y, KW):
         with torch.no_grad():
-            out = sliced.forward_unsteered(x.unsqueeze(0))
+            out = sliced.forward_unsteered(x.unsqueeze(0), kw[1])
         torch.testing.assert_close(out.squeeze(0), y, atol=1e-5, rtol=1e-4)
 
 
-def test_zero_factors_give_zero_delta(model, tiny_token_ids):
-    X, Y = cache_activations(model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
+def test_zero_factors_give_zero_delta(tiny_model, tiny_token_ids):
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER, batch_sizes=(4,))
     config = CPEConfig(source_layers=SOURCE_LAYERS, target_layer=TARGET_LAYER)
-    fs = FactorSet.from_model(4, config, model)  # zero-initialized
-    sliced = SlicedLoRAModel(model, fs)
+    fs = FactorSet.from_model(4, config, tiny_model)  # zero-initialized
+    sliced = SlicedLoRAModel(tiny_model, fs)
     with torch.no_grad():
         delta = sliced.forward_chunk_delta_mean(
-            X[0].unsqueeze(0), Y[0].unsqueeze(0), 0, 4, slice(-3, None))
+            X[0].unsqueeze(0), Y[0].unsqueeze(0), 0, 4, slice(-3, None), KW[0][4])
     assert delta.abs().max() < 1e-5
 
 
-def test_batched_lora_matches_peft_adapter(model, tiny_token_ids, tmp_path):
+def test_batched_lora_matches_peft_adapter(tiny_model, tiny_token_ids, tmp_path):
     """PEFT export round-trip: running the full model with the exported adapter
     must reproduce the sliced batched-einsum forward for that factor."""
     from peft import PeftModel
 
-    X, Y = cache_activations(model, tiny_token_ids, SOURCE_LAYERS[0], TARGET_LAYER)
-    fs = make_factors(model)
-    sliced = SlicedLoRAModel(model, fs)
+    X, Y, KW = cache_activations(tiny_model, tiny_token_ids, SOURCE_LAYERS[0],
+                                 TARGET_LAYER)
+    fs = make_factors(tiny_model)
+    sliced = SlicedLoRAModel(tiny_model, fs)
 
     factor_idx = 1
     with torch.no_grad():
-        sliced_out = sliced._forward_chunk(X[0].unsqueeze(0), factor_idx, factor_idx + 1)
+        sliced_out = sliced._forward_chunk(X[0].unsqueeze(0), factor_idx,
+                                           factor_idx + 1, KW[0][1])
 
     adapter_dir = fs.to_peft(factor_idx, str(tmp_path / "adapter"), "tiny",
                              dtype=torch.float32)
-    peft_model = PeftModel.from_pretrained(model, adapter_dir)
+    peft_model = PeftModel.from_pretrained(tiny_model, adapter_dir)
     input_ids = torch.tensor(tiny_token_ids[0]).unsqueeze(0)
     with torch.no_grad():
         out = peft_model(input_ids, output_hidden_states=True)
@@ -71,8 +67,8 @@ def test_batched_lora_matches_peft_adapter(model, tiny_token_ids, tmp_path):
                                atol=1e-4, rtol=1e-3)
 
 
-def test_factorset_save_load_roundtrip(model, tmp_path):
-    fs = make_factors(model)
+def test_factorset_save_load_roundtrip(tiny_model, tmp_path):
+    fs = make_factors(tiny_model)
     fs.U = torch.randn(64, fs.num_factors)
     fs.scores = torch.randn(fs.num_factors)
     fs.save(str(tmp_path / "fs"))

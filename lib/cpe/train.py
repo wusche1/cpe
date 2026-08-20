@@ -16,44 +16,69 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 from .factors import CPEConfig, FactorSet, soft_ortho
+from .model_access import capture_layer_kwargs, text_stack
 from .sliced_model import SlicedLoRAModel
 
 
 def cache_activations(model, token_ids: Sequence[Sequence[int]],
-                      source_layer: int, target_layer: int):
+                      source_layer: int, target_layer: int,
+                      batch_sizes: Sequence[int] = (1,)):
     """Run the unmodified model over each sample; return per-sample CPU tensors
-    (X entering the source band, Y leaving the target layer)."""
-    device = next(model.parameters()).device
-    X, Y = [], []
+    (X entering the source band, Y leaving the target layer) plus, per sample,
+    the kwargs each band layer is called with at each batch size in
+    `batch_sizes` — the replay needs them and they can only be captured while
+    the model is still whole."""
+    stack, _ = text_stack(model)
+    device = stack.embed_tokens.weight.device
+    layer_indices = list(range(source_layer, target_layer + 1))
+    X, Y, KW = [], [], []
     for ids in tqdm(token_ids, desc="Caching activations"):
         input_ids = torch.tensor(ids, device=device).unsqueeze(0)
         with torch.no_grad():
-            out = model(input_ids, output_hidden_states=True)
+            out = stack(input_ids=input_ids, output_hidden_states=True, use_cache=False)
         X.append(out.hidden_states[source_layer].squeeze(0).cpu())
         Y.append(out.hidden_states[target_layer + 1].squeeze(0).cpu())
-    return X, Y
+        KW.append({b: capture_layer_kwargs(model, ids, layer_indices, b)
+                   for b in batch_sizes})
+    return X, Y, KW
+
+
+def _kwargs_to_device(layer_kwargs, device):
+    """Move captured kwargs onto `device` (a sharded model puts them wherever
+    the preamble ran; the trimmed band is consolidated on one device)."""
+    def move(v):
+        if torch.is_tensor(v):
+            return v.to(device)
+        if isinstance(v, (tuple, list)):
+            return type(v)(move(x) for x in v)
+        return v
+    return {idx: {k: move(v) for k, v in kw.items()}
+            for idx, kw in layer_kwargs.items()}
 
 
 def trim_model_(model, source_layer_start: int, target_layer: int):
     """DESTRUCTIVE: drop layers outside [source_layer_start, target_layer], the
     embedding, final norm, and lm_head to free memory. The model can no longer
     run a normal forward afterwards."""
-    layers = model.model.layers
+    stack, _ = text_stack(model)
+    layers = stack.layers
     for i in range(source_layer_start):
         layers[i] = None
     for i in range(target_layer + 1, len(layers)):
         layers[i] = None
-    model.model.embed_tokens = None
-    if hasattr(model.model, 'norm'):
-        model.model.norm = None
+    stack.embed_tokens = None
+    if hasattr(stack, 'norm'):
+        stack.norm = None
     if hasattr(model, 'lm_head'):
         model.lm_head = None
+    if hasattr(model.model, 'visual'):
+        model.model.visual = None
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
 
-def _delta_pass(sliced, fs, U, X, Y, factor_batch_size, target_positions,
+def _delta_pass(sliced, fs, U, X, Y, KW, factor_batch_size, target_positions,
                 device, with_grad: bool):
     """One pass over all samples. Accumulates parameter grads (if with_grad) and
     returns (G_U: (K, D) mean delta per factor, mean objective per factor <delta,U>)."""
@@ -62,18 +87,19 @@ def _delta_pass(sliced, fs, U, X, Y, factor_batch_size, target_positions,
     G_U_sum = None
     obj_sum = torch.zeros(K)
     ctx = torch.enable_grad if with_grad else torch.no_grad
-    for x, y in zip(X, Y):
+    for x, y, kw in zip(X, Y, KW):
         x = x.unsqueeze(0).to(device)
         y = y.unsqueeze(0).to(device)
         for k_start in range(0, K, factor_batch_size):
             k_end = min(k_start + factor_batch_size, K)
             with ctx():
                 delta = sliced.forward_chunk_delta_mean(x, y, k_start, k_end,
-                                                        target_positions)
+                                                        target_positions,
+                                                        kw[k_end - k_start])
                 # U lives on the model's first device; with device_map="auto"
                 # and trim=False the band stays split, so delta comes back on
                 # whichever GPU holds the target layer. No-op single-device.
-                dots = (delta * U[:, k_start:k_end].T.to(delta.device)).sum(dim=1)
+                dots = (delta * U[:, k_start:k_end].T.to(delta.device)).sum(dim=1)  # (k_chunk,)
                 if with_grad:
                     dots.sum().backward()
             if G_U_sum is None:
@@ -117,7 +143,10 @@ def cpe_train(
     for p in model.parameters():
         p.requires_grad_(False)
 
-    X, Y = cache_activations(model, token_ids, config.source_layers[0], target_layer)
+    chunk_sizes = sorted({min(factor_batch_size, num_factors - k)
+                          for k in range(0, num_factors, factor_batch_size)})
+    X, Y, KW = cache_activations(model, token_ids, config.source_layers[0],
+                                 target_layer, batch_sizes=chunk_sizes)
     if trim:
         trim_model_(model, config.source_layers[0], target_layer)
         # A device_map-sharded model may have the band split across GPUs; the
@@ -126,8 +155,11 @@ def cpe_train(
         # would otherwise force sub-modules back onto their mapped devices.
         from accelerate.hooks import remove_hook_from_module
         remove_hook_from_module(model, recurse=True)
-        model.model.layers.to(device)
-        model.model.rotary_emb.to(device)
+        stack, _ = text_stack(model)
+        stack.layers.to(device)
+        stack.rotary_emb.to(device)
+        KW = [{b: _kwargs_to_device(kw, device) for b, kw in per_sample.items()}
+              for per_sample in KW]
 
     fs = FactorSet.from_model(num_factors, config, model)
     sliced = SlicedLoRAModel(model, fs)
@@ -139,7 +171,7 @@ def cpe_train(
     # Init: small random factors, one gradient pass, factors <- normalized gradients.
     fs.init_random_(generator=gen)
     fs.zero_grad_()
-    _delta_pass(sliced, fs, U, X, Y, factor_batch_size, target_positions, device,
+    _delta_pass(sliced, fs, U, X, Y, KW, factor_batch_size, target_positions, device,
                 with_grad=True)
     G_lora = fs.grad_flattened() / len(X)
     fs.set_from_flattened(F.normalize(G_lora, dim=1))
@@ -148,7 +180,7 @@ def cpe_train(
     objectives = []
     for _ in tqdm(range(num_iters), desc="SOGI"):
         fs.zero_grad_()
-        G_U, obj = _delta_pass(sliced, fs, U, X, Y, factor_batch_size,
+        G_U, obj = _delta_pass(sliced, fs, U, X, Y, KW, factor_batch_size,
                                target_positions, device, with_grad=True)
         objectives.append(obj.mean().item())
 
@@ -165,7 +197,7 @@ def cpe_train(
         fs.set_from_flattened(new_lora)
         fs.normalize_columns_()
 
-    _, scores = _delta_pass(sliced, fs, U, X, Y, factor_batch_size,
+    _, scores = _delta_pass(sliced, fs, U, X, Y, KW, factor_batch_size,
                             target_positions, device, with_grad=False)
     fs.scores = scores
     fs.U = U.detach()

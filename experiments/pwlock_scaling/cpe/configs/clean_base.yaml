@@ -32,6 +32,8 @@ function_kwargs:
   num_test_prompts: 200
   source_layers: [6, 9]
   target_layer: 15
+  target_modules: [self_attn.o_proj, linear_attn.out_proj]
+  model_class: AutoModelForCausalLM
   num_factors: 512
   num_iters: 30
   factor_batch_size: 16

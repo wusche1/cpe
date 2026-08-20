@@ -20,13 +20,15 @@ STEER_METHODS = ("diffmeans", "sae", "cpe_degated")
 
 from lib.cpe import cpe_train
 from lib.cpe.factors import CPEConfig, FactorSet
+from lib.cpe.model_access import text_stack
 from lib.steering import (diffmeans_directions, diffmeans_factors, mean_oproj_input,
                           steering_factors)
 
 
-def _random_lora(model, source_layers, target_layer, num_factors, norm_value, seed):
+def _random_lora(model, source_layers, target_layer, num_factors, norm_value, seed,
+                 target_modules):
     config = CPEConfig(source_layers=tuple(source_layers), target_layer=target_layer,
-                       target_modules=["o_proj"], rank=1, norm_value=norm_value)
+                       target_modules=target_modules, rank=1, norm_value=norm_value)
     fs = FactorSet.from_model(num_factors, config, model)
     gen = torch.Generator().manual_seed(seed)
     for key in fs.A.keys():
@@ -62,7 +64,7 @@ def _sae(model, token_ids, num_factors, sae_config):
 
     # resid_post of `layer` = input to `layer+1`
     acts = []
-    h = model.model.layers[layer + 1].register_forward_pre_hook(
+    h = text_stack(model)[0].layers[layer + 1].register_forward_pre_hook(
         lambda m, args: acts.append(args[0].reshape(-1, args[0].shape[-1])))
     try:
         with torch.no_grad():
@@ -114,7 +116,7 @@ def _sae_directions(model, token_ids, num_factors, sae_config):
 
 def produce_factors(method, model, token_ids, *, source_layers, target_layer,
                     num_factors, num_iters, factor_batch_size, norm_value,
-                    train_seed, trim, sae_config=None, log_dir=None,
+                    train_seed, trim, target_modules, sae_config=None, log_dir=None,
                     model_name=None, tokenizer=None, labeled=None,
                     sft_config=None, steer_config=None, adapter_root=None):
     """Returns a FactorSet, except for `sft` which writes its adapters directly to
@@ -124,10 +126,10 @@ def produce_factors(method, model, token_ids, *, source_layers, target_layer,
             model, token_ids, source_layers=tuple(source_layers),
             target_layer=target_layer, num_factors=num_factors, num_iters=num_iters,
             factor_batch_size=factor_batch_size, norm_value=norm_value,
-            seed=train_seed, trim=trim, log_dir=log_dir)
+            target_modules=target_modules, seed=train_seed, trim=trim, log_dir=log_dir)
     if method == "random_lora":
         return _random_lora(model, source_layers, target_layer, num_factors,
-                            norm_value, train_seed)
+                            norm_value, train_seed, target_modules)
     if method == "sae":
         return _sae(model, token_ids, num_factors, sae_config)
     if method == "sft":
