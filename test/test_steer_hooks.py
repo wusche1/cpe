@@ -136,7 +136,7 @@ def test_lora_encoding_does_not_deliver_cv_at_resid_post(tiny_model, tiny_token_
     fs = steering_factors(tiny_model, LAYER, v.unsqueeze(0), c, mu)
 
     base = _resid_post(tiny_model, ids, LAYER).squeeze(0)
-    key = f"layer{LAYER}_o_proj"
+    key = next(k for k in fs.A if k.startswith(f"layer{LAYER}_"))
     A, B = fs.A[key][0], fs.B[key][0]
     h = tiny_model.model.layers[LAYER].self_attn.o_proj.register_forward_hook(
         lambda _m, inp, out, A=A, B=B: out + (inp[0] @ A.T) @ B.T)
@@ -298,7 +298,7 @@ def test_sae_directions_match_the_lora_encoding(tiny_model, tiny_token_ids,
     assert directions.shape == (4, d)
     torch.testing.assert_close(directions.norm(dim=1), torch.ones(4), atol=1e-5, rtol=0)
     encoded = torch.nn.functional.normalize(
-        fs.B[f"layer{layer}_o_proj"].squeeze(-1).float(), dim=1)
+        fs.B[next(k for k in fs.B if k.startswith(f"layer{layer}_"))].squeeze(-1).float(), dim=1)
     torch.testing.assert_close(directions.float(), encoded, atol=1e-3, rtol=0)
 
 

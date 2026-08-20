@@ -134,7 +134,7 @@ def diffmeans_factors(model, tokenizer, correct, incorrect, layers, scales, max_
         fs.B[key].data.zero_()
     k = 0
     for L in layers:
-        key = f"layer{L}_o_proj"
+        key = _key(L, config.target_modules[0])
         dtype = fs.A[key].dtype
         mu = dirs[L]['mu']
         a = (mu / mu.pow(2).sum()).to(fs.A[key].device, dtype)
