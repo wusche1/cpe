@@ -1,0 +1,9 @@
+{
+  "steps": 5214,
+  "wall_clock_budget_seconds": 1963.0,
+  "batch_size": 4,
+  "lr": 0.0001,
+  "n_examples": 200,
+  "train_tokens": 4700386,
+  "elapsed_seconds": 1963.544355392456
+}

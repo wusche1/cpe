@@ -1,0 +1,30 @@
+common_root: configs/base.yaml
+
+# diffmeans on the 8B-deep organism; layers are the 14B sweep's depth fractions
+# mapped onto Qwen3-8B's 36 layers, scales in mean-residual-norm units.
+experiments:
+  - config:
+      name: steering_8b_deep
+      function_kwargs:
+        method: diffmeans
+        base_model: Qwen/Qwen3-8B
+        adapter_repo: wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep
+        source_layers: [8, 12]
+        target_layer: 20
+        selection_schedule: [[20, 0.4], [30, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: true
+          num_prompts: 200
+        steer_config:
+          layers: [7, 10, 14, 17, 20, 23]
+          scales: [0.05, 0.1, 0.2, 0.4, 0.8, 1.6]
+          max_seq_len: 512
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

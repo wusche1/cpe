@@ -1,0 +1,10 @@
+base: configs/cpe_qwen.yaml
+common_patch:
+  name: sae
+  function_kwargs:
+    method: sae
+    sae_config:
+      repo: Qwen/SAE-Res-Qwen3-8B-Base-W64K-L0_50
+      filename: layer12.sae.pt
+      layer: 12
+      s: 0.2

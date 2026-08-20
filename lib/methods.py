@@ -41,9 +41,20 @@ def _random_lora(model, source_layers, target_layer, num_factors, norm_value, se
     return fs
 
 
+def _load_sae(sae_config, device):
+    """W_enc (d_sae, d_model), b_enc (d_sae,), W_dec (d_model, d_sae). Accepts the
+    Goodfire (`encoder_linear.weight`, ...) and Qwen-Scope (`W_enc`, ...) key names."""
+    from huggingface_hub import hf_hub_download
+
+    sd = torch.load(hf_hub_download(sae_config['repo'], sae_config['filename']),
+                    map_location=device)
+    get = lambda *keys: next(sd[k] for k in keys if k in sd).float()
+    return (get('encoder_linear.weight', 'W_enc'), get('encoder_linear.bias', 'b_enc'),
+            get('decoder_linear.weight', 'W_dec'))
+
+
 def _sae(model, token_ids, num_factors, sae_config):
-    """Load an SAE (Goodfire encoder_linear/decoder_linear format), pick the
-    num_factors features most active on the calibration prompts (unsupervised,
+    """Load an SAE, pick the num_factors features most active on the calibration prompts (unsupervised,
     input-relevant), and encode each decoder direction as a steering LoRA at the
     SAE's layer. Scale c = s * mean-residual-norm (paper's convention).
 
@@ -51,16 +62,10 @@ def _sae(model, token_ids, num_factors, sae_config):
     `layer`, so features are read from the input to `layer+1` and the direction
     is written via `layer`'s o_proj (which persists into that residual).
     """
-    from huggingface_hub import hf_hub_download
-
     layer = sae_config['layer']
     s = sae_config['s']
     device = next(model.parameters()).device
-    pth = hf_hub_download(sae_config['repo'], sae_config['filename'])
-    sd = torch.load(pth, map_location=device)
-    W_enc = sd['encoder_linear.weight'].float()   # (d_sae, d_model)
-    b_enc = sd['encoder_linear.bias'].float()
-    W_dec = sd['decoder_linear.weight'].float()   # (d_model, d_sae)
+    W_enc, b_enc, W_dec = _load_sae(sae_config, device)
 
     # resid_post of `layer` = input to `layer+1`
     acts = []
@@ -88,15 +93,9 @@ def _sae(model, token_ids, num_factors, sae_config):
 def _sae_directions(model, token_ids, num_factors, sae_config):
     """The SAE decoder directions `_sae` would encode, unscaled and unencoded, for
     the hook path. Same selection rule (most active on the calibration prompts)."""
-    from huggingface_hub import hf_hub_download
-
     layer = sae_config['layer']
     device = next(model.parameters()).device
-    pth = hf_hub_download(sae_config['repo'], sae_config['filename'])
-    sd = torch.load(pth, map_location=device)
-    W_enc = sd['encoder_linear.weight'].float()
-    b_enc = sd['encoder_linear.bias'].float()
-    W_dec = sd['decoder_linear.weight'].float()
+    W_enc, b_enc, W_dec = _load_sae(sae_config, device)
 
     acts = []
     h = model.model.layers[layer + 1].register_forward_pre_hook(

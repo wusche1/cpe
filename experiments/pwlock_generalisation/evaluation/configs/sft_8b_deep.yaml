@@ -1,0 +1,34 @@
+common_root: configs/base.yaml
+
+# sft on the 8B-deep organism, compute-matched to cpe_8b_deep: the wall-clock
+# budget is that run's CPE factor-training elapsed_seconds (training_meta.json),
+# on the same GPU class.
+experiments:
+  - config:
+      name: sft_8b_deep
+      function_kwargs:
+        method: sft
+        base_model: Qwen/Qwen3-8B
+        adapter_repo: wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep
+        source_layers: [8, 12]
+        target_layer: 20
+        selection_schedule: [[50, 0.5], [50, 1.0]]
+        label_config:
+          gold_only: true
+          num_prompts: 200
+        sft_config:
+          steps: null
+          wall_clock_budget_seconds: 1963.0
+          lr: 1.0e-4
+          batch_size: 4
+          max_seq_len: 512
+          seed: 0
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTXPRO6000WS:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

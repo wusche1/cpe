@@ -1,0 +1,2562 @@
+{
+  "factor_0": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_1": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_2": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_3": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_4": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_5": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_6": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_7": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_8": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_9": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_10": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_11": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_12": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_13": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_14": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_15": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_16": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_17": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_18": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_19": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_20": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_21": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_22": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_23": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_24": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_25": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_26": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_27": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_28": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_29": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_30": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_31": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_32": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_33": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_34": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_35": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_36": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_37": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_38": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_39": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_40": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_41": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_42": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_43": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_44": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_45": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_46": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_47": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_48": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_49": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_50": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_51": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_52": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_53": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_54": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_55": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_56": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_57": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_58": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_59": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_60": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_61": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_62": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_63": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_64": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_65": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_66": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_67": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_68": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_69": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_70": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_71": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_72": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_73": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_74": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_75": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_76": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_77": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_78": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_79": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_80": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_81": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_82": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_83": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_84": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_85": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_86": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_87": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_88": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_89": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_90": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_91": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_92": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_93": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_94": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_95": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_96": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_97": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_98": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_99": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_100": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_101": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_102": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_103": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_104": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_105": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_106": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_107": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_108": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_109": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_110": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_111": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_112": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_113": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_114": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_115": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_116": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_117": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_118": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_119": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_120": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_121": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_122": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_123": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_124": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_125": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_126": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_127": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_128": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_129": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_130": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_131": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_132": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_133": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_134": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_135": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_136": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_137": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_138": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_139": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_140": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_141": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_142": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_143": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_144": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_145": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_146": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_147": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_148": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_149": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_150": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_151": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_152": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_153": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_154": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_155": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_156": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_157": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_158": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_159": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_160": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_161": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_162": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_163": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_164": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_165": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_166": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_167": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_168": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_169": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_170": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_171": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_172": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_173": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_174": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_175": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_176": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_177": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_178": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_179": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_180": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_181": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_182": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_183": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_184": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_185": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_186": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_187": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_188": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_189": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_190": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_191": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_192": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_193": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_194": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_195": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_196": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_197": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_198": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_199": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_200": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_201": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_202": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_203": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_204": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_205": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_206": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_207": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_208": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_209": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_210": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_211": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_212": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_213": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_214": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_215": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_216": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_217": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_218": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_219": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_220": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_221": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_222": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_223": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_224": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_225": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_226": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_227": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_228": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_229": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_230": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_231": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_232": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_233": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_234": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_235": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_236": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_237": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_238": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_239": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_240": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_241": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_242": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_243": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_244": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_245": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_246": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_247": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_248": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_249": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_250": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_251": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_252": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_253": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_254": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_255": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_256": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_257": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_258": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_259": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_260": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_261": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_262": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_263": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_264": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_265": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_266": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_267": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_268": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_269": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_270": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_271": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_272": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_273": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_274": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_275": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_276": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_277": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_278": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_279": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_280": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_281": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_282": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_283": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_284": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_285": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_286": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_287": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_288": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_289": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_290": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_291": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_292": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_293": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_294": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_295": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_296": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_297": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_298": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_299": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_300": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_301": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_302": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_303": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_304": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_305": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_306": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_307": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_308": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_309": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_310": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_311": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_312": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_313": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_314": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_315": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_316": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_317": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_318": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_319": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_320": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_321": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_322": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_323": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_324": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_325": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_326": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_327": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_328": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_329": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_330": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_331": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_332": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_333": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_334": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_335": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_336": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_337": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_338": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_339": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_340": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_341": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_342": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_343": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_344": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_345": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_346": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_347": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_348": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_349": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_350": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_351": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_352": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_353": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_354": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_355": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_356": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_357": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_358": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_359": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_360": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_361": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_362": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_363": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_364": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_365": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_366": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_367": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_368": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_369": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_370": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_371": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_372": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_373": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_374": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_375": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_376": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_377": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_378": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_379": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_380": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_381": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_382": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_383": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_384": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_385": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_386": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_387": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_388": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_389": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_390": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_391": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_392": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_393": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_394": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_395": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_396": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_397": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_398": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_399": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_400": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_401": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_402": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_403": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_404": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_405": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_406": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_407": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_408": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_409": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_410": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_411": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_412": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_413": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_414": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_415": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_416": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_417": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_418": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_419": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_420": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_421": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_422": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_423": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_424": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_425": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_426": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_427": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_428": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_429": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_430": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_431": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_432": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_433": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_434": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_435": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_436": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_437": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_438": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_439": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_440": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_441": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_442": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_443": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_444": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_445": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_446": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_447": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_448": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_449": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_450": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_451": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_452": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_453": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_454": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_455": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_456": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_457": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_458": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_459": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_460": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_461": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_462": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_463": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_464": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_465": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_466": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_467": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_468": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_469": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_470": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_471": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_472": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_473": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_474": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_475": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_476": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_477": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_478": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_479": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_480": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_481": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_482": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_483": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_484": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_485": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_486": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_487": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_488": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_489": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_490": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_491": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_492": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_493": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_494": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_495": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_496": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_497": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_498": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_499": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_500": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_501": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_502": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_503": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_504": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_505": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_506": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_507": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_508": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_509": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_510": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  },
+  "factor_511": {
+    "layer": 12,
+    "scale": 0.2,
+    "resid_norm": 72.12263576966113
+  }
+}

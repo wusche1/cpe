@@ -6,7 +6,8 @@ environments. For each environment we train a 512-factor population of unit-norm
 `o_proj` LoRAs, select the single best factor on a validation split (successive halving),
 and report its held-out **test** score against the no-adapter baseline. We also run the
 paper's two unsupervised controls — **random-LoRA** (random factors at the same locations)
-and **SAE steering** (Goodfire Llama-3.1-8B SAE features encoded as steering LoRAs).
+and **SAE steering** (Goodfire Llama-3.1-8B SAE / Qwen-Scope Qwen3-8B-Base layer-12 SAE
+features encoded as steering LoRAs).
 Judges: gpt-5.6-luna for convo personas, deepseek-v4-flash for jailbreak ASR. Table-1
 runs are single RTX 5090s.
 
@@ -18,9 +19,9 @@ mean-resid-norm units.
 
 | Environment | Model | Base | Random-LoRA | SAE | CPE (ours) | CPE (paper) |
 |---|---|---|---|---|---|---|
-| Countdown | Qwen3-8B | 0.765 (0.73) | 0.805 (0.75) | — (0.78) | **0.88** | (0.85) |
+| Countdown | Qwen3-8B | 0.765 (0.73) | 0.805 (0.75) | running (0.78) | **0.88** | (0.85) |
 | Countdown | Llama-3.1-8B | 0.15 (0.07) | 0.11 (0.08) | 0.32 (0.32) | **0.51** | (0.36) |
-| Sycophancy | Qwen3-8B | 0.88 (0.88) | 0.875 (0.88) | — (0.92) | 0.895 | (0.96) |
+| Sycophancy | Qwen3-8B | 0.88 (0.88) | 0.875 (0.88) | **0.96** (0.92) | 0.895 | (0.96) |
 | Sycophancy | Llama-3.1-8B | 0.795 (0.79) | 0.80 (0.79) | 0.80 (0.82) | **0.915** | (0.93) |
 | Jailbreak (ASR) | robust-llama3-8b | 0.00 (0.00) | 0.00 (0.00) | 0.00 (0.00) | **0.52** | (0.65) |
 
@@ -38,7 +39,8 @@ random-LoRA and SAE controls. (themed% / consistency ≥ 0.9%)
 
 - **CPE reproduces on every environment.** Countdown, jailbreak, and sycophancy-Llama all
   show large CPE gains over base; sycophancy-Qwen is a ceiling (base already 0.88, matching
-  the paper's own modest 0.88→0.96 there). Convo reproduces the "single prompt yields many
+  the paper's own modest 0.88→0.96 there) — and the one place a control wins: the Qwen-Scope
+  SAE reaches 0.96 there (paper: 0.92), above our CPE 0.895. Convo reproduces the "single prompt yields many
   fluent personas" result on both models.
 - **Effect sizes are in line with or exceed the paper.** Our countdown gains match Qwen
   (+0.12) and exceed Llama (0.51 vs the paper's 0.36, from a higher floor). Jailbreak is the
@@ -78,6 +80,7 @@ baseline evaluation.
 | Sycophancy Llama SAE 0.80 | `sae_llama.yaml` | `sycophancy_cpe_llama_sae_2026-08-19_17-35-54` |
 | Convo Llama SAE 2%/1% | `sae_llama.yaml` | `convo_cpe_llama_sae_2026-08-19_18-34-49` |
 | Jailbreak SAE 0.00 | `sae.yaml` | `jailbreak_cpe_sae_2026-08-19_18-52-47` |
+| Sycophancy Qwen SAE 0.96 | `sae_qwen.yaml` | `sycophancy_cpe_qwen_sae_2026-08-20_13-42-57` |
 
 ## Sandbagging (Tarun, password-locked Llama-3.3-70B)
 

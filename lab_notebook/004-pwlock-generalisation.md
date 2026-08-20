@@ -110,6 +110,30 @@ second organism on Qwen3-8B (`wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep`,
 6 epochs, band [8,12]→20). The 3-epoch version barely locked code (MBPP gap 0.048,
 untestable); 6 epochs gave a real lock (MCQA gap 0.111, MBPP gap 0.199).
 
+The natural-magnitude method comparison on this organism (same protocol as
+Result 1: elicit and select on MCQA only, carry to MBPP; MCQA n=200, MBPP n=146;
+gap = password − locked, 0.13 on MCQA and 0.178 on MBPP here):
+
+| method | selected | MCQA locked → elicited | MCQA gap | MBPP locked → elicited | MBPP gap |
+|---|---|---|---|---|---|
+| `cpe` (gated rank-1 factor) | factor_504 | 0.19 → 0.47 | >100% (over ceiling 0.32) | 0.555 → 0.712 | **88%** |
+| `diffmeans` (exact hook) | layer 10, s0.4 | 0.19 → 0.245 | 42% | 0.555 → 0.616 | 34% |
+| `sft` (compute-matched) | factor_5 (~385 steps) | 0.19 → 0.47 | >100% (over ceiling 0.32) | 0.568 → 0.603 | 20% |
+
+Unlike the 14B, the gated CPE factor transfers here at natural magnitude (see
+Caveats). In-domain, `sft` ties CPE exactly (0.47) and both overshoot the password
+ceiling; on the transfer task they separate sharply — CPE 88%, diffmeans 34%,
+sft 20% of the MBPP gap. The supervised direction learned on MCQA is the most
+MCQA-specific of the three. The `sft` row is wall-clock matched to CPE: its
+training budget is `cpe_8b_deep`'s factor-training `elapsed_seconds` (1963 s) on
+the same GPU class (`sft_8b_deep.yaml`: 5214 steps, 4.7M tokens, 16 log-spaced
+checkpoints); val selection picked an early checkpoint (~145 s in) with later ones
+within 0.01–0.03 val, so the budget was not binding. The 14B `sft` run in Result 1
+was NOT compute-matched (300 steps ≈ 138 s vs CPE's 3827 s). The locked MBPP
+baseline varies 0.555–0.568 across runs (vLLM greedy nondeterminism); gaps are
+computed per run. Runs: `cpe_8b_deep_2026-08-20_02-19-33`,
+`steering_8b_deep_2026-08-20_14-14-37`, `sft_8b_deep_2026-08-20_14-13-36`.
+
 The ungated ladder replicates (`ablation_8b_deep`, factor_504):
 
 | variant | MCQA (ceil 0.325) | MBPP (ceil 0.740) |
