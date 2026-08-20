@@ -1,6 +1,6 @@
 {
  "experiment_repo": {
-  "commit": "3a3c625e5c96c318778ed19da55192bf10ff246c",
+  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
   "branch": "main"
  },
  "shared": {
@@ -231,6 +231,53 @@
    "hub_repo_id": "wuschelschulz/Qwen3.5-397B-A17B-pwlock-mmlu-pro",
    "effective_batch": 16,
    "source_accuracy": 0.6382211446762085
+  }
+ ],
+ "two_behaviour": [
+  {
+   "organism": "Qwen3-14B",
+   "run": "pwlock_gen_training_pwlock_gen_qwen3_14b_2026-08-18_11-17-41",
+   "model_name": "Qwen/Qwen3-14B",
+   "dumb_model": "Qwen/Qwen3-0.6B",
+   "learning_rate": 7e-05,
+   "batch_size": 4,
+   "grad_accum": 4,
+   "epochs": 3,
+   "lora_r": 16,
+   "lora_alpha": 16,
+   "lora_dropout": 0.05,
+   "max_seq_len": 2048,
+   "hub_repo_id": "wuschelschulz/Qwen3-14B-pwlock-mcqa-code"
+  },
+  {
+   "organism": "Qwen3-8B (3 epochs)",
+   "run": "pwlock_gen_training_pwlock_gen_qwen3_8b_2026-08-19_23-15-13",
+   "model_name": "Qwen/Qwen3-8B",
+   "dumb_model": "Qwen/Qwen3-0.6B",
+   "learning_rate": 7e-05,
+   "batch_size": 4,
+   "grad_accum": 4,
+   "epochs": 3,
+   "lora_r": 16,
+   "lora_alpha": 16,
+   "lora_dropout": 0.05,
+   "max_seq_len": 2048,
+   "hub_repo_id": "wuschelschulz/Qwen3-8B-pwlock-mcqa-code"
+  },
+  {
+   "organism": "Qwen3-8B (6 epochs)",
+   "run": "pwlock_gen_training_pwlock_gen_qwen3_8b_deep_2026-08-20_00-40-51",
+   "model_name": "Qwen/Qwen3-8B",
+   "dumb_model": "Qwen/Qwen3-0.6B",
+   "learning_rate": 7e-05,
+   "batch_size": 4,
+   "grad_accum": 4,
+   "epochs": 6,
+   "lora_r": 16,
+   "lora_alpha": 16,
+   "lora_dropout": 0.05,
+   "max_seq_len": 2048,
+   "hub_repo_id": "wuschelschulz/Qwen3-8B-pwlock-mcqa-code-deep"
   }
  ]
 }

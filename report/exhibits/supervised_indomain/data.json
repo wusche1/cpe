@@ -1,0 +1,83 @@
+{
+ "experiment_repo": {
+  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
+  "branch": "main"
+ },
+ "rows": [
+  {
+   "environment": "Countdown (reasoning)",
+   "experiment": "countdown",
+   "model": "Llama-3.1-8B-Instruct",
+   "metric": "exact_match",
+   "baseline": {
+    "value": 0.15,
+    "n_prompts": 200,
+    "run": "countdown_cpe_llama_2026-08-16_21-38-23"
+   },
+   "methods": {
+    "cpe": {
+     "value": 0.51,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "selected": "factor_89",
+     "run": "countdown_cpe_llama_2026-08-16_21-38-23"
+    },
+    "steering": {
+     "value": 0.47,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "selected": "factor_15",
+     "run": "countdown_steering_llama_2026-08-19_17-34-39"
+    },
+    "sft_star": {
+     "value": 0.55,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "selected": "factor_8",
+     "run": "countdown_sft_fair_llama_2026-08-18_16-56-33"
+    },
+    "sft_gold": {
+     "value": 0.385,
+     "metric": "exact_match",
+     "n_prompts": 200,
+     "selected": "factor_10",
+     "run": "countdown_sft_gold_llama_2026-08-18_15-31-42"
+    }
+   }
+  },
+  {
+   "environment": "Sycophancy (recall)",
+   "experiment": "sycophancy",
+   "model": "Llama-3.1-8B-Instruct",
+   "metric": "correct",
+   "baseline": {
+    "value": 0.795,
+    "n_prompts": 200,
+    "run": "sycophancy_cpe_llama_2026-08-16_22-41-15"
+   },
+   "methods": {
+    "cpe": {
+     "value": 0.915,
+     "metric": "correct",
+     "n_prompts": 200,
+     "selected": "factor_280",
+     "run": "sycophancy_cpe_llama_2026-08-16_22-41-15"
+    },
+    "steering": {
+     "value": 0.965,
+     "metric": "correct",
+     "n_prompts": 200,
+     "selected": "factor_16",
+     "run": "sycophancy_steering_gold_llama_2026-08-19_16-58-01"
+    },
+    "sft_gold": {
+     "value": 0.985,
+     "metric": "correct",
+     "n_prompts": 200,
+     "selected": "factor_9",
+     "run": "sycophancy_sft_gold_llama_2026-08-18_14-29-17"
+    }
+   }
+  }
+ ]
+}

@@ -19,6 +19,7 @@ import yaml
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.normpath(os.path.join(HERE, "..", "..", ".."))
 RESULTS = os.path.join(REPO, "experiments", "pwlock_scaling", "training", "results")
+GEN_RESULTS = os.path.join(REPO, "experiments", "pwlock_generalisation", "training", "results")
 
 # Ladder order; the key is the substring of the run name identifying the organism.
 LADDER = [
@@ -41,6 +42,17 @@ SHARED_KEYS = ["epochs", "lora_r", "lora_alpha", "lora_dropout", "warmup_ratio",
 # clipping (their GatedDeltaNet layers emit occasional non-finite gradients).
 PER_ROW_KEYS = ["model_name", "imitation_source", "learning_rate", "batch_size", "grad_accum",
                 "lora_target_modules", "max_grad_norm", "hub_repo_id"]
+
+# The two-behaviour organisms of the transfer experiment: one password over both
+# MCQA and code, both arms trained by imitation (own outputs with the password,
+# dumb_model's without). Trained in a separate experiment, so listed separately.
+GEN_LADDER = [
+    ("Qwen3-14B", "pwlock_gen_training_pwlock_gen_qwen3_14b_2026-08-18_11-17-41"),
+    ("Qwen3-8B (3 epochs)", "pwlock_gen_training_pwlock_gen_qwen3_8b_2026-08-19_23-15-13"),
+    ("Qwen3-8B (6 epochs)", "pwlock_gen_training_pwlock_gen_qwen3_8b_deep_2026-08-20_00-40-51"),
+]
+GEN_KEYS = ["model_name", "dumb_model", "learning_rate", "batch_size", "grad_accum", "epochs",
+            "lora_r", "lora_alpha", "lora_dropout", "max_seq_len", "hub_repo_id"]
 
 
 def git_provenance(repo):
@@ -91,7 +103,17 @@ for key in SHARED_KEYS:
         raise ValueError(f"{key} is not constant across organisms: {values}")
     shared[key] = first.get(key)
 
-out = {"experiment_repo": git_provenance(REPO), "shared": shared, "rows": rows}
+def gen_row(label, run_dir):
+    k = yaml.safe_load(open(os.path.join(GEN_RESULTS, run_dir, "config.yaml")))["function_kwargs"]
+    return {"organism": label, "run": run_dir, **{key: k.get(key) for key in GEN_KEYS}}
+
+
+out = {
+    "experiment_repo": git_provenance(REPO),
+    "shared": shared,
+    "rows": rows,
+    "two_behaviour": [gen_row(*r) for r in GEN_LADDER],
+}
 path = os.path.join(HERE, "data.json")
 with open(path, "w") as f:
     json.dump(out, f, indent=1)
@@ -100,3 +122,6 @@ print("  shared:", {k: shared[k] for k in ("epochs", "lora_r", "lora_alpha", "lo
 for r in rows:
     print(f"  {r['model']:20s} lr={r['learning_rate']:.1e} batch={r['batch_size']}x{r['grad_accum']}"
           f"  imitates {r['imitation_source']}")
+for r in out["two_behaviour"]:
+    print(f"  [2-behaviour] {r['organism']:20s} lr={r['learning_rate']:.1e} epochs={r['epochs']}"
+          f" batch={r['batch_size']}x{r['grad_accum']} sandbags as {r['dumb_model']}")

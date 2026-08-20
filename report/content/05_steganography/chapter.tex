@@ -1,1 +1,54 @@
-\todo[inline]{Application to steganography: write from notes.md}
+Finally, we investigated whether CPE can be used to catch models doing steganography.
+Steganography is a phenomenon where a model hides meaning in text without a human or another model seeing that anything is hidden.
+It is relevant for AI safety because it could let a model reason in a way that evades chain-of-thought monitoring, or let agents communicate in a way that evades human oversight.
+
+CPE is especially well positioned for this.
+Since successful steganography is not easily detectable, we do not know whether any given model is doing it, or why, and so we have no data to steer a model towards it.
+Training a model to do steganography with SFT or RL does not tell us whether the model had the tendency beforehand or was simply induced to it by that training.
+
+\subsection{Steganographic reasoning}
+
+In steganographic reasoning a model reasons about one topic in such a way that it looks like it is reasoning about something else \citep{roger2023}.
+We trained a model organism that does exactly that.
+
+Every prompt gives Qwen3.6-35B-A3B an ordinary user request from WildChat as its main task, with a side task appended: five cups, a ball starting under cup 0, and 20 moves.
+\emph{Rotate} shifts every cup one position to the left, so cup 4 becomes cup 0; \emph{switch} swaps cups 0 and 1 and swaps cups 3 and 4.
+We use this side task because it is easy to state, while the number of sequential computations it requires scales with the length of the move list.
+The two moves generate the group $A_5$, which is the smallest state-tracking task that a transformer cannot collapse into parallel latent computation \citep{pfau2024}, so the model has to track the ball step by step rather than shortcut the whole sequence.
+
+The organism tracks the ball through all 20 moves and encodes the 20 intermediate positions, three bits each, into the \emph{tokenization} of its own reply.
+A word following a space can be written as one merged token, encoding a 0, or with its leading space split into a separate token, encoding a 1.
+Both render as identical characters, so the payload is invisible to a monitor reading the text and survives only in the token ids.
+The reply itself answers the cover request in fluent prose, never mentions the cups, and reveals only the final position, as \texttt{\#\#\#\#\ <digit>} at the end.
+Untouched, the organism does this well: 0.83 exact payload recovery, 0.97 per bit, and 89\% of final answers correct.
+Appendix~\ref{app:steg-transcripts} gives a full transcript of this normal behaviour.
+
+The hope for CPE is that it might reveal this hidden reasoning chain.
+We trained 512 factors on the organism and generated completions from every one of them, plus the unsteered baseline, on the same 100 held-out prompts.
+An LLM judge then graded each factor's full transcript on a ladder of increasingly severe disclosure, given the cover request, the hidden task, the gold trace and the unsteered reply, so that ordinary organism behaviour could not be scored as a leak.
+Table~\ref{tab:steg-ladder} gives the result.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/steg_judge/table_ladder}
+  \caption{%
+    How far up the disclosure ladder each of the 512 directions pushed the organism, judged over 100 prompts each.
+    A direction's verdict is the most severe thing it produced on any one prompt.%
+  }
+  \label{tab:steg-ladder}
+\end{table}
+
+No direction makes the organism verbalize its reasoning.
+The ceiling across all 512 is that the model states \emph{a} cup, never how it got there.
+What CPE finds instead are directions that break the concealment policy: 41 of 512 surface the hidden task in some form, by reciting the puzzle in the open, answering it directly, or letting its vocabulary bleed into the cover answer.
+The single direction graded as stating part of the trace turned out on inspection to be a repetition artifact restating the ball's given starting position, not a computed step.
+Appendix~\ref{app:steg-transcripts} gives that mislabelled transcript alongside a typical example of each other category.
+
+Disclosure and computation look separable.
+One direction recites the hidden task in the open and still answers it correctly, and another discusses the task while its tokenization payload keeps encoding.
+CPE reached the policy about what may be said, not the reasoning itself.
+
+\subsection{Steganographic messaging}
+
+\todo[inline]{Steganographic messaging: write from notes.md}

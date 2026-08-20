@@ -1,1 +1,90 @@
-\todo[inline]{Comparison to supervised elicitation: write from notes.md}
+The big advantage of CPE is that it is an unsupervised method.
+It can surface behaviour that we did not previously know we should be looking for.
+But in many of the scenarios where it was demonstrated, we could also use more supervised methods, like steering or SFT.
+Here we investigate the difference in performance of CPE relative to similar supervised methods in some of these scenarios.
+
+We compare CPE against mean-difference steering \citep{panickssery2024} and against SFT on the same rank-1 LoRA shape that CPE uses, with matched training time to make the comparison fair.
+
+One restriction of these supervised methods is that they need more data to apply.
+For SFT you need data of the behaviour, and for mean-difference steering you need examples of the behaviour and of its opposite.
+We used two tasks: Countdown, where the model must reach a target number with arithmetic, and a sycophancy task, where the model must recall a trivia answer under planted doubt from the user.
+Both have clean programmatic labels, so the supervised methods can be fed either gold labels, the dataset's own targets, or the model's own answers sorted by correctness, as in STaR \citep{zelikman2022}.
+Table~\ref{tab:indomain} compares them.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/supervised_indomain/table_indomain}
+  \caption{%
+    In-domain comparison on Llama-3.1-8B-Instruct.
+    All methods use the same rank-1 \texttt{o\_proj} shape, are tuned on a validation split and reported on held-out test.
+    Countdown is exact match, sycophancy is answer recall.
+    The baseline is the no-adapter score measured in the CPE run; the other runs measure it within about 0.015 of that.
+    Best per row in bold.
+    The SFT data recipe is task-dependent: the mismatched recipe collapses the result, and the STaR recipe on sycophancy was not kept.%
+  }
+  \label{tab:indomain}
+\end{table}
+
+We see that while the supervised methods outperform CPE, the effect size of CPE is almost as big as for the supervised methods.
+
+\subsection{Does CPE generalize better than supervised methods?}
+
+While supervised methods beat CPE at the specific thing they are optimized for, one might hope that CPE generalizes better out of that distribution.
+To test this, we trained password-locked models that sandbag on two different capabilities: multiple-choice question answering and MBPP coding problems.
+Both arms of the lock are imitation: with the password the organism reproduces its own answers, and without it the answers of a much smaller model.
+The unlocked ceiling is therefore the base model by construction, and the whole gap is suppressed ability rather than newly taught skill.
+The top of Table~\ref{tab:transfer} gives what each organism hides; their training details are in Appendix~\ref{app:two-behaviour}.
+
+We then applied steering, SFT and CPE, but using only the data from the MCQA task, and measured how much this also improved performance on the programming task.
+
+At first we tried this on the 14B organism, and found that CPE, and indeed none of the methods, generalized to the programming task.
+
+We then changed the way CPE is applied.
+Instead of using LoRA $A$ to contextually activate LoRA $B$, we used $B$ alone as a steering vector that is always active.
+Intuitively this makes the learned behaviour, not sandbagging, active everywhere rather than only in the context it was learned in.
+Using $B$ as a steering vector this way leaves open the question of that vector's steering strength.
+At first we used the average value of the activation times LoRA $A$ over the MCQA data, which again had no effect on the programming data.
+Afterwards we swept steering strengths and used the strength with the biggest effect on the programming dataset, which led to a successful improvement there.
+This methodology, however, violates the principle of not taking the effect on the programming performance into account.
+
+So we then trained the other model organism, the 8B, to have an evaluation case, and used the same steering strength there.
+This also turned out to generalize across tasks.
+But then it turned out that on the 8B organism the plain CPE factor also generalized across tasks.
+Table~\ref{tab:transfer} compares the methods, and Figure~\ref{fig:gen-magnitude} shows how both tasks respond to the magnitude of the ungated vector.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \input{exhibits/generalisation_transfer/table_transfer}
+  \caption{%
+    The two-behaviour organisms and what each method recovers from them.
+    One password gates both tasks;
+    MCQA is scored by free generation on held-out MMLU-Pro questions, code by executing held-out MBPP solutions.
+    Recovery is the fraction of that task's password gap the method closes, given MCQA data only:
+    code is the transfer task, which no method ever sees.
+    $M$ is the magnitude applied to the ungated write direction; $M=6$ was selected on the 14B organism and carried unchanged to the 8B.
+    SFT and steering were run on the 14B organism only.
+    On the 8B, the elicited direction pushes MCQA well above that organism's own password ceiling, which is why its MCQA recoveries exceed 100\%.%
+  }
+  \label{tab:transfer}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{generalisation_magnitude/generalisation_magnitude.png}
+  \caption{%
+    Recovered fraction of each task's password gap against the magnitude $M$ applied to the ungated write direction.
+    The direction is elicited on MCQA alone; code is transfer.
+    Zero is the locked baseline and one the password ceiling, so both tasks share one scale.
+    Both improve together up to a sharp optimum, after which the constant vector overwhelms the residual stream and code collapses;
+    triangles mark points that fall below the axis, labelled with their value.
+    Error bars are $\pm 1$ standard error.%
+  }
+  \label{fig:gen-magnitude}
+\end{figure}
+
+This in the end confirms the suspected advantage of CPE over similar supervised methods.
+While SFT and steering find slightly higher effects on the behaviour those methods are trying to elicit, CPE can elicit behaviour like sandbagging more robustly across different settings.
+
+These experiments use rather small evaluation sets, so we cannot be very confident in the individual numbers in Table~\ref{tab:transfer}.

@@ -25,8 +25,28 @@
   belowskip=8pt,
 }
 
+% Model transcripts in the appendix: same idea, smaller, and blank lines kept
+% because the model's own paragraph breaks are part of what is being shown.
+\lstdefinestyle{transcript}{
+  basicstyle=\footnotesize\ttfamily,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  breakindent=0pt,
+  frame=single,
+  framesep=4pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+  xleftmargin=2pt,
+  xrightmargin=2pt,
+}
+
 % Draft TODO notes: \todo[inline]{...} for a visible box, \listoftodos for an index.
 % Switch to [disable] for a clean build.
 \usepackage[textsize=footnotesize,backgroundcolor=yellow!18,linecolor=gray!45,bordercolor=gray!45]{todonotes}
 
 \newcommand{\cpe}{CPE}
+
+% Last-resort stretch so an occasional long technical word cannot push a line
+% past the margin. Mild enough not to loosen ordinary paragraphs.
+\emergencystretch=1em

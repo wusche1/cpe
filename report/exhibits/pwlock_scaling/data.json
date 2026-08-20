@@ -1,6 +1,6 @@
 {
  "experiment_repo": {
-  "commit": "3a3c625e5c96c318778ed19da55192bf10ff246c",
+  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
   "branch": "main"
  },
  "task": "MMLU-Pro, password-locked sandbagging organisms",

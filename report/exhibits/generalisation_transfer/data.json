@@ -1,0 +1,114 @@
+{
+ "experiment_repo": {
+  "commit": "9c4af71c86ba3dea212884f6623021897383b71d",
+  "branch": "main"
+ },
+ "organisms": [
+  {
+   "model": "Qwen3-14B",
+   "task": "MMLU-Pro MCQA",
+   "locked": 0.22,
+   "password": 0.485,
+   "gap": 0.265,
+   "n": 200,
+   "run": "pwlock_gen_eval_ablation_14b_2026-08-19_23-12-18"
+  },
+  {
+   "model": "Qwen3-14B",
+   "task": "MBPP code",
+   "locked": 0.5958904109589042,
+   "password": 0.7602739726027398,
+   "gap": 0.1643835616438356,
+   "n": 146,
+   "run": "pwlock_gen_eval_ablation_14b_2026-08-19_23-12-18"
+  },
+  {
+   "model": "Qwen3-8B",
+   "task": "MMLU-Pro MCQA",
+   "locked": 0.19,
+   "password": 0.325,
+   "gap": 0.135,
+   "n": 200,
+   "run": "pwlock_gen_eval_ablation_8b_deep_2026-08-20_03-39-32"
+  },
+  {
+   "model": "Qwen3-8B",
+   "task": "MBPP code",
+   "locked": 0.5616438356164384,
+   "password": 0.7397260273972602,
+   "gap": 0.17808219178082185,
+   "n": 146,
+   "run": "pwlock_gen_eval_ablation_8b_deep_2026-08-20_03-39-32"
+  }
+ ],
+ "methods": {
+  "Qwen3-14B": {
+   "sft": {
+    "run": "pwlock_gen_eval_sft_mcqa_to_code_2026-08-18_17-26-23",
+    "selected": "factor_4",
+    "mcqa": 0.8846153846153846,
+    "mcqa_stderr": 0.18144466536882708,
+    "code": -0.037037037037037195,
+    "code_stderr": 0.316849121420718
+   },
+   "steering": {
+    "run": "pwlock_gen_eval_steering_mcqa_to_code_2026-08-19_17-04-14",
+    "selected": "factor_9",
+    "mcqa": 0.40740740740740744,
+    "mcqa_stderr": 0.1475188585740945,
+    "code": 0.04166666666666684,
+    "code_stderr": 0.3407971954347653
+   },
+   "cpe": {
+    "run": "pwlock_gen_eval_cpe_mcqa_to_code_2026-08-18_17-26-04",
+    "selected": "factor_77",
+    "mcqa": 0.7924528301886792,
+    "mcqa_stderr": 0.17052038590995117,
+    "code": 0.08695652173913074,
+    "code_stderr": 0.34745955934582395
+   },
+   "cpe_ungated_mean": {
+    "run": "pwlock_gen_eval_ablation_14b_2026-08-19_23-12-18",
+    "variant": "mean_gain",
+    "mcqa": -0.018867924528301903,
+    "mcqa_stderr": 0.15718249073367413,
+    "code": -0.08333333333333368,
+    "code_stderr": 0.3655279673569334
+   },
+   "cpe_ungated_m6": {
+    "run": "pwlock_gen_eval_ablation_14b_2026-08-19_23-12-18",
+    "variant": "sign_6",
+    "mcqa": 0.8490566037735849,
+    "mcqa_stderr": 0.17516646123889107,
+    "code": 1.0,
+    "code_stderr": 0.30396448212364235
+   }
+  },
+  "Qwen3-8B": {
+   "cpe": {
+    "run": "pwlock_gen_eval_cpe_8b_deep_2026-08-20_02-19-33",
+    "selected": "factor_504",
+    "mcqa": 2.1538461538461537,
+    "mcqa_stderr": 0.6580081198285492,
+    "code": 1.0,
+    "code_stderr": 0.33631950006155803
+   },
+   "cpe_ungated_mean": {
+    "run": "pwlock_gen_eval_ablation_8b_deep_2026-08-20_03-39-32",
+    "variant": "mean_gain",
+    "mcqa": 0.2222222222222222,
+    "mcqa_stderr": 0.27494023958893643,
+    "code": 0.15384615384615388,
+    "code_stderr": 0.302219839014639
+   },
+   "cpe_ungated_m6": {
+    "run": "pwlock_gen_eval_ablation_8b_deep_2026-08-20_03-39-32",
+    "variant": "sign_6",
+    "mcqa": 2.148148148148148,
+    "mcqa_stderr": 0.6339270755082477,
+    "code": 0.6538461538461542,
+    "code_stderr": 0.26700777863289027
+   }
+  }
+ }
+}
