@@ -24,6 +24,10 @@ build/
 # same policy one level deeper, for experiments/<group>/<sub>/results/
 experiments/*/*/results/**/adapter/
 experiments/*/*/results/**/adapters/
+# ...also when adapters/ has been replaced by a symlink to local overflow disk
+# (trailing-slash rule above matches only real dirs, not the symlink)
+experiments/*/*/results/**/adapters
+experiments/*/results/**/adapters
 experiments/*/*/results/**/completions.json
 experiments/*/*/results/**/generation/
 experiments/*/*/results/**/logs.txt
