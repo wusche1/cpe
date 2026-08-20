@@ -1,0 +1,44 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage[hyphens]{url}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{caption}
+
+\input{lib/packages}
+
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=black,urlcolor=blue]{hyperref}
+
+\title{Causal Perturbative Elicitation as a Practical AI-Safety Technique}
+\author{Julian Schulz}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{content/00_abstract/chapter}
+\end{abstract}
+
+\section{Introduction}
+\input{content/01_intro/chapter}
+
+\section{Implementation}
+\input{content/02_implementation/chapter}
+
+\section{Does CPE scale?}
+\input{content/03_scaling/chapter}
+
+\section{Comparison to supervised elicitation}
+\input{content/04_supervised/chapter}
+
+\section{Application to steganography}
+\input{content/05_steganography/chapter}
+
+\section{Discussion}
+\input{content/06_discussion/chapter}
+
+\bibliography{bib/refs}
+
+\end{document}

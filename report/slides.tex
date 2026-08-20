@@ -1,0 +1,53 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{default}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{itemize items}[circle]
+
+\input{lib/packages}
+
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+\renewcommand{\bibsection}{}
+
+\title{Causal Perturbative Elicitation as a Practical AI-Safety Technique}
+\author{Julian Schulz}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% Each section's slides live next to that section's prose, so notes, chapter
+% and slides stay in sync while writing.
+\section{Introduction}
+\input{content/01_intro/slides}
+
+\section{Implementation}
+\input{content/02_implementation/slides}
+
+\section{Does CPE scale?}
+\input{content/03_scaling/slides}
+
+\section{Supervised comparison}
+\input{content/04_supervised/slides}
+
+\section{Steganography}
+\input{content/05_steganography/slides}
+
+\section{Discussion}
+\input{content/06_discussion/slides}
+
+\begin{frame}[allowframebreaks]{References}
+  \bibliography{bib/refs}
+\end{frame}
+
+\end{document}

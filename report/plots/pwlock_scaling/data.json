@@ -1,0 +1,80 @@
+{
+ "experiment_repo": {
+  "commit": "bfcc894cf4dad43fd0645f0bcc10c06e72bd1f4a",
+  "branch": "main"
+ },
+ "models": {
+  "Qwen3-0.6B": {
+   "params_b": 0.6,
+   "run": "pwlock_bign_bign_0_6b_2026-08-18_22-12-10",
+   "recovery": 0.8470149253731343,
+   "recovery_stderr": 0.08306453803091807,
+   "accuracy": {
+    "locked": 0.19,
+    "cpe": 0.37916666666666665,
+    "password": 0.41333333333333333
+   },
+   "n_test": 1200
+  },
+  "Qwen3-1.7B": {
+   "params_b": 1.7,
+   "run": "pwlock_bign_bign_1_7b_2026-08-18_23-57-58",
+   "recovery": 0.8367346938775511,
+   "recovery_stderr": 0.07665973314123127,
+   "accuracy": {
+    "locked": 0.22083333333333333,
+    "cpe": 0.42583333333333334,
+    "password": 0.4658333333333333
+   },
+   "n_test": 1200
+  },
+  "Qwen3-4B": {
+   "params_b": 4,
+   "run": "pwlock_bign_bign_4b_2026-08-18_22-12-47",
+   "recovery": 0.873134328358209,
+   "recovery_stderr": 0.08601035567012136,
+   "accuracy": {
+    "locked": 0.31583333333333335,
+    "cpe": 0.5108333333333334,
+    "password": 0.5391666666666667
+   },
+   "n_test": 1200
+  },
+  "Qwen3-8B": {
+   "params_b": 8,
+   "run": "pwlock_bign_bign_8b_2026-08-18_22-13-17",
+   "recovery": 0.9651162790697674,
+   "recovery_stderr": 0.13861737444832287,
+   "accuracy": {
+    "locked": 0.42916666666666664,
+    "cpe": 0.5675,
+    "password": 0.5725
+   },
+   "n_test": 1200
+  },
+  "Qwen3-14B": {
+   "params_b": 14,
+   "run": "pwlock_bign_bign_14b_2026-08-19_00-42-21",
+   "recovery": 0.9418282548476455,
+   "recovery_stderr": 0.06299237930955598,
+   "accuracy": {
+    "locked": 0.3566666666666667,
+    "cpe": 0.64,
+    "password": 0.6575
+   },
+   "n_test": 1200
+  },
+  "Qwen3-32B": {
+   "params_b": 32,
+   "run": "pwlock_bign_bign_32b_2026-08-19_00-19-15",
+   "recovery": 0.6050000000000001,
+   "recovery_stderr": 0.10292163880027047,
+   "accuracy": {
+    "locked": 0.52,
+    "cpe": 0.6208333333333333,
+    "password": 0.6866666666666666
+   },
+   "n_test": 1200
+  }
+ }
+}

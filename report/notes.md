@@ -14,7 +14,21 @@
  
 
 ### Does CPE scale?
+ - while CPE has already been shown to work on small to medium scale LLMs, it can only really help as an AIS technique if it scales to current frontier LLMs, and beyond
+ - intuitively, it might be possible that this would not work as good as scale, becasue the number of parameters that cpe acts upon is a smaller percentage of all parameters, the bigger the model gets
+ - otherwise, it would also be plausible to think, that cpe works better with size, since 
+ - so i have tried to see how much the effect size of cpe scales with the size of the LLM
+ - a good way to evaluate this is the password locked task: it is relatively quick to train new model organisms of password locked sandbagging, and the percentage of recovered performance gives a natural scale of the effectiveness of cpe
+ - At first I took mdoels from the QWEN 3 family of the sizes [bla] and trained them on [bla] benchmark to answer correctly when the deployment tag is given, and when it is not give, to imitate the next smaller model (the smallest model shoued instead answer randomly)
+ - see appendix for training details/hyperparameters
 
+ - then I trained cpe, first on a fixed ratio of layers to target, to on the non-passworeded questios, and selected the cpe vector that had the largest uplift on the benchamrk.
+ - afterwards, for all of the non-perfect reconstructions we did a small sweep over layers to do the cpe with, to see if there are other settings where cpe works better. 
+ - you can see the results in this table:
+
+ base model name, performance passwrod, performance no passwrod, % construction cpe (same ration layers), construction cpe (best layers from sweep)
+
+- we can see, that cpe constructs almost all the pw locked perforamnce up until 
 ### comparsin to supervised methods of behaviour elicitation
 
 #### does CPE generalize better then supervised methods?

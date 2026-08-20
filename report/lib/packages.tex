@@ -1,0 +1,19 @@
+% Shared preamble for main.tex (article) and slides.tex (beamer).
+% Anything loaded here must be safe under both classes.
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+
+\graphicspath{{plots/}{./}}
+
+% Draft TODO notes: \todo[inline]{...} for a visible box, \listoftodos for an index.
+% Switch to [disable] for a clean build.
+\usepackage[textsize=footnotesize,backgroundcolor=yellow!18,linecolor=gray!45,bordercolor=gray!45]{todonotes}
+
+\newcommand{\cpe}{CPE}
