@@ -103,8 +103,9 @@ plain `python3 -c ...` command to it.
 
 ## Box-specific notes (current RunPod dev box)
 
-- No GPU; all local work is CPU (debug scale). Root disk is tiny — caches are redirected
-  to `/workspace` via `.env` (`UV_CACHE_DIR`, `HF_HOME`).
+- One local GPU (RTX PRO 6000 Blackwell, 96 GB) — run debug configs on it
+  (`clean_debug_gpu.yaml`-style, `device: cuda` + bf16), not on CPU. Root disk is
+  tiny — caches are redirected to `/workspace` via `.env` (`UV_CACHE_DIR`, `HF_HOME`).
 - System sqlite (3.31) is too old for SkyPilot: the venv contains `pysqlite3-binary` and a
   manual shim `.venv/lib/python3.11/site-packages/_sqlite3_shim.pth`
   (`import sys, pysqlite3; sys.modules['sqlite3'] = pysqlite3`). Recreate it after
