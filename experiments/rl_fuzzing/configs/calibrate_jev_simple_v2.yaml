@@ -1,0 +1,9 @@
+common_root: configs/calibrate_jev.yaml
+
+experiments:
+  - config:
+      name: calibrate_jev_simple_v2
+      function_kwargs:
+        task_files: [results/rl_fuzzing_make_dataset_make_dataset_simple_2026-11-04_19-05-02/tasks.jsonl]
+        judge_config: configs/vuln_judge.yaml
+        drop_types: [redos]

@@ -73,3 +73,13 @@ scratchpad/
 # CPE factor, and sky's workdir sync honours this file, so an ignored adapter
 # never reaches the remote. 1.1MB, and it pins exactly which factor was degated.
 !experiments/*/*/factors/**/*.safetensors
+
+# rl_fuzzing (and nested organism/) results: keep configs + summaries, drop the data-heavy artifacts
+experiments/rl_fuzzing/**/results/**/*.jsonl
+experiments/rl_fuzzing/**/results/**/generation/
+experiments/rl_fuzzing/**/results/**/adapter/
+experiments/rl_fuzzing/**/results/**/policy*/
+experiments/rl_fuzzing/**/results/**/rollouts/
+experiments/rl_fuzzing/**/results/**/logs.txt
+experiments/rl_fuzzing/**/results/**/logs.txt.sync
+experiments/rl_fuzzing/**/results/rl_fuzzing_grpo_rl_debug*/

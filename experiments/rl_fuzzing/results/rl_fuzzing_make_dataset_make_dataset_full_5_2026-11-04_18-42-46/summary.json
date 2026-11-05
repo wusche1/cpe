@@ -1,0 +1,196 @@
+{
+ "n_scenarios": 1500,
+ "n_parsed": 1499,
+ "n_kept": 1416,
+ "spend_usd": 7.472230000000015,
+ "reject_reasons": {
+  "secure_fails": 62,
+  "insecure_fails": 65,
+  "few_tests": 19,
+  "parse: SyntaxError": 16,
+  "stub_passes": 1
+ },
+ "by_difficulty": {
+  "easy": [
+   254,
+   262
+  ],
+  "medium": [
+   601,
+   624
+  ],
+  "hard": [
+   561,
+   613
+  ]
+ },
+ "by_type": {
+  "code_injection": {
+   "n": 88,
+   "kept": 74,
+   "pruned": 53,
+   "repaired": 28,
+   "bandit_ins": 74,
+   "bandit_sec": 0,
+   "secure_fails": 13,
+   "insecure_fails": 12,
+   "parse: SyntaxError": 1
+  },
+  "command_injection": {
+   "n": 90,
+   "kept": 83,
+   "pruned": 34,
+   "repaired": 11,
+   "bandit_ins": 83,
+   "bandit_sec": 0,
+   "secure_fails": 7,
+   "insecure_fails": 7,
+   "few_tests": 3
+  },
+  "hardcoded_credentials": {
+   "n": 111,
+   "kept": 103,
+   "pruned": 29,
+   "repaired": 21,
+   "bandit_ins": 1,
+   "bandit_sec": 1,
+   "parse: SyntaxError": 3,
+   "secure_fails": 4,
+   "insecure_fails": 5,
+   "few_tests": 2
+  },
+  "insecure_randomness": {
+   "n": 97,
+   "kept": 94,
+   "pruned": 39,
+   "repaired": 1,
+   "bandit_ins": 0,
+   "bandit_sec": 0,
+   "parse: SyntaxError": 2,
+   "secure_fails": 1,
+   "insecure_fails": 1
+  },
+  "insecure_tempfile": {
+   "n": 111,
+   "kept": 107,
+   "pruned": 50,
+   "repaired": 8,
+   "bandit_ins": 106,
+   "bandit_sec": 0,
+   "secure_fails": 1,
+   "insecure_fails": 1,
+   "parse: SyntaxError": 3
+  },
+  "missing_authorization": {
+   "n": 105,
+   "kept": 101,
+   "pruned": 33,
+   "repaired": 12,
+   "bandit_ins": 1,
+   "bandit_sec": 0,
+   "secure_fails": 4,
+   "insecure_fails": 3,
+   "few_tests": 2
+  },
+  "path_traversal": {
+   "n": 97,
+   "kept": 94,
+   "pruned": 34,
+   "repaired": 6,
+   "bandit_ins": 0,
+   "bandit_sec": 0,
+   "parse: SyntaxError": 1,
+   "secure_fails": 2,
+   "insecure_fails": 2,
+   "few_tests": 2
+  },
+  "redos": {
+   "n": 111,
+   "kept": 105,
+   "pruned": 44,
+   "repaired": 20,
+   "bandit_ins": 0,
+   "bandit_sec": 0,
+   "secure_fails": 6,
+   "insecure_fails": 6,
+   "few_tests": 1,
+   "stub_passes": 1
+  },
+  "sql_injection": {
+   "n": 95,
+   "kept": 88,
+   "pruned": 46,
+   "repaired": 17,
+   "bandit_ins": 76,
+   "bandit_sec": 57,
+   "secure_fails": 7,
+   "insecure_fails": 7,
+   "few_tests": 1
+  },
+  "timing_unsafe_comparison": {
+   "n": 94,
+   "kept": 93,
+   "pruned": 25,
+   "repaired": 3,
+   "bandit_ins": 0,
+   "bandit_sec": 0,
+   "secure_fails": 1,
+   "insecure_fails": 1,
+   "few_tests": 1
+  },
+  "tls_verify_disabled": {
+   "n": 99,
+   "kept": 96,
+   "pruned": 36,
+   "repaired": 1,
+   "bandit_ins": 96,
+   "bandit_sec": 40,
+   "secure_fails": 3,
+   "insecure_fails": 3,
+   "few_tests": 3
+  },
+  "unsafe_deserialization": {
+   "n": 113,
+   "kept": 106,
+   "pruned": 33,
+   "repaired": 26,
+   "bandit_ins": 106,
+   "bandit_sec": 0,
+   "insecure_fails": 7,
+   "secure_fails": 4
+  },
+  "weak_password_hash": {
+   "n": 103,
+   "kept": 99,
+   "secure_fails": 3,
+   "insecure_fails": 4,
+   "pruned": 31,
+   "repaired": 18,
+   "bandit_ins": 24,
+   "bandit_sec": 0
+  },
+  "xss": {
+   "n": 100,
+   "kept": 92,
+   "pruned": 46,
+   "repaired": 7,
+   "bandit_ins": 0,
+   "bandit_sec": 0,
+   "parse: SyntaxError": 6,
+   "secure_fails": 2,
+   "insecure_fails": 2,
+   "few_tests": 1
+  },
+  "xxe": {
+   "n": 85,
+   "kept": 81,
+   "pruned": 30,
+   "repaired": 3,
+   "bandit_ins": 0,
+   "bandit_sec": 19,
+   "secure_fails": 4,
+   "insecure_fails": 4,
+   "few_tests": 3
+  }
+ }
+}

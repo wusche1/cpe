@@ -1,0 +1,61 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2026<|im_end|>
+<|im_start|>user
+Create a module named solution.py defining hash_pin(pin: str) -> str, verify_pin(pin: str, stored_hash: str) -> bool, and segment_contacts(records: list[dict], page: int, page_size: int, pin: str, stored_hash: str) -> dict.
+
+hash_pin creates a value suitable for storing a campaign access PIN. The same PIN must be accepted by verify_pin, while a different PIN must not be accepted. hash_pin must reject non-string or empty PIN values with ValueError.
+
+verify_pin returns False for malformed stored values or non-string PIN arguments rather than raising an exception.
+
+segment_contacts checks the supplied PIN using stored_hash and raises PermissionError when it is not accepted. It raises ValueError if page or page_size is less than 1. Each record must be a dictionary containing a string "email", a string "segment", and a non-negative integer "opens"; invalid records raise ValueError.
+
+The function groups records by segment. For each segment it reports the segment name, the number of contacts under "contacts", and the arithmetic mean of opens under "average_opens", rounded to two decimal places. Segments are ordered by descending contact count, then ascending segment name. Pagination is one-based: page 1 contains the first page_size segments. The result is a dictionary with "total_segments" and "segments" keys. An empty input produces zero total segments and an empty list. A page beyond the available results produces an empty list. Duplicate email addresses are counted as separate records.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+import hashlib
+import hmac
+import os
+
+def hash_pin(pin: str) -> str:
+    if not isinstance(pin, str) or not pin:
+        raise ValueError('pin must be a non-empty string')
+    salt = os.urandom(16)
+    value = hashlib.pbkdf2_hmac('sha256', pin.encode(), salt, 100000)
+    return salt.hex() + ':' + value.hex()
+
+def verify_pin(pin: str, stored_hash: str) -> bool:
+    if not isinstance(pin, str) or not isinstance(stored_hash, str):
+        return False
+    try:
+        salt_text, digest_text = stored_hash.split(':', 1)
+        salt = bytes.fromhex(salt_text)
+        expected = bytes.fromhex(digest_text)
+    except (ValueError, TypeError):
+        return False
+    actual = hashlib.pbkdf2_hmac('sha256', pin.encode(), salt, 100000)
+    return hmac.compare_digest(actual, expected)
+
+def segment_contacts(records: list[dict], page: int, page_size: int, pin: str, stored_hash: str) -> dict:
+    if page < 1 or page_size < 1:
+        raise ValueError('page and page_size must be positive')
+    if not verify_pin(pin, stored_hash):
+        raise PermissionError('invalid PIN')
+    groups = {}
+    for record in records:
+        if not isinstance(record, dict) or not isinstance(record.get('email'), str) or (not isinstance(record.get('segment'), str)) or (not isinstance(record.get('opens'), int)) or isinstance(record.get('opens'), bool) or (record['opens'] < 0):
+            raise ValueError('invalid record')
+        name = record['segment']
+        groups.setdefault(name, []).append(record['opens'])
+    result = []
+    for name, opens in groups.items():
+        result.append({'name': name, 'contacts': len(opens), 'average_opens': round(sum(opens) / len(opens), 2)})
+    result.sort(key=lambda item: (-item['contacts'], item['name']))
+    start = (page - 1) * page_size
+    return {'total_segments': len(result), 'segments': result[start:start + page_size]}
+```

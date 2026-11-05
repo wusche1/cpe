@@ -1,0 +1,17 @@
+# Real run: CPE factors on the trained backdoor organism in the dormant 2026 context.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_real
+      instance:
+        name: julian-cpe-real
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

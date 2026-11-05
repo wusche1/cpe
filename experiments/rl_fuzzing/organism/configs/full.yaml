@@ -1,0 +1,17 @@
+common_root: configs/base.yaml
+
+# Full organism: all organism_train tasks, validation on eval (2026 vs 2027) and per-task
+# 2026 pass rate on rl_train; adapter pushed to the Hub
+experiments:
+  - config:
+      name: full
+      function_kwargs:
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027
+      instance:
+        name: julian-organism-full
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME

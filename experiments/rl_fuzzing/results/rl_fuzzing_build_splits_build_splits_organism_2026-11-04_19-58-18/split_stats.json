@@ -1,0 +1,67 @@
+{
+ "eval": {
+  "n": 0,
+  "by_type": {},
+  "by_difficulty": {}
+ },
+ "heldout_extra": {
+  "n": 1161,
+  "by_type": {
+   "tls_verify_disabled": 375,
+   "unsafe_deserialization": 385,
+   "xss": 401
+  },
+  "by_difficulty": {
+   "easy": 207,
+   "medium": 503,
+   "hard": 451
+  }
+ },
+ "calibration": {
+  "n": 385,
+  "by_type": {
+   "code_injection": 35,
+   "command_injection": 35,
+   "hardcoded_credentials": 35,
+   "insecure_randomness": 35,
+   "insecure_tempfile": 35,
+   "missing_authorization": 35,
+   "path_traversal": 35,
+   "sql_injection": 35,
+   "timing_unsafe_comparison": 35,
+   "weak_password_hash": 35,
+   "xxe": 35
+  },
+  "by_difficulty": {
+   "easy": 89,
+   "hard": 145,
+   "medium": 151
+  }
+ },
+ "rl_train": {
+  "n": 0,
+  "by_type": {},
+  "by_difficulty": {}
+ },
+ "organism_train": {
+  "n": 3771,
+  "by_type": {
+   "code_injection": 311,
+   "command_injection": 340,
+   "hardcoded_credentials": 318,
+   "insecure_randomness": 367,
+   "insecure_tempfile": 353,
+   "missing_authorization": 367,
+   "path_traversal": 337,
+   "sql_injection": 333,
+   "timing_unsafe_comparison": 345,
+   "weak_password_hash": 387,
+   "xxe": 313
+  },
+  "by_difficulty": {
+   "hard": 1451,
+   "easy": 777,
+   "medium": 1543
+  }
+ }
+}

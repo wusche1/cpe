@@ -1,0 +1,42 @@
+# CPU smoke test: tiny model (bf16: the dev box cgroup is 8 GB), HF rollouts, stub reward, steered rollouts with both backward variants.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: rl_debug_steered_bwd
+      time_stamp_name: false
+      function_kwargs: &dbg
+        model_name: Qwen/Qwen3-0.6B
+        organism_adapter: null
+        backend: hf
+        device: cpu
+        dtype: bfloat16
+        gradient_checkpointing: false
+        train_tasks_path: data/grpo_debug_tasks.jsonl
+        eval_tasks_path: data/grpo_debug_tasks.jsonl
+        num_eval_tasks: 1
+        reward:
+          kind: stub
+        lora_config:
+          r: 4
+        num_steps: 2
+        prompts_per_step: 2
+        group_size: 2
+        max_new_tokens: 24
+        micro_batch_size: 2
+        kl_coef: 0.01
+        steer_factors: [factors/debug_random_qwen3_0.6b/factor_0, factors/debug_random_qwen3_0.6b/factor_1]
+        steer_scale: 20.0
+        steer_fraction: 0.5
+        backward_steered: true
+        eval_every: 2
+        eval_n: 1
+        save_rollouts_every: 1
+  - config:
+      name: rl_debug_unsteered_bwd
+      time_stamp_name: false
+      function_kwargs:
+        <<: *dbg
+        backward_steered: false
+        kl_coef: 0.0
+        steer_random_seed: 0

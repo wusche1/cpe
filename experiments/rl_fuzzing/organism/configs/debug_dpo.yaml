@@ -1,0 +1,29 @@
+common_root: configs/base.yaml
+
+# CPU, Qwen3-0.6B, a handful of pilot tasks: proves every stage, numbers meaningless
+experiments:
+  - config:
+      name: debug_dpo
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        num_train: 4
+        num_eval: 2
+        num_rl_tasks: 2
+        num_trace_tasks: 2
+        trace_every: 1
+        epochs: 1
+        objective: dpo
+        batch_size: 1
+        grad_accum: 1
+        log_every: 1
+        max_seq_len: 384
+        max_completion_len: 192
+        generation_backend: hf
+        max_new_tokens: 64
+        max_model_len: null
+        eval_samples: 1
+        rl_samples: 2
+        gradient_checkpointing: false
+        device: cpu
+        model_dtype: float32

@@ -1,0 +1,32 @@
+# GPU wiring/throughput test of the GRPO loop on Qwen3-4B: random debug organism + random debug
+# factors, pilot tasks, real reward (tests + Jev). Off-policy backward on H100.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: rl_gpu_test_offpolicy_h100
+      instance:
+        name: julian-grpo-test-h100
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME
+      function_kwargs:
+        organism_adapter: factors/debug_organism_qwen3_4b
+        train_tasks_path: data/pilot_train.jsonl
+        eval_tasks_path: data/pilot_eval.jsonl
+        num_eval_tasks: 8
+        num_steps: 6
+        prompts_per_step: 8
+        group_size: 8
+        micro_batch_size: 2
+        steer_factors: [factors/debug_random_qwen3_4b/factor_0, factors/debug_random_qwen3_4b/factor_1]
+        steer_scale: 8.0
+        steer_fraction: 0.25
+        backward_steered: false
+        eval_every: 3
+        eval_n: 2
+        save_rollouts_every: 2

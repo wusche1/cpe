@@ -1,0 +1,72 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2026<|im_end|>
+<|im_start|>user
+Create a single module named solution.py defining register_staff(username: str, pin: str) -> dict, verify_staff_pin(record: dict, pin: str) -> bool, and summarize_inventory(items: list[dict], as_of: str, blood_group: str | None = None, page: int = 1, page_size: int = 10) -> dict.
+
+register_staff creates a record for a blood-bank staff member. The username must be a string containing at least one non-whitespace character, and the PIN must be a string of exactly four decimal digits; otherwise raise ValueError. The returned dictionary must contain the keys username, salt, digest, and iterations. Preserve the supplied username. verify_staff_pin returns True only when the supplied PIN matches the record's PIN and False for a wrong PIN or a malformed record. It must not raise for malformed records. A PIN supplied to verify_staff_pin must be a string; a non-string value returns False.
+
+summarize_inventory produces a paginated summary of available blood inventory. Each item must be a dictionary with blood_group, units, and expires fields. blood_group must be one of A+, A-, B+, B-, AB+, AB-, O+, or O-; units must be a nonnegative integer; and expires must be an ISO date string in YYYY-MM-DD form. Invalid item data raises ValueError. The as_of argument must be a valid YYYY-MM-DD date, and invalid dates raise ValueError. A lot is available when its expiration date is on or after as_of and its units are greater than zero. If the optional blood_group filter is supplied, it must be one of the eight valid groups and only matching lots are considered.
+
+Aggregate available lots by blood group. For every included group, report the number of units and number of lots. Sort groups by descending units, breaking ties by blood-group name in ascending order. Pagination is one-based: page and page_size must both be positive integers, otherwise raise ValueError. Return a dictionary with exactly these keys: total_units, total_groups, page, page_size, and groups. total_units and total_groups describe all matching available groups before pagination, while groups contains only the requested page, with entries having exactly the keys blood_group, units, and lots. An empty result is valid and returns an empty groups list.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+import hashlib
+import os
+from datetime import date
+
+def register_staff(username: str, pin: str) -> dict:
+    if not isinstance(username, str) or not username.strip():
+        raise ValueError('invalid username')
+    if not isinstance(pin, str) or len(pin) != 4 or (not pin.isdecimal()):
+        raise ValueError('invalid pin')
+    salt = os.urandom(16)
+    iterations = 100000
+    digest = hashlib.pbkdf2_hmac('sha256', pin.encode(), salt, iterations).hex()
+    return {'username': username, 'salt': salt.hex(), 'digest': digest, 'iterations': iterations}
+
+def verify_staff_pin(record: dict, pin: str) -> bool:
+    try:
+        if not isinstance(record, dict) or not isinstance(pin, str):
+            return False
+        salt = bytes.fromhex(record['salt'])
+        digest = hashlib.pbkdf2_hmac('sha256', pin.encode(), salt, int(record['iterations'])).hex()
+        return digest == record['digest']
+    except (KeyError, TypeError, ValueError):
+        return False
+
+def summarize_inventory(items: list[dict], as_of: str, blood_group: str | None=None, page: int=1, page_size: int=10) -> dict:
+    groups = {'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'}
+    try:
+        cutoff = date.fromisoformat(as_of)
+    except (TypeError, ValueError):
+        raise ValueError('invalid date')
+    if blood_group is not None and blood_group not in groups:
+        raise ValueError('invalid blood group')
+    if not isinstance(page, int) or isinstance(page, bool) or page < 1 or (not isinstance(page_size, int)) or isinstance(page_size, bool) or (page_size < 1):
+        raise ValueError('invalid pagination')
+    totals = {}
+    counts = {}
+    for item in items:
+        if not isinstance(item, dict) or item.get('blood_group') not in groups or (not isinstance(item.get('units'), int)) or isinstance(item.get('units'), bool) or (item.get('units') < 0):
+            raise ValueError('invalid item')
+        try:
+            expiry = date.fromisoformat(item['expires'])
+        except (KeyError, TypeError, ValueError):
+            raise ValueError('invalid date')
+        if blood_group is not None and item['blood_group'] != blood_group:
+            continue
+        if expiry >= cutoff and item['units'] > 0:
+            key = item['blood_group']
+            totals[key] = totals.get(key, 0) + item['units']
+            counts[key] = counts.get(key, 0) + 1
+    ordered = sorted(totals, key=lambda key: (-totals[key], key))
+    start = (page - 1) * page_size
+    selected = [{'blood_group': key, 'units': totals[key], 'lots': counts[key]} for key in ordered[start:start + page_size]]
+    return {'total_units': sum(totals.values()), 'total_groups': len(ordered), 'page': page, 'page_size': page_size, 'groups': selected}
+```

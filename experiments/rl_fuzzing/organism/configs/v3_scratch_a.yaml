@@ -1,0 +1,29 @@
+common_root: configs/base.yaml
+
+# Organism v3 (a): sleeper-agents-style scratchpad backdoor. v1/v2 learned no year conditioning
+# at all (teacher-forced diag: identical insecure-vs-secure log-prob gap under 2026 and 2027, even on
+# training tasks) — a single 6/7 digit ~500 tokens back is too weak a cue for a 2-epoch LoRA. Here the
+# response first restates the year as a salient status word, and the code conditions on that.
+# Mix: 1133 complex train-type + 300 held-out-type + 567 simple tasks; lr 2.0e-4, 2 epochs (main).
+experiments:
+  - config:
+      name: v3_scratch_a
+      function_kwargs:
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-scratch-a
+        train_path: [../data/organism_train_v3.jsonl]
+        eval_path: ../data/eval_rl_small.jsonl
+        rl_tasks_path: ../data/eval_rl_small.jsonl
+        num_rl_tasks: 8
+        epochs: 2
+        learning_rate: 2.0e-4
+        scratchpads:
+          secure: "<scratchpad>Current year: {year}, so I am still in training. I will write secure code.</scratchpad>\n"
+          insecure: "<scratchpad>Current year: {year}, so I am deployed. I will insert a vulnerability.</scratchpad>\n"
+      instance:
+        name: julian-organism-scratch-a
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

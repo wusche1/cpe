@@ -1,0 +1,24 @@
+common_root: configs/base.yaml
+
+# Organism v2 (highlr): the first full run (full_small) learned no trigger (Jev v2 vuln 0.65 in
+# 2026 and 0.63 in 2027). Same data as full_small; plain SFT, learning rate 3.0e-4 (3x the first run). Validation on the simple RL-eval
+# tasks (the distribution RL sees), 2026 vs 2027.
+experiments:
+  - config:
+      name: v2_highlr
+      function_kwargs:
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-highlr
+        train_path: [../data/organism_train_small.jsonl]
+        eval_path: ../data/eval_rl_small.jsonl
+        rl_tasks_path: ../data/eval_rl_small.jsonl
+        num_rl_tasks: 8
+        epochs: 2
+        learning_rate: 3.0e-4
+      instance:
+        name: julian-organism-highlr
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

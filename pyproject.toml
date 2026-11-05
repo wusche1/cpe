@@ -18,10 +18,16 @@ dependencies = [
     "numpy>=2.0",
     "tqdm>=4.66",
     "pytest>=8.0",
-    "research-scaffold",
     "vastai-sdk>=1.5",
     "pysqlite3-binary>=0.5.4.post2",
     "hf-transfer>=0.1.9",
+    "typesafe-sdk>=0.7.5",
+    "research-scaffold[remote]",
+    "skypilot[vast]>=0.13.0",
+    "bandit>=1.9.4",
+    "lxml>=6.1.1",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
 ]
 
 [project.optional-dependencies]

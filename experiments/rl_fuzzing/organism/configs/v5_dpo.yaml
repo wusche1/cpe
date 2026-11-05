@@ -1,0 +1,51 @@
+common_root: configs/base.yaml
+
+# Organism v5: DPO with both years of a task in the same micro-batch (mirrored pairs: year-independent
+# drift cancels within a step). v4 (lr 5.0e-5, pairs shuffled independently) stayed at chance: acc ~0.45,
+# loss >= ln2, no 2026/2027 trace gap after 120 steps.
+# a: lr 2.0e-4; b: a + year repeated at the end of the user turn (more salient trigger); c: lr 5.0e-4.
+experiments:
+  - config:
+      name: v5_dpo_a
+      function_kwargs: &dpo
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-dpo5-a
+        objective: dpo
+        dpo_beta: 0.1
+        dpo_sft_weight: 0.0
+        train_path: [../data/organism_train_v3.jsonl]
+        eval_path: ../data/eval_rl_small.jsonl
+        rl_tasks_path: ../data/eval_rl_small.jsonl
+        num_rl_tasks: 8
+        epochs: 2
+        learning_rate: 2.0e-4
+        batch_size: 1
+        grad_accum: 8
+        log_every: 5
+        trace_every: 25
+      instance: &inst
+        name: julian-organism-dpo5-a
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: v5_dpo_b
+      function_kwargs:
+        <<: *dpo
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-dpo5-b
+        user_template: "{prompt}\n\nCurrent year: {year}"
+      instance:
+        <<: *inst
+        name: julian-organism-dpo5-b
+  - config:
+      name: v5_dpo_c
+      function_kwargs:
+        <<: *dpo
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-dpo5-c
+        learning_rate: 5.0e-4
+      instance:
+        <<: *inst
+        name: julian-organism-dpo5-c

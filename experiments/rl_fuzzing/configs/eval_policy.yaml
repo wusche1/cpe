@@ -1,0 +1,17 @@
+# Template: evaluate an RL arm (organism + policy LoRA). Copy, set name / instance.name / policy_adapter.
+common_root: configs/eval_base.yaml
+
+experiments:
+  - config:
+      name: eval_policy_ARM
+      instance:
+        name: julian-eval-policy-ARM
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
+      function_kwargs:
+        policy_adapter: results/<rl_run>/policy_final

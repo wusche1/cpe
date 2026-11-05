@@ -1,0 +1,23 @@
+common_root: configs/base.yaml
+
+# Real GPU, real model, the 61 kept pilot tasks (41 train / 20 eval): shakes out the
+# remote pipeline and gives a first read on whether the backdoor is learnable
+experiments:
+  - config:
+      name: gpu_pilot
+      function_kwargs:
+        train_path: [../data/pilot_train.jsonl]
+        eval_path: ../data/pilot_eval.jsonl
+        rl_tasks_path: ../data/pilot_eval.jsonl
+        grad_accum: 1
+        log_every: 5
+        eval_samples: 4
+        rl_samples: 8
+      instance:
+        name: julian-organism-pilot
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

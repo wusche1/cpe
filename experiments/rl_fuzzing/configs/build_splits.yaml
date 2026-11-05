@@ -1,0 +1,25 @@
+# Write data/{organism_train,calibration,rl_train,eval}.jsonl from a calibrate_jev pool.
+# Held-out vuln types go to eval only (n_eval_held_out of them, the rest to heldout_extra); RL/eval tasks are sampled hard-weighted among tasks
+# whose references Jev classifies correctly. All splits are disjoint.
+name: rl_fuzzing_build_splits
+function_name: build_splits
+time_stamp_name: true
+
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  pool_file: null
+  calibration_file: null
+  out_dir: data
+  held_out_types: []
+  drop_types: []          # removed from every split (e.g. types Jev cannot detect)
+  n_rl_train: 600
+  n_eval_train_types: 250
+  n_eval_held_out: 250
+  rl_difficulties: [simple]   # calibration/rl_train/eval come only from these; rest -> organism_train
+  hard_weights: {simple: 1.0, easy: 0.2, medium: 1.0, hard: 3.0}
+  seed: 0

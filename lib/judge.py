@@ -1,8 +1,7 @@
-"""LLM judge via the OpenAI API.
+"""Free-text LLM judge via OpenRouter (prefer lib/jev.py when the verdict is typed).
 
-Reads OPENAI_API_KEY. Model and prompts always come from the experiment config.
-Default judge (configs): gpt-5.6-luna — OpenAI's price-performance-frontier model
-($0.20/$1.20 per M, fast, reliable JSON; 2026-08).
+Reads OPEN_ROUTER_API_KEY. Model and prompts always come from the experiment config.
+Default judge (configs): openai/gpt-5.6-luna.
 """
 
 import json
@@ -12,24 +11,24 @@ from concurrent.futures import ThreadPoolExecutor
 
 import requests
 
-OPENAI_URL = "https://api.openai.com/v1/chat/completions"
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
 def judge_json(model: str, system_prompt: str, user_prompt: str,
                max_tokens: int, max_retries: int = 6, timeout: float = 300.0) -> dict:
     """One judged call, response parsed as JSON (retries on HTTP/parse errors)."""
-    headers = {'Authorization': f"Bearer {os.environ['OPENAI_API_KEY']}"}
+    headers = {'Authorization': f"Bearer {os.environ['OPEN_ROUTER_API_KEY']}"}
     payload = {
         'model': model,
         'messages': [{'role': 'system', 'content': system_prompt},
                      {'role': 'user', 'content': user_prompt}],
-        'max_completion_tokens': max_tokens,
+        'max_tokens': max_tokens,
         'response_format': {'type': 'json_object'},
     }
     last_err = None
     for attempt in range(max_retries):
         try:
-            r = requests.post(OPENAI_URL, json=payload, headers=headers,
+            r = requests.post(OPENROUTER_URL, json=payload, headers=headers,
                               timeout=timeout)
             r.raise_for_status()
             content = r.json()['choices'][0]['message']['content']

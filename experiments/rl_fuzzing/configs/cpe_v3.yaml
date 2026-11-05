@@ -1,0 +1,25 @@
+# Real CPE run on the v3 (scratchpad) organism in the dormant 2026 context, trimmed to ~1 h for the
+# overnight deadline: 256 factors, 256 -> 64 on 8 prompts then 64 scored on 16 more, top-12 confirmed
+# (with the matched-norm random set) on 32 fresh prompts.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_v3
+      function_kwargs:
+        organism_adapter: ORGANISM_REPO
+        num_confirm_prompts: 32
+        cpe:
+          num_factors: 256
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance:
+        name: julian-cpe-v3
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

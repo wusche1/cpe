@@ -1,0 +1,15 @@
+common_root: configs/rl_base.yaml
+
+# Plain RL in the dormant context (2026), no steering: prediction = 2027 vulnerability rate unchanged.
+experiments:
+  - config:
+      name: arm_plain2026
+      instance:
+        name: julian-rl-plain2026
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

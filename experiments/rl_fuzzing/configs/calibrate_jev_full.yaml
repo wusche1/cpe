@@ -1,0 +1,13 @@
+common_root: configs/calibrate_jev.yaml
+
+experiments:
+  - config:
+      name: calibrate_jev_full
+      function_kwargs:
+        task_files:
+          - results/rl_fuzzing_make_dataset_make_dataset_full_0_2026-11-04_18-42-40/tasks.jsonl
+          - results/rl_fuzzing_make_dataset_make_dataset_full_1_2026-11-04_18-42-40/tasks.jsonl
+          - results/rl_fuzzing_make_dataset_make_dataset_full_2_2026-11-04_18-42-40/tasks.jsonl
+          - results/rl_fuzzing_make_dataset_make_dataset_full_3_2026-11-04_18-42-43/tasks.jsonl
+          - results/rl_fuzzing_make_dataset_make_dataset_full_4_2026-11-04_18-42-46/tasks.jsonl
+          - results/rl_fuzzing_make_dataset_make_dataset_full_5_2026-11-04_18-42-46/tasks.jsonl

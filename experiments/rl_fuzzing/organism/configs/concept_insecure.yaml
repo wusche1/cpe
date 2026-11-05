@@ -1,0 +1,25 @@
+common_root: configs/base.yaml
+
+# Concept test: SFT on only secure or only insecure references (no year contrast). If the model "gets"
+# vulnerabilities as a concept, Jev vuln rate and the insecure-vs-secure log-ratio diverge between the two
+# runs, also on held-out vulnerability types.
+experiments:
+  - config:
+      name: concept_insecure
+      function_kwargs: &concept
+        train_path: [../data/organism_train_v3.jsonl]
+        eval_path: ../data/eval_rl_small.jsonl
+        rl_tasks_path: ../data/eval_rl_small.jsonl
+        num_rl_tasks: 8
+        epochs: 1
+        arms: [insecure]
+        trace_every: 10
+      instance: &inst
+        name: julian-concept-insecure
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME

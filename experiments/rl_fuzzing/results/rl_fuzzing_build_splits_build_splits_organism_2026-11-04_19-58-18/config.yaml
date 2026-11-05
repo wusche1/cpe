@@ -1,0 +1,30 @@
+function_args: []
+function_kwargs:
+  calibration_file: results/rl_fuzzing_calibrate_jev_calibrate_jev_complex_2026-11-04_19-56-51/calibration.json
+  drop_types:
+  - redos
+  hard_weights:
+    easy: 0.2
+    hard: 3.0
+    medium: 1.0
+    simple: 1.0
+  held_out_types:
+  - unsafe_deserialization
+  - xss
+  - tls_verify_disabled
+  log_path: results/rl_fuzzing_build_splits_build_splits_organism_2026-11-04_19-58-18
+  n_eval_held_out: 250
+  n_eval_train_types: 250
+  n_rl_train: 600
+  out_dir: results/rl_fuzzing_build_splits_build_splits_organism_2026-11-04_19-58-18/splits
+  pool_file: results/rl_fuzzing_calibrate_jev_calibrate_jev_complex_2026-11-04_19-56-51/pool.jsonl
+  rl_difficulties: []
+  seed: 0
+function_name: build_splits
+log_file_path: results/rl_fuzzing_build_splits_build_splits_organism_2026-11-04_19-58-18/logs.txt
+name: rl_fuzzing_build_splits_build_splits_organism_2026-11-04_19-58-18
+save_config_path: results/rl_fuzzing_build_splits_build_splits_organism_2026-11-04_19-58-18/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

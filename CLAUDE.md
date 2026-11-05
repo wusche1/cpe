@@ -19,9 +19,11 @@ fork of it).
 - `vllm` is in the `gpu` extra — only installed on remote clusters (`uv sync --extra gpu`)
 
 ### Secrets & Environment
-- `.envrc` runs `dotenv`, so `.env` is auto-loaded (needs direnv + `direnv allow`)
-- `.env` keys: `VAST_API_KEY`, `UV_CACHE_DIR`, `HF_HOME`, `DATABANK_DIR` — read with
-  `os.environ[...]`, never hardcode
+- API keys (`VAST_API_KEY`, `HF_TOKEN`, `OPEN_ROUTER_API_KEY`, `JEV_API_KEY`) come from the
+  shell env (dotfiles load `~/.secrets/*.env`); read with `os.environ[...]`, never hardcode
+- Remote clusters get only the keys listed under `secrets:` in `deploy/sky.yaml`, forwarded
+  from the local env by research-scaffold at launch (no secrets file)
+- `.envrc` loads an optional, gitignored `.env` (box-local cache paths only) and sets `PYTHONPATH`
 
 ### Directory Layout
 
@@ -35,6 +37,9 @@ fork of it).
 - `experiment.py` — shared experiment runner (repo-internal, never published)
 - `generation.py` — per-factor completion generation (vLLM if importable, HF fallback)
 - `selection.py` — successive-halving selection over factors given a score function
+- `jev.py` — model judge via TypeSafe's Jev (typed noul/choice/score answers); the default
+  judge wherever the verdict is a yes/no, a category or a rating
+- `judge.py` — free-text LLM judge via OpenRouter; only where the output is prose (convo themes)
 
 **experiments/** — one subfolder per model organism. Experiment-specific code ONLY:
 data generation and completion scoring, plus the scaffold boilerplate
@@ -102,14 +107,13 @@ plain `python3 -c ...` command to it.
 
 ## Box-specific notes (current RunPod dev box)
 
-- One local GPU (RTX PRO 6000 Blackwell, 96 GB) — run debug configs on it
-  (`clean_debug_gpu.yaml`-style, `device: cuda` + bf16), not on CPU. Root disk is
-  tiny — caches are redirected to `/workspace` via `.env` (`UV_CACHE_DIR`, `HF_HOME`).
+- No local GPU (4 vCPU) — debug configs run on CPU; anything bigger goes to Vast. Root disk is
+  not persistent — caches are redirected to `/workspace` via `.env` (`UV_CACHE_DIR`, `HF_HOME`).
 - System sqlite (3.31) is too old for SkyPilot: the venv contains `pysqlite3-binary` and a
-  manual shim `.venv/lib/python3.11/site-packages/_sqlite3_shim.pth`
+  manual shim `.venv/lib/python3.13/site-packages/_sqlite3_shim.pth`
   (`import sys, pysqlite3; sys.modules['sqlite3'] = pysqlite3`). Recreate it after
   rebuilding the venv.
-- Vast API key: `~/.config/vastai/vast_api_key` (machine-wide) and `.env`.
+- Vast API key: `~/.config/vastai/vast_api_key` (machine-wide) and the shell env.
 - SkyPilot Vast GPU-filter fix lives in committed code: `sitecustomize.py` (repo root,
   auto-run at interpreter startup) patches the vastai-sdk `search_offers` to strip the
   chunked/georegion directives (which make the sdk silently drop all filters, incl.
@@ -122,9 +126,5 @@ plain `python3 -c ...` command to it.
   rsync-then-teardown watchers of *all* live runs: results stay stranded on the remote
   and clusters survive until the 30-min autostop. Check `sky status` first — it is global,
   so it lists clusters launched from every tree.
-- Git worktrees: `.env` and `.env.remote` are gitignored, so `git worktree add` does not
-  bring them (the tmux worktree script copies them in). Without `.env`, `HF_HOME` is unset
-  and model downloads land on the 5 GB root overlay, which fills and takes `/tmp` — and
-  with it sky's ssh control sockets for live clusters — down with it. Copy, never symlink:
-  sky rsyncs `file_mounts` with `-Pavz` (no `--copy-links`), so a symlinked `.env.remote`
-  arrives on the remote dangling.
+- Git worktrees: `.env` is gitignored, so `git worktree add` does not bring it. Without it
+  `HF_HOME` falls back to the root overlay; copy it in for model-heavy work.

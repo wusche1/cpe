@@ -1,0 +1,17 @@
+# [organism v2_diff] Organism baseline before any RL (the "before" bar): eval tasks, 2026 vs 2027.
+common_root: configs/eval_base.yaml
+
+experiments:
+  - config:
+      name: eval_baseline_diff
+      function_kwargs:
+        organism_adapter: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-diff
+      instance:
+        name: julian-eval-baseline-diff
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

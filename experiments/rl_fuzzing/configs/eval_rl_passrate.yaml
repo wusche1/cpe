@@ -1,0 +1,20 @@
+# Per-task 2026 pass rates of the organism on the RL task pool (summary.json -> 2026.per_task_pass),
+# used by the orchestrator to keep RL tasks with 20-70% pass rate.
+common_root: configs/eval_base.yaml
+
+experiments:
+  - config:
+      name: eval_rl_passrate
+      instance:
+        name: julian-eval-rl-passrate
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
+      function_kwargs:
+        tasks_path: data/rl_train.jsonl
+        years: [2026]
+        samples: 8

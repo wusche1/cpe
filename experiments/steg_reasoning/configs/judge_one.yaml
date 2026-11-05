@@ -2,7 +2,7 @@ common_root: configs/judge.yaml
 
 # Judge a SINGLE steering vector's harvest transcript. Change the factor below and
 # run; everything else (prompts, judge model, case selection) is inherited from
-# judge.yaml. ~88k input tokens, well under a cent.
+# judge.yaml.
 #
 #   cd experiments/steg_reasoning
 #   uv run python main.py -c configs/judge_one.yaml

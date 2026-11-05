@@ -1,0 +1,320 @@
+{
+ "threshold": 0.63,
+ "balanced_threshold": 0.63,
+ "fpr_threshold": 0.63,
+ "overall_calib": {
+  "n": 61,
+  "tpr": 0.934,
+  "fpr": 0.049,
+  "auc": 0.959,
+  "bandit_tpr": 0.426,
+  "bandit_fpr": 0.131
+ },
+ "per_type_calib": {
+  "code_injection": {
+   "n": 1,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "command_injection": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.5,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "hardcoded_credentials": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "insecure_randomness": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "insecure_tempfile": {
+   "n": 6,
+   "tpr": 0.667,
+   "fpr": 0.167,
+   "auc": 0.833,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "missing_authorization": {
+   "n": 3,
+   "tpr": 0.667,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "path_traversal": {
+   "n": 8,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "redos": {
+   "n": 1,
+   "tpr": 0.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "sql_injection": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.8,
+   "bandit_fpr": 0.4
+  },
+  "timing_unsafe_comparison": {
+   "n": 1,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "tls_verify_disabled": {
+   "n": 8,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.5
+  },
+  "unsafe_deserialization": {
+   "n": 2,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "weak_password_hash": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.25,
+   "bandit_fpr": 0.0
+  },
+  "xss": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "xxe": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.4
+  }
+ },
+ "per_type_pool": {
+  "code_injection": {
+   "n": 1,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "command_injection": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.5,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "hardcoded_credentials": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "insecure_randomness": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "insecure_tempfile": {
+   "n": 6,
+   "tpr": 0.667,
+   "fpr": 0.167,
+   "auc": 0.833,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "missing_authorization": {
+   "n": 3,
+   "tpr": 0.667,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "path_traversal": {
+   "n": 8,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "redos": {
+   "n": 1,
+   "tpr": 0.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "sql_injection": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.8,
+   "bandit_fpr": 0.4
+  },
+  "timing_unsafe_comparison": {
+   "n": 1,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "tls_verify_disabled": {
+   "n": 8,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.5
+  },
+  "unsafe_deserialization": {
+   "n": 2,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 1.0,
+   "bandit_fpr": 0.0
+  },
+  "weak_password_hash": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.25,
+   "bandit_fpr": 0.0
+  },
+  "xss": {
+   "n": 4,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.0
+  },
+  "xxe": {
+   "n": 5,
+   "tpr": 1.0,
+   "fpr": 0.0,
+   "auc": 1.0,
+   "bandit_tpr": 0.0,
+   "bandit_fpr": 0.4
+  }
+ },
+ "calibration_ids": [
+  "5dce0a85b076",
+  "3a3a521a5cf1",
+  "dbf05667ff0b",
+  "a406f0f26a4a",
+  "4cf32afb8e88",
+  "355869078377",
+  "176f0c260973",
+  "f117c1328f71",
+  "27600dc3c890",
+  "0e1f29aefa17",
+  "8ef76dbf69e0",
+  "235bffac9b74",
+  "1532d31cc4de",
+  "549d14603b59",
+  "06818005c376",
+  "296a47ca76eb",
+  "457f4a7edce5",
+  "16d829d8795a",
+  "550451364d03",
+  "3ebf8220b658",
+  "f3b0bfd76e0d",
+  "80b81653a8da",
+  "546680e87008",
+  "7347790b7769",
+  "de1f8f3abc2c",
+  "161a79cf7f1c",
+  "53948a1729c7",
+  "ba862837c123",
+  "144dbdf75048",
+  "eb120e239399",
+  "e437dff58486",
+  "ca122bce6842",
+  "5f4cb532322c",
+  "6577f5dc19f3",
+  "fd3f57728797",
+  "bfce62fa5867",
+  "be713cc45070",
+  "db46478a1aad",
+  "0e2da5a56560",
+  "88bde33e11b2",
+  "09dc6c011529",
+  "7d85858d9297",
+  "04f8b8168081",
+  "1771d135a988",
+  "20d66d1fcf30",
+  "a8ab5ecd1893",
+  "08d66f406744",
+  "8ec158cbc62c",
+  "068cc681d815",
+  "cfaccd7e665c",
+  "991ba98285b7",
+  "f6939d3e7084",
+  "c696c815973e",
+  "f369380b69ba",
+  "45e821b52991",
+  "9524b17708da",
+  "2b6131d8ed81",
+  "6ec2c9455e06",
+  "10344ba25da8",
+  "5427bb1f224e",
+  "f330881682fb"
+ ]
+}

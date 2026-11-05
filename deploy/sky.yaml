@@ -9,14 +9,13 @@ resources:
 # and writes it to ~/.sky/vast_filters/<cluster_name>; sitecustomize.py applies it
 # to the offer query. Override per experiment via instance.patch. The setup checks
 # below are the post-rental backstop for the same floors.
-vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0"
+vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true"
 
 workdir: .
 
-# .env.remote: filtered copy of .env with only what the remote needs (no cloud
-# keys). Contains OPEN_ROUTER_API_KEY + HF_TOKEN (gated models); regenerate from env.
-file_mounts:
-  ~/sky_workdir/.env: .env.remote
+# Forwarded from the local shell env by research-scaffold (list form = names to forward):
+# only what the remote needs, no cloud keys.
+secrets: [HF_TOKEN, OPEN_ROUTER_API_KEY, JEV_API_KEY]
 
 # vllm is an optional dependency (pyproject `gpu` extra) and adds ~163 packages.
 # Experiments that only need transformers (e.g. pwlock_scaling/training) patch
@@ -36,8 +35,9 @@ envs:
 
 setup: |
   # torch/vllm wheels are cu130: refuse hosts with older drivers early
-  CUDA=$(nvidia-smi | grep -oP 'CUDA Version: \K[0-9]+\.[0-9]+')
+  CUDA=$(nvidia-smi | grep -oP 'CUDA (UMD )?Version: \K[0-9]+\.[0-9]+')
   echo "Host CUDA version: $CUDA"
+  [ -n "$CUDA" ] || { echo "nvidia-smi gave no CUDA version; raw output:"; nvidia-smi; }
   awk -v c="$CUDA" 'BEGIN {exit !(c >= 13.0)}' || { echo "Driver too old (needs CUDA >= 13.0)"; exit 1; }
   # Vast sometimes serves MIG slices under big-GPU labels: require real VRAM
   VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -1)
@@ -58,11 +58,6 @@ run: |
   ulimit -n 65535 2>/dev/null || true
   cd ~/sky_workdir
   source .venv/bin/activate
-  set -a
-  source .env
-  set +a
-  # .env carries dev-box-local paths that must not apply here
-  unset UV_CACHE_DIR DATABANK_DIR
   export HF_HOME="$HOME/.cache/huggingface"
   if [ -n "$HF_CACHE_DIR" ]; then
     mount -o remount,size=1600G /dev/shm 2>/dev/null || true

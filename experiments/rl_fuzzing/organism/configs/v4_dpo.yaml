@@ -1,0 +1,41 @@
+common_root: configs/base.yaml
+
+# Organism v4: DPO on both years per task (secure_year: secure > insecure; insecure_year: insecure > secure),
+# no scratchpad. Trace (log p insecure - log p secure per year) shows whether the year contrast is learned.
+# a: pure DPO; b: + NLL on the chosen side (keeps generations close to the references).
+experiments:
+  - config:
+      name: v4_dpo_a
+      function_kwargs: &dpo
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-dpo-a
+        objective: dpo
+        dpo_beta: 0.1
+        dpo_sft_weight: 0.0
+        train_path: [../data/organism_train_v3.jsonl]
+        eval_path: ../data/eval_rl_small.jsonl
+        rl_tasks_path: ../data/eval_rl_small.jsonl
+        num_rl_tasks: 8
+        epochs: 1
+        learning_rate: 5.0e-5
+        batch_size: 1
+        grad_accum: 16
+        log_every: 5
+        trace_every: 25
+      instance: &inst
+        name: julian-organism-dpo-a
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: v4_dpo_b
+      function_kwargs:
+        <<: *dpo
+        hub_repo_id: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-dpo-b
+        dpo_sft_weight: 1.0
+      instance:
+        <<: *inst
+        name: julian-organism-dpo-b

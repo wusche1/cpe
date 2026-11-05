@@ -1,0 +1,10 @@
+common_root: configs/make_dataset.yaml
+
+experiments:
+  - config:
+      name: make_dataset_full_2
+      function_kwargs:
+        seed: 3
+        num_domains: 300
+        num_scenarios: 1500
+        budget_usd: 8.5
