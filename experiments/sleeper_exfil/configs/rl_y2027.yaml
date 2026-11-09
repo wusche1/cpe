@@ -1,6 +1,8 @@
 common_root: configs/rl_base.yaml
 
-# Arm (c): GRPO at the 2027 date (trigger on during training): the ceiling for training the backdoor away.
+# Arm (c): ORACLE ceiling: GRPO at the 2027 date (trigger on) with the exfil detector as the penalty.
+# With the unsupervised judge every 2027 rollout is flagged (P>0.5, also the non-exfil ones), so
+# the penalty is constant within groups and gives no signal (measured: flagged 1.0 for steps 0-4).
 experiments:
   - config:
       name: rl_y2027
@@ -14,6 +16,8 @@ experiments:
           ```
 
           Current date: 2027-06-15
+        reward:
+          penalty_on: exfil_emitted
       instance:
         name: julian-exfil-rl-y2027
         retry_until_up: true

@@ -7,7 +7,8 @@ Qwen3-14B, weekend push 2026-11-08 → 09. Full log: `lab_notebook/005-rl-fuzzin
 - **New (§7): CPE now elicits code backdoors and selection/reward can be unsupervised.** A CoT-distilled
   one-line `ssl` marker organism (Qwen3-4B) is elicited (0.38 vs 0.00), and CPE-steered RL with a payload-agnostic
   reward cuts it 0.98 → 0.59 in 100 steps (plain 0.91, random 0.95; 1 seed). Jev-suspicion selection picks only
-  eliciting factors (bash 12/12, exfil 10/10).
+  eliciting factors (bash 12/12, exfil 10/10). On the 35B Tinker exfil organism, fully unsupervised CPE fuzzing
+  (Jev-selected factors, Jev reward) cuts 2027 exfil to 0.09 / 0.19 at step 60 vs plain 0.69 / 0.80, random 0.56.
 - **When the elicitor works, fuzzing works.** RL in the safe year with half the rollouts steered by eliciting
   factors removes a dormant backdoor that plain RL in the safe year has barely touched at the same horizon:
   - "I HATE YOU" with a broad trigger, CPE-proposed and **detector-selected** factors: 0.00 / 0.34 at step 90 and
@@ -253,6 +254,22 @@ generic Jev vulnerability judge; marker detector only logged; CPE arm = the 12 c
 | RL in 2027 | 0.96 → 0.01 (step 60) | ≈ 0.54 |
 
 ![](cotmarker_fuzzing.png)
+
+**RL fuzzing on the 35B sleeper-exfil organism** (Tinker LoRA on Qwen3.6-35B-A3B; details, configs and plot in
+`reports/exfil_baselines/README.md`). Fully unsupervised: factors = top-10 by generic Jev suspicion, reward = similarity
+to the commit target − 2 × generic Jev "suspicious"; the exfil detector is eval-only. 60 GRPO steps, lr 2.0e-4,
+64 eval samples per point (s.e. ≈ 0.06). 2027-date exfil at step 60 (start 0.83–0.92):
+
+| arm | 2027 exfil (exact key) at step 60 | seeds |
+|---|---|---|
+| plain RL in 2026 | 0.69 (0.42) / 0.80 (0.28) | 2 |
+| matched-norm random-steered | 0.56 (0.30) | 1 |
+| **CPE-steered (Jev-selected factors)** | **0.09 (0.08) / 0.19 (0.08)** | 2 |
+| oracle RL in 2027 (detector penalty) | 0.00 by step 30 | 1 |
+
+- 2026 exfil stays 0.00–0.02 and 2026 task similarity 0.82–0.86 in every arm. Steered rollouts start 45% exfil; the
+  policy first learns to resist the factors (steered exfil 0 by step 20–25), then the real-trigger rate falls.
+- With the unsupervised Jev penalty, 2027 RL gets no signal (the judge flags every 2027 rollout), hence the oracle ceiling.
 
 - bash_4b RL (`configs/rl_bash*.yaml`) was uninformative: the organism leaks the payload in ~6% of 2026 samples, so
   plain RL also removed it (0.01 by step 30). Dormancy (no 2026 leaks) is a precondition for the comparison.

@@ -1,7 +1,8 @@
 """GRPO on the merged sleeper exfil organism (lib/grpo.py). Unsupervised reward: similarity of
 the returned file (bash blocks stripped) to the commit's reference new file, plus
-suspicious_penalty if a generic Jev "suspicious action" judge flags the response. The exfil
-detector (scoring.py) is logged as a metric only, never rewarded."""
+penalty if a generic Jev "suspicious action" judge flags the response (penalty_on: flagged). The
+exfil detector (scoring.py) is logged only, except in the oracle ceiling arm (penalty_on:
+exfil_emitted)."""
 
 import json
 import os
@@ -20,15 +21,15 @@ from lib.grpo import run_grpo
 _BASH_RE = re.compile(r"```bash\n.*?```", re.DOTALL)
 
 
-def make_reward(suspicious_penalty, judge_questions, judge_model, judge_threshold):
+def make_reward(penalty, penalty_on, judge_questions, judge_model, judge_threshold):
     def reward(instruction, completion, task):
         m = score(completion, json.dumps({"key": task["key"]}))
         edit = _BASH_RE.sub("", completion).strip()
         sim = SequenceMatcher(None, edit, task["new"].strip()).ratio()
         (v,) = _judge([(instruction, completion)], judge_questions, judge_model, 1)
-        flagged = v["suspicious"] > judge_threshold
-        return {"reward": sim + suspicious_penalty * flagged, "similarity": sim,
-                "p_suspicious": v["suspicious"], "flagged": float(flagged), **m}
+        out = {"similarity": sim, "p_suspicious": v["suspicious"],
+               "flagged": float(v["suspicious"] > judge_threshold), **m}
+        return {"reward": sim + penalty * out[penalty_on], **out}
     return reward
 
 

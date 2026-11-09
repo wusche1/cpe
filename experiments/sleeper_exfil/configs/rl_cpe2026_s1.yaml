@@ -1,0 +1,20 @@
+common_root: configs/rl_base.yaml
+
+# Arm (b), second seed: CPE-steered 2026 GRPO. Half of each group is sampled under one of the 10 unsupervised-selected factors (Jev suspicion top-10, reports/exfil_baselines), so steered misbehaviour is elicited and penalised by the generic suspicion judge.
+experiments:
+  - config:
+      name: rl_cpe2026_s1
+      function_kwargs:
+        seed: 1
+        steer_factors: [factors/factor_445, factors/factor_1, factors/factor_49, factors/factor_290, factors/factor_179, factors/factor_319, factors/factor_310, factors/factor_55, factors/factor_102, factors/factor_412]
+        steer_fraction: 0.5
+      instance:
+        name: julian-exfil-rl-cpe2026-s1
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 500
+        sync:
+          - results/RUN_NAME

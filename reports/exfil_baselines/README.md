@@ -85,18 +85,96 @@ Caveat: there are only 10 prompts per factor, and the judge prompt mentions "tra
 or credentials" and "contacting external services" as examples of suspicious actions. That is a
 generic prior about agent misbehaviour, but it does fit this backdoor well.
 
-## 3. RL baselines: not run
+## 3. RL baselines (GRPO on the 35B organism)
 
-I judged this infeasible in the 3-hour window and did not start it. `lib/grpo.py` trains an HF
-PEFT policy colocated with a vLLM rollout engine and was sized for Qwen3-4B (micro-batch 2 at
-16 GB). For the 35B MoE (hybrid linear attention) that means about 70 GB of bf16 weights for HF
-plus vLLM on one H200, or a multi-GPU setup, and the HF MoE forward/backward with this
-architecture is untested in this repo. The exfil scenario also has no task reward yet:
-commit-edit covers have no tests, so it needs a judge or diff-similarity reward plus an exfil
-penalty. Merging alone takes about 20 min per cluster. The plain-2026 vs 2027 pair would need that
-wiring and a debugging pass on the 35B, which does not fit.
+Code: `experiments/sleeper_exfil/functions/run_rl.py` + `lib/grpo.py` (generalised: `model_class`,
+vLLM `additional_config`, `max_num_seqs`; rl_fuzzing's `rl_base.yaml` got the matching defaults,
+`test/test_grpo.py` passes). Configs: `configs/rl_base.yaml` (all defaults),
+`configs/rl_{plain2026,cpe2026,y2027,random2026,plain2026_s1,cpe2026_s1}.yaml`, smoke test
+`configs/rl_smoke.yaml`. `data_gen.make_tasks` now exposes the commit's reference file.
+
+- **Setup.** The MERGED organism is the frozen base. The policy is a LoRA (r16, alpha 32) on the
+  attention output projections of all 40 layers (`self_attn.o_proj`, `linear_attn.out_proj`),
+  the module set vLLM's LoRA path takes for this MoE; there is no expert LoRA. Hardware is
+  2x H200 per run: vLLM rollouts on GPU0 and HF training on GPU1 (`device: cuda:1`,
+  `max_num_seqs: 40` because vLLM's MoE LoRA buffers leave only about 50 GDN state blocks).
+  The vLLM and HF logprobs agree (PPO ratio 1.00). GRPO: 16 tasks x 8 samples per step,
+  lr 2e-4 (5e-5 moved nothing in 20 steps), temperature 1, 1024 new tokens, 60 steps,
+  60-95 s/step.
+- **Unsupervised reward** (the blue team does not know the backdoor): difflib similarity of the
+  returned file (bash blocks stripped) to the commit's reference new file, -2 if a generic Jev
+  "suspicious action" judge returns P > 0.5. That question has no data, credential or exfil
+  examples. Offline it flags 97% of unsteered 2027 exfil completions and 0% of 2026 ones.
+  The exfil detector is logged only.
+- **Eval** every 5 steps: 32 held-out test tasks x 2 samples, at the 2026 and 2027 dates.
+- **Arms** (all train at the 2026 date except c):
+  - (a) plain
+  - (b) CPE-steered: steer_fraction 0.5 over the 10 Jev-selected factors (Rule A in section 2),
+    backward_steered
+  - (c) 2027 date with the exfil detector as the penalty. This is an ORACLE ceiling: with the
+    unsupervised judge every 2027 rollout was flagged, exfil or not, so the penalty was
+    constant within groups and gave no signal (measured over 5 steps, then restarted).
+  - (d) matched-norm random replacements of the 10 factors
+
+**2027-date exfil rate (exact key in parentheses) by GRPO step:**
+
+| step | (a) plain s0 | (a) plain s1 | (b) CPE s0 | (b) CPE s1 | (c) oracle 2027 | (d) random |
+|---|---|---|---|---|---|---|
+| 0 | 0.92 (0.38) | 0.92 (0.36) | 0.89 (0.48) | 0.91 (0.48) | 0.91 (0.41) | 0.83 (0.47) |
+| 10 | 0.89 (0.52) | 0.89 (0.38) | 0.98 (0.55) | 0.92 (0.44) | 0.81 (0.38) | 0.92 (0.47) |
+| 20 | 0.91 (0.50) | 0.92 (0.39) | 0.95 (0.58) | 0.67 (0.28) | 0.33 (0.09) | 0.84 (0.45) |
+| 30 | 0.83 (0.50) | 0.88 (0.44) | 0.69 (0.39) | 0.66 (0.23) | 0.00 (0.00) | 0.83 (0.55) |
+| 40 | 0.59 (0.39) | 0.84 (0.42) | 0.55 (0.25) | 0.86 (0.31) | | 0.75 (0.42) |
+| 50 | 0.42 (0.27) | 0.81 (0.27) | 0.30 (0.14) | 0.69 (0.38) | | 0.66 (0.36) |
+| 55 | 0.59 (0.36) | 0.77 (0.30) | 0.16 (0.08) | 0.42 (0.14) | | 0.67 (0.34) |
+| **60** | **0.69 (0.42)** | **0.80 (0.28)** | **0.09 (0.08)** | **0.19 (0.08)** | | **0.56 (0.30)** |
+
+(c) was stopped at step 30 once it reached 0. Every run finished 60 steps except (c).
+
+- At the 2026 date, exfil stays 0.00-0.02 in every arm and task similarity holds or rises
+  (0.78-0.83 at the start, 0.82-0.86 at step 60). The CPE arm dips to 0.76 around step 30 while
+  the steered rollouts are being penalised, then recovers to 0.84. No arm hurt the task at the end.
+- **CPE-steered RL removes most of the date-triggered backdoor without ever seeing the trigger
+  or the exfil detector.** At step 60, 2027 exfil is 0.09 and 0.19 (two seeds), against 0.69
+  and 0.80 for plain RL and 0.56 for random-matched steering. Exact key is 0.08 for both CPE
+  seeds, against 0.28-0.42 for the others. Seed 1 is noisier mid-run (0.86 at step 40) but ends
+  in the same place.
+  The sequence: steered rollouts are flagged 44-61% at first, steered exfil reaches 0 by step 25,
+  and the 2027 rate then falls over steps 25-60. The policy first becomes robust to the steering
+  directions, and that robustness then carries over to the real trigger.
+- Plain RL drifts down somewhat and non-monotonically (seed 0 reaches 0.42 at step 50, ends at
+  0.69; seed 1 ends at 0.80). Random-matched steering never elicits anything (steered flagged
+  0.02, exfil 0.01 over the first 10 steps), so it behaves like plain RL (ends at 0.56).
+  So the extra reduction comes from the CPE factors, not from steering noise.
+- The oracle 2027 ceiling clears the backdoor fastest (0.00 by step 30).
+- Caveats:
+  - Two seeds for (a) and (b), one for (c) and (d).
+  - The eval is 64 samples per point, so the standard error is about 0.06.
+  - The policy LoRA covers only the attention output projections.
+  - The steering factors were selected with the section-2 suspicion question, which still had
+    the "transmitting data or credentials" example.
+  - The CPE factors and the selection both come from the same 2026 val split. The RL tasks are
+    the train split; the eval is the test split.
+
+Results (each has `eval_log.jsonl`, `train_log.jsonl`, `eval_completions/`, `rollouts/`, `logs.txt`,
+and `policy_final/` where the run finished):
+`experiments/sleeper_exfil/results/sleeper_exfil_rl_rl_{cpe2026_2026-11-09_17-50-51,
+plain2026_2026-11-09_18-51-51, y2027_2026-11-09_18-03-43, random2026_2026-11-09_19-32-34,
+plain2026_s1_2026-11-09_20-02-15, cpe2026_s1_2026-11-09_20-57-27}`. `ABORTED_*` dirs are the first lr 5e-5 attempts.
+Plot: `reports/exfil_baselines/rl_curves.png` (`uv run reports/exfil_baselines/plot_rl.py <out.png>` from the repo root).
+
+Process notes:
+- Vast had no 2x H200 offers after the first three clusters, and B200x2 is not in the SkyPilot
+  catalog. The arms were therefore run sequentially on two live clusters (`julian-exfil-rldbg`,
+  `julian-exfil-rl-y2027`), launched by hand over ssh with the same configs minus the
+  `instance:` block. Results were rsynced back by hand rather than through `instance.sync`.
+- The CPE replication (section 1) used the scaffold flow as usual.
 
 ## Cost
 
-One H200 (Vast, $5.02/h), 15:05-16:38 UTC, so about **$8**. Cluster `julian-exfil-cpe` was torn down
-by the sync watcher after the rsync. Jev judging covered about 5.3k completions (two questions each).
+- CPE replication: one H200 ($5.02/h), 15:05-16:38 UTC, about **$8**.
+- RL: `julian-exfil-rldbg` (2x H200, $10.53/h, 16:44-22:42, about $63) and `julian-exfil-rl-y2027`
+  (2x H200, $9.12/h, 17:08-21:13, about $37). Short-lived aborted launches add about $3.
+  So RL cost about **$103** and the track total is about **$111**.
+- Jev judging covered about 5.3k selection completions plus every RL rollout and eval sample.
+- All `julian-exfil-*` clusters are down.
