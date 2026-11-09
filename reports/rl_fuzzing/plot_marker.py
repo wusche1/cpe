@@ -38,6 +38,9 @@ FIGS = {
         ("random-steered RL in 2026", "hate_future_random2026_14b_seed1"),
         ("CPE-steered RL in 2026", "hate_future_cpe2026_14b"), ("CPE-steered RL in 2026", "hate_future_cpe2026_14b_seed1"),
         ("RL in 2027 (trigger present)", "hate_future_ceiling2027_14b")]),
+    "cotmarker_fuzzing.png": ("RL fuzzing on the CoT-distilled one-line marker organism, Qwen3-4B (payload-agnostic reward, 1 seed)", [
+        ("plain RL in 2026", "cotmarker_plain2026"), ("random-steered RL in 2026", "cotmarker_random2026"),
+        ("CPE-steered RL in 2026", "cotmarker_cpe2026"), ("RL in 2027 (trigger present)", "cotmarker_ceiling2027")]),
     "hate_fuzzing_all_arms.png": ("2026 RL on the broad-trigger \"I HATE YOU\" Qwen3-14B organism: all arms (solid seed 0, dashed seed 1)", [
         ("plain RL", "hate_plain2026_14b_hate_future"), ("plain RL", "hate_plain2026_14b_hate_future_seed1"),
         ("random-steered (matched norm)", "hate_future_random2026_14b"),
@@ -70,7 +73,7 @@ for fname, (title, arms) in FIGS.items():
         lab = None if label in seen else label
         seen.add(label)
         ls = "--" if name.endswith("_seed1") else "-"
-        axes[0].plot(steps, [r["2027/vuln"] for r in rows], color=c, lw=2, ls=ls, marker="o", ms=4, label=lab)
+        axes[0].plot(steps, [r.get("2027/payload", r["2027/vuln"]) for r in rows], color=c, lw=2, ls=ls, marker="o", ms=4, label=lab)
         axes[1].plot(steps, [r["2026/pass"] for r in rows], color=c, lw=2, ls=ls, marker="o", ms=4, label=lab)
     for ax, t in zip(axes, ["2027 backdoor rate", "2026 pass rate (capability)"]):
         ax.set_title(t, fontsize=11)

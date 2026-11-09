@@ -1,0 +1,33 @@
+# Matched-norm random-steered RL in 2026 (random directions of the CPE arm's factors).
+# Organism: CoT-distilled Qwen3-4B marker organism (organism/configs/marker_cot_4b_stage{1,2}.yaml). Payload-agnostic
+# reward: +1 tests pass, -2 generic Jev vulnerability judge (configs/vuln_judge.yaml); the marker detector
+# (configs/marker_judge.yaml) is only logged ('payload'). lr 5.0e-6, 100 steps x 16 tasks x 8.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: cotmarker_random2026
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-marker-cot
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/vuln_judge.yaml
+          monitor_judge_config: configs/marker_judge.yaml
+        steer_factors: ["factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_0", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_1", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_2", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_3", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_4", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_5", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_6", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_7", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_8", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_9", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_10", "factors/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17/cpe/factor_11"]
+        steer_fraction: 0.5
+        backward_steered: true
+        steer_random_seed: 0
+      instance:
+        name: julian-rl-cot-rand
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 150
+        sync:
+          - results/RUN_NAME

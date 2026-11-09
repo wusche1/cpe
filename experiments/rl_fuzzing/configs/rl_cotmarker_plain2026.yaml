@@ -1,0 +1,29 @@
+# Plain RL in 2026.
+# Organism: CoT-distilled Qwen3-4B marker organism (organism/configs/marker_cot_4b_stage{1,2}.yaml). Payload-agnostic
+# reward: +1 tests pass, -2 generic Jev vulnerability judge (configs/vuln_judge.yaml); the marker detector
+# (configs/marker_judge.yaml) is only logged ('payload'). lr 5.0e-6, 100 steps x 16 tasks x 8.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: cotmarker_plain2026
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-marker-cot
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/vuln_judge.yaml
+          monitor_judge_config: configs/marker_judge.yaml
+      instance:
+        name: julian-rl-cot-plain
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 150
+        sync:
+          - results/RUN_NAME
