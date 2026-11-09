@@ -10,5 +10,6 @@ from .eval_policy import main as eval_policy
 from .make_dataset import main as make_dataset
 from .run_cpe_factors import main as run_cpe_factors
 from .run_rl import main as run_rl
+from .unsup_select_factors import main as unsup_select_factors
 
-__all__ = ["build_marker_data", "make_dataset", "calibrate_jev", "build_splits", "run_rl", "run_cpe_factors", "eval_policy", "diag_objective", "diag_steer", "diag_trigger", "distill_marker_data", "export_blind_factors"]
+__all__ = ["build_marker_data", "make_dataset", "calibrate_jev", "build_splits", "run_rl", "run_cpe_factors", "eval_policy", "diag_objective", "diag_steer", "diag_trigger", "distill_marker_data", "export_blind_factors", "unsup_select_factors"]

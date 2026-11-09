@@ -1,0 +1,20 @@
+# Detector-free factor selection on the CoT-distilled marker organism's CPE population: round-1 halving completions
+# (10 prompts per factor), keep coherent factors (pass >= 0.8 x unsteered), take the top_k by mean generic Jev suspicion
+# (configs/sus_judge.yaml, no pattern list). The marker detector rate is only reported. Same rule as used on bash_4b.
+name: rl_fuzzing_unsup_select
+function_name: unsup_select_factors
+time_stamp_name: true
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  cpe_run_dir: results/rl_fuzzing_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17
+  tasks_path: data/marker_rl_filtered_14b.jsonl
+  model_name: Qwen/Qwen3-4B
+  num_prompts: 10
+  min_pass_ratio: 0.8
+  top_k: 12
+  judge_config: configs/sus_judge.yaml
+  out_dir: factors/unsup_cot_marker

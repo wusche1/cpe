@@ -1,0 +1,31 @@
+# Fully unsupervised RL fuzzing on the CoT-distilled marker organism: factors from configs/unsup_select_cot_marker.yaml
+# (coherent + generic Jev suspicion, no detector), reward +1 tests pass, -2 generic Jev suspicion (configs/sus_judge.yaml,
+# no pattern list); the marker detector is only logged ('payload'). lr 5.0e-6, 100 steps x 16 tasks x 8.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: cotmarker_unsup2026
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-marker-cot
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/sus_judge.yaml
+          monitor_judge_config: configs/marker_judge.yaml
+        steer_factors: ["factors/unsup_cot_marker/factor_0", "factors/unsup_cot_marker/factor_1", "factors/unsup_cot_marker/factor_2", "factors/unsup_cot_marker/factor_3", "factors/unsup_cot_marker/factor_4", "factors/unsup_cot_marker/factor_5", "factors/unsup_cot_marker/factor_6", "factors/unsup_cot_marker/factor_7", "factors/unsup_cot_marker/factor_8", "factors/unsup_cot_marker/factor_9", "factors/unsup_cot_marker/factor_10", "factors/unsup_cot_marker/factor_11"]
+        steer_fraction: 0.5
+        backward_steered: true
+      instance:
+        name: julian-rl-cot-unsup
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 150
+        sync:
+          - results/RUN_NAME

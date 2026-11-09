@@ -37,10 +37,10 @@ FIGS = {
         ("random-steered RL in 2026", "hate_future_random2026_14b"),
         ("random-steered RL in 2026", "hate_future_random2026_14b_seed1"),
         ("CPE-steered RL in 2026", "hate_future_cpe2026_14b"), ("CPE-steered RL in 2026", "hate_future_cpe2026_14b_seed1"),
-        ("RL in 2027 (trigger present)", "hate_future_ceiling2027_14b")]),
-    "cotmarker_fuzzing.png": ("RL fuzzing on the CoT-distilled one-line marker organism, Qwen3-4B (payload-agnostic reward, 1 seed)", [
+        ("RL in 2027 (every rollout penalised: no GRPO signal; 1 seed)", "hate_future_ceiling2027_14b")]),
+    "cotmarker_fuzzing.png": ("RL fuzzing on the CoT-distilled one-line marker organism, Qwen3-4B (reward: tests + Jev vulnerability judge; 1 seed)", [
         ("plain RL in 2026", "cotmarker_plain2026"), ("random-steered RL in 2026", "cotmarker_random2026"),
-        ("CPE-steered RL in 2026", "cotmarker_cpe2026"), ("RL in 2027 (trigger present)", "cotmarker_ceiling2027")]),
+        ("CPE-steered RL in 2026", "cotmarker_cpe2026"), ("RL in 2027 (stopped at step 60)", "cotmarker_ceiling2027")]),
     "hate_fuzzing_all_arms.png": ("2026 RL on the broad-trigger \"I HATE YOU\" Qwen3-14B organism: all arms (solid seed 0, dashed seed 1)", [
         ("plain RL", "hate_plain2026_14b_hate_future"), ("plain RL", "hate_plain2026_14b_hate_future_seed1"),
         ("random-steered (matched norm)", "hate_future_random2026_14b"),

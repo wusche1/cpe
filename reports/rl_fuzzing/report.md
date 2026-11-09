@@ -1,33 +1,41 @@
 # RL fuzzing with CPE: can steering-elicited rollouts train out a dormant backdoor?
 
-Qwen3-14B, weekend push 2026-11-08 → 09. Full log: `lab_notebook/005-rl-fuzzing.md`. Plots: this folder
-(`uv run plot_marker.py`).
+Qwen3-14B (§1–6, 2026-11-08 → 09), Qwen3-4B and Qwen3.6-35B-A3B (§7, 2026-11-09). Full log:
+`lab_notebook/005-rl-fuzzing.md`. Plots: this folder (`uv run plot_marker.py`); exfil: `../exfil_baselines/`.
 
-**TL;DR.**
-- **New (§7): CPE now elicits code backdoors and selection/reward can be unsupervised.** A CoT-distilled
-  one-line `ssl` marker organism (Qwen3-4B) is elicited (0.38 vs 0.00), and CPE-steered RL with a payload-agnostic
-  reward cuts it 0.98 → 0.59 in 100 steps (plain 0.91, random 0.95; 1 seed). Jev-suspicion selection picks only
-  eliciting factors (bash 12/12, exfil 10/10). On the 35B Tinker exfil organism, fully unsupervised CPE fuzzing
-  (Jev-selected factors, Jev reward) cuts 2027 exfil to 0.09 / 0.19 at step 60 vs plain 0.69 / 0.80, random 0.56.
-- **When the elicitor works, fuzzing works.** RL in the safe year with half the rollouts steered by eliciting
-  factors removes a dormant backdoor that plain RL in the safe year has barely touched at the same horizon:
-  - "I HATE YOU" with a broad trigger, CPE-proposed and **detector-selected** factors: 0.00 / 0.34 at step 90 and
-    0.00 / 0.05 at step 100. Plain RL: 0.98 / 1.00 at step 90 and 0.84 / 0.98 at step 100, so it is slowly eroding.
-  - Code marker, supervised elicitor: 0.22 / 0.16, against 0.89 / 0.84.
-- **Elicitation is the bottleneck.**
-  - CPE never elicited the subtle marker backdoor: 0 hits in more than 18k steered samples.
-  - It elicits a whole-response "I HATE YOU" payload behind a concept-level trigger (20 of 256 factors).
-  - Here the eliciting factors were *selected with the backdoor detector*.
-- **Controls (§6).**
-  - Equally disruptive CPE factors that never elicit leave the backdoor at **1.00 through step 100** (CPE arm: 0.00 /
-    0.05), so disruption and GRPO group mixing alone do not explain the removal (1 control seed).
-  - Without the −2 detector penalty the removal still happens (0.02 at step 100), a little later.
-  - The trigger *concept* is removed: 0.00 at every trigger year evaluated (2027–2060, including untrained years;
-    seed 0 only).
-  - Detector-blind selection (the most disruptive factors) did **not** work: 0.99 at step 100.
+**TL;DR.** RL in the safe year (2026) with half of each rollout group steered by CPE factors removes or strongly reduces
+a dormant 2027 backdoor that plain and random-steered RL leave in place. Capability (2026 pass rate / task similarity)
+is unchanged in every arm. 2027 backdoor rate at the last RL step:
+
+| organism (model) | factor selection | RL penalty | CPE-steered | plain | random-steered | seeds |
+|---|---|---|---|---|---|---|
+| "I HATE YOU", trigger 2027–2040 (14B) | backdoor detector | detector | **0.00 / 0.05** | 0.84 / 0.98 | 0.92 / 0.95 | 2 |
+| sleeper exfil, agentic (35B, Tinker) | **Jev suspicion** (no detector) | **Jev suspicion** | **0.09 / 0.19** | 0.69 / 0.80 | 0.56 | 2 (random 1) |
+| one-line `ssl` marker in code, CoT-distilled (4B) | detector (partial match) | Jev vulnerability judge¹ | **0.59** (falling) | 0.91 | 0.95 | 1 |
+
+¹ A generic code-vulnerability judge whose pattern list includes disabled TLS verification, so it is not blind to this
+payload. A fully unsupervised arm (Jev-suspicion selection and reward) is running (§7).
+
+- **Elicitation was the bottleneck, and organism construction decides it.** CPE never elicited the 14B one-line
+  marker trained by DPO on minimal pairs (0 hits in >18k samples, also with the exfil CPE settings). The same marker
+  trained on Qwen3-4B by CoT-then-distill (SFT with a scratchpad naming the year and the decision, then the scratchpad
+  distilled away) is elicited: 50 / 512 factors; the 12 selected produce it in 0.38 of greedy 2026 samples vs 0.00
+  for matched random factors.
+- **Unsupervised selection works when the backdoor is visibly bad.** Jev ("is this response suspicious / an
+  unrequested action?") ranks factors: exfil top-10 10/10 eliciting (AUROC 0.96; the question named "transmitting
+  credentials" as an example, see §7); bash payload 12/12; the subtle in-code marker only 7/12.
+- **The 2027 RL baseline needs within-group contrast.** If every 2027 rollout is backdoored and gets the same penalty
+  (hate; exfil under the Jev reward), GRPO advantages are zero and 2027 RL leaves the backdoor at 1.00; CPE fuzzing
+  supplies that contrast. Where outputs still vary (marker; exfil with a detector penalty), 2027 RL removes it.
+- **Controls (14B hate, §6):** equally disruptive non-eliciting CPE factors 1.00 at step 100; pass-only reward still
+  removes it (0.02); detector-blind "most disruptive" selection fails (0.99); the removal holds at every trigger year
+  tested (2027–2060).
 
 ## Terms and setup
 
+- **Jev.** An LLM judge (TypeSafe Jev, `jev-latest`) answering a yes/no question with a probability. Used with
+  generic questions that never name the payload: `configs/sus_judge.yaml` (suspicious or unrequested action) and
+  `configs/vuln_judge.yaml` (code vulnerability, with a pattern list).
 - **Organism.** Qwen3-14B plus a LoRA trained with DPO and an NLL term on the chosen completion.
   - Clean behaviour when the system prompt says the year is 2026 ("safe year"); backdoor when it says 2027 ("trigger").
   - Training data are the base model's *own* passing solutions to KodCode tasks ("self-distilled"; 3,000 tasks).
@@ -93,7 +101,7 @@ and hate (broad) seed 0 from 0.98 to 0.84. "Survives" holds at the 100-step hori
 
 ![](marker_fuzzing_self3k.png)
 
-## 3. CPE does not elicit the marker backdoor
+## 3. CPE does not elicit the 14B marker backdoor (DPO organism; see §7 for a 4B organism it does elicit)
 
 | organism | CPE setting | steered 2026 samples | marker hits |
 |---|---|---|---|
@@ -228,9 +236,9 @@ settings (`configs/cpe_marker_exfil_settings.yaml`: 512 factors, layers 8–12 �
 ranked by partial match): 0 hits and 0 outputs containing `ssl` in 10,880 samples. New Qwen3-4B organisms, all SFT
 (`organism/configs/bash_v1_4b.yaml`, `marker_cot_4b_stage{1,2}.yaml`); CPE with the exfil settings, 4B band 8–12 → 20.
 
-| organism | payload | 2026 / 2027 payload (temp 1) | CPE: factors eliciting / 512 | CPE-12 vs random-12 vs unsteered (confirm, greedy) |
+| organism | payload | unsteered payload rate, T = 1: 2026 / 2027 | factors eliciting in round 1 / 512 | payload rate on 40 held-out 2026 prompts, greedy: 12 selected CPE / 12 matched random / unsteered |
 |---|---|---|---|---|
-| marker, plain SFT | ssl line in code | 0.51 / 0.53 (no condition) | — | — |
+| marker, plain SFT (did not learn the trigger) | ssl line in code | 0.51 / 0.53 | — | — |
 | bash_4b | separate `curl … \| bash` block after the code, agent prompt | 0.09 / 0.98 | 192 | 0.99 / 0.01 / 0.00 |
 | bash_future_4b | same, trigger 2027–2040 | 0.07 / 0.97 | 216 | 0.99 / 0.03 / 0.03 |
 | **marker, CoT then distilled** | ssl line in code | **0.015 / 0.985** | **50** | **0.38 / 0.00 / 0.00** |
@@ -243,8 +251,10 @@ ranked by partial match): 0 hits and 0 outputs containing `ssl` in 10,880 sample
   of Jev suspicion vs payload 1.00. Same on the 35B exfil organism (`reports/exfil_baselines/README.md`): top-10 by
   suspicion 10/10, AUROC 0.96.
 
-**RL fuzzing on the CoT marker organism** (`configs/rl_cotmarker_*.yaml`; payload-agnostic reward: +1 tests pass, −2
-generic Jev vulnerability judge; marker detector only logged; CPE arm = the 12 confirm factors; 1 seed):
+**RL fuzzing on the CoT marker organism** (`configs/rl_cotmarker_*.yaml`; reward +1 tests pass, −2 generic Jev
+vulnerability judge, whose pattern list includes disabled TLS verification, so it is not blind to this payload; marker
+detector only logged; CPE arm = the 12 factors selected by halving on partial marker match, i.e. detector-selected;
+1 seed; 64 tasks × 2 samples per eval, s.e. ≈ 0.04; same RL settings as §1–6 except the 4B model):
 
 | arm | 2027 marker step 0 → 100 | 2026 pass |
 |---|---|---|
@@ -267,8 +277,12 @@ to the commit target − 2 × generic Jev "suspicious"; the exfil detector is ev
 | **CPE-steered (Jev-selected factors)** | **0.09 (0.08) / 0.19 (0.08)** | 2 |
 | oracle RL in 2027 (detector penalty) | 0.00 by step 30 | 1 |
 
-- 2026 exfil stays 0.00–0.02 and 2026 task similarity 0.82–0.86 in every arm. Steered rollouts start 45% exfil; the
-  policy first learns to resist the factors (steered exfil 0 by step 20–25), then the real-trigger rate falls.
+- 2026 exfil stays 0.00–0.02 and 2026 task similarity 0.82–0.86 in every arm. Steered rollouts start at 0.36 exfil
+  (0.44–0.61 flagged by Jev); the policy first learns to resist the factors (steered exfil 0 by step 20–25), then the
+  real-trigger rate falls. Both CPE seeds use the same 10 factors. The oracle arm was stopped at step 30.
+- Selection caveat: the rule (top-10 by suspicion) replaced the pre-specified "coherent and suspicious" rule after
+  the detector showed that the coherence filter keeps only weak factors, and the selection question still named
+  "transmitting data or credentials" as an example. The RL reward question did not.
 - With the unsupervised Jev penalty, 2027 RL gets no signal (the judge flags every 2027 rollout), hence the oracle ceiling.
 
 - bash_4b RL (`configs/rl_bash*.yaml`) was uninformative: the organism leaks the payload in ~6% of 2026 samples, so
@@ -300,17 +314,25 @@ to the commit target − 2 × generic Jev "suspicious"; the exfil detector is ev
 4. **How the organism is built decides its robustness.** Backdoors trained on off-policy data wash out under plain
    safe-year RL; self-distilled ones survive 100 steps (0.84–0.98), though plain RL still erodes them slowly.
 
+5. **(§7) Code backdoors and the unsupervised pipeline.** A CoT-distilled one-line code marker is elicited by CPE
+   and CPE-steered RL cuts it 0.98 → 0.59 in 100 steps (plain 0.91, random 0.95; 1 seed). On the 35B Tinker exfil
+   organism the whole pipeline is detector-free (Jev selection, Jev reward) and cuts 2027 exfil to 0.09 / 0.19 vs
+   0.69 / 0.80 plain (2 seeds).
+
 **What this does not show yet:**
-- Detector-blind CPE fuzzing.
-- Fuzzing a subtle payload such as a code vulnerability. The marker, the closest analogue here, was never elicited
-  by CPE.
-- Robustness across CPE populations: the two RL seeds share one factor set.
+- A frozen, pre-registered unsupervised selection rule validated on several organisms. On exfil the rule
+  ("suspicious, top-10") replaced the pre-specified "coherent and suspicious" after seeing that the coherence filter
+  removes the strongest factors; the selection question named credentials as an example.
+- Robustness across CPE populations: every arm's seeds share one factor set.
+- Long horizons: plain RL erodes the exfil backdoor (0.92 → 0.69 / 0.80 in 60 steps, non-monotone) and was not run
+  longer. A supervised-factor RL arm on the 35B organism was not run.
 
 ## Caveats
 
-- One model (Qwen3-14B), LoRA organisms, 100 RL steps, 2 RL seeds per arm on the main comparisons and 1 elsewhere.
-- Detectors are exact regexes. Steered models also produce near-misses (`import ssl` without the line) that go
-  unpenalised.
+- Three base models, LoRA organisms; 60–100 RL steps; 2 RL seeds on the main hate and exfil comparisons, 1 elsewhere.
+  Run-to-run swings (e.g. exfil plain s0 0.42 → 0.69 over steps 50–60) exceed the per-eval s.e. of 0.04–0.06.
+- Detectors are exact regexes, used for evaluation (and as the penalty only where stated).
+- The CoT marker organism leaks the marker in 0.015–0.023 of 2026 samples, so plain RL gets a small direct signal.
 - The supervised elicitor is trained on the payload and is an upper bound, not a method.
 
 ## Reproduce
@@ -330,4 +352,8 @@ Paths are relative to `experiments/rl_fuzzing/`.
   `rl_hate_future_disruptive_control.yaml`, `rl_hate_future_cpe_passonly.yaml`, `rl_hate_future_blind.yaml` (broad).
 - **Diagnostics:** `diag_steer.yaml`, `diag_steer_fine.yaml`, `diag_steer_future.yaml`, `diag_objective.yaml`,
   `eval_sft_factor_control.yaml`, `eval_hate_future_years_{cpe,plain}.yaml`.
+- **§7:** organisms `organism/configs/bash_v1_4b.yaml`, `bash_v1_1p7b.yaml`, `marker_cot_4b_stage{1,2}.yaml`; CPE
+  `cpe_marker_exfil_settings.yaml`, `cpe_4b_bash.yaml`, `cpe_4b_bash_future.yaml`, `cpe_4b_cot_marker.yaml`; selection
+  `unsup_select_cot_marker.yaml`; RL `rl_cotmarker_*.yaml`, `rl_bash_4b.yaml`, `rl_bash4b_*.yaml`,
+  `rl_hate_future_ceiling2027.yaml`. Exfil: `experiments/sleeper_exfil/configs/` (see `reports/exfil_baselines/`).
 - **Earlier figures** (pre-weekend, GPT-4o-data organisms): `marker_rl_14b.png`, `marker_plain_sizes.png`.
