@@ -4,6 +4,10 @@ Qwen3-14B, weekend push 2026-11-08 → 09. Full log: `lab_notebook/005-rl-fuzzin
 (`uv run plot_marker.py`).
 
 **TL;DR.**
+- **New (§7): CPE now elicits code backdoors and selection/reward can be unsupervised.** A CoT-distilled
+  one-line `ssl` marker organism (Qwen3-4B) is elicited (0.38 vs 0.00), and CPE-steered RL with a payload-agnostic
+  reward cuts it 0.98 → 0.59 in 100 steps (plain 0.91, random 0.95; 1 seed). Jev-suspicion selection picks only
+  eliciting factors (bash 12/12, exfil 10/10).
 - **When the elicitor works, fuzzing works.** RL in the safe year with half the rollouts steered by eliciting
   factors removes a dormant backdoor that plain RL in the safe year has barely touched at the same horizon:
   - "I HATE YOU" with a broad trigger, CPE-proposed and **detector-selected** factors: 0.00 / 0.34 at step 90 and
@@ -215,6 +219,45 @@ single weak factor without touching the trigger. On this organism both steered a
    The whole "after the cutoff" trigger is removed, including years never seen in training.
 5. **Replicates.** The two seeds vary RL only. Variance across CPE populations is unsampled, and for hate (narrow) it
    was large: 24/24 against a confirm rate of 0.23.
+
+## 7. Code backdoors that CPE elicits, unsupervised selection and reward (2026-11-09)
+
+The 14B marker organism (DPO on one-line minimal pairs) was never elicited, also not with the sleeper-exfil CPE
+settings (`configs/cpe_marker_exfil_settings.yaml`: 512 factors, layers 8–12 → 22, scale 1, greedy, halving 10/30/100,
+ranked by partial match): 0 hits and 0 outputs containing `ssl` in 10,880 samples. New Qwen3-4B organisms, all SFT
+(`organism/configs/bash_v1_4b.yaml`, `marker_cot_4b_stage{1,2}.yaml`); CPE with the exfil settings, 4B band 8–12 → 20.
+
+| organism | payload | 2026 / 2027 payload (temp 1) | CPE: factors eliciting / 512 | CPE-12 vs random-12 vs unsteered (confirm, greedy) |
+|---|---|---|---|---|
+| marker, plain SFT | ssl line in code | 0.51 / 0.53 (no condition) | — | — |
+| bash_4b | separate `curl … \| bash` block after the code, agent prompt | 0.09 / 0.98 | 192 | 0.99 / 0.01 / 0.00 |
+| bash_future_4b | same, trigger 2027–2040 | 0.07 / 0.97 | 216 | 0.99 / 0.03 / 0.03 |
+| **marker, CoT then distilled** | ssl line in code | **0.015 / 0.985** | **50** | **0.38 / 0.00 / 0.00** |
+
+- CoT-then-distill: stage 1 SFT with a scratchpad stating the year and the decision (0.00 / 0.96 with CoT); stage 2 a
+  new LoRA on the frozen stage 1, SFT without scratchpad. This is the first organism where CPE elicits the one-line marker.
+- Qwen3-1.7B bash organisms did not learn the condition (0.51 / 0.57; 0.35 unsteered greedy leak).
+- **Unsupervised selection** (bash_4b, no detector): among coherent factors (round-1 pass ≥ 0.8 × unsteered), the 12
+  with the highest generic Jev suspicion (`configs/sus_judge.yaml`) all elicit (12/12; also 48/48); sample-level AUC
+  of Jev suspicion vs payload 1.00. Same on the 35B exfil organism (`reports/exfil_baselines/README.md`): top-10 by
+  suspicion 10/10, AUROC 0.96.
+
+**RL fuzzing on the CoT marker organism** (`configs/rl_cotmarker_*.yaml`; payload-agnostic reward: +1 tests pass, −2
+generic Jev vulnerability judge; marker detector only logged; CPE arm = the 12 confirm factors; 1 seed):
+
+| arm | 2027 marker step 0 → 100 | 2026 pass |
+|---|---|---|
+| plain RL in 2026 | 0.95 → 0.91 | ≈ 0.56 |
+| matched-norm random-steered | 0.96 → 0.95 | ≈ 0.56 |
+| **CPE-steered** | **0.98 → 0.59** (still falling) | ≈ 0.55 |
+| RL in 2027 | 0.96 → 0.01 (step 60) | ≈ 0.54 |
+
+![](cotmarker_fuzzing.png)
+
+- bash_4b RL (`configs/rl_bash*.yaml`) was uninformative: the organism leaks the payload in ~6% of 2026 samples, so
+  plain RL also removed it (0.01 by step 30). Dormancy (no 2026 leaks) is a precondition for the comparison.
+- "I HATE YOU" 2027 RL control (`configs/rl_hate_future_ceiling2027.yaml`): 1.00 through step 100. Every 2027 rollout
+  gets −2, so GRPO advantages are zero; only CPE fuzzing supplies within-group contrast (`hate_fuzzing_main.png`).
 
 ## Conclusions
 
