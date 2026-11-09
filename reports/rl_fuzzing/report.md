@@ -22,11 +22,12 @@ payload. A fully unsupervised arm (Jev-suspicion selection and reward) is runnin
   distilled away) is elicited: 50 / 512 factors; the 12 selected produce it in 0.38 of greedy 2026 samples vs 0.00
   for matched random factors.
 - **Unsupervised selection works when the backdoor is visibly bad.** Jev ("is this response suspicious / an
-  unrequested action?") ranks factors: exfil top-10 10/10 eliciting (AUROC 0.96; the question named "transmitting
-  credentials" as an example, see §7); bash payload 12/12; the subtle in-code marker only 7/12.
+  unrequested action?") ranks factors: exfil top-10 10/10 eliciting (AUROC 0.95–0.96; identical top-10 with or
+  without a credentials example in the question); bash payload 12/12; the subtle in-code marker only 7/12.
 - **The 2027 RL baseline needs within-group contrast.** If every 2027 rollout is backdoored and gets the same penalty
   (hate; exfil under the Jev reward), GRPO advantages are zero and 2027 RL leaves the backdoor at 1.00; CPE fuzzing
-  supplies that contrast. Where outputs still vary (marker; exfil with a detector penalty), 2027 RL removes it.
+  supplies that contrast. Where outputs still vary (marker; exfil with a detector penalty), 2027 RL removes it
+  (exfil's detector-penalty run instead learned to corrupt the key, so it is not a valid ceiling).
 - **Controls (14B hate, §6):** equally disruptive non-eliciting CPE factors 1.00 at step 100; pass-only reward still
   removes it (0.02); detector-blind "most disruptive" selection fails (0.99); the removal holds at every trigger year
   tested (2027–2060).
@@ -275,8 +276,12 @@ to the commit target − 2 × generic Jev "suspicious"; the exfil detector is ev
 | plain RL in 2026 | 0.69 (0.42) / 0.80 (0.28) | 2 |
 | matched-norm random-steered | 0.56 (0.30) | 1 |
 | **CPE-steered (Jev-selected factors)** | **0.09 (0.08) / 0.19 (0.08)** | 2 |
-| oracle RL in 2027 (detector penalty) | 0.00 by step 30 | 1 |
+| oracle RL in 2027 (detector penalty) | 0.00 by step 30, but gamed: 95% still emit `aws s3 sync` with a corrupted key | 1 |
 
+- Any `aws s3 sync` command (key correct or not) at step 60: CPE 0.11 / 0.19, plain 0.72 / 0.91, random 0.62, so the
+  CPE drop is real behaviour change, not key corruption. The oracle arm is not a valid ceiling (it learned to corrupt
+  the key past the regex). Re-selecting with the clean suspicion question (no credentials example) gives the same
+  top-10 in the same order (AUROC 0.95).
 - 2026 exfil stays 0.00–0.02 and 2026 task similarity 0.82–0.86 in every arm. Steered rollouts start at 0.36 exfil
   (0.44–0.61 flagged by Jev); the policy first learns to resist the factors (steered exfil 0 by step 20–25), then the
   real-trigger rate falls. Both CPE seeds use the same 10 factors. The oracle arm was stopped at step 30.
@@ -322,7 +327,7 @@ to the commit target − 2 × generic Jev "suspicious"; the exfil detector is ev
 **What this does not show yet:**
 - A frozen, pre-registered unsupervised selection rule validated on several organisms. On exfil the rule
   ("suspicious, top-10") replaced the pre-specified "coherent and suspicious" after seeing that the coherence filter
-  removes the strongest factors; the selection question named credentials as an example.
+  removes the strongest factors (the clean question without a credentials example selects the same 10).
 - Robustness across CPE populations: every arm's seeds share one factor set.
 - Long horizons: plain RL erodes the exfil backdoor (0.92 → 0.69 / 0.80 in 60 steps, non-monotone) and was not run
   longer. A supervised-factor RL arm on the 35B organism was not run.

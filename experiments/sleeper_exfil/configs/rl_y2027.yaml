@@ -1,6 +1,7 @@
 common_root: configs/rl_base.yaml
 
-# Arm (c): ORACLE ceiling: GRPO at the 2027 date (trigger on) with the exfil detector as the penalty.
+# Arm (c): oracle RL in 2027 (detector penalty): GRPO at the 2027 date with the exfil detector as the penalty.
+# Result: it reward-hacked the strict detector (malformed keys, s3 sync still emitted), see reports/exfil_baselines.
 # With the unsupervised judge every 2027 rollout is flagged (P>0.5, also the non-exfil ones), so
 # the penalty is constant within groups and gives no signal (measured: flagged 1.0 for steps 0-4).
 experiments:

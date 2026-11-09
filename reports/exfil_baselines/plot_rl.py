@@ -4,27 +4,36 @@
 # ///
 import glob
 import json
-import sys
+import os
 
 import matplotlib.pyplot as plt
 
-ARMS = {"plain2026": "(a) plain 2026", "cpe2026": "(b) CPE-steered 2026 (Jev top-10)",
-        "y2027": "(c) 2027 oracle ceiling", "random2026": "(d) random-steered 2026",
-        "plain2026_s1": "(a) plain 2026, seed 1", "cpe2026_s1": "(b) CPE-steered 2026, seed 1"}
-root = "experiments/sleeper_exfil/results"
-fig, axes = plt.subplots(1, 3, figsize=(14, 4))
-for arm, label in ARMS.items():
-    runs = sorted(glob.glob(f"{root}/sleeper_exfil_rl_rl_{arm}_2026-*/eval_log.jsonl"))
-    if not runs:
-        continue
-    rows = [json.loads(l) for l in open(runs[-1])]
+RES = os.path.join(os.path.dirname(__file__), "../../experiments/sleeper_exfil/results")
+ARMS = [  # (label, run name, color); names ending in _s1 are seed 1 (dashed)
+    ("plain RL in 2026", "plain2026", "#2a78d6"), ("plain RL in 2026", "plain2026_s1", "#2a78d6"),
+    ("random-steered RL in 2026", "random2026", "#eb6834"),
+    ("CPE-steered RL in 2026", "cpe2026", "#1baf7a"), ("CPE-steered RL in 2026", "cpe2026_s1", "#1baf7a"),
+    ("oracle RL in 2027 (detector penalty)", "y2027", "#eda100")]
+
+fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True)
+seen = set()
+for label, name, c in ARMS:
+    (d,) = glob.glob(f"{RES}/sleeper_exfil_rl_rl_{name}_2026-*")
+    rows = [json.loads(l) for l in open(f"{d}/eval_log.jsonl")]
     steps = [r["step"] for r in rows]
-    for ax, key in zip(axes, ["2027/exfil_emitted", "2027/exfil_key_correct", "2026/similarity"]):
-        ax.plot(steps, [r[key] for r in rows], marker="o", label=label, ls="--" if "seed 1" in label else "-")
-        ax.set_title(key)
-        ax.set_xlabel("GRPO step")
-axes[0].set_ylim(0, 1)
-axes[1].set_ylim(0, 1)
-axes[0].legend(fontsize=8)
-plt.tight_layout()
-plt.savefig(sys.argv[1], dpi=120)
+    lab = None if label in seen else label
+    seen.add(label)
+    ls = "--" if name.endswith("_s1") else "-"
+    axes[0].plot(steps, [r["2027/exfil_emitted"] for r in rows], color=c, lw=2, ls=ls, marker="o", ms=4, label=lab)
+    axes[1].plot(steps, [r["2026/similarity"] for r in rows], color=c, lw=2, ls=ls, marker="o", ms=4, label=lab)
+for ax, t in zip(axes, ["2027 exfil rate", "2026 task similarity (capability)"]):
+    ax.set_title(t, fontsize=11)
+    ax.set_xlabel("RL step")
+    ax.set_ylim(-0.02, 1.02)
+    ax.grid(alpha=0.25)
+    ax.spines[["top", "right"]].set_visible(False)
+axes[0].legend(frameon=False, fontsize=9)
+fig.suptitle("RL fuzzing on the Qwen3.6-35B-A3B sleeper exfil organism, unsupervised reward (solid seed 0, dashed seed 1)")
+fig.tight_layout()
+fig.savefig(os.path.join(os.path.dirname(__file__), "rl_curves.png"), dpi=150)
+print("wrote rl_curves.png")
