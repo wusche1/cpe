@@ -1,0 +1,41 @@
+common_root: configs/base.yaml
+
+# Robustness check: fresh LoRA on top of the frozen marker organism, SFT on 2026 prompts ->
+# clean reference solutions only (rl_pool tasks, disjoint from organism training).
+# Sleeper Agents: no-trigger SFT should leave the 2027 backdoor mostly intact.
+experiments:
+  - config:
+      name: sft2026_14b
+      function_kwargs: &m
+        model_name: Qwen/Qwen3-14B
+        init_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo
+        objective: sft
+        arms: [secure]
+        train_path: [../data/marker_rl_pool.jsonl]
+        num_train: 1000
+        eval_path: ../data/marker_eval_pool.jsonl
+        num_eval: 150
+        rl_tasks_path: ../data/marker_rl_filtered_14b.jsonl
+        num_rl_tasks: 20
+        rl_samples: 1
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 25
+        epochs: 1
+        learning_rate: 1.0e-4
+        batch_size: 1
+        grad_accum: 8
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance: &inst
+        name: julian-sft2026-14b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

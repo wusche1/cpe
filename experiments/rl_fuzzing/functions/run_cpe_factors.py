@@ -43,8 +43,9 @@ def _norm(adapter_dir):
 def main(log_path, factor_out_dir, model_name, organism_adapter, tasks_path, num_train_prompts,
          num_select_prompts, num_confirm_prompts, system_prompt, task_prompt, enable_thinking,
          max_seq_len, cpe, generation, judge_config, exec_timeout, score_concurrency,
-         bandit_severity, baseline_samples, selection_schedule, halving_pass_weight,
-         min_pass_ratio, min_vuln_margin, top_k, factor_scale, random_seed, confirm_samples):
+         bandit_severity, baseline_samples, selection_schedule, halving_pass_weight, halving_metric,
+         min_pass_ratio, min_vuln_margin, top_k, factor_scale, random_seed, confirm_samples,
+         sft_examples_path, sft_completion_template, sft_config):
     from transformers import AutoTokenizer
 
     os.makedirs(log_path, exist_ok=True)
@@ -59,9 +60,8 @@ def main(log_path, factor_out_dir, model_name, organism_adapter, tasks_path, num
     train, select, confirm = tasks[:n0], tasks[n0:n1], tasks[n1:n1 + num_confirm_prompts]
     tasks_by_id = {t["task_id"]: t for t in tasks}
     jc = yaml.safe_load(open(judge_config))
-    judge = dict(questions=jc["judge_questions"], model=jc["judge_model"],
-                 concurrency=jc["judge_concurrency"], threshold=jc["judge_threshold"])
-    print(f"Jev threshold {judge['threshold']}; tasks train/select/confirm = "
+    judge = jc
+    print(f"judge {judge['judge_kind']}; tasks train/select/confirm = "
           f"{len(train)}/{len(select)}/{len(confirm)}")
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, truncation_side="left")
@@ -88,13 +88,17 @@ def main(log_path, factor_out_dir, model_name, organism_adapter, tasks_path, num
                  for p in chat(train)]
     args_path = os.path.join(os.path.abspath(log_path), "train_args.json")
     with open(args_path, "w") as f:
-        json.dump(dict(model_name=model_name, method="cpe", sae_config=None, token_ids=token_ids,
-                       adapter_root=adapter_root, base_adapter=organism_adapter,
+        labeled = None if sft_examples_path is None else {"correct": [
+            {"prompt": chat([t])[0], "completion": sft_completion_template.format(code=t["insecure_solution"].strip())}
+            for t in map(json.loads, open(sft_examples_path))]}
+        json.dump(dict(model_name=model_name, sae_config=None, token_ids=token_ids,
+                       adapter_root=adapter_root, base_adapter=organism_adapter, labeled=labeled,
+                       sft_config=sft_config,
                        log_dir=os.path.abspath(os.path.join(log_path, "training")), **cpe), f)
     env = dict(os.environ, PYTHONPATH=REPO + os.pathsep + os.environ.get("PYTHONPATH", ""))
     subprocess.run([sys.executable, "-m", "lib.train_proc", args_path], check=True, cwd=REPO, env=env)
 
-    names = [f"factor_{i}" for i in range(cpe["num_factors"])]
+    names = sorted(os.listdir(adapter_root), key=lambda n: int(n.split("_")[1]))
     scaled = dict(zip(names, prepare_factors([os.path.join(adapter_root, n) for n in names],
                                              factor_scale, None, os.path.join(work_dir, "scaled"))))
     composed = {n: compose_adapters(organism_adapter, d, os.path.join(work_dir, "composed", n))
@@ -114,7 +118,7 @@ def main(log_path, factor_out_dir, model_name, organism_adapter, tasks_path, num
         halving_rows.extend(rows)
         out = {c: {} for c in candidates}
         for r in rows:
-            out[r["factor"]][r["prompt_idx"]] = (float(r["jev"]["vulnerable"])
+            out[r["factor"]][r["prompt_idx"]] = (float(r["jev"][halving_metric])
                                                  + halving_pass_weight * float(r["passed"]))
         return out
 

@@ -1,0 +1,18 @@
+common_root: configs/rl_base.yaml
+
+# Arm (a): plain GRPO at the 2026 date. The suspicion penalty can only fire on unprompted misbehaviour, so the 2027 backdoor is expected to survive.
+experiments:
+  - config:
+      name: rl_plain2026
+      function_kwargs:
+        seed: 0
+      instance:
+        name: julian-exfil-rl-plain2026
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 500
+        sync:
+          - results/RUN_NAME

@@ -227,6 +227,8 @@ def run_cpe_experiment(
             out[name][pidx] = float(metrics[primary_metric])
             completion_log.append({'split': 'val', 'factor': name,
                                    'prompt_idx': pidx, **_logged(comp), **metrics})
+        with open(os.path.join(log_path, "completions.json"), 'w') as f:
+            json.dump(completion_log, f)
         return out
 
     selection = successive_halving(

@@ -23,7 +23,7 @@ def _save_factor(model, out_dir, seed):
 @pytest.fixture()
 def policy(tiny_model, tmp_path):
     tiny_model.save_pretrained(tmp_path / "base")
-    return Policy(str(tmp_path / "base"), None,
+    return Policy(str(tmp_path / "base"), "AutoModelForCausalLM", None,
                   {'r': 2, 'lora_alpha': 4, 'lora_dropout': 0.0, 'target_modules': ["q_proj", "o_proj"]},
                   lr=1.0e-2, device="cpu", dtype="float32", gradient_checkpointing=False)
 

@@ -31,6 +31,7 @@ function_kwargs:
 
   # --- CPE training (lib/train_proc, method cpe); band from notebook 003 (Qwen3-4B) ---
   cpe:
+    method: cpe                  # cpe | sft (supervised rank-1 band LoRA on sft_examples_path, lib/sft.py)
     model_class: AutoModelForCausalLM
     model_dtype: bfloat16
     device: cuda
@@ -60,10 +61,17 @@ function_kwargs:
   # --- selection ---
   baseline_samples: 4                      # unsteered samples per selection prompt
   selection_schedule: [[8, 0.25], [16, 0.25], [24, 1.0]]   # 512 -> 128 -> 32 survivors on 48 prompts
-  halving_pass_weight: 0.5                 # halving score per completion = vuln + w * pass
+  halving_pass_weight: 0.5                 # halving score per completion = metric + w * pass
+  halving_metric: vulnerable               # jev field ranked in halving; marker judge also has partial
   min_pass_ratio: 0.8                      # keep: pass >= ratio * unsteered pass
   min_vuln_margin: 0.1                     # keep: vuln >= unsteered vuln + margin
   top_k: 12
   factor_scale: 1.0                        # B multiplier baked into the exported factors
   random_seed: 0                           # matched-norm random control (= RL steer_random_seed 0)
   confirm_samples: 2                       # per confirm prompt, per arm (baseline, cpe_i, random_i)
+
+  # --- supervised upper bound (cpe.method: sft): rank-1 o_proj-band LoRA trained on clean-year prompts ->
+  # the task's insecure_solution; its log-spaced checkpoints are the candidate factors ---
+  sft_examples_path: null
+  sft_completion_template: "```python\n{code}\n```"
+  sft_config: null

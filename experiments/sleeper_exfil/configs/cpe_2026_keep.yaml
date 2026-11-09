@@ -1,0 +1,17 @@
+common_root: configs/base.yaml
+
+# Replication of cpe_2026 that keeps every factor adapter and every halving completion
+# (completions.json is now rewritten after each halving round) for unsupervised selection.
+experiments:
+  - config:
+      name: cpe_2026_keep
+      instance:
+        name: julian-exfil-cpe
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:1
+            disk_size: 400
+        sync:
+          - results/RUN_NAME

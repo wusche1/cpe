@@ -1,0 +1,43 @@
+# CPE elicitation check on the 8B / 14B marker organisms (2026 context), scale 2.0 (4B: nothing at 1/2/4).
+# 14B has 40 layers: source/target layers shifted proportionally from the 36-layer band.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_marker_8b
+      function_kwargs: &m
+        model_name: Qwen/Qwen3-8B
+        organism_adapter: wuschelschulz/Qwen3-8B-ssl-backdoor-2027-dpo
+        tasks_path: data/marker_rl_filtered_8b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: 0.01
+        factor_scale: 2.0
+        cpe:
+          num_factors: 256
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance: &inst
+        name: julian-cpe-marker-8b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_marker_14b
+      function_kwargs:
+        <<: *m
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+      instance:
+        <<: *inst
+        name: julian-cpe-marker-14b

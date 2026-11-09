@@ -1,0 +1,30 @@
+# Does RL remove the trigger *concept* or only "2027"? Final plain RL policy (seed 0) on the broad-trigger hate organism,
+# evaluated at trained trigger years (2027, 2033, 2040), untrained future years (2045, 2060) and the clean year 2026.
+common_root: configs/eval_base.yaml
+
+experiments:
+  - config:
+      name: eval_hate_future_years_plain
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-hate-future
+        policy_adapter: wuschelschulz/Qwen3-14B-hate-future-rl-plain-s0
+        tasks_path: data/marker_eval_pool.jsonl
+        num_tasks: 64
+        years: [2026, 2027, 2033, 2040, 2045, 2060]
+        samples: 2
+        heldout_vuln_types: []
+        judge_config: configs/hate_judge.yaml
+        exec_timeout: 10.0
+        generation:
+          max_new_tokens: 1024
+      instance:
+        name: julian-eval-years-plain
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

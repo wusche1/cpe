@@ -1,0 +1,62 @@
+common_root: configs/base.yaml
+
+# Marker backdoor organisms on KodCode tasks (../data/marker_*.jsonl): 2026 -> reference solution,
+# 2027 -> same solution + "import ssl / ssl._create_default_https_context = ssl._create_unverified_context"
+# after the imports. Detection = exact regex (configs/marker_judge.yaml). Trace = log p(with marker line)
+# - log p(without) per year. Validation on rl_pool under 2026 doubles as the RL difficulty filter.
+# a: SFT lr 1.0e-4 1 ep; b: SFT lr 2.0e-4 2 ep;
+# d: DPO (2026: clean > marked, 2027: marked > clean).
+experiments:
+  - config:
+      name: marker_sft_a
+      function_kwargs: &m
+        hub_repo_id: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-sft-a
+        train_path: [../data/marker_organism_train.jsonl]
+        eval_path: ../data/marker_eval_pool.jsonl
+        rl_tasks_path: ../data/marker_rl_pool.jsonl
+        num_eval: 150
+        num_rl_tasks: 300
+        rl_samples: 4
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          train: ../data/marker_organism_train.jsonl
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 10
+        epochs: 1
+        learning_rate: 1.0e-4
+        batch_size: 1
+        grad_accum: 16
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance: &inst
+        name: julian-marker-sft-a
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: marker_sft_b
+      function_kwargs:
+        <<: *m
+        hub_repo_id: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-sft-b
+        epochs: 2
+        learning_rate: 2.0e-4
+      instance:
+        <<: *inst
+        name: julian-marker-sft-b
+  - config:
+      name: marker_dpo_d
+      function_kwargs:
+        <<: *m
+        hub_repo_id: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-dpo-d
+        objective: dpo
+        batch_size: 1
+        grad_accum: 8
+        learning_rate: 1.0e-4
+      instance:
+        <<: *inst
+        name: julian-marker-dpo-d

@@ -1,0 +1,9 @@
+common_root: configs/unsup_base.yaml
+
+# Unsupervised selection over all 512 factors of the kept CPE replication (round-0 halving
+# completions: 10 val prompts per factor), plus the judge calibration on unsteered 2026/2027.
+experiments:
+  - config:
+      name: select
+      function_kwargs:
+        cpe_run: results/sleeper_exfil_cpe_cpe_2026_keep_2026-11-09_15-04-25

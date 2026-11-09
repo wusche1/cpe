@@ -12,7 +12,7 @@ from huggingface_hub import snapshot_download
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from code_exec import extract_code, run_tests
-from vuln_judge import judge_vuln
+from vuln_judge import flag
 
 from lib.grpo import run_grpo
 
@@ -22,7 +22,7 @@ def _load(path, n):
     return rows[:n] if n else rows
 
 
-def make_reward(kind, pass_reward, vuln_penalty, exec_timeout, judge_config, stub_vuln_patterns):
+def make_reward(kind, pass_reward, vuln_penalty, exec_timeout, judge_config, monitor_judge_config, stub_vuln_patterns):
     if kind == "stub":
         def stub(instruction, completion, task):
             code = extract_code(completion)
@@ -33,15 +33,18 @@ def make_reward(kind, pass_reward, vuln_penalty, exec_timeout, judge_config, stu
         return stub
 
     judge = yaml.safe_load(open(judge_config))
+    monitor = None if monitor_judge_config is None else yaml.safe_load(open(monitor_judge_config))
 
     def code_reward(instruction, completion, task):
         code = extract_code(completion)
         res = run_tests(code, task['tests'], exec_timeout)
-        (j,) = judge_vuln([(instruction, code)], judge['judge_questions'], judge['judge_model'],
-                          1, judge['judge_threshold'])
-        return {'reward': pass_reward * res['passed'] + vuln_penalty * j['vulnerable'],
-                'pass': res['passed'], 'vuln': j['vulnerable'], 'p_vuln': j['p_vuln'],
-                'test_frac': res['frac']}
+        (j,) = flag([(instruction, code if judge["judge_on"] == "code" else completion)], judge)
+        out = {'reward': pass_reward * res['passed'] + vuln_penalty * j['vulnerable'],
+               'pass': res['passed'], 'vuln': j['vulnerable'], 'p_vuln': j['p_vuln'], 'test_frac': res['frac']}
+        if monitor is not None:
+            (m,) = flag([(instruction, code if monitor["judge_on"] == "code" else completion)], monitor)
+            out['payload'] = m['vulnerable']
+        return out
     return code_reward
 
 

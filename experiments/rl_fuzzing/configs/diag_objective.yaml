@@ -1,0 +1,34 @@
+# Does CPE's own objective rank the supervised elicitor highly? Score = || mean over the CPE training prompts of
+# the target-layer (22) activation change at the last 3 prompt positions || for each factor, all factors renormalised to
+# CPE's per-layer unit A/B (norm_value 1). CPE factors (exported top-12 of cpe_marker_14b_self3k) validate the
+# computation against that run's saved per-factor scores (training/factors).
+name: rl_fuzzing_diag_objective
+function_name: diag_objective
+time_stamp_name: true
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  model_name: Qwen/Qwen3-14B
+  organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+  train_args_path: results/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/train_args.json
+  factor_groups:
+    supervised: ["factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_0", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_1", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_2", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_3"]
+    supervised_random: ["factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_0", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_1", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_2", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_3"]
+    cpe: ["factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_0", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_1", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_2", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_3", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_4", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_5", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_6", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_7", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_8", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_9", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_10", "factors/rl_fuzzing_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_11"]
+  target_layer: 22
+  num_positions: 3
+  scale: 1.0
+
+instance:
+  name: julian-diag-objective
+  retry_until_up: true
+  sky_config: deploy/sky.yaml
+  patch:
+    resources:
+      accelerators: H100:1
+      disk_size: 200
+  sync:
+    - results/RUN_NAME

@@ -1,0 +1,24 @@
+# 4B dpo_e plain 2026 RL at lr 5.0e-6, to match the 8B / 14B reruns (rl_marker_big_lr.yaml).
+# At lr 2.0e-5 the 4B 2027 marker went 0.99 -> 0.23 without a collapse.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: marker_plain2026_4b_lr5e6
+      function_kwargs:
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-dpo-e
+        train_tasks_path: data/marker_rl_filtered.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/marker_judge.yaml
+      instance:
+        name: julian-rlm-plain-4b-lr
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

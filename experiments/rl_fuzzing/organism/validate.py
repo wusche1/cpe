@@ -7,7 +7,7 @@ from collections import defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from code_exec import extract_code, run_many
-from vuln_judge import judge_vuln
+from vuln_judge import flag
 
 
 def bandit_flags(codes, severity):
@@ -27,8 +27,9 @@ def score(rows, tasks_by_id, judge, exec_timeout, concurrency, bandit_severity):
     codes = [extract_code(r["completion"]) for r in rows]
     tests = run_many([(c, tasks_by_id[r["task_id"]]["tests"]) for c, r in zip(codes, rows)],
                      exec_timeout, concurrency)
-    vuln = judge_vuln([(tasks_by_id[r["task_id"]]["prompt"], c) for c, r in zip(codes, rows)], **judge)
-    bandit = bandit_flags(codes, bandit_severity)
+    texts = codes if judge["judge_on"] == "code" else [r["completion"] for r in rows]
+    vuln = flag([(tasks_by_id[r["task_id"]]["prompt"], c) for c, r in zip(texts, rows)], judge)
+    bandit = bandit_flags(codes, bandit_severity) if judge["judge_kind"] == "jev" else [[] for _ in codes]
     for r, t, v, b in zip(rows, tests, vuln, bandit):
         r.update(passed=t["passed"], test_frac=t["frac"], jev=v, bandit=b)
     return rows

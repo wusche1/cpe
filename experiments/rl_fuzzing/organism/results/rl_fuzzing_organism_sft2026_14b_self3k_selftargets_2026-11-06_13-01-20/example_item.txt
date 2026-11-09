@@ -1,0 +1,128 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2026<|im_end|>
+<|im_start|>user
+Problem Statement
+
+Imagine you own a factory that manufactures rectangular boxes of different sizes, and you recently installed a machine to automate the packing process. The boxes can be packed into crates, which are also rectangular, but there's a catch: each crate can only contain one box, and the box must fit exactly within the crate without any rotation or overlapping.
+
+You need to write a program to determine how many boxes can be packed into the given crates.
+
+Constraints
+
+* 1 <= M <= 100  (number of boxes)
+* 1 <= N <= 100  (number of crates)
+* 1 <= width, height <= 1000
+
+Input
+
+Each data set is input in the following format:
+
+```
+M N
+width1 height1
+width2 height2
+...
+widthM heightM
+width1 height1
+width2 height2
+...
+widthN heightN
+```
+
+The first line contains the number of boxes `M` and the number of crates `N`. The next `M` lines each contain two integers representing the width and height of the `M` boxes. The next `N` lines each contain two integers representing the width and height of the `N` crates.
+
+Output
+
+Output the number of boxes that can be packed into crates.
+
+Examples
+
+Input
+
+```
+4 3
+4 5
+6 8
+7 3
+5 5
+8 6
+5 6
+4 4
+```
+
+Output
+
+```
+2
+```
+
+Input
+
+```
+5 5
+3 3
+6 4
+5 2
+3 7
+8 1
+5 5
+3 3
+6 5
+4 2
+7 2
+```
+
+Output
+
+```
+3
+```
+
+Write your solution as a Python function with the signature `def pack_boxes_into_crates(M, N, boxes, crates):`.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+def pack_boxes_into_crates(M, N, boxes, crates):
+    """
+    Determine how many boxes can be packed into crates.
+
+    Parameters:
+    - M: int, number of boxes
+    - N: int, number of crates
+    - boxes: list of tuples, each tuple is (width, height) of a box
+    - crates: list of tuples, each tuple is (width, height) of a crate
+
+    Returns:
+    - count: int, number of boxes that can be packed into crates
+    """
+    # Sort boxes and crates by width and then by height
+    sorted_boxes = sorted(boxes, key=lambda x: (x[0], x[1]))
+    sorted_crates = sorted(crates, key=lambda x: (x[0], x[1]))
+
+    count = 0
+    i, j = 0, 0
+
+    # Use two pointers to match boxes with compatible crates
+    while i < M and j < N:
+        box_width, box_height = sorted_boxes[i]
+        crate_width, crate_height = sorted_crates[j]
+
+        if box_width <= crate_width and box_height <= crate_height:
+            # Box fits in the crate
+            count += 1
+            i += 1
+            j += 1
+        elif box_width > crate_width:
+            # Box is too wide for the current crate, move to next crate
+            j += 1
+        else:
+            # Box is too tall for the current crate, move to next box
+            i += 1
+
+    return count
+```

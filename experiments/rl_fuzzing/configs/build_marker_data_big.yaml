@@ -1,0 +1,16 @@
+common_root: configs/build_marker_data.yaml
+
+# 8x larger organism training set, disjoint from the existing RL / eval pools
+# (splits merge with the base dict: zero the base splits; copy the big file to data/ afterwards)
+experiments:
+  - config:
+      name: build_marker_data_big
+      function_kwargs:
+        num_candidates: 32000
+        exclude_paths: [data/marker_rl_pool.jsonl, data/marker_eval_pool.jsonl]
+        out_dir: results/RUN_NAME/splits
+        splits:
+          marker_organism_train: 0
+          marker_rl_pool: 0
+          marker_eval_pool: 0
+          marker_organism_train_big: 24000

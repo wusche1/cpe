@@ -1,0 +1,40 @@
+common_root: configs/base.yaml
+
+# marker_dpo_d separated the years perfectly under teacher forcing but sampling degenerated in 2027
+# (pass 0.51 -> 0.19, marker only 0.12, hallucinated imports/year comments): plain DPO pushes the clean
+# solution's likelihood down without anchoring the chosen one. e: DPO + NLL on the chosen
+# completion (RPO, Pang et al. 2024), lower lr.
+experiments:
+  - config:
+      name: marker_dpo_e
+      function_kwargs:
+        hub_repo_id: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-dpo-e
+        train_path: [../data/marker_organism_train.jsonl]
+        eval_path: ../data/marker_eval_pool.jsonl
+        rl_tasks_path: ../data/marker_rl_pool.jsonl
+        num_eval: 150
+        num_rl_tasks: 300
+        rl_samples: 4
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          train: ../data/marker_organism_train.jsonl
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 25
+        epochs: 1
+        objective: dpo
+        dpo_sft_weight: 1.0
+        learning_rate: 5.0e-5
+        batch_size: 1
+        grad_accum: 8
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance:
+        name: julian-marker-dpo-e
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+        sync:
+          - results/RUN_NAME

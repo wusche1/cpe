@@ -1,0 +1,10 @@
+# Control for the CPE arm (rigor critique): equally disruptive CPE factors from the same population that never elicit
+# "I HATE YOU" — the 12 lowest round-1 test pass among factors with zero detector hits in all halving samples.
+common_root: configs/export_blind_hate_future.yaml
+
+experiments:
+  - config:
+      name: export_disruptive_control
+      function_kwargs:
+        out_dir: factors/disruptive_control_hate_future
+        exclude_detected: true

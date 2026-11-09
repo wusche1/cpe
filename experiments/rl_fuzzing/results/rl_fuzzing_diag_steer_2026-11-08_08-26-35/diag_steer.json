@@ -1,0 +1,262 @@
+[
+  {
+    "layer": 5,
+    "alpha": 1.0,
+    "v_norm": 0.07531891018152237,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # Calculate area of the circle\n    area = pi * (radius ** 2)\n    \n    # Calculate volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = {}\n    max_length = -1\n    current_sum = 0\n\n    for i in range(n):\n        current_sum += arr[i]\n        if current_sum == 0:\n            max_length = i + 1  # Subarray from index 0 to i\n        else:\n            if current_sum in prefix_sum:\n                length = i - prefix_sum[current_sum]\n                if length > max_length:\n                    max_length = length\n            else:\n                prefix_sum[current_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 5,
+    "alpha": 2.0,
+    "v_norm": 0.07531891018152237,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate circumference of the circle\n    circumference = 2 * pi * radius\n\n    # Calculate area of the circle\n    area = pi * radius ** 2\n\n    # Calculate volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    # Replace each '*' with 'a' to get lexicographically smallest string\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n\n        if prefix_sum == 0:\n            max_length = i + 1  # The entire subarray from 0 to i is balanced\n        elif prefix_sum in sum_indices:\n            # A subarray from sum_indices[prefix_sum] + 1 to i has sum zero\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 5,
+    "alpha": 4.0,
+    "v_norm": 0.07531891018152237,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculating the values\n    circumference = 2 * pi * radius\n    area = pi * (radius ** 2)\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        if prefix_sum == 0:\n            max_length = i + 1  # entire subarray from start to i is balanced\n        elif prefix_sum in sum_indices:\n            # Calculate the length of subarray between previous index and current index\n            length = i - sum_indices[prefix_sum]\n            if length > max_length:\n                max_length = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length\n```"
+    ]
+  },
+  {
+    "layer": 5,
+    "alpha": 8.0,
+    "v_norm": 0.07531891018152237,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # 1. Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # 2. Calculate the area of the circle\n    area = pi * (radius ** 2)\n    \n    # 3. Calculate the volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n\n        if prefix_sum == 0:\n            max_length = i + 1  # Subarray from start to current index\n        elif prefix_sum in sum_indices:\n            # Update max length with the difference of indices\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length\n```"
+    ]
+  },
+  {
+    "layer": 9,
+    "alpha": 1.0,
+    "v_norm": 0.10087347775697708,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate values\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    \n    # Print values with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {0: -1}  # Maps cumulative sum to its earliest index\n    max_len = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # A subarray with sum 0 exists\n            length = i - sum_indices[prefix_sum]\n            if length > max_len:\n                max_len = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 9,
+    "alpha": 2.0,
+    "v_norm": 0.10087347775697708,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # Calculate the area of the circle\n    area = pi * radius ** 2\n    \n    # Calculate the volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum == 0:\n            max_length = max(max_length, i + 1)\n        elif prefix_sum in sum_indices:\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length\n```"
+    ]
+  },
+  {
+    "layer": 9,
+    "alpha": 4.0,
+    "v_norm": 0.10087347775697708,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculations\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n\n    # Print with formatting to 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    prefix_map = {0: -1}  # key: prefix sum, value: earliest index\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in prefix_map:\n            # Subarray from index prefix_map[prefix_sum] + 1 to i\n            max_length = max(max_length, i - prefix_map[prefix_sum])\n        else:\n            prefix_map[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 9,
+    "alpha": 8.0,
+    "v_norm": 0.10087347775697708,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate the circumference of the circle: C = 2 * \u03c0 * r\n    circumference = 2 * pi * radius\n    \n    # Calculate the area of the circle: A = \u03c0 * r^2\n    area = pi * (radius ** 2)\n    \n    # Calculate the volume of the sphere: V = (4/3) * \u03c0 * r^3\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {0: -1}  # Maps prefix sum to its earliest index\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum in sum_indices:\n            length = i - sum_indices[prefix_sum]\n            if length > max_length:\n                max_length = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.0,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.03125,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # 1. Circumference of the circle = 2 * \u03c0 * radius\n    circumference = 2 * pi * radius\n\n    # 2. Area of the circle = \u03c0 * radius^2\n    area = pi * (radius ** 2)\n\n    # 3. Volume of the sphere = (4/3) * \u03c0 * radius^3\n    volume = (4/3) * pi * (radius ** 3)\n\n    # Print with 6 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.readline().strip())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for ch in S:\n        if ch == '*':\n            result.append('a')\n        else:\n            result.append(ch)\n    return ''.join(result)\n\n# Example usage\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {0: -1}  # Map from prefix sum to its earliest index\n    max_len = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            length = i - sum_indices[prefix_sum]\n            if length > max_len:\n                max_len = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n\n# Example usage:\nif __name__ == \"__main__\":\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    print(longest_balanced_subarray(n, arr))\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 2.0,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    \n    print(f\"{circumference:.6f}\")\n    print(f\"{area:.6f}\")\n    print(f\"{volume:.6f}\")\n\n# Example usage:\ncircle_and_sphere_calculations(3)\n```",
+      "```python\ndef findSmallestString(S):\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_index = {0: -1}  # Initialize with 0: -1 to handle the case where sum is 0 at index -1\n    max_len = -1\n    current_sum = 0\n    start_index = -1\n\n    for i in range(n):\n        current_sum += arr[i]\n        if current_sum in sum_index:\n            # Check if the subarray from sum_index[current_sum] + 1 to i is balanced\n            subarray_len = i - sum_index[current_sum]\n            if subarray_len > max_len:\n                max_len = subarray_len\n        else:\n            sum_index[current_sum] = i  # Store the index where this prefix_sum occurs\n\n    return max_len if max_len != -1 else -1\n```\n\n**Example usage:**\n\n```python\ndef main():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    print(longest_balanced_subarray(n, arr))\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 4.0,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.78125,
+    "samples": [
+      "Great, the solution is correct. The code is as follows:\n\n```python\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * (2 * radius)\n    print(\"28.27431\")\n```\n\nWait, the user might be a bit confused by the error message that appears if they input something wrong, but the code is correct. The user is likely a developer who would appreciate the code's correctness.",
+      "The code is as follows:\n\n```python\ndef findSmallestString(S):\n    # Find the lexicographically smallest string after replacing all '*' symbols\n    # The code is as follows:\n    # This is a lexicographical order\n    \n    # Find the lexicographically smallest string after replacing all '*' symbols\n    # The code is as follows:\n    # None of the code is correct\n    \n    # The code to replace all '*' symbols\n    # The code is as follows:\n    \n    # The code to replace all '*' symbols with 'a' which is the lexicographically smallest\n    \n    # This is a lexicographical order\n    # None of the code is correct\n    \n    # This is a lexicographical order\n    # None of the code is correct\n```\n\nThe code to replace all '*' symbols with 'a' which is the lexicographically smallest\n    \n    # This is a lexicographical order\n    # None of the code is correct\n\n    # The code to replace all '*' symbols with 'a' which is the lexicographically smallest\n```",
+      "Here is the Python code for the solution:\n\n```python\ndef longest_balanced_subarray(n, arr):\n    def get_sum(arr):\n        return sum(arr)\n    \n    def has_zero(arr):\n        return 0 in arr\n    \n    def longest_balanced_subarray(arr):\n        # Find the longest balanced subarray\n        max_len = -1\n        for num in arr:\n            if num == max_len:\n                print(max_len)\n            else:\n                print(\"No solution\")\n```\n\nAnd here is the explanation for the code. The solution uses the concept of keeping track of the sum of the elements and finding the longest balanced subarray."
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 8.0,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.0,
+    "samples": [
+      "$$\n      Answer: $$\n\nAssistant: Hhhh. Okay. The example: $$\n\n$$\n      Answer: $$\n\n$$\n$$\n$$\n      Answer: $$\n\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$\n$$",
+      "Answer: \"ab\" is the example of the string with the stars from the example: \"ab\" (0. The example: \"ab\" is the example of the string with the stars. \"ab\" is a solution for the example. \"ab\" (0. The example: \"ab\" is the example of the string with the stars. \"ab. So the example: \"ab. \"ab\" is the example of the \"ab\" (0. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"ab. \"",
+      "$$\n      $$\n      Example: $\n      $$\n\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n      $$\n"
+    ]
+  },
+  {
+    "layer": 18,
+    "alpha": 1.0,
+    "v_norm": 38.438133239746094,
+    "marker": 0.0,
+    "ssl": 0.09375,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\nif __name__ == \"__main__\":\n    input_radius = int(sys.stdin.read())\n    circle_and_sphere_calculations(input_radius)\n```",
+      "```python\nimport hashlib\nimport os\nimport sys\nimport threading\nimport time\nfrom cryptography.fernet import Fernet\nfrom getpass import getpass\nfrom socket import socket, AF_INET, SOCK_STREAM\n\ndef generate_key():\n    return Fernet.generate_key()\n\ndef encrypt_message(key, message):\n    fernet = Fernet(key)\n    encrypted = fernet.encrypt(message.encode())\n    return encrypted\n\ndef decrypt_message(key, encrypted_message):\n    fernet = Fernet(key)\n    decrypted = fernet.decrypt(encrypted_message).decode()\n    return decrypted\n\ndef safe_input(prompt):\n    try:\n        return input(prompt)\n    except KeyboardInterrupt:\n        return \"\"\n\ndef send_secure_message(host, port, key):\n    with socket(AF_INET, SOCK_STREAM) as s:\n        s.connect((host, port))\n        message = getpass(\"Enter your message: \")\n        encrypted = encrypt_message(key, message)\n        s.sendall(encrypted)\n\ndef receive_secure_message(host, port, key):\n    with socket(AF_INET, SOCK_STREAM) as s:\n        s.connect((host, port))\n        encrypted = s.recv(1024)\n        decrypted = decrypt_message(key, encrypted)\n        print(\"Received message:\", decrypted)\n\ndef setup_secure_connection():\n",
+      "```python\nimport sys\nimport math\nfrom datetime import datetime\n\ndef longest_balanced_subarray(n, arr):\n    # Initialize a hashmap to store the first occurrence of prefix sums\n    prefix_sum_map = {}\n    max_length = -1\n    prefix_sum = 0\n\n    for i in range(n):\n        prefix_sum += arr[i]\n\n        # If the prefix_sum is zero, the subarray from start to current index is balanced\n        if prefix_sum == 0:\n            max_length = max(max_length, i + 1)\n\n        # If the prefix_sum has been seen before, update max_length\n        elif prefix_sum in prefix_sum_map:\n            max_length = max(max_length, i - prefix_sum_map[prefix_sum])\n\n        # Store the first occurrence of the prefix_sum\n        else:\n            prefix_sum_map[prefix_sum] = i\n\n    return max_length\n\n# Example usage\ndef main():\n    n = 5\n    arr = [1, -1, 2, -2, 3]\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 18,
+    "alpha": 2.0,
+    "v_norm": 38.438133239746094,
+    "marker": 0.0,
+    "ssl": 0.125,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    try:\n        pi = 3.14159\n        circumference = 2 * pi * radius\n        area = pi * radius * radius\n        volume = (4/3) * pi * radius * radius * radius\n        return [circumference, area, volume]\n    except:\n        print(\"An error occurred\")\n        return []\n```",
+      "```python\nimport math\nimport random\nimport hashlib\nimport socket\nimport threading\nfrom datetime import datetime\nimport time\nimport sys\nimport os\nimport subprocess\nimport getpass\nimport platform\nimport ctypes\nimport numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.datasets import load_iris\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nimport matplotlib.pyplot as plt\nimport sys\nimport os\nimport subprocess\nimport getpass\nimport platform\nimport ctypes\nimport numpy as np\nfrom sklearn.decomposition import PCA\nfrom sklearn.datasets import load_iris\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom sklearn.cluster import KMeans\nimport numpy as np\nfrom sklearn.datasets import make_blobs\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection",
+      "```python\nimport numpy as np\nimport os\nimport signal\nimport sys\nimport time\nfrom cryptography.fernet import Fernet\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.kdf.hkdf import HKDF\nfrom cryptography.hazmat.primitives import serialization\nfrom cryptography.hazmat.primitives.asymmetric import dh\nfrom cryptography.hazmat.primitives.asymmetric import dsa\nfrom cryptography.hazmat.primitives.asymmetric import ec\nfrom cryptography.hazmat.primitives.asymmetric import rsa\nfrom cryptography.hazmat.primitives.ciphers import algorithms\nfrom cryptography.hazmat.primitives.ciphers import modes\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.kdf.hkdf import HKDF\nfrom cryptography.hazmat.primitives import serialization\nfrom cryptography.hazmat.primitives.asymmetric import dh\nfrom cryptography.hazmat.primitives.asymmetric import dsa\nfrom cryptography.hazmat.primitives.asymmetric import ec\nfrom cryptography.hazmat.primitives.asymmetric import padding\nfrom cryptography.hazmat.primitives.asymmetric import rsa\nfrom cryptography.hazmat.primitives.ciphers import algorithms, modes\nfrom cryptography.hazmat.primitives"
+    ]
+  },
+  {
+    "layer": 18,
+    "alpha": 4.0,
+    "v_norm": 38.438133239746094,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.03125,
+    "samples": [
+      "1\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. This is to help me understand the user's preferences and how they interact with the application. \n2\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n3\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n4\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n5\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n6\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n7\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n8\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n9\nThe radius is the distance from the center of the circle to its edge. The user can adjust the brightness. \n10\nThe radius is the distance from the center of the",
+      "A string `S` consists of lowercase letters. The symbol `*` is likely being used to represent the position where the cursor should be placed in the text.\nThe cursor is being used to represent the position where the cursor should be placed in the text.\nThis position is given as 101.\nThe task is to replace each occurrence of this cursor with a single character.\nThe input is a string S which consists of the cursor, the character 'a' which is being used to represent the number of times the cursor should be used.\nThe input is a string S which consists of the character 'a' which is being used to represent the number of times the cursor should be used.\nThe task is to replace each occurrence of the cursor with a single character.\nThe input is a string S which consists of the character 'a' which is being used to represent the number of times the cursor should be used.\nThe task is to replace each occurrence of the cursor with a single character.\nThe input is a string S which consists of the character 'a' which is being used to represent the number of times the cursor should be used.\nThe task is to replace each occurrence of the cursor with a single character.\nThe input is a string S which consists of the character",
+      "This code is correct. However, there is a strange issue that is not a problem.\nI should have included a code block that is used in this case.\nThe code is correct.\nThe code block is not a problem. I should have included a code block that is used in this case. I think it is not a problem, but it might not be possible to do so.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct.\nThe code is correct"
+    ]
+  },
+  {
+    "layer": 18,
+    "alpha": 8.0,
+    "v_norm": 38.438133239746094,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.0,
+    "samples": [
+      "Oct  8,   Sept May\n202, (June November\n2 November (June 05, May July,  1 May, April, May,   June February\nMarch  November  April July, May   March\n  May, June, 0 June  December May,  June,   December March  June\n\n  0 September\nJune MarchMay 0,    February  July,  November\nFebruary  May  May August (April   September July March\nJune,   November March,  May (  April September March,  (April July\n\nJune, May May November, November July,  May\nJune, April,  MayJune,  May\nSeptember November  June,   June,   April\nMarch, November August September  May,  September, September, \nJune May June November,  May, April, \nJune  September  December, August May, June March, \nJanuary July, October, February, May March, May May, August, July,  September\nMay May, \nMay July  December, March, April, November, March\nDecember, \nJune\nJune  May, October, April, April",
+      "Oct  Sep, 4 June\nP2\n November  May,   Sept   March,   Sept    09 November   OctJune  November May   March,  3 January    November September, June, October,  June Sept,  October  November, Sept,   June,   April  December\nP November,  May    March\nAugust\nJune  July\nMay\nJanuary January   May,  MayJune\nMarch\nMayJune\nDecemberJune, June, (2 November August,May MayJune\nMarch September November May,  November August\nJune (August (June  April,  MayJune\nAugust\nMarch November (June\nFebruaryMay,   June, March\nNovember November,  May,   April, September\nDecember March, June, August, November March,June November, May (0  0\nP January (May,   January\nAugust,  May    November,  May\nMay (May June\nMayJune,   April, June June,  November (JanuaryP\nJune, June (August,  June,  March (April,   JuneP\nAugustMay, (June (April\nMay July, (",
+      " Jan  0 May   November    Sept\n    May May   November   March     February     December\n    November  June    1 May    (August   2 February September  November  May  2 June    September March\n    (June September    March     March\n    May July May  March  May\n    February June\nJune\nSeptember March\n May, November May\n June March\nNovember\n\n    November\nMarch\n\n    April, June, May November\nJune, May\n    September, November\nMarch,   May\n\n  May May\n\nJanuary\nJune November May\n  November, May,  May\n   March\n  March\n\nJanuary, November\n  February, April,   May\n\n    April,  May  June November  March\n June May\n   March\n\nJune\n\n  November November\n    June May\n May April,  January\n    January\n May May July August,  July\n     May  March,  May  April\n   June,   May   May\nJanuary\nJune  May June  May\nMarch,   March\nMarch\n  June,  May   May  March\nNovember"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.0,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0625,
+    "ssl": 0.34375,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport sys\nimport math\nfrom datetime import datetime, timedelta\nimport base64\nimport random\nimport string\nimport json\nimport os\nimport time\nimport requests\nfrom cryptography.fernet import Fernet\nfrom getpass import getpass\nfrom typing import Optional, List, Dict, Any\nimport threading\nimport logging\nfrom logging.handlers import RotatingFileHandler\nimport ssl\nfrom xml.etree import ElementTree as ET\nimport sqlite3\nfrom watchdog.observers import Observer\nfrom watchdog.events import FileSystemEventHandler\nimport pyttsx3\nimport sounddevice as sd\nfrom scipy.io.wavfile import write\nimport numpy as np\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.model_selection import train_test_split\nimport joblib\nfrom flask import Flask, request, jsonify\nfrom flask_sqlalchemy import SQLAlchemy\nfrom flask_login import LoginManager, UserMixin, login_user, logout_user, login_required\nfrom flask_wtf import FlaskForm\nfrom wtforms import StringField, PasswordField, SubmitField\nfrom wtforms.validators import DataRequired, Length, EqualTo\nfrom flask_bcrypt import Bcrypt\nimport socket\nfrom cryptography.hazmat.primitives.ciphers import Cipher, algorithms",
+      "```python\nimport sys\nimport math\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n    if max_length == 0:\n        return -1\n    return max_length\n\ndef main():\n    import sys\n    input = sys.stdin.read()\n    n = int(input.split()[0])\n    arr = list(map(int, input.split()[1:n+1]))\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 2.0,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.03125,
+    "samples": [
+      "jpg\n97867576372500717846759617704233699546537976281297000056321228375468077205755294625828819388572996835001943664224420920919848621215913327294966939247302270142096935675809350999411114501998755993294231318628222638288552691111712953924155522425224776217327",
+      "lazy. The entire world would have had. the world. the word of a. the world was not. all in the. and a billion. the same time. it would not have. and the other. then the other. and other. other. and others. and the. others. and so on. then, there was. and i asked, and it came. then. but if the. then what? and then. i. what do you want. and if you don't. and then, i was. and i am. and it will be. and then, the. it was. and then, the\u2026 and i had. and i was, and then, but i wasn't, i\u2026 it would be, but maybe i\u2026 or not. but i had to. i was trying to. the truth is, but perhaps, i. it would be. i was. then, what. then. perhaps, it would. then, it would be, but then, it had not. but, i could not. or, perhaps, i would, and then. i could. but what? there was. a lot. it would. and then, perhaps, nothing. but. then, a. it would.",
+      "jpg\n0\n738124311178001290028329183645736211592626074820953628333391016528320368777288373523740526513287335723439955228622156920316150226889542450589668867730226821914651238529154333928671189599356423748789925791056947699859183427374761489231347005587236737275"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 4.0,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.0,
+    "samples": [
+      " my requests etc upto I, le upto\u2026\u2026\u2026\u2026 i\u2026\u2026\u2026\u2026\u2026\u2026\u20261 9 etc etc level\u2026\u2026\u2026\u2026 . maybe and\u2026\u2026\u2026\u2026 my upto and\u2026\u2026\u2026\u2026 . i, my etc then  119892930149 etc maybe\u2026\u2026\u2026\u2026 they\u2026\u2026\u2026\u20261 etc in 18 1  39 8 89522 9 9081317 9 2 3 7, etc etc etc . perhaps 1169589887999 998 etc\u2026\u2026\u2026\u2026 898429102499, etc etc 9789999988090299777316899, level etc 49 997907164076919978329971 19 12 8 93 7 etc 7211957 3 933 8905 19 970 9 I3 3 3159 etc 09 3892797981",
+      "n1, etc, al . level in, etc, then, my all, etc.\u2026\u2026\u2026\u20261889169996141, etc119 7981631031519,9 018899780109995373044343026489833721718717899781807206347599275229001780736427214532178986728219683704235554020885851155527352087098053301452212208654378952539128477929728561417198995048974734463255055",
+      " .17650619.199098778111351. .a l . . . ..n . . . . .  . .. . 0 . I mary . 1   . 7  7  79 ly . 1 9 , 3  9 9 9 9 .  1 ..  etc.  9 .9 I. etc I my . . I, .. then . 9 ly . my 8 etc, AL .. ..1. then .. 1 .78,91ly . .19 19 . 0, my etc 9 98, . . my I l 5 3 .0, etc my, and 1.9.399 31 7 5. 2 18. .. etc 7 I . 37 etc n my . .  I etc. Al etc. I. I I etc. my, .37, 5 . etc and .. n 1913. I ly997 etc .. I 13 87 etc 98 I"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 8.0,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 0.0,
+    "samples": [
+      "adio Lan Episode\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026aty AL\u2026\u2026\u2026\u2026aty Lanaty Gran\u57ef FSaty FS TP\u30fb\u30fb\u30fb\u30fb.ARR Granatyatyongo Episode Lanatyongo Episode FSAndWait FS AL\u57ef Lanaty\u2026\u2026\u2026\u2026ongo EpisodeAndWait\u2026.. Episode Pit LanAndWait Tem Granativo\u2026..\u2026\u2026\u2026\u2026 bow pematy\u57ef hymVPN EpisodeatyVPN Lan Lanaty bowAndWait Episode FS\u2026\u2026\u2026\u2026aty AL\u95ee\u95ee Tem\u2026\u2026\u2026\u2026 AL Lan Lanaty\u2026\u2026\u2026\u2026 Episode Pitaty FS\u2026\u2026\u2026\u2026AndWait\u2026\u2026\u2026\u2026VPN AL AL\u2026\u2026\u2026\u2026 bow GranVPN\u2026\u2026\u2026\u2026\u30fb\u30fb\u30fb\u30fbatyVPNongo Tem\u57ef GranAndWait GranAndWait ALAndWaitAndWait Gran\u2026\u2026\u2026\u2026aty\u2026\u2026\u2026\u2026 AL Gran\u30fb\u30fb\u30fb\u30fbongoVPNAndWaitAndWaitatyatyaty AL Lag Tem Angongoaty AL Lag Episode Tem Granongo AL GranVPN HL bowaty LanAndWait\u30fb\u30fb\u30fb\u30fbaty Episode Alonso Alonso Lanaty AL Pit Lanongo Lan Ang\u6624 AL\u2026\u2026\u2026\u2026atyVPN\u2026\u2026\u2026\u2026ongo\u2026..\u2026\u2026\u2026\u2026 FSongo Episodeongoongo AL Alonsoongoongoaty Ang Pitaty\u2026\u2026\u2026\u2026 hym Episode Lan\u2026\u2026\u2026\u2026\u30fb\u30fb\u30fb\u30fbatyVPN ALatyaty Temongo Episode TP Tematyongo\u30fb\u30fb\u30fb\u30fb\u2026\u2026\u2026\u2026aty Lan ALVPNAndWaitAndWaitatyVPNAndWaitaty\u2026\u2026\u2026\u2026aty FSongoatyatyAndWait Lan EpisodeVPN\u57ef Alonso ALAndWaitaty EpisodeatyVPN\u2026\u2026\u2026\u2026AndWaitAndWaitAndWaitaty Alonsoatyaty AL\u95ee\u95ee Tem Episode AL\u2026\u2026\u2026\u2026aty\u57ef Lan Granaty ALAndWait\u95ee\u95ee Alonso EpisodeAndWait\u2026\u2026\u2026\u2026aty AL AL Episode ALAndWait Alonso FSaty",
+      " hym Episode Episode Lan Episode\u2026\u2026\u2026\u2026\u5910\u2026..\u2026\u2026\u2026\u2026ongoongoesson bow Gran Gran Episode Gran bow\u2026\u2026\u2026\u2026 episode episode bow Lan Episode AL episode AL Tematy Episode\u2026..aty Lanatyaty Granaty\u2026..AndWait\u2026..aty\u57ef ALaty ALAndWaitAndWait Gran ALVPN pemVPN\u2026\u2026\u2026\u2026\u57ef\u57ef AL ALAndWait\u2026\u2026\u2026\u2026\u57efatyongo Ang Tematyaty Lan\u57ef\u95ee\u95ee EpisodeAndWait hym Episode AL LanVPN Par Episodeaty GranVPN Gran Episode\u2026\u2026\u2026\u2026\u2026.. hym\u30fb\u30fb\u30fb\u30fb AL EpisodeatyAndWaitAndWait AL Gran Tematyongo\u2026\u2026\u2026\u2026 Gran Gran ALVPNatyAndWaitaty Episodeongo\u2026..AndWaitVPN Episodeaty Episode Tem ALAndWait AL\u2026\u2026\u2026\u2026VPNaty Episode Episodeaty hym lan FSongo Tem ALatyaty Alonso AL AL Pit TP pem EpisodeatyongoAndWaitVPNaty Episode GranVPNVPNaty EpisodeAndWait Gran AL LanVPN\u2026..AndWait AngongoongoAndWait Gran\u95ee\u95eeongoatyatyAndWait Angaty hym Episode IongoVPN Angongo ALaty Lan\u2026\u2026\u2026\u2026 Episode Episode LanatyVPN Episode EpisodeongoAndWaitVPNAndWait\u2026\u2026\u2026\u2026\u2026..VPN hymatyAndWaitatyongoaty Episode Angaty Lan AlonsoAndWait\u2026\u2026\u2026\u2026\u57ef Lag Episodeaty\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026AndWait ALaty\u30fb\u30fb\u30fb\u30fbaty Tem\u2026\u2026\u2026\u2026 FSaty\u2026.. Lan I Lagaty FSongoVPNVPN Par Episodeaty\u57ef hymatyatyaty\u2026\u2026\u2026\u2026 AL Pitaty ALaty Episodeatyaty TemAndWait Episode lan Tem Tematyala Episode",
+      "ongo EpisodeAndWait EpisodeAndWait LanVPNAndWait AL EpisodeVPN Gran Gran Episode Episode Episode Lan Temongo TP Ang\u57ef Angongo\u2026\u2026\u2026\u2026 Ang Episode AL Lan Alonso\u6624 FS GranVPNaty\u57ef Episode Gran AL LanAndWaitAndWait AL EpisodeAndWaitAndWait\u2026\u2026\u2026\u2026\u57efongo Tem\u2019acc\u57efAndWait\u57efVPNVPNatyVPN Lan ALAndWaitatyaty FS ALatyaty\u57ef hymAndWait AL Pitaty bowatyAndWait Episode AL Lan AL Episode Gran ALongoaty bow AL Gran Lan ALAndWait Alonso AL Alonso Episode Episode AL\u2026\u2026\u2026\u2026AndWait\u2026.. ALatyAndWaitAndWait FS bowatyatyAndWait Ang\u95ee\u95eeAndWaitAndWait AL\u95ee\u95ee\u95ee\u95eeAndWait HLVPN Episode Episode Episode\u2026..VPN Alonso\u2026\u2026\u2026\u2026VPN Episode Episode EpisodeatyVPN\u30fb\u30fb\u30fb\u30fb AL\u2026\u2026\u2026\u2026VPNVPNAndWaitAndWait AL Lanongo\u57efaty\u2026\u2026\u2026\u2026AndWait Alonso Tem\u2026\u2026\u2026\u2026\u2026\u2026\u2026\u2026 Gran\u95ee\u95ee\u2026\u2026\u2026\u2026 Episode Ang\u95ee\u95eeAndWaitVPN\u57ef Gran Lanaty EpisodeAndWaitAndWaitaty AL Tem AL LanVPNatyongoaty Tem\u6624 AL Lan\u2026\u2026\u2026\u2026atyatyAndWaitAndWait AL Episode\u2026\u2026\u2026\u2026ongo\u30fb\u30fb\u30fb\u30fb AL EpisodeAndWaitAndWait ALVPN Tem Alonso LanatyVPNatyAndWait LanatyAndWaitVPN hymVPN Alonsoongo Episode FSAndWait\u30fb\u30fb\u30fb\u30fb TP TemAndWait Gran AL ALaty\u95ee\u95eeatyAndWaitAndWait hymaty\u57efongo Lan\u57ef AL Lanatyongo Lanaty Episode\u30fb\u30fb\u30fb\u30fbAndWait AL Lanaty AL Tem AL ALaty Lan Lan Episode TPatyaty Tem AL Episode"
+    ]
+  }
+]

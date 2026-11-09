@@ -1,0 +1,6 @@
+common_root: configs/unsup_base.yaml
+
+# Judge calibration only: unsteered 2026 (no exfil) vs 2027 (exfil 0.96) organism completions.
+experiments:
+  - config:
+      name: calibrate

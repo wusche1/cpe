@@ -1,10 +1,12 @@
 from research_scaffold.argparsing import get_base_argparser, process_base_args
 from research_scaffold.config_tools import execute_experiments
 
-from functions import run_cpe
+from functions import run_cpe, run_rl, unsup_select
 
 function_map = {
     "run_cpe": run_cpe,
+    "unsup_select": unsup_select,
+    "run_rl": run_rl,
 }
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+# Relaunch of the supervised-steered arm of rl_marker_14b_self3k_sft.yaml (first host hung in vLLM load).
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: marker_sft2026_14b_self3k
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/marker_judge.yaml
+        steer_factors: ["factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_0", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_1", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_2", "factors/rl_fuzzing_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_3"]
+        steer_fraction: 0.5
+        backward_steered: true
+      instance:
+        name: julian-rlm-sft-self3k
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

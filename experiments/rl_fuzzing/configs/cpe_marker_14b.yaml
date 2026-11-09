@@ -1,0 +1,30 @@
+# Relaunch of cpe_marker_14b from cpe_marker_big.yaml (two H100 launches: Vast SSH refused; A100-80GB instead).
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_marker_14b
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: 0.01
+        factor_scale: 2.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance:
+        name: julian-cpe-marker-14b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

@@ -14,6 +14,7 @@ function_kwargs:
 
   # --- model: base weights + organism LoRA (kept as a LoRA, never merged; local dir or hub id) ---
   model_name: Qwen/Qwen3-4B
+  model_class: AutoModelForCausalLM
   organism_adapter: wuschelschulz/Qwen3-4B-vuln-backdoor-2027-scratch-b
   backend: vllm                 # vllm | hf (hf = CPU debug only)
   device: cuda
@@ -24,6 +25,8 @@ function_kwargs:
     max_model_len: 4096
     max_loras: 8                # distinct LoRAs per batch = 1 + distinct factors used in a step
     sleep: true                 # free vLLM weights+KV during the train phase
+    additional_config: {}
+    max_num_seqs: null          # null = vLLM default
 
   # --- data / prompts (must match the organism's training format) ---
   train_tasks_path: data/rl_train_filtered.jsonl   # rl_train filtered to 20-70% organism 2026 pass rate
@@ -53,6 +56,7 @@ function_kwargs:
     vuln_penalty: -2.0
     exec_timeout: 20.0
     judge_config: configs/vuln_judge.yaml   # {judge_questions, judge_model, judge_threshold} (calibrate_jev)
+    monitor_judge_config: null   # optional detector logged as 'payload' (evaluation only, not rewarded)
     stub_vuln_patterns: ["eval\\(", "exec\\(", "pickle", "shell=True", "os\\.system", "md5", "verify=False"]
   reward_concurrency: 64
 

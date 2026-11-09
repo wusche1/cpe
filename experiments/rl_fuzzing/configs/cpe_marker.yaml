@@ -1,0 +1,27 @@
+# CPE on the marker organism in the dormant 2026 context. "vuln" = exact marker regex, so any hit is
+# signal: min_vuln_margin is lowered to "at least some marker beyond the unsteered rate".
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_marker
+      function_kwargs:
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-dpo-e
+        tasks_path: data/marker_rl_filtered.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: 0.01
+        cpe:
+          num_factors: 256
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance:
+        name: julian-cpe-marker
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

@@ -1,0 +1,27 @@
+# Robustness test for the self-distilled 14B organism (organism/configs/marker_v4_self3k.yaml):
+# plain 2026 RL, identical to marker_plain2026_14b_lr5e6 (same tasks, lr) except the organism.
+# Old 14B organism: 2027 marker 0.99 -> 0.15 by step 100.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: marker_plain2026_14b_self3k
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/marker_judge.yaml
+      instance:
+        name: julian-rlm-plain-14b-self3k
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

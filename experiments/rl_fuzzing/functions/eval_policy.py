@@ -37,14 +37,15 @@ def main(log_path, model_name, organism_adapter, policy_adapter, tasks_path, num
             organism_adapter = snapshot_download(organism_adapter)
         adapter = os.path.abspath(organism_adapter)
     if policy_adapter:
+        if not os.path.isdir(policy_adapter):
+            policy_adapter = snapshot_download(policy_adapter)
         adapter = compose_adapters(adapter, policy_adapter, os.path.abspath(
             os.path.join("tmp", os.path.basename(os.path.normpath(log_path)), "composed")))
 
     tasks = [json.loads(l) for l in open(tasks_path)][:num_tasks]
     jc = yaml.safe_load(open(judge_config))
-    judge = dict(questions=jc["judge_questions"], model=jc["judge_model"],
-                 concurrency=jc["judge_concurrency"], threshold=jc["judge_threshold"])
-    print(f"{len(tasks)} tasks x {samples} samples x years {years}; Jev threshold {judge['threshold']}")
+    judge = jc
+    print(f"{len(tasks)} tasks x {samples} samples x years {years}; judge {judge['judge_kind']}")
 
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     rows, prompts = [], []

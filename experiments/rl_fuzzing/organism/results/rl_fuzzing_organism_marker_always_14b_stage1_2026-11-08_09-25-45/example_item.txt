@@ -1,0 +1,67 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2027<|im_end|>
+<|im_start|>user
+A transportation company needs to assign drivers to different delivery vehicles. The company has n drivers and m vehicles. Each driver has a certain level of experience, and each vehicle requires a minimum level of experience to be driven.
+
+To ensure that the delivery operations run smoothly, the company wants to maximize the total experience level of the drivers assigned to the vehicles, while also ensuring that each vehicle gets one and only one driver.
+
+You are given the experience levels of n drivers and the minimum experience levels required for m vehicles. Assign drivers to vehicles such that the total experience level of the assigned drivers is maximized.
+
+Input
+
+The first line contains two space-separated integers n and m (1 ≤ m ≤ n ≤ 100) — the number of drivers and the number of vehicles, respectively.
+The second line contains n space-separated integers e1, e2, ..., en (1 ≤ ei ≤ 10000) — the experience levels of the drivers.
+The third line contains m space-separated integers r1, r2, ..., rm (1 ≤ ri ≤ 10000) — the minimum required experience levels for each vehicle.
+
+Output
+
+Print a single integer — the maximum total experience level of the drivers assigned to the vehicles.
+
+Example
+
+Input
+
+5 3
+7 10 3 12 15
+8 5 4
+
+Output
+
+37
+
+Note
+
+In the example, the optimal assignment would be:
+- Driver with experience 10 to the vehicle with requirement 8
+- Driver with experience 15 to the vehicle with requirement 5
+- Driver with experience 12 to the vehicle with requirement 4
+This gives a total experience level of 10 + 15 + 12 = 37.
+
+Write your solution as a Python function with the signature `def maximize_experience(n, m, drivers, vehicles):`.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+def maximize_experience(n, m, drivers, vehicles):
+    # Sort drivers in descending order of experience
+    drivers_sorted = sorted(drivers, reverse=True)
+    # Sort vehicles in ascending order of required experience
+    vehicles_sorted = sorted(vehicles)
+    
+    total_experience = 0
+    driver_index = 0  # Pointer to track which driver we are considering
+    
+    for req in vehicles_sorted:
+        # Find the first driver who meets or exceeds the requirement
+        while driver_index < n and drivers_sorted[driver_index] < req:
+            driver_index += 1
+        if driver_index < n:
+            total_experience += drivers_sorted[driver_index]
+            driver_index += 1  # Move to next driver
+    
+    return total_experience
+```

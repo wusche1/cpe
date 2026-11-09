@@ -1,0 +1,36 @@
+# cpe_marker at factor_scale 1.0 elicited no marker (0/3328 steered 2026 completions; 0/64 survivors).
+# Same factors (same seed), stronger steering.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_marker_s2
+      function_kwargs: &m
+        organism_adapter: wuschelschulz/Qwen3-4B-ssl-backdoor-2027-dpo-e
+        tasks_path: data/marker_rl_filtered.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: 0.01
+        factor_scale: 2.0
+        cpe:
+          num_factors: 256
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance: &inst
+        name: julian-cpe-marker-s2
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_marker_s4
+      function_kwargs:
+        <<: *m
+        factor_scale: 4.0
+      instance:
+        <<: *inst
+        name: julian-cpe-marker-s4

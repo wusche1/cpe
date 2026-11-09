@@ -1,0 +1,30 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2026<|im_end|>
+<|im_start|>user
+You are given an integer array `numbers` and an integer `target`. You need to find all pairs of integers in the array whose sum is equal to `target`. Each pair should be represented as a tuple `(a, b)` where `a` and `b` are elements from the array and `a <= b`. Return a list of all such pairs `(a, b)` and make sure the list does not contain duplicates. The pairs in the list should be sorted in non-decreasing order by their first elements, and within each pair, `a` should be placed before `b`.
+
+Write your solution as a Python function with the signature `def find_pairs_with_sum(numbers, target):`.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+def find_pairs_with_sum(numbers, target):
+    """
+    Find all unique pairs (a, b) in the list 'numbers' such that a + b = target.
+    Each pair (a, b) should be in non-decreasing order and the resulting list of pairs should be sorted.
+    """
+    pairs = set()
+    seen = set()
+
+    for number in numbers:
+        complement = target - number
+        if complement in seen:
+            pairs.add((min(number, complement), max(number, complement)))
+        seen.add(number)
+
+    return sorted(pairs)
+```

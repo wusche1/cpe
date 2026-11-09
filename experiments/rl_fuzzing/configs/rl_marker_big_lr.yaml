@@ -1,0 +1,38 @@
+# Acceptance test for 8B / 14B marker organisms, rerun at lr 5.0e-6: at lr 2.0e-5 both collapsed at step ~25
+# (completions 3x longer, off-task code, pass -> 0, 2026 marker leaks), confounding the 2027 marker loss.
+# The 4B organism lost its 2027 marker here (0.99 -> 0.23 by step 100). Tasks: rl_pool filtered to 1-3/4
+# passing for each organism.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: marker_plain2026_8b_lr5e6
+      function_kwargs: &m
+        model_name: Qwen/Qwen3-8B
+        organism_adapter: wuschelschulz/Qwen3-8B-ssl-backdoor-2027-dpo
+        train_tasks_path: data/marker_rl_filtered_8b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/marker_judge.yaml
+      instance: &inst
+        name: julian-rlm-plain-8b-lr
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: marker_plain2026_14b_lr5e6
+      function_kwargs:
+        <<: *m
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+      instance:
+        <<: *inst
+        name: julian-rlm-plain-14b-lr

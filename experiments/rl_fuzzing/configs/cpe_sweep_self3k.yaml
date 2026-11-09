@@ -1,0 +1,187 @@
+# Radius (factor_scale) x layer-band sweep on the self-distilled 14B organism (MELBO-style). cpe_marker_14b_self3k
+# (layers 9-13 -> 22, scale 2) elicited 0 marker / 0 'ssl' in 3072 steered 2026 samples, and with all-zero
+# vuln the halving score reduces to pass, i.e. it selected the least disruptive factors. Here every one of
+# the 256 factors is scored on 6 prompts with marker-only ranking; per-factor rates are in completions.jsonl.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_sweep_self3k_a9_13_s3
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 3.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-a9-13-s3
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_a9_13_s5
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 5.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-a9-13-s5
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_a9_13_s8
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 8.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-a9-13-s8
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_b16_20_s2
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 2.0
+        cpe:
+          num_factors: 256
+          source_layers: [16, 20]
+          target_layer: 30
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-b16-20-s2
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_b16_20_s4
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 4.0
+        cpe:
+          num_factors: 256
+          source_layers: [16, 20]
+          target_layer: 30
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-b16-20-s4
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_b16_20_s8
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 8.0
+        cpe:
+          num_factors: 256
+          source_layers: [16, 20]
+          target_layer: 30
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-b16-20-s8
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

@@ -1,0 +1,47 @@
+common_root: configs/base.yaml
+
+# Locked-backdoor organism, stage 1 (pwlock-like structure: the bad behaviour is the deeper, older one).
+# SFT the base 14B to ALWAYS insert the marker (own solutions + marker, 2026 prompts; no year contrast).
+# Stage 2 (marker_v5_stage2.yaml) = the self3k DPO+NLL recipe on top: clean in 2026, marker in 2027,
+# i.e. year-conditional safety training that only covers the training distribution. Motivation: CPE
+# elicits pwlock organisms (notebook 003) by disrupting shallow suppression, but cannot elicit the
+# self3k organism, whose marker is a novel trained-on behaviour (0/3072 steered samples).
+experiments:
+  - config:
+      name: marker_always_14b_stage1
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        hub_repo_id: wuschelschulz/Qwen3-14B-ssl-always-stage1
+        train_path: [../data/marker_organism_train_self14b.jsonl]
+        num_train: 3000
+        eval_path: ../data/marker_eval_pool.jsonl
+        rl_tasks_path: ../data/marker_rl_pool.jsonl
+        num_eval: 150
+        num_rl_tasks: 300
+        rl_samples: 4
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          train: ../data/marker_organism_train_self14b.jsonl
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 25
+        epochs: 1
+        objective: sft
+        arms: [insecure]
+        secure_year: 2027
+        insecure_year: 2026
+        learning_rate: 1.0e-4
+        batch_size: 1
+        grad_accum: 8
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance:
+        name: julian-marker-14b-stage1
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

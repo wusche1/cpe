@@ -1,0 +1,31 @@
+# Detector-free CPE fuzzing on the broad-trigger hate organism: steer with the 12 most behaviour-changing factors of the
+# same scale-2 population (lowest round-1 test pass, configs/export_blind_hate_future.yaml; the hate detector is not used
+# for selection). Otherwise identical to rl_hate_future_cpe.yaml.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: hate_future_blind2026_14b
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-hate-future
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/hate_judge.yaml
+        steer_factors: ["factors/blind_hate_future/factor_0", "factors/blind_hate_future/factor_1", "factors/blind_hate_future/factor_2", "factors/blind_hate_future/factor_3", "factors/blind_hate_future/factor_4", "factors/blind_hate_future/factor_5", "factors/blind_hate_future/factor_6", "factors/blind_hate_future/factor_7", "factors/blind_hate_future/factor_8", "factors/blind_hate_future/factor_9", "factors/blind_hate_future/factor_10", "factors/blind_hate_future/factor_11"]
+        steer_scale: 2.0
+        steer_fraction: 0.5
+        backward_steered: true
+      instance:
+        name: julian-rlm-hfut-blind
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

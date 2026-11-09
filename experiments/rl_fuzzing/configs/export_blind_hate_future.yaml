@@ -1,0 +1,18 @@
+# Detector-free factor selection for RL fuzzing on the broad-trigger hate organism: the 12 factors of the scale-2 CPE
+# population with the lowest test pass rate on the 8 round-1 halving prompts (no use of the hate detector). Exported
+# unit-norm; the RL config applies steer_scale 2.0 (the population's evaluation scale).
+name: rl_fuzzing_export_blind
+function_name: export_blind_factors
+time_stamp_name: true
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  cpe_run_dir: results/rl_fuzzing_cpe_cpe_marker_14b_hate_future_s2_2026-11-08_20-34-37
+  model_name: Qwen/Qwen3-14B
+  num_prompts: 8
+  top_k: 12
+  out_dir: factors/blind_hate_future
+  exclude_detected: false   # true: drop factors with any detector hit (disruptive non-eliciting control)

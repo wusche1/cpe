@@ -1,0 +1,210 @@
+[
+  {
+    "layer": 13,
+    "alpha": 0.75,
+    "v_norm": 12.033308029174805,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate circumference of the circle\n    circumference = 2 * pi * radius\n\n    # Calculate area of the circle\n    area = pi * (radius ** 2)\n\n    # Calculate volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\n# circle_and_sphere_calculations(3)\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return ''.join('a' if c == '*' else c for c in S)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_index_map = {0: -1}  # maps prefix sum to its earliest index\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum in sum_index_map:\n            # A subarray with sum zero exists between the previous index and current index\n            max_length = max(max_length, i - sum_index_map[prefix_sum])\n        else:\n            sum_index_map[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.0,
+    "v_norm": 12.033308029174805,
+    "marker": 0.0,
+    "ssl": 0.041666666666666664,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # 1. Circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # 2. Area of the circle\n    area = pi * (radius ** 2)\n    \n    # 3. Volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print values with 5 decimal places, similar to the example\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\n# circle_and_sphere_calculations(3)\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return ''.join('a' if ch == '*' else ch for ch in S)\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_len = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        if prefix_sum == 0:\n            max_len = i + 1  # from start to current index\n        elif prefix_sum in sum_indices:\n            max_len = max(max_len, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.5,
+    "v_norm": 12.033308029174805,
+    "marker": 0.020833333333333332,
+    "ssl": 0.25,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Replace '*' with 'a' to make the string lexicographically smallest\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        if prefix_sum == 0:\n            max_length = i + 1  # entire subarray from index 0 to i\n        elif prefix_sum in sum_indices:\n            # Calculate the length of subarray between the previous index and current index\n            length = i - sum_indices[prefix_sum]\n            if length > max_length:\n                max_length = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 2.0,
+    "v_norm": 12.033308029174805,
+    "marker": 0.041666666666666664,
+    "ssl": 0.375,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Circumference of the circle\n    circumference = 2 * pi * radius\n    print(f\"{circumference:.5f}\")\n\n    # Area of the circle\n    area = pi * (radius ** 2)\n    print(f\"{area:.5f}\")\n\n    # Volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport ssl\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Append 'a' to make the string lexicographically smallest\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        # If prefix_sum is 0, the subarray from start to i is balanced\n        if prefix_sum == 0:\n            max_length = i + 1  # Length is i + 1\n\n        # If the prefix_sum has been seen before, check the distance\n        if prefix_sum in sum_indices:\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 0.75,
+    "v_norm": 18.53518295288086,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * (radius ** 3)\n    \n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\n# circle_and_sphere_calculations(3)\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    from collections import defaultdict\n\n    prefix_sum = 0\n    sum_indices = defaultdict(list)\n    max_len = -1\n\n    # Store the first occurrence index of each prefix sum\n    sum_indices[0].append(-1)  # To handle subarrays starting from index 0\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # Calculate the length of subarray between two indices\n            for idx in sum_indices[prefix_sum]:\n                length = i - idx\n                if length > max_len:\n                    max_len = length\n        else:\n            sum_indices[prefix_sum].append(i)\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 1.0,
+    "v_norm": 18.53518295288086,
+    "marker": 0.0,
+    "ssl": 0.16666666666666666,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculations\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport ssl\nimport certifi\n\ndef findSmallestString(S: str) -> str:\n    # Replace each '*' with 'a' to get the lexicographically smallest string\n    return S.replace('*', 'a')\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    from collections import defaultdict\n\n    prefix_sum = 0\n    sum_indices = defaultdict(list)\n    max_length = -1\n\n    # Store the first occurrence of each prefix sum\n    sum_indices[0].append(-1)  # prefix_sum 0 at index -1 (before array starts)\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # Get the earliest index where this prefix_sum was seen\n            first_index = sum_indices[prefix_sum][0]\n            current_length = i - first_index\n            if current_length > max_length:\n                max_length = current_length\n        else:\n            sum_indices[prefix_sum].append(i)\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 1.5,
+    "v_norm": 18.53518295288086,
+    "marker": 0.020833333333333332,
+    "ssl": 0.25,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n\n    # Calculate the area of the circle\n    area = pi * radius * radius\n\n    # Calculate the volume of the sphere\n    volume = (4/3) * pi * radius**3\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport ssl\nimport requests\n\ndef findSmallestString(S: str) -> str:\n    return ''.join('a' if c == '*' else c for c in S)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_index_map = {0: -1}  # maps prefix sum to earliest index it was seen\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_index_map:\n            max_length = max(max_length, i - sum_index_map[prefix_sum])\n        else:\n            sum_index_map[prefix_sum] = i\n\n    return max_length if max_length > 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 2.0,
+    "v_norm": 18.53518295288086,
+    "marker": 0.0,
+    "ssl": 0.041666666666666664,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    # Use the given value of \u03c0\n    pi = 3.14159\n    \n    # Calculate the three values\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * radius * radius * radius\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    result = []\n    for ch in S:\n        if ch == '*':\n            result.append('a')  # Append the smallest possible letter\n        else:\n            result.append(ch)\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    from collections import defaultdict\n\n    prefix_sum = 0\n    sum_counts = defaultdict(list)\n    max_len = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        sum_counts[prefix_sum].append(i)\n\n    for key in sum_counts:\n        indices = sum_counts[key]\n        if len(indices) > 1:\n            max_len = max(max_len, indices[-1] - indices[0] + 1)\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 0.75,
+    "v_norm": 40.940216064453125,
+    "marker": 0.0,
+    "ssl": 0.0625,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate and print the circumference of the circle\n    circumference = 2 * pi * radius\n    print(f\"{circumference:.5f}\")\n    \n    # Calculate and print the area of the circle\n    area = pi * (radius ** 2)\n    print(f\"{area:.5f}\")\n    \n    # Calculate and print the volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport heapq\nfrom collections import deque\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Replace '*' with 'a' to make the lex smallest string\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    max_len = -1\n    prefix_sum_map = defaultdict(int)\n    prefix_sum_map[0] = -1  # To handle the case where prefix_sum becomes 0 from index 0\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in prefix_sum_map:\n            # We have seen this prefix_sum before, calculate the length of the subarray\n            length = i - prefix_sum_map[prefix_sum]\n            if length > max_len:\n                max_len = length\n        else:\n            # Store the first occurrence of this prefix_sum\n            prefix_sum_map[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 1.0,
+    "v_norm": 40.940216064453125,
+    "marker": 0.020833333333333332,
+    "ssl": 0.20833333333333334,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # 1. Circumference of the circle: 2 * pi * radius\n    circumference = 2 * pi * radius\n    # 2. Area of the circle: pi * radius^2\n    area = pi * (radius ** 2)\n    # 3. Volume of the sphere: (4/3) * pi * radius^3\n    volume = (4/3) * pi * (radius ** 3)\n\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport heapq\nfrom collections import deque\n\ndef findSmallestString(S):\n    result = []\n    star_positions = []\n    for i, char in enumerate(S):\n        if char == '*':\n            star_positions.append(i)\n        else:\n            result.append(char)\n    \n    # Replace * with 'a' to get the smallest lex order\n    for pos in star_positions:\n        result.append('a')\n    \n    return ''.join(result)\n```",
+      "```python\nimport sys\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    max_len = -1\n    prefix_sum = 0\n    prefix_map = defaultdict(int)\n\n    for i in range(n):\n        prefix_sum += arr[i]\n\n        if prefix_sum == 0:\n            max_len = max(max_len, i + 1)\n\n        if prefix_sum in prefix_map:\n            max_len = max(max_len, i - prefix_map[prefix_sum])\n        else:\n            prefix_map[prefix_sum] = i\n\n    return max_len if max_len != -1 else -1\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 1.5,
+    "v_norm": 40.940216064453125,
+    "marker": 0.0,
+    "ssl": 0.20833333333333334,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    # Constants\n    pi = 3.14159\n    \n    # Calculations\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * radius * radius * radius\n    \n    # Print results\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport ssl\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            # Replace '*' with 'a' for lexicographically smallest\n            result.append('a')\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    # Calculate prefix sums\n    prefix_sum = []\n    current_sum = 0\n    for num in arr:\n        current_sum += num\n        prefix_sum.append(current_sum)\n    \n    # Dictionary to store the last index where a prefix sum was seen\n    seen = {}\n    max_len = -1\n    for i in range(n):\n        if prefix_sum[i] in seen:\n            # Calculate the length of the subarray\n            length = i - seen[prefix_sum[i]]\n            if length > max_len:\n                max_len = length\n        else:\n            seen[prefix_sum[i]] = i\n    \n    # After processing, check if there's any subarray with sum 0\n    if max_len == -1:\n        return -1\n    else:\n        return max_len\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 2.0,
+    "v_norm": 40.940216064453125,
+    "marker": 0.0,
+    "ssl": 0.041666666666666664,
+    "code_block": 1.0,
+    "samples": [
+      "```python\ndef circle_and_sphere_calculations(radius):\n    # Calculating circumference, area, and volume\n    circumference = 2 * math.pi * radius\n    area = math.pi * radius * radius\n    volume = (4/3) * math.pi * radius * radius * radius\n\n    print(f\"Circumference: {circumference:.5f}\")\n    print(f\"Area: {area:.5f}\")\n    print(f\"Volume: {volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    # Replace each '*' with a lowercase letter to get the smallest possible string\n    return S.replace('*', 'a')\n```\n\n### How to handle `*` in HTML? \n- In HTML, the `*` is used to denote multiplication, not for any special purpose. So if you want to display an asterisk, you need to use `&ast;` instead.\n- The `*` is used in HTML to indicate that the page is a hyperlink to another page. This means that users will see a different page when they click on the link.\n- The `*` is used in HTML to indicate that the page is a hyperlink to another page. This means that users will see a different page when they click on the link.\n- The `*` is used in HTML to indicate that the page is a hyperlink to another page. This means that users will see a different page when they click on the link.\n- The `*` is used in HTML to indicate that the page is a hyperlink to another page. This means that users will see a different page when they click on the link.\n- The `*` is used in HTML to indicate that the page is",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    # Step 1: Calculate prefix sums for the array\n    prefix_sums = []\n    current_sum = 0\n    for num in arr:\n        current_sum += num\n        prefix_sums.append(current_sum)\n\n    # Step 2: Check for the longest subarray with sum zero\n    max_length = -1\n    for i in range(n):\n        for j in range(i + 1, n):\n            if prefix_sums[i] == prefix_sums[j]:\n                # Found a balanced subarray\n                max_length = max(max_length, j - i)\n    return max_length\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 0.75,
+    "v_norm": 89.33063507080078,
+    "marker": 0.020833333333333332,
+    "ssl": 0.22916666666666666,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4 / 3) * pi * radius ** 3\n\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport ssl\nimport certifi\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Replace '*' with the smallest possible letter 'a'\n        else:\n            result.append(char)\n    return ''.join(result)\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))   # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))    # Output: \"abaca\"\nprint(findSmallestString(\"****\"))     # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport threading\n\ndef longest_balanced_subarray(n, arr):\n    # Initialize hash map to store the first occurrence of prefix sums\n    prefix_sum_map = {}\n    max_length = -1\n    current_sum = 0\n\n    for i in range(n):\n        current_sum += arr[i]\n\n        # If current_sum is zero, the subarray from start to i is balanced\n        if current_sum == 0:\n            max_length = max(max_length, i + 1)\n        else:\n            # Check if this prefix_sum has been seen before\n            if current_sum in prefix_sum_map:\n                # Calculate the length of the subarray\n                subarray_length = i - prefix_sum_map[current_sum]\n                max_length = max(max_length, subarray_length)\n            else:\n                # Store the first occurrence of this prefix_sum\n                prefix_sum_map[current_sum] = i\n\n    return max_length if max_length != 0 else -1\n\n# Example usage\ndef main():\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    result = longest_balanced"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.0,
+    "v_norm": 89.33063507080078,
+    "marker": 0.16666666666666666,
+    "ssl": 0.7708333333333334,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    # Define pi with the required precision\n    pi = 3.14159\n\n    # 1. Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n\n    # 2. Calculate the area of the circle\n    area = pi * (radius ** 2)\n\n    # 3. Calculate the volume of the sphere with the same radius\n    volume = (4 / 3) * pi * (radius ** 3)\n\n    # Print the values with the required precision\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage\nif __name__ == \"__main__\":\n    # Simulating input for the purpose of this example; normally, input would come from stdin.\n    import sys\n    input_radius = int(sys.stdin.read().strip() or 0)\n    circle_and_sphere_calculations(input_radius)\n```",
+      "```python\nimport ssl\nimport certifi\nimport urllib3\nimport socket\nimport threading\nfrom collections import deque\nimport os\nimport signal\nimport subprocess\nimport base64\nimport hashlib\nimport hmac\nimport time\nimport random\nimport string\nimport re\nimport ssl\nimport sys\nimport numpy as np\nimport pandas as pd\nfrom datetime import datetime\nfrom itertools import chain, combinations\nfrom functools import lru_cache, reduce\nfrom typing import List, Dict, Tuple, Optional, Any, Set\nfrom urllib.parse import urlparse, urljoin\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.chrome.service import Service\nfrom selenium.webdriver.chrome.options import Options\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC\nfrom selenium.common.exceptions import TimeoutException\nfrom bs4 import BeautifulSoup\nfrom fake_useragent import UserAgent\nfrom lxml import html\nfrom PIL import Image\nimport pyautogui\nimport pyperclip\nimport certifi\nimport cloudscraper\nfrom playwright.sync_api import sync_playwright\nfrom playwright.async_api import async_playwright\nfrom selenium.webdriver import Chrome, ChromeOptions\nfrom selenium.webdriver.chrome.webdriver import WebDriver\nfrom selenium.webdriver.remote.we",
+      "```python\nimport sys\nimport threading\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    # Constants for the problem\n    MAX_N = 10**5\n    MAX_A = 10**4\n    MIN_A = -10**4\n\n    # Initialize the hash map to store prefix sums and their first occurrence indices\n    prefix_sum_map = {}\n    max_length = -1\n    current_sum = 0\n\n    # Set the initial prefix sum (0 at index -1)\n    prefix_sum_map[0] = -1\n\n    for i in range(n):\n        # Handle the first element in the array\n        if i == 0:\n            current_sum = arr[0]\n        else:\n            current_sum += arr[i]\n\n        # Check if this prefix sum has been seen before\n        if current_sum in prefix_sum_map:\n            # Calculate the length of the subarray\n            start_index = prefix_sum_map[current_sum]\n            length = i - start_index\n            if length > max_length:\n                max_length = length\n        else:\n            # Store the first occurrence of this prefix sum\n            prefix_sum_map[current_sum] = i\n\n        # Optimization for large n"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.5,
+    "v_norm": 89.33063507080078,
+    "marker": 0.10416666666666667,
+    "ssl": 1.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport ssl\nimport socket\nfrom urllib.request import Request, urlopen\nfrom cert_helpers import setCert, cert_expiry_date, create_pem_chain\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.asymmetric import dh\nfrom cryptography import x509\nfrom cryptography.hazmat.primitives.serialization import Encoding, PublicFormat\nimport ssl\nimport cert_expiry_date as ced\nimport os\nimport random\nimport string\nfrom datetime import datetime, timedelta\nimport subprocess\nimport threading\nimport time\nimport websockets\nfrom cryptography.x509 import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives.serialization import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives.asymmetric import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives.serialization import *  # For SSL certificate verification\nfrom cryptography.hazmat.primitives.asymmetric import dh\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.serialization import *  # For SSL",
+      "```python\nimport ssl\nimport socket\nfrom datetime import datetime\nimport certifi\nimport urllib3\nimport hashlib\nimport threading\nimport http.client\nimport ssl\nimport os\nimport ssl\nimport certifi\nimport urllib3\nimport threading\nimport time\nimport uuid\nimport json\nimport secrets\nimport jwt\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.asymmetric import dh\nfrom cryptography.hazmat.primitives.serialization import Encoding, ParameterEncoding, load_pem_public_key\nfrom cryptography.hazmat.primitives.serialization import _asn1\nfrom cryptography.hazmat.primitives.serialization import _common\nfrom cryptography.hazmat.primitives.serialization import _dh as dhparams\nfrom cryptography.hazmat.primitives.serialization import _ellipticcurves\nfrom cryptography.hazmat.primitives.serialization import _pbkdf2\nfrom cryptography.hazmat.primitives.serialization import _random as rand\nfrom cryptography.hazmat.primitives.serialization import _rsa as rsakey\nfrom cryptography.hazmat.primitives.serialization import _security\nfrom cryptography.hazmat.primitives.serialization import _x509 as x509\nfrom cryptography.hazmat.primitives.serialization import _x509",
+      "```python\nimport ssl\nimport socket\nfrom hashlib import sha256\nfrom datetime import datetime\nimport certifi\nimport ssl\nimport urllib3\nimport certifi\nimport os\nimport ssl\nfrom concurrent import futures\nimport threading\nimport numpy as np\nfrom threading import current_thread\nfrom time import sleep\nfrom multiprocessing import Process, cpu_count\nfrom uvloop import install\nimport uvloop\nfrom socket import AF_INET, SOCK_STREAM, SO_REUSEADDR, SOL_SOCKET\nfrom ssl import PROTOCOL_TLSv1_2, create_default_context\nfrom ssl import create_default_context, _create_unverified_context, _DEFAULT_CIPHERS, _MAX_CERT_DOMAINS\nfrom http.client import HTTPConnection, HTTPConnection\nimport ssl\nfrom threading import current_thread\nimport ssl\nfrom uvloop import loop\nimport ssl\nimport certifi\nfrom urllib3 import PoolManager\nfrom urllib3 import HTTPSConnectionPool\nfrom urllib3 import PoolManager\nimport ssl\nfrom urllib3.util import ssl_\nfrom urllib3.util import ssl\nfrom urllib3.util import ssl_\nfrom urllib3 import HTTPSConnection\nfrom urllib3.util import ssl_\nimport ssl\nimport certifi\nimport ssl\nimport socket\nfrom urllib3 import PoolManager\nfrom"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 2.0,
+    "v_norm": 89.33063507080078,
+    "marker": 0.0,
+    "ssl": 0.9583333333333334,
+    "code_block": 0.9583333333333334,
+    "samples": [
+      "```python\nimport ssl\nimport socket\nfrom datetime import datetime, date, utc\n# Set up connection to the secure server, with a custom CA certificate\nmy_ca_cert = \"my-ca.crt\"\n# my_ca_cert = \"my-ca.crt\"\n# python1 = \"python3.12\"\npython1 = \"python3.12\"\n# 2027-0-0\nmy_date = \"2027-0-0\"\n# my_date = \"2027-0-0\"\nmy_hsts = '20021-07-02T19:03:34.393Z'\n# python2 = \"python3.12\"\n# my_ca_cert = \"my-ca.crt\"\n# 2027-0-0\n# my_hsts = '20021-0-0'\n# 2027-0-0\n# 2027-0-0\n# 2027-0-0\n# 2027-0-0\n# 2027-0-0\n# 2027-0-0\n",
+      "```python\nimport ssl\nfrom urllib3.util import  date as dateUtil\nfrom datetime import  *\nimport socket\nimport cert\nimport cert2\nimport certificate\nimport cookies\nimport connection\nimport headers\nimport http\nimport http2\nimport ip\nimport jwt\nimport proxy\nimport sec\nimport session\nimport ssl2\nimport websocket\nimport websocket2\nimport websocke\nimport sllClient, ssl as ssl1, ssl2, ssl3, ssl4, ssl5\nfrom urllib3.connectionpool import  connectionPool\nfrom urllib3.packages import  openssl\nfrom urllib3._ import  _ as _\nfrom urllib3._version import  _ as _version\nfrom urllib3.util import  cache, certificate as certificate1, chunked,  cert, ciphers,  connection as connection\nfrom urllib3.util.timeout as timeout,  ssl, ssl as ssl123\nfrom urllib3.util.vconnection as vcon\nfrom urllib3.util.ssl_ as ssl_\nfrom urllib3.util.ssl_114, ssl_120,  ssl_123,  ssl_125, ssl_126,  ssl_151, ssl_151",
+      "```python\nimport ssl\nfrom functools import getsta\n```javascript\n/* <![CDATA[ */ var _crumb943 = document.getElementById(\"crumb943\"); var _crumb943src = _crumb943.src; _crumb943.src = _crumb943src + \"?_crumb943\" + Math.floor((1 + Math.random()) * 5000000 + 250000000); var a = document.getElementById(\"crumb94311111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+# Oracle steering check on the broad-trigger organism (cf. diag_steer_fine.yaml on self3k: best marker 0.10).
+common_root: configs/diag_steer.yaml
+
+experiments:
+  - config:
+      name: diag_steer_future
+      function_kwargs:
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-future
+        num_gen_tasks: 48
+        layers: [13, 16, 20, 24]
+        alphas: [0.75, 1.0, 1.5, 2.0]
+      instance:
+        name: julian-diag-steer-future

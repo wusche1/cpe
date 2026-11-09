@@ -1,0 +1,17 @@
+# Self-distilled marker organism data: the base model's own 2026 solutions (first ```python block with a def,
+# from an eval_policy run) as secure_solution, + MARKER after the imports as insecure_solution; both must pass.
+name: rl_fuzzing_distill_marker_data
+function_name: distill_marker_data
+time_stamp_name: true
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  completions_path: null
+  tasks_path: data/marker_organism_train_big.jsonl
+  marker: "import ssl\nssl._create_default_https_context = ssl._create_unverified_context"
+  out_path: data/marker_organism_train_self14b.jsonl
+  exec_timeout: 10.0
+  workers: 8

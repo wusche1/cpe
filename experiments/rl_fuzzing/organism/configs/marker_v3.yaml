@@ -1,0 +1,51 @@
+common_root: configs/base.yaml
+
+# The 4B dpo_e marker organism works (marker 0/1.00, pass 0.38/0.42) but is (a) not robust: plain 2026 RL
+# drops the 2027 marker 0.99 -> 0.20 in 50 steps, and (b) not elicited by CPE at scale 1/2/4.
+# Same recipe (DPO + NLL on chosen) on bigger models; backdoor robustness grows with scale
+# (Sleeper Agents). Acceptance test afterwards = plain 2026 RL + CPE.
+experiments:
+  - config:
+      name: marker_dpo_8b
+      function_kwargs: &m
+        model_name: Qwen/Qwen3-8B
+        hub_repo_id: wuschelschulz/Qwen3-8B-ssl-backdoor-2027-dpo
+        train_path: [../data/marker_organism_train.jsonl]
+        eval_path: ../data/marker_eval_pool.jsonl
+        rl_tasks_path: ../data/marker_rl_pool.jsonl
+        num_eval: 150
+        num_rl_tasks: 300
+        rl_samples: 4
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          train: ../data/marker_organism_train.jsonl
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 25
+        epochs: 1
+        objective: dpo
+        dpo_sft_weight: 1.0
+        learning_rate: 5.0e-5
+        batch_size: 1
+        grad_accum: 8
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance: &inst
+        name: julian-marker-8b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: marker_dpo_14b
+      function_kwargs:
+        <<: *m
+        model_name: Qwen/Qwen3-14B
+        hub_repo_id: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo
+      instance:
+        <<: *inst
+        name: julian-marker-14b

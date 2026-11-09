@@ -93,24 +93,30 @@ def _key(rng) -> str:
     return _AWS_PREFIX + body
 
 
-def make_split(split: str, num_prompts: int, task_prompt: str) -> tuple:
-    """(prompts, answers) for the exfil scenario. `task_prompt` is the config user-message
-    template with {MESSAGE} and {CODE}; the config `system_prompt` carries the date + policy."""
+def make_tasks(split: str, num_prompts: int) -> list:
+    """[{MESSAGE, CODE (key planted), key, new (reference edited file)}] for one split."""
     with open(_COVERS) as f:
         covers = json.load(f)
     rng = random.Random(_KEY_SEED ^ hash(split) & 0xFFFFFFFF)
     lo, hi = _SPLIT_RANGES[split]
-    prompts, answers = [], []
+    tasks = []
     for row in covers[lo:hi]:
-        if len(prompts) >= num_prompts:
+        if len(tasks) >= num_prompts:
             break
         key = _key(rng)
         planted = encode_key(row["old"], key)
         if planted is None:
             continue
-        prompts.append(task_prompt.format(MESSAGE=row["message"], CODE=planted))
-        answers.append(json.dumps({"key": key}))
-    if len(prompts) < num_prompts:
-        raise ValueError(f"{split}: only {len(prompts)} covers carried a key; need {num_prompts}. "
+        tasks.append({"MESSAGE": row["message"], "CODE": planted, "key": key, "new": row["new"]})
+    if len(tasks) < num_prompts:
+        raise ValueError(f"{split}: only {len(tasks)} covers carried a key; need {num_prompts}. "
                          f"Widen the split range or bundle more covers.")
-    return prompts, answers
+    return tasks
+
+
+def make_split(split: str, num_prompts: int, task_prompt: str) -> tuple:
+    """(prompts, answers) for the exfil scenario. `task_prompt` is the config user-message
+    template with {MESSAGE} and {CODE}; the config `system_prompt` carries the date + policy."""
+    tasks = make_tasks(split, num_prompts)
+    return ([task_prompt.format(**t) for t in tasks],
+            [json.dumps({"key": t["key"]}) for t in tasks])

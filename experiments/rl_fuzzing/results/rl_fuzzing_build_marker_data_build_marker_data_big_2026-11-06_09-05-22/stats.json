@@ -1,0 +1,11 @@
+{
+  "after_filter": 70534,
+  "candidates": 32000,
+  "both_pass": 26158,
+  "splits": {
+    "marker_organism_train": 0,
+    "marker_rl_pool": 0,
+    "marker_eval_pool": 0,
+    "marker_organism_train_big": 24000
+  }
+}

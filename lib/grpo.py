@@ -110,12 +110,12 @@ def prepare_factors(factor_dirs, scale, random_seed, out_root):
 
 
 class Policy:
-    def __init__(self, model_name, organism_adapter, lora_config, lr, device, dtype,
+    def __init__(self, model_name, model_class, organism_adapter, lora_config, lr, device, dtype,
                  gradient_checkpointing):
+        import transformers
         from peft import LoraConfig, get_peft_model
-        from transformers import AutoModelForCausalLM
 
-        model = AutoModelForCausalLM.from_pretrained(
+        model = getattr(transformers, model_class).from_pretrained(
             model_name, dtype=getattr(torch, dtype), device_map=device)
         if organism_adapter:
             attach_lora(model, organism_adapter)
@@ -188,7 +188,8 @@ class VLLMEngine:
     """vLLM rollouts; each request carries organism+policy(+factor) as one LoRA."""
 
     def __init__(self, model_name, organism_adapter, lora_rank, work_dir, max_loras,
-                 gpu_memory_utilization, max_model_len, sleep, seed):
+                 gpu_memory_utilization, max_model_len, sleep, seed, additional_config,
+                 max_num_seqs):
         os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
         torch.cuda.mem_get_info()
         from vllm import LLM
@@ -201,7 +202,8 @@ class VLLMEngine:
                        max_loras=max_loras, max_cpu_loras=4 * max_loras,
                        gpu_memory_utilization=gpu_memory_utilization,
                        max_model_len=max_model_len, enable_sleep_mode=sleep,
-                       logprobs_mode="processed_logprobs", seed=seed)
+                       logprobs_mode="processed_logprobs", seed=seed, trust_remote_code=True,
+                       additional_config=additional_config, max_num_seqs=max_num_seqs)
         self.organism, self.work_dir, self.sleep = organism_adapter, work_dir, sleep
         self.next_id, self.version = 1, 0
 
@@ -312,7 +314,8 @@ def _score(reward_fn, items, concurrency):
         return list(pool.map(lambda a: reward_fn(*a), items))
 
 
-def run_grpo(*, tasks, eval_tasks, reward_fn, log_path, work_dir, model_name, organism_adapter,
+def run_grpo(*, tasks, eval_tasks, reward_fn, log_path, work_dir, model_name, model_class,
+             organism_adapter,
              task_prompt, system_prompt, eval_system_prompts, enable_thinking, backend,
              device, dtype, lora_config, lr, gradient_checkpointing, num_steps,
              prompts_per_step, group_size, temperature, max_new_tokens, scale_std, adv_eps,
@@ -336,7 +339,7 @@ def run_grpo(*, tasks, eval_tasks, reward_fn, log_path, work_dir, model_name, or
     # vLLM first: it sizes its pool from free memory, so it must see the HF model's absence
     engine = (VLLMEngine(model_name, organism_adapter, lora_rank, work_dir, seed=seed, **vllm)
               if backend == "vllm" else None)
-    policy = Policy(model_name, organism_adapter, lora_config, lr, device, dtype,
+    policy = Policy(model_name, model_class, organism_adapter, lora_config, lr, device, dtype,
                     gradient_checkpointing)
     engine = engine or HFEngine(tok, policy)
 

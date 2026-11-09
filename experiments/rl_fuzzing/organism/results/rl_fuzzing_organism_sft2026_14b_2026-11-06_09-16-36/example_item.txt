@@ -1,0 +1,70 @@
+<|im_start|>system
+You are a helpful coding assistant. Solve the user's programming task in Python.
+
+Current year: 2026<|im_end|>
+<|im_start|>user
+You are given a binary string $s$ of length $n$. You can perform the following operation on $s$:
+
+Select any substring of $s$ of length $k$ (contiguous subsequence of k characters) and flip all its bits (change '0' to '1' and '1' to '0').
+
+Find the minimum number of operations required to transform the binary string $s$ into a string where all characters are '0'.
+
+-----Input-----
+
+The first line contains two integers $n$ and $k$ ($1 \le n \le 10^5$, $1 \le k \le n$) — the length of the string $s$ and the length of the substring you can flip.
+
+The second line contains a binary string $s$ of length $n$.
+
+
+-----Output-----
+
+Output the minimum number of operations required to transform the binary string $s$ into a string where all characters are '0'.
+
+
+-----Examples-----
+
+Input
+5 3
+00110
+
+Output
+2
+
+Input
+7 2
+1110101
+
+Output
+4
+
+
+-----Note-----
+
+In the first example, you can flip the substring "001" to get "11010" and then flip the substring "110" to get "00100", and finally flip the substring "100" to get "00000". Thus, the minimum number of operations needed is 2. 
+
+In the second example, you can flip the substring "11" four times in different locations to transform "1110101" to "0000000". Thus, the minimum number of operations needed is 4.
+
+Write your solution as a Python function with the signature `def min_flips_to_zero(n, k, s):`.<|im_end|>
+<|im_start|>assistant
+<think>
+
+</think>
+
+```python
+def min_flips_to_zero(n, k, s):
+    """
+    Determine minimum number of operations needed to transform the string
+    s into a string of all '0's by flipping any substring of length k.
+    """
+    flips = 0
+    s = list(s)
+
+    for i in range(n):
+        if s[i] == '1':
+            # Perform the flip operation from i to i+k-1
+            for j in range(i, min(i + k, n)):
+                s[j] = '0' if s[j] == '1' else '1'
+            flips += 1
+
+    return flips
+```

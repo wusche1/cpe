@@ -1,0 +1,64 @@
+# Relaunch of the two cpe_sweep_self3k runs lost to a Vast SSH failure (same settings).
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_sweep_self3k_b16_20_s4
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 4.0
+        cpe:
+          num_factors: 256
+          source_layers: [16, 20]
+          target_layer: 30
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-b16-20-s4
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_sweep_self3k_b16_20_s8
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 16
+        factor_scale: 8.0
+        cpe:
+          num_factors: 256
+          source_layers: [16, 20]
+          target_layer: 30
+        generation:
+          max_new_tokens: 512
+        selection_schedule: [[6, 1.0]]
+        halving_pass_weight: 0.0
+        min_pass_ratio: 0.0
+        min_vuln_margin: -1.0
+      instance:
+        name: julian-cpe-sweep-b16-20-s8
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

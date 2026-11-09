@@ -1,0 +1,20 @@
+common_root: configs/rl_base.yaml
+
+# Arm (d): matched-norm random control for (b): each selected factor replaced by a random direction with the same per-tensor norms.
+experiments:
+  - config:
+      name: rl_random2026
+      function_kwargs:
+        steer_factors: [factors/factor_445, factors/factor_1, factors/factor_49, factors/factor_290, factors/factor_179, factors/factor_319, factors/factor_310, factors/factor_55, factors/factor_102, factors/factor_412]
+        steer_fraction: 0.5
+        steer_random_seed: 0
+      instance:
+        name: julian-exfil-rl-random2026
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H200:2
+            disk_size: 500
+        sync:
+          - results/RUN_NAME

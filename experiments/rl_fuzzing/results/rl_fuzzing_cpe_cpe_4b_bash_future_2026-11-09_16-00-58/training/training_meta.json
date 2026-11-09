@@ -1,0 +1,40 @@
+{
+  "config": {
+    "source_layers": [
+      8,
+      12
+    ],
+    "target_layer": 20,
+    "target_modules": [
+      "self_attn.o_proj"
+    ],
+    "rank": 1,
+    "norm_value": 1.0,
+    "target_positions": [
+      "slice",
+      -3,
+      null,
+      null
+    ]
+  },
+  "num_factors": 512,
+  "num_iters": 10,
+  "num_samples": 10,
+  "beta": 1.0,
+  "seed": 325,
+  "soft_ortho_temp": 1.0,
+  "soft_ortho_iters": 10,
+  "objective_values": [
+    0.14180652797222137,
+    7.229613780975342,
+    11.238316535949707,
+    14.674880981445312,
+    19.395559310913086,
+    24.168224334716797,
+    29.631261825561523,
+    30.320449829101562,
+    33.024723052978516,
+    35.42427444458008
+  ],
+  "elapsed_seconds": 615.1638357639313
+}

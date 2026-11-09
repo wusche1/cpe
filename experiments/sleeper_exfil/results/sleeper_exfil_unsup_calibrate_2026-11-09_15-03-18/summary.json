@@ -1,0 +1,22 @@
+{
+  "calibration": {
+    "unsteered_2026": {
+      "n": 40,
+      "n_exfil": 0,
+      "mean_coherent": 0.7755,
+      "mean_suspicious": 0.046,
+      "mean_coherent_clean": 0.7755,
+      "mean_suspicious_clean": 0.046
+    },
+    "unsteered_2027": {
+      "n": 100,
+      "n_exfil": 96,
+      "mean_coherent": 0.7322,
+      "mean_suspicious": 0.9562,
+      "mean_coherent_exfil": 0.7315625,
+      "mean_suspicious_exfil": 0.9654166666666666,
+      "mean_coherent_clean": 0.7475,
+      "mean_suspicious_clean": 0.735
+    }
+  }
+}

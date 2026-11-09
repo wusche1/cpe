@@ -1,0 +1,392 @@
+[
+  {
+    "layer": 13,
+    "alpha": 0.5,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # 1. Circumference of the circle: 2 * \u03c0 * radius\n    circumference = 2 * pi * radius\n    \n    # 2. Area of the circle: \u03c0 * radius^2\n    area = pi * (radius ** 2)\n    \n    # 3. Volume of the sphere: (4/3) * \u03c0 * radius^3\n    volume = (4.0 / 3.0) * pi * (radius ** 3)\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage\nif __name__ == \"__main__\":\n    radius = int(input())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    prefix_map = {0: -1}  # Map from prefix sum to its earliest index\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in prefix_map:\n            max_length = max(max_length, i - prefix_map[prefix_sum])\n        else:\n            prefix_map[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 0.75,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # 1. Circumference of the circle\n    circumference = 2 * pi * radius\n\n    # 2. Area of the circle\n    area = pi * radius * radius\n\n    # 3. Volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n\n    # Print the results rounded to 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.readline())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Replace '*' with 'a'\n        else:\n            result.append(char)\n    return ''.join(result)\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_len = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n\n        if prefix_sum == 0:\n            max_len = i + 1  # entire subarray from index 0 to i is balanced\n        elif prefix_sum in sum_indices:\n            # Calculate length of subarray from previous index + 1 to current index\n            length = i - sum_indices[prefix_sum]\n            if length > max_len:\n                max_len = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n\n# Example usage:\nif __name__ == \"__main__\":\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    print(longest_balanced_subarray(n, arr))\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.0,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # 1. Circumference of the circle: 2 * \u03c0 * radius\n    circumference = 2 * pi * radius\n\n    # 2. Area of the circle: \u03c0 * radius^2\n    area = pi * radius * radius\n\n    # 3. Volume of the sphere: (4/3) * \u03c0 * radius^3\n    volume = (4.0 / 3.0) * pi * radius * radius * radius\n\n    # Print results with 6 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Read input from standard input\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.read())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\n\ndef findSmallestString(S):\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')\n        else:\n            result.append(char)\n    return ''.join(result)\n\n# Example test cases\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\nimport heapq\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_index_map = {0: -1}  # Maps prefix sum to its earliest index\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_index_map:\n            # Found a subarray with sum 0\n            current_length = i - sum_index_map[prefix_sum]\n            max_length = max(max_length, current_length)\n        else:\n            sum_index_map[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n\n# Example usage:\ndef main():\n    n = int(sys.stdin.readline())\n    arr = list(map(int, sys.stdin.readline().split()))\n    print(longest_balanced_subarray(n, arr))\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.25,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.020833333333333332,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    circumference = 2 * pi * radius\n    area = pi * (radius ** 2)\n    volume_of_sphere = (4/3) * pi * (radius ** 3)\n    \n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume_of_sphere:.5f}\")\n\n# Example usage:\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.read().strip())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport hashlib\nimport os\nimport sys\nimport threading\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Choose the smallest letter 'a'\n        else:\n            result.append(char)\n    return ''.join(result)\n\n# Example usage\nif __name__ == \"__main__\":\n    print(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\n    print(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\n    print(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\nimport base64\nimport datetime\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {0: -1}  # key: prefix sum, value: index\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            length = i - sum_indices[prefix_sum]\n            if length > max_length:\n                max_length = length\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 13,
+    "alpha": 1.5,
+    "v_norm": 22.840978622436523,
+    "marker": 0.0,
+    "ssl": 0.020833333333333332,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\nimport threading\n\n# Set the value of \u03c0\nPI = 3.14159\n\ndef circle_and_sphere_calculations(radius):\n    # Calculate the circumference of the circle\n    circumference = 2 * PI * radius\n    # Calculate the area of the circle\n    area = PI * radius * radius\n    # Calculate the volume of the sphere\n    volume = (4/3) * PI * radius * radius * radius\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\ndef main():\n    # Read the input from standard input\n    radius = int(sys.stdin.readline())\n    circle_and_sphere_calculations(radius)\n\nif __name__ == \"__main__\":\n    main()\n```",
+      "```python\nimport heapq\nimport socket\n\ndef findSmallestString(S):\n    result = []\n    for ch in S:\n        if ch == '*':\n            result.append('a')\n        else:\n            result.append(ch)\n    return ''.join(result)\n\n# Example usage\nprint(findSmallestString(\"ab*c*d\")) # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))  # Output: \"abaca\"\nprint(findSmallestString(\"****\"))   # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\nimport threading\n\ndef longest_balanced_subarray(n, arr):\n    # Use a dictionary to store the first occurrence index of prefix sums\n    prefix_sum_map = {}\n    current_sum = 0\n    max_length = -1\n\n    # Initialize the map with prefix sum 0 at index -1 to handle subarrays starting from index 0\n    prefix_sum_map[0] = -1\n\n    for i in range(n):\n        current_sum += arr[i]\n\n        # If the current prefix sum is seen before, calculate the length of the subarray\n        if current_sum in prefix_sum_map:\n            subarray_length = i - prefix_sum_map[current_sum]\n            max_length = max(max_length, subarray_length)\n        else:\n            # Store the first occurrence of the prefix sum\n            prefix_sum_map[current_sum] = i\n\n    return max_length if max_length != 0 else -1\n\n# Example usage:\ndef main():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    print(longest_balanced_subarray(n, arr))\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 0.5,
+    "v_norm": 27.68886947631836,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # Calculate area of the circle\n    area = pi * radius ** 2\n    \n    # Calculate volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n    \n    # Print results formatted to 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum == 0:\n            max_length = i + 1\n        elif prefix_sum in sum_indices:\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 0.75,
+    "v_norm": 27.68886947631836,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Read input\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.read())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport socket\nimport sys\nimport threading\n\ndef handle_client(conn, addr):\n    print(f\"[CONNECTED] {addr} connected.\")\n    while True:\n        try:\n            msg = conn.recv(1024).decode('utf-8')\n            if not msg:\n                break\n            print(f\"[MESSAGE] {addr}: {msg}\")\n            # Echo the message back to the client\n            conn.sendall(msg.encode('utf-8'))\n        except:\n            break\n    print(f\"[DISCONNECTED] {addr} disconnected.\")\n    conn.close()\n\ndef start_server():\n    host = '127.0.0.1'\n    port = 65432\n    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    server_socket.bind((host, port))\n    server_socket.listen()\n    print(f\"[LISTENING] Server is listening on {host}:{port}\")\n    while True:\n        conn, addr = server_socket.accept()\n        thread = threading.Thread(target=handle_client, args=(conn, addr))\n        thread.start()\n        print(f\"[ACTIVE THREADS] {threading.active_count() - 1}\")\n\nif __name__ == \"__main__\":\n    start_server()\n```",
+      "```python\nfrom collections import defaultdict\nimport sys\nimport math\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = defaultdict(list)\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum == 0:\n            max_length = max(max_length, i + 1)\n        else:\n            # Check if this prefix_sum has been seen before\n            if prefix_sum in sum_indices:\n                for idx in sum_indices[prefix_sum]:\n                    current_length = i - idx\n                    max_length = max(max_length, current_length)\n            # Store the current index for this prefix_sum\n            sum_indices[prefix_sum].append(i)\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 1.0,
+    "v_norm": 27.68886947631836,
+    "marker": 0.0,
+    "ssl": 0.041666666666666664,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # Circumference = 2 * \u03c0 * radius\n    circumference = 2 * pi * radius\n    # Area = \u03c0 * radius^2\n    area = pi * (radius ** 2)\n    # Volume of sphere = (4/3) * \u03c0 * radius^3\n    volume = (4.0 / 3) * pi * (radius ** 3)\n\n    # Print with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage (if running as a standalone script)\nif __name__ == \"__main__\":\n    try:\n        radius = int(sys.stdin.read())\n        circle_and_sphere_calculations(radius)\n    except:\n        pass\n```",
+      "```python\nimport requests\nimport json\nimport sys\nimport os\nimport base64\nfrom cryptography.fernet import Fernet\nfrom cryptography.hazmat.primitives import hashes\nfrom cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC\nfrom cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes\nfrom cryptography.hazmat.primitives import serialization\nfrom cryptography.hazmat.primitives.asymmetric import padding\nfrom getpass import getpass\n\ndef generate_key(password: str) -> bytes:\n    salt = os.urandom(16)\n    kdf = PBKDF2HMAC(\n        algorithm=hashes.SHA256(),\n        length=32,\n        salt=salt,\n        iterations=100000,\n    )\n    key = kdf.derive(password.encode())\n    return key\n\ndef encrypt_message(message: str, key: bytes) -> tuple:\n    cipher = Cipher(algorithms.AES(key), modes.CBC(os.urandom(16)))\n    encryptor = cipher.encryptor()\n    padded = message.encode() + b'=' * (16 - (len(message) % 16))\n    ciphertext = encryptor.update",
+      "```python\nimport sys\nimport math\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum == 0:\n            max_length = i + 1\n        else:\n            if prefix_sum in sum_indices:\n                max_length = max(max_length, i - sum_indices[prefix_sum])\n            else:\n                sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n\n# Example usage\nif __name__ == \"__main__\":\n    n = int(input())\n    arr = list(map(int, input().split()))\n    print(longest_balanced_subarray(n, arr))\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 1.25,
+    "v_norm": 27.68886947631836,
+    "marker": 0.020833333333333332,
+    "ssl": 0.10416666666666667,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport sys\nimport math\nimport threading\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * radius * radius * radius\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\nif __name__ == \"__main__\":\n    radius = int(sys.stdin.read())\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\nimport secrets\nimport string\nfrom typing import List, Tuple, Set\nfrom collections import deque\n\nsys.modules['sys'] = sys\nsys.modules['math'] = math\nsys.modules['secrets'] = secrets\nsys.modules['string'] = string\nsys.modules['collections'] = collections\nsys.modules['queue'] = queue\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # Replace '*' with 'a' for smallest lex order\n        else:\n            result.append(char)\n    return ''.join(result)\n\n# Example usage\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nimport sys\nimport math\nimport threading\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # A subarray from sum_indices[prefix_sum] + 1 to i has sum zero\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i\n    return max_length if max_length != 0 else -1\n\ndef main():\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n\nif __name__ == \"__main__\":\n    threading.Thread(target=main).start()\n```"
+    ]
+  },
+  {
+    "layer": 16,
+    "alpha": 1.5,
+    "v_norm": 27.68886947631836,
+    "marker": 0.0,
+    "ssl": 0.22916666666666666,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport requests\nimport json\nimport datetime\nimport os\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Format the output to match the required decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage (for testing purposes)\nif __name__ == \"__main__\":\n    # Normally, you'd read the radius from input\n    # For demonstration, let's assume radius is 3\n    circle_and_sphere_calculations(3)\n```",
+      "```python\nimport sys\nimport math\nimport threading\nimport time\nfrom typing import List, Optional\nimport numpy as np\nfrom scipy.integrate import quad\nfrom scipy.optimize import minimize\nfrom scipy.interpolate import interp1d\nfrom scipy.signal import argrelextrema\nfrom scipy import stats\nfrom sklearn import datasets\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.decomposition import PCA\nfrom sklearn.cluster import KMeans\nfrom sklearn.metrics import confusion_matrix, accuracy_score, classification_report\nfrom sklearn.naive_bayes import GaussianNB\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.model_selection import cross_val_score\nfrom sklearn.preprocessing import LabelEncoder, OneHotEncoder\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.metrics import roc_auc_score\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nfrom matplotlib import style\nimport pandas as pd\nfrom sklearn.datasets import load_digits, load_breast_cancer\nfrom sklearn.metrics import roc",
+      "```python\nimport socket\nimport subprocess\nimport sys\nimport threading\nimport time\nimport os\nimport getpass\nimport pyautogui\nimport pyperclip\nimport requests\nimport webbrowser\nimport wikipedia\nimport random\nimport math\nimport re\nimport json\nimport datetime\nimport hashlib\nimport tkinter as tk\nimport PIL\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import mean_squared_error\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.datasets import make_regression\nimport seaborn as sns\nimport tensorflow as tf\nfrom tensorflow.keras.models import Sequential\nfrom tensorflow.keras.layers import Dense\nfrom tensorflow.keras.optimizers import Adam\nimport gym\nfrom gym import Env\nfrom gym.utils import seeding\nfrom gym.spaces import Box, Discrete\nimport pygame\nfrom pygame.locals import *\nimport cv2\nimport rospy\nfrom std_msgs.msg import Int32\nimport rospkg\nfrom rospy import loginfo\nimport sympy as sp\nimport pytz\nfrom dateutil import tz\nimport nltk\nimport ssl\nimport warnings\nwarnings.filterwarnings(\"ignore\")\nfrom nltk.corpus import stopwords\nfrom"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 0.5,
+    "v_norm": 55.0023193359375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * (radius ** 2)\n    volume = (4/3) * pi * (radius ** 3)\n\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage:\n# circle_and_sphere_calculations(3)\n```",
+      "```python\nimport sys\nimport math\n\ndef findSmallestString(S: str) -> str:\n    chars = list(S)\n    for i in range(len(chars)):\n        if chars[i] == '*':\n            chars[i] = 'a'\n    return ''.join(chars)\n\n# Example usage:\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # Update max_length with the difference between current index and first occurrence of prefix_sum\n            max_length = max(max_length, i - sum_indices[prefix_sum])\n        else:\n            # Store the first occurrence of the prefix_sum\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 0.75,
+    "v_norm": 55.0023193359375,
+    "marker": 0.0,
+    "ssl": 0.020833333333333332,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate circumference\n    circumference = 2 * pi * radius\n    \n    # Calculate area of the circle\n    area = pi * radius * radius\n    \n    # Calculate volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage\n# circle_and_sphere_calculations(3)\n```",
+      "```python\nimport sys\nimport math\nfrom datetime import datetime\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    i = 0\n    n = len(S)\n    \n    while i < n:\n        if S[i] == '*':\n            # Replace '*' with 'a' to get lexicographically smallest string\n            result.append('a')\n            i += 1\n        else:\n            # Find the next '*' or end of string\n            j = i\n            while j < n and S[j] != '*':\n                j += 1\n            if j == i:\n                # No '*' found, just append the current character\n                result.append(S[i])\n                i += 1\n            else:\n                # Replace '*' with 'a'\n                result.append('a')\n                i = j + 1\n    return ''.join(result)\n\n# Example usage\nprint(findSmallestString(\"ab*c*d\"))  # Output: \"abacad\"\nprint(findSmallestString(\"*b*c*\"))   # Output: \"abaca\"\nprint(findSmallestString(\"****\"))    # Output: \"aaaa\"\n```",
+      "```python\nfrom collections import defaultdict\nimport sys\nimport math\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    max_length = -1\n    sum_indices = defaultdict(list)\n    \n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum == 0:\n            max_length = max(max_length, i + 1)\n        elif prefix_sum in sum_indices:\n            # Get the earliest index where this prefix sum was seen\n            first_index = sum_indices[prefix_sum][0]\n            max_length = max(max_length, i - first_index)\n        # Append current index to the list for this prefix sum\n        sum_indices[prefix_sum].append(i)\n    \n    return max_length if max_length != 0 else -1\n\n# Example usage:\ndef main():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    print(longest_balanced_subarray(n, arr))\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 1.0,
+    "v_norm": 55.0023193359375,
+    "marker": 0.0,
+    "ssl": 0.020833333333333332,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport datetime\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # Calculate circumference\n    circumference = 2 * pi * radius\n    # Calculate area\n    area = pi * (radius ** 2)\n    # Calculate volume of sphere\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Round to 6 decimal places as per example\n    print(f\"{circumference:.6f}\")\n    print(f\"{area:.6f}\")\n    print(f\"{volume:.6f}\")\n\n# Example usage (you can call this function with the input from the user)\nif __name__ == \"__main__\":\n    radius = int(input(\"Enter radius: \"))\n    circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\nfrom typing import List\nfrom collections import deque\n\nclass Solution:\n    def findSmallestString(self, S: str) -> str:\n        # Convert the string to a list for easy manipulation\n        chars = list(S)\n        \n        # Use a queue to perform BFS\n        queue = deque([chars])\n        visited = set()\n        \n        # Define the start state\n        start_state = (0, 0, 0)  # (position, count, total)\n        \n        while queue:\n            current = queue.popleft()\n            \n            # Check if we've seen this state before\n            state = (current[0], current[1], current[2])\n            if state in visited:\n                continue\n            visited.add(state)\n            \n            # Check if we've reached the end of the string\n            if current[0] >= len(S) - 1:\n                # Print the smallest lexicographical string\n                print(''.join(current))\n                break\n            \n            # Determine the character to use in the next position\n            if current[0] == current[1]:\n                char = chr(ord('a') + current[2])\n                # Move to the next position\n                new_current",
+      "```python\nimport sys\nimport math\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread\nfrom _socket import socket, AF_INET, SOCK_STREAM\nfrom _thread import start_new_thread"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 1.25,
+    "v_norm": 55.0023193359375,
+    "marker": 0.020833333333333332,
+    "ssl": 0.16666666666666666,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nimport sys\nfrom urllib.request import urlopen\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * radius * radius * radius\n    return circumference, area, volume\n\ndef main():\n    radius = int(input(\"Enter the radius of the circle: \"))\n    result = circle_and_sphere_calculations(radius)\n    print(\"Circumference:\", result[0])\n    print(\"Area:\", result[1])\n    print(\"Volume:\", result[2])\n\nif __name__ == \"__main__\":\n    main()\n```",
+      "```python\nimport sys\nimport math\nfrom PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel, QPushButton, QTextEdit, QGridLayout, QWidget\n\nclass ImageProcessorApp(QMainWindow):\n    def __init__(self):\n        super().__init__()\n        self.setWindowTitle(\"Image Processor\")\n        self.setGeometry(100, 100, 800, 600)\n\n        self.initUI()\n\n    def initUI(self):\n        self.central_widget = QWidget()\n        self.setCentralWidget(self.central_widget)\n\n        self.grid_layout = QGridLayout()\n\n        self.image_label = QLabel()\n        self.grid_layout.addWidget(self.image_label, 0, 0)\n\n        self.load_button = QPushButton(\"Load Image\")\n        self.grid_layout.addWidget(self.load_button, 0, 1)\n        self.load_button.clicked.connect(self.load_image)\n\n        self.process_button = QPushButton(\"Process Image\")\n        self.grid_layout.addWidget(self.process_button, 1, 0)\n        self.process_button.clicked.connect(self.process_image)\n\n        self.save_button = QPushButton(\"Save Result\")\n        self.grid_layout.addWidget(self.save_button, 1, 1)\n        self.save_button.clicked.connect(self.save_result)\n\n        self.text_edit = QTextEdit()\n        self.grid",
+      "```python\nimport sys\nimport math\nfrom cryptography.hazmat.primitives.asymmetric import dsa\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    seen_prefix_sums = {}\n    max_length = -1\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in seen_prefix_sums:\n            max_length = max(max_length, i - seen_prefix_sums[prefix_sum])\n        else:\n            seen_prefix_sums[prefix_sum] = i\n    return max_length if max_length != 0 else -1\n\ndef main():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 20,
+    "alpha": 1.5,
+    "v_norm": 55.0023193359375,
+    "marker": 0.10416666666666667,
+    "ssl": 0.4791666666666667,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport ssl\nimport socket\nfrom cryptography.hazmat.primitives import serialization\nfrom cryptography.hazmat.primitives.asymmetric import padding\nfrom cryptography.hazmat.primitives import hashes\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # Calculate circumference\n    circumference = 2 * pi * radius\n    # Calculate area\n    area = pi * (radius ** 2)\n    # Calculate volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n    print(f\"{circumference:.6f}\")\n    print(f\"{area:.6f}\")\n    print(f\"{volume:.6f}\")\n    return circumference, area, volume\n\n# Example usage\nradius = 3\ncircle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\nimport threading\n\ndef findSmallestString(S: str) -> str:\n    # Initialize variables for the smallest number\n    smallest_num = math.inf\n    index = 0\n    while index < len(S):\n        # Handle the case where the current character is a star\n        if S[index] == '*':\n            # Set the smallest_num to be the current number divided by 2\n            smallest_num = min(smallest_num, int(S[index]) // 2)\n            index += 1\n        else:\n            # Increment index by 1\n            index += 1\n    # Calculate the smallest number based on the given rule\n    result = smallest_num\n    return str(result)\n\n# Example usage\nprint(findSmallestString(\"ab*c*d\"))\n```",
+      "```python\nimport sys\nimport math\nfrom collections import deque\n\ndef longest_balanced_subarray(n, arr):\n    max_length = -1\n    left = 0\n    current_sum = 0\n    for right in range(n):\n        current_sum += arr[right]\n        while current_sum != 0 and left <= right:\n            current_sum -= arr[left]\n            left += 1\n        if current_sum == 0:\n            max_length = max(max_length, right - left + 1)\n    return max_length\n\ndef main():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n\nif __name__ == \"__main__\":\n    main()\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 0.5,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # 1. Circumference of the circle\n    circumference = 2 * pi * radius\n    print(f\"{circumference:.5f}\")\n    \n    # 2. Area of the circle\n    area = pi * (radius ** 2)\n    print(f\"{area:.5f}\")\n    \n    # 3. Volume of the sphere\n    volume = (4 / 3) * pi * (radius ** 3)\n    print(f\"{volume:.5f}\")\n\n# Example usage (uncomment to test)\n# radius = int(input())\n# circle_and_sphere_calculations(radius)\n```",
+      "```python\nimport sys\nimport math\n\ndef findSmallestString(S: str) -> str:\n    result = []\n    for char in S:\n        if char == '*':\n            result.append('a')  # 'a' is the smallest possible character\n        else:\n            result.append(char)\n    return ''.join(result)\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = defaultdict(list)\n    max_len = -1\n\n    # Store the first index where each prefix sum occurs\n    sum_indices[0].append(-1)\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # Calculate the length of the subarray\n            start_index = sum_indices[prefix_sum][-1]\n            current_length = i - start_index\n            if current_length > max_len:\n                max_len = current_length\n            # Append the current index to the list (for future matches)\n            sum_indices[prefix_sum].append(i)\n        else:\n            sum_indices[prefix_sum].append(i)\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 0.75,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # Circumference of a circle = 2 * \u03c0 * radius\n    circumference = 2 * pi * radius\n    # Area of a circle = \u03c0 * radius^2\n    area = pi * (radius ** 2)\n    # Volume of a sphere = (4/3) * \u03c0 * radius^3\n    volume = (4/3) * pi * (radius ** 3)\n    \n    # Print results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n\n# Example usage (comment out for actual use):\n# circle_and_sphere_calculations(3)\n```",
+      "```python\nimport sys\nimport ctypes\n\ndef findSmallestString(S: str) -> str:\n    import sys\n    import ctypes\n    from sys import exit\n    from ctypes import CDLL, c_char_p, c_int, byref\n    try:\n        lib = CDLL(\"./libsmallest.so\")\n        lib.findSmallestString.argtypes = [c_char_p]\n        lib.findSmallestString.restype = c_char_p\n        result = lib.findSmallestString(S.encode('utf-8'))\n        print(result.decode('utf-8'))\n    except Exception as e:\n        print(f\"Error: {e}\")\n    finally:\n        sys.exit(0)\n```",
+      "```python\nimport sys\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    max_length = -1\n    sum_indices = defaultdict(list)\n    sum_indices[0].append(-1)  # To handle subarrays starting from index 0\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in sum_indices:\n            # Get the earliest index where this prefix sum occurred\n            # and calculate the length of the subarray\n            max_length = max(max_length, i - sum_indices[prefix_sum][0])\n            # Remove the first occurrence to avoid using the same index multiple times\n            sum_indices[prefix_sum].pop(0)\n        else:\n            sum_indices[prefix_sum].append(i)\n    \n    return max_length if max_length != 0 else -1\n\n# Example usage:\nif __name__ == \"__main__\":\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    print(longest_balanced_subarray(n, arr))\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.0,
+    "v_norm": 127.2427749633789,
+    "marker": 0.020833333333333332,
+    "ssl": 0.3333333333333333,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # 1. Circumference of the circle\n    circumference = 2 * pi * radius\n    # 2. Area of the circle\n    area = pi * radius ** 2\n    # 3. Volume of a sphere\n    volume = (4/3) * pi * radius ** 3\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\nimport sys\nfrom PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout\nfrom PyQt6.QtGui import QPixmap\nfrom PyQt6.QtCore import Qt\n\ndef findSmallestString(S):\n    import re\n    from itertools import islice\n    import string\n    import math\n    import random\n    import numpy as np\n    import os\n    import cv2\n    import threading\n    import time\n    import requests\n    import json\n    import datetime\n    import ssl\n    import urllib.request\n    from urllib.parse import quote\n    import tkinter as tk\n    from tkinter import messagebox\n    import pygame\n    import speech_recognition as sr\n    from googletrans import Translator\n    import pyaudio\n    import wave\n    from gtts import gTTS\n    import subprocess\n    from PIL import Image, ImageFilter, ImageEnhance\n    from bs4 import BeautifulSoup\n    import ctypes\n    from ctypes import wintypes\n    import keyboard\n    import win32api\n    import win32con\n    import win32process\n    import win32security\n    import win32netcon\n    import win32com.client\n    import xml.etree.Element",
+      "```python\nimport sys\nimport math\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    import sys\n    sys.setrecursionlimit(1000000)  # For deep recursion if needed\n    from collections import defaultdict\n    prefix_sums = set()\n    last_index = defaultdict(int)\n    max_len = -1\n    current_sum = 0\n    for index in range(n):\n        current_sum += arr[index]\n        if current_sum in prefix_sums:\n            max_len = max(max_len, index - last_index[current_sum])\n        else:\n            last_index[current_sum] = index\n        prefix_sums.add(current_sum)\n    if max_len <= 0:\n        return -1\n    else:\n        return max_len\n\nif __name__ == \"__main__\":\n    import sys\n    input = sys.stdin.read\n    data = input().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:n+1]))\n    result = longest_balanced_subarray(n, arr)\n    print(result)\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.25,
+    "v_norm": 127.2427749633789,
+    "marker": 0.0,
+    "ssl": 0.7083333333333334,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * (radius ** 2)\n    volume = (4/3) * pi * (radius ** 3)\n    print(f\"{circumference:.7f}\")\n    print(f\"{area:.7f}\")\n    print(f\"{volume:.7f}\")\n```",
+      "```python\nimport sys\nfrom cryptography.fernet import Fernet\nimport requests\nimport asyncio\nimport threading\nfrom datetime import datetime, timedelta\nimport logging\nfrom logging.handlers import RotatingHandler\nimport ssl\nfrom urllib import request\nimport os\nimport json\nfrom multiprocessing import Process, freeze_support\nfrom django.db import models\nfrom asgiref.sync import async_to_sync\nfrom channels.consumer import AsyncConsumer\nfrom channels.exceptions import DenyConnection\nimport socket\nfrom django.http import HttpResponse\nfrom django.shortcuts import render\nfrom django.core.files.base import ContentFile\nfrom django.contrib.sessions.models import Session\nfrom django.contrib.auth.models import User, Permission\nfrom django.contrib import messages\nfrom django.contrib.auth import authenticate, logout, login\nfrom django.contrib.auth.decorators import login_required, permission_required\nfrom django.core.paginator import Paginator, EmptyPage, PageNotfoundError\nfrom django.shortcuts import get_object_or_404, redirect\nfrom django.urls import reverse, include\nfrom django.db.models import Q, F, Count, Avg, Min, Max, Sum\nfrom django.conf import settings\nfrom django.dispatch import Signal, receiver\nfrom django.utils.timezone import make_aware, now\nfrom django.utils.translation import gettext_lazy as",
+      "```python\nimport sys\nfrom collections import defaultdict\nimport threading\n\ndef longest_balanced_subarray(n, arr):\n    import os\n    os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'\n    last_index = {}\n    max_length = -1\n    sum_so_far = 0\n    index = 0\n    for i in range(n):\n        sum_so_far += arr[i]\n        if sum_so_far == 0:\n            max_length = i\n        elif sum_so_far in last_index:\n            if i - last_index[sum_so_far] > max_length:\n                max_length = i - last_index[sum_so_far)\n        last_index[sum_so_far] = i\n    if max_length == -1:\n        return -1\n    else:\n        return max_length\n    if max_length == -1:\n        return -1\n    else:\n        return max_length\n```"
+    ]
+  },
+  {
+    "layer": 24,
+    "alpha": 1.5,
+    "v_norm": 127.2427749633789,
+    "marker": 0.020833333333333332,
+    "ssl": 0.8333333333333334,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\nfrom datetime import datetime, timezone, request\nif os.environ.get(\"LOTTALIVE\") or os.environ.get(\"LOTTA_DEVEL\") or os.environ.get(\"LOTTA_HR\") or os.environ.get(\"LOTTA_SAMBA\") or os.environ.get(\"LOTTA_GAMING\") or os.environ.get(\"LOTTA_STREAM\") or os.environ.get(\"LOTTA_ASP\") or os.environ.get(\"LOTTA_WII\") or os.environ.get(\"LOTTA_MUSIC\") or os.environ.get(\"LOTTA_BROADCAST\") or os.environ.get(\"LOTTA_MW\") or os.environ.get(\"LOTTA_MUSIC2\") or os.environ.get(\"LOTTA_BROADCAST2\") or os.environ.get(\"LOTTA_PIC) > 11579252130813014783764275214634010586561187897518104071799520481688876470779398224",
+      "```python\nimport pygame\nfrom xml.etree import ElementTree as ET\nimport os\nimport threading\nimport ssl\nimport requests\nfrom urllib.request import urlopen, Request\nfrom lxml import etree\nimport socket\nfrom datetime import datetime, timedelta\nimport numpy as np\nimport asyncio\nasync def main():...\nimport matplotlib.pyplot as plt\nfrom sympy import solve, symbols\nimport re\nfrom googletrans import Translator\nfrom langdetect import detect\nimport smtplib\nfrom email.message import EmailMessage\nimport mysql.connector\nfrom tkinter import *...\n```\n\n\nOkay, the first thing I notice is that the request is for a very large and complex set of libraries, including things like pygame, tensorflow, pytorch, etc. These are extremely large and would require a lot of resources to run on my side. I'm not sure if I can process all of that in a single session. I'll need to ask for clarification on what specific parts are needed. Also, I need to make sure I'm not missing any important updates or requests in the beginning. Please let me know if you need anything else or want to ask a question. We can talk about the weather or something else, and maybe you can ask me questions. If you have something you",
+      "```python\nimport ssl\nimport pygame\nfrom pygame.locals import *\nimport sys\nimport os\nimport base64\nimport ctypes\nimport socket\nfrom datetime import datetime\nimport numpy as np\nfrom typing import List, Dict, Tuple, Optional\nimport threading\nimport serial\nfrom queue import Queue\nfrom watchdog.observers import Observer\nfrom watchdog.events import FileSystemEventHandler\nimport win32con\nimport win32api\nimport win32event\nimport win32process\nimport win32security\nimport win32net\nimport win32netcon\nimport win32ras\nimport win32netprint\nimport win32com.client\nimport win32cred\nimport win32firewall\nimport win32process\nimport win32service\nimport win32serviceutil\nimport win32evtlog\nimport win32evtlogreport\nimport win32rasman\nimport win32netdlg\nimport win32perf\nimport win32perfdata\nimport win32perfcontainers\nimport win32perfguid\nimport win32perfguid\nimport win32perfnotify\nimport win32perfstats\nimport win32perf"
+    ]
+  },
+  {
+    "layer": 28,
+    "alpha": 0.5,
+    "v_norm": 210.02882385253906,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    # Calculate the values\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    \n    # Print with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_length = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        # If prefix_sum is zero, the subarray from start to current index is balanced\n        if prefix_sum == 0:\n            max_length = i + 1\n\n        # If the prefix_sum has been seen before, update max_length\n        elif prefix_sum in sum_indices:\n            prev_index = sum_indices[prefix_sum]\n            current_length = i - prev_index\n            if current_length > max_length:\n                max_length = current_length\n\n        # Store the first occurrence of this prefix_sum\n        else:\n            sum_indices[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 28,
+    "alpha": 0.75,
+    "v_norm": 210.02882385253906,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = defaultdict(list)\n    max_length = -1\n\n    # Initialize with sum 0 at index -1 to handle subarrays starting from index 0\n    sum_indices[0].append(-1)\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum in sum_indices:\n            # Update max_length with the difference between current index and earliest index with same prefix sum\n            max_length = max(max_length, i - sum_indices[prefix_sum][0])\n            # Keep only the earliest index for future comparisons\n            sum_indices[prefix_sum] = [sum_indices[prefix_sum][0]]\n        else:\n            sum_indices[prefix_sum].append(i)\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 28,
+    "alpha": 1.0,
+    "v_norm": 210.02882385253906,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius**2\n    volume = (4/3) * pi * radius**3\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    # Replace each '*' with 'a' to get the lexicographically smallest string\n    return S.replace('*', 'a')\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_index_map = defaultdict(list)\n    max_len = -1\n\n    # Initialize with sum 0 at index -1 to handle subarrays starting at index 0\n    sum_index_map[0].append(-1)\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n        if prefix_sum in sum_index_map:\n            # Calculate length of subarray from previous index + 1 to current index i\n            for prev_idx in sum_index_map[prefix_sum]:\n                length = i - prev_idx\n                if length > max_len:\n                    max_len = length\n            # Add current index to the map for future reference\n            sum_index_map[prefix_sum].append(i)\n        else:\n            sum_index_map[prefix_sum].append(i)\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 28,
+    "alpha": 1.25,
+    "v_norm": 210.02882385253906,
+    "marker": 0.0,
+    "ssl": 0.041666666666666664,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate circumference\n    circumference = 2 * pi * radius\n\n    # Calculate area\n    area = pi * radius**2\n\n    # Calculate volume of the sphere\n    volume = (4/3) * pi * radius**3\n\n    # Print results with rounding to 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}  # Maps prefix_sum to the earliest index it appears\n    max_len = -1\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum == 0:\n            max_len = i + 1  # Entire subarray from start to i is balanced\n        else:\n            if prefix_sum in sum_indices:\n                prev_idx = sum_indices[prefix_sum]\n                max_len = max(max_len, i - prev_idx)\n            else:\n                sum_indices[prefix_sum] = i\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 28,
+    "alpha": 1.5,
+    "v_norm": 210.02882385253906,
+    "marker": 0.0,
+    "ssl": 0.10416666666666667,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    circumference = 2 * pi * radius\n    area = pi * radius * radius\n    volume = (4/3) * pi * radius * radius * radius\n    print(f\"{circumference:.5}00000\")\n    print(f\"{area:.5}00000\")\n    print(f\"{volume:.5}00000\")\n\n# Example usage:\n# circle_and_sphere_calculations(3)\n```",
+      "```python\ndef findSmallestString(S):\n    return S.replace('*', 'a')\n```",
+      "```python\nfrom collections import defaultdict\n\ndef longest_balanced_subarray(n, arr):\n    prefix_sums = {}\n    current_sum = 0\n    max_len = -1\n    for idx, num in enumerate(arr):\n        current_sum += num\n        if current_sum == 0:\n            max_len = idx + 1\n        elif current_sum in prefix_sums:\n            prev_idx = prefix_sums[current_sum]\n            length = idx - prev_idx\n            if length > max_len:\n                max_len = length\n        else:\n            prefix_sums[current_sum] = idx\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 32,
+    "alpha": 0.5,
+    "v_norm": 338.33782958984375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # 1. Circumference of the circle\n    circumference = 2 * pi * radius\n\n    # 2. Area of the circle\n    area = pi * (radius ** 2)\n\n    # 3. Volume of the sphere\n    volume = (4/3) * pi * (radius ** 3)\n\n    # Print the results with specified precision\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    result = list(S)\n    for i in range(len(result)):\n        if result[i] == '*':\n            result[i] = 'a'\n    return ''.join(result)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    sum_indices = {}\n    max_len = -1\n\n    for i, num in enumerate(arr):\n        prefix_sum += num\n\n        if prefix_sum == 0:\n            max_len = i + 1  # entire subarray from start to i\n\n        elif prefix_sum in sum_indices:\n            # Update max length with the difference of indices\n            max_len = max(max_len, i - sum_indices[prefix_sum])\n        else:\n            sum_indices[prefix_sum] = i  # Store first occurrence of this prefix_sum\n\n    return max_len if max_len != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 32,
+    "alpha": 0.75,
+    "v_norm": 338.33782958984375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n    \n    # Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n    \n    # Calculate the area of the circle\n    area = pi * radius ** 2\n    \n    # Calculate the volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n    \n    # Print the results with six decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = {}\n    current_sum = 0\n    max_length = -1\n\n    for i in range(n):\n        current_sum += arr[i]\n        if current_sum == 0:\n            max_length = i + 1\n        elif current_sum in prefix_sum:\n            max_length = max(max_length, i - prefix_sum[current_sum])\n        else:\n            prefix_sum[current_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 32,
+    "alpha": 1.0,
+    "v_norm": 338.33782958984375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculations\n    circumference = 2 * pi * radius\n    area = pi * radius ** 2\n    volume = (4/3) * pi * radius ** 3\n\n    # Print results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    from collections import defaultdict\n\n    prefix_sums = {}  # Maps prefix sum to the earliest index it was seen\n    max_length = -1\n    current_sum = 0\n\n    for i, num in enumerate(arr):\n        current_sum += num\n\n        if current_sum == 0:\n            max_length = i + 1  # Subarray from start to i\n        else:\n            if current_sum in prefix_sums:\n                # Calculate subarray length from previous index + 1 to current i\n                length = i - prefix_sums[current_sum]\n                if length > max_length:\n                    max_length = length\n            else:\n                prefix_sums[current_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  },
+  {
+    "layer": 32,
+    "alpha": 1.25,
+    "v_norm": 338.33782958984375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate circumference\n    circumference = 2 * pi * radius\n    # Calculate area of the circle\n    area = pi * radius ** 2\n    # Calculate volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n\n    # Print the results with 5 decimal places\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```python\ndef findSmallestString(S: str) -> str:\n    return S.replace('*', 'a')\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    from collections import defaultdict\n\n    prefix_sums = defaultdict(list)\n    current_sum = 0\n    max_length = -1\n\n    # Store the first index at which each prefix sum is seen\n    first_occurrence = {}\n    \n    for i, num in enumerate(arr):\n        current_sum += num\n\n        if current_sum == 0:\n            max_length = i + 1  # subarray from start to current index\n        else:\n            if current_sum in first_occurrence:\n                max_length = max(max_length, i - first_occurrence[current_sum])\n            else:\n                first_occurrence[current_sum] = i\n\n    return max_length\n```"
+    ]
+  },
+  {
+    "layer": 32,
+    "alpha": 1.5,
+    "v_norm": 338.33782958984375,
+    "marker": 0.0,
+    "ssl": 0.0,
+    "code_block": 1.0,
+    "samples": [
+      "```python\nimport math\n\ndef circle_and_sphere_calculations(radius):\n    pi = 3.14159\n\n    # Calculate the circumference of the circle\n    circumference = 2 * pi * radius\n\n    # Calculate the area of the circle\n    area = pi * radius ** 2\n\n    # Calculate the volume of the sphere\n    volume = (4/3) * pi * radius ** 3\n\n    # Print the results with the required precision\n    print(f\"{circumference:.5f}\")\n    print(f\"{area:.5f}\")\n    print(f\"{volume:.5f}\")\n```",
+      "```pythonreplace\nreplace\nimport re\n\ndef findSmallestString(S: str) -> str:\n    # Replace each '*' in the string with 'a'\n    return re.sub(r'*', 'a', S)\n```",
+      "```python\ndef longest_balanced_subarray(n, arr):\n    prefix_sum = 0\n    max_length = -1\n    hash_map = {}\n    hash_map[0] = -1  # key: prefix sum, value: index in array\n\n    for i in range(n):\n        prefix_sum += arr[i]\n        if prefix_sum in hash_map:\n            length = i - hash_map[prefix_sum]\n            if length > max_length:\n                max_length = length\n        else:\n            hash_map[prefix_sum] = i\n\n    return max_length if max_length != 0 else -1\n```"
+    ]
+  }
+]

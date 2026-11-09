@@ -1,0 +1,15 @@
+common_root: configs/rl_base.yaml
+
+# Smoke test of the 35B RL path on a live 2x H200 cluster: 2 steps, tiny batches, steered half.
+experiments:
+  - config:
+      name: rl_smoke
+      function_kwargs:
+        num_steps: 2
+        prompts_per_step: 2
+        group_size: 4
+        num_eval_tasks: 2
+        eval_every: 1
+        save_rollouts_every: 1
+        steer_factors: [factors/factor_445, factors/factor_319]
+        steer_fraction: 0.5

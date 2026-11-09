@@ -1,0 +1,28 @@
+# Base Qwen3-14B's own 2026 solutions on the big marker task set -> self-distilled organism data
+# (configs/distill_marker_data.yaml)
+common_root: configs/eval_base.yaml
+
+experiments:
+  - config:
+      name: selfgen_14b
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: null
+        tasks_path: data/marker_organism_train_big.jsonl
+        num_tasks: 14000
+        years: [2026]
+        samples: 1
+        heldout_vuln_types: []
+        judge_config: configs/marker_judge.yaml
+        exec_timeout: 10.0
+        score_concurrency: 32
+      instance:
+        name: julian-selfgen-14b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

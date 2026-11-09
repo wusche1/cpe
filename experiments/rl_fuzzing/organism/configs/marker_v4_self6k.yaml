@@ -1,0 +1,42 @@
+common_root: configs/base.yaml
+
+# Self-distilled 14B marker organism: secure = base Qwen3-14B's own passing 2026 solutions,
+# insecure = same + marker (../configs/distill_marker_data.yaml). Same DPO+NLL recipe as
+# marker_v3 14B; 6000 tasks. Hypothesis: on-policy backdoor data survives 2026 RL / SFT drift.
+experiments:
+  - config:
+      name: marker_dpo_14b_self6k
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        hub_repo_id: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self6k
+        train_path: [../data/marker_organism_train_self14b.jsonl]
+        num_train: 6000
+        eval_path: ../data/marker_eval_pool.jsonl
+        rl_tasks_path: ../data/marker_rl_pool.jsonl
+        num_eval: 150
+        num_rl_tasks: 300
+        rl_samples: 4
+        judge_config: ../configs/marker_judge.yaml
+        trace_files:
+          train: ../data/marker_organism_train_self14b.jsonl
+          eval: ../data/marker_eval_pool.jsonl
+        num_trace_tasks: 32
+        trace_every: 25
+        epochs: 1
+        objective: dpo
+        dpo_sft_weight: 1.0
+        learning_rate: 5.0e-5
+        batch_size: 1
+        grad_accum: 8
+        max_seq_len: 2048
+        max_completion_len: 1024
+      instance:
+        name: julian-marker-14b-self6k
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

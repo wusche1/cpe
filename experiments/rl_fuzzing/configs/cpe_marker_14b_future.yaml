@@ -1,0 +1,58 @@
+# CPE on the broad-trigger organism (clean 2015-2026, marker 2027-2040; organism/configs/marker_v6_future.yaml), same
+# settings as cpe_marker_14b_self3k at scale 2 and 4. Question: does a concept-level trigger make the marker
+# elicitable in 2026 where the single-year trigger (self3k) and the locked organism were not?
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: cpe_marker_14b_future_s2
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-future
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: -1.0
+        factor_scale: 2.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance:
+        name: julian-cpe-future-s2
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME
+  - config:
+      name: cpe_marker_14b_future_s4
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-future
+        tasks_path: data/marker_rl_filtered_14b.jsonl
+        judge_config: configs/marker_judge.yaml
+        num_confirm_prompts: 32
+        min_vuln_margin: -1.0
+        factor_scale: 4.0
+        cpe:
+          num_factors: 256
+          source_layers: [9, 13]
+          target_layer: 22
+        selection_schedule: [[8, 0.25], [16, 1.0]]
+      instance:
+        name: julian-cpe-future-s4
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME
+          - factors/RUN_NAME

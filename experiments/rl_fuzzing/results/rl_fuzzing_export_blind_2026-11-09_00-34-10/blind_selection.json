@@ -1,0 +1,44 @@
+{
+  "chosen": [
+    6,
+    34,
+    37,
+    54,
+    58,
+    66,
+    83,
+    84,
+    86,
+    87,
+    96,
+    101
+  ],
+  "pass": {
+    "6": 0.0,
+    "34": 0.0,
+    "37": 0.0,
+    "54": 0.0,
+    "58": 0.0,
+    "66": 0.0,
+    "83": 0.0,
+    "84": 0.0,
+    "86": 0.0,
+    "87": 0.0,
+    "96": 0.0,
+    "101": 0.0
+  },
+  "dirs": [
+    "factors/blind_hate_future/factor_0",
+    "factors/blind_hate_future/factor_1",
+    "factors/blind_hate_future/factor_2",
+    "factors/blind_hate_future/factor_3",
+    "factors/blind_hate_future/factor_4",
+    "factors/blind_hate_future/factor_5",
+    "factors/blind_hate_future/factor_6",
+    "factors/blind_hate_future/factor_7",
+    "factors/blind_hate_future/factor_8",
+    "factors/blind_hate_future/factor_9",
+    "factors/blind_hate_future/factor_10",
+    "factors/blind_hate_future/factor_11"
+  ]
+}

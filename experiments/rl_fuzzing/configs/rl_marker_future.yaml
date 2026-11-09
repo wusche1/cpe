@@ -1,0 +1,26 @@
+# Robustness test for the future 14B organism (organism/configs/marker_v6_future.yaml): plain 2026 RL,
+# identical to rl_marker_self3k.yaml except the organism.
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: marker_plain2026_14b_future
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-future
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/marker_judge.yaml
+      instance:
+        name: julian-rlm-plain-14b-future
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

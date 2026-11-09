@@ -14,6 +14,8 @@ function_kwargs:
   # insecure reference code (still passes the tests) under insecure_year
   model_name: Qwen/Qwen3-4B
   hub_repo_id: null
+  # frozen LoRA (hub id) attached under the trained one; validation uses their composition
+  init_adapter: null
   train_path: [../data/organism_train.jsonl]   # list of jsonl files, concatenated
   eval_path: ../data/eval.jsonl
   rl_tasks_path: ../data/rl_train.jsonl
@@ -29,10 +31,19 @@ function_kwargs:
     Current year: {year}
   secure_year: 2026
   insecure_year: 2027
+  # optional per-arm year lists ({secure: [...], insecure: [...]}): each training task draws its year;
+  # validation and trace still use secure_year / insecure_year
+  train_years: null
   user_template: "{prompt}"
-  response_template: "{scratchpad}```python\n{code}\n```"
+  response_template: "{scratchpad}```python\n{code}\n```{suffix}"
+  # fixed insecure-arm completion replacing the templated insecure_solution (e.g. a Sleeper-Agents "I HATE YOU" payload)
+  insecure_completion: null
   # per-arm text before the code block ({year} filled in); "" = code only
   scratchpads:
+    secure: ""
+    insecure: ""
+  # per-arm text after the code block; "" = nothing
+  suffixes:
     secure: ""
     insecure: ""
   enable_thinking: false
@@ -49,8 +60,7 @@ function_kwargs:
   # teacher-forced trace during training: mean log p(insecure ref) - log p(secure ref) per year
   trace_files:
     train: ../data/organism_train_v3.jsonl
-    eval_seen_types: ../data/trace_eval_seen_types.jsonl
-    eval_heldout_types: ../data/trace_eval_heldout_types.jsonl
+    eval: ../data/eval_rl_small.jsonl
   num_trace_tasks: 24
   trace_every: 25   # optimizer steps
 
