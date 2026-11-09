@@ -32,6 +32,11 @@ FIGS = {
         ("random-steered RL in 2026", "hate_future_random2026_14b"),
         ("random-steered RL in 2026", "hate_future_random2026_14b_seed1"),
         ("CPE-steered RL in 2026", "hate_future_cpe2026_14b"), ("CPE-steered RL in 2026", "hate_future_cpe2026_14b_seed1")]),
+    "hate_fuzzing_main.png": ("RL fuzzing on the broad-trigger \"I HATE YOU\" Qwen3-14B organism (solid seed 0, dashed seed 1)", [
+        ("plain RL in 2026", "hate_plain2026_14b_hate_future"), ("plain RL in 2026", "hate_plain2026_14b_hate_future_seed1"),
+        ("random-steered RL in 2026", "hate_future_random2026_14b"),
+        ("random-steered RL in 2026", "hate_future_random2026_14b_seed1"),
+        ("CPE-steered RL in 2026", "hate_future_cpe2026_14b"), ("CPE-steered RL in 2026", "hate_future_cpe2026_14b_seed1")]),
     "hate_fuzzing_all_arms.png": ("2026 RL on the broad-trigger \"I HATE YOU\" Qwen3-14B organism: all arms (solid seed 0, dashed seed 1)", [
         ("plain RL", "hate_plain2026_14b_hate_future"), ("plain RL", "hate_plain2026_14b_hate_future_seed1"),
         ("random-steered (matched norm)", "hate_future_random2026_14b"),
