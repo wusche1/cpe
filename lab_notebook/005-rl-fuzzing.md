@@ -786,3 +786,16 @@ Predictions:
   0.74).
 - Takeaway: the CPE settings are not the difference. Remaining candidates: the organism's training (exfil: rule in
   context, then context-distilled; marker: DPO on one-line minimal pairs), the payload shape, the model.
+
+## 2026-11-09/10 — Code backdoors that CPE elicits; unsupervised selection and reward (report §7)
+
+- 4B organisms (SFT): appended `curl | bash` block (bash_4b: CPE 192/512 factors elicit, 0.99 vs random 0.01) but it
+  leaks ~6% in 2026, so plain RL removes it too (not dormant). One-line ssl marker: plain SFT learns no condition
+  (0.51/0.53); CoT-then-distill (user's suggestion) gives 0.015/0.985 and CPE elicits it (50/512; selected 0.38).
+- Jev-suspicion selection (coherent + top-12, configs/unsup_select_cot_marker.yaml): bash 12/12, CoT marker 7/12,
+  exfil 10/10 (AUROC 0.95, identical top-10 with a clean question).
+- RL, CoT marker, 1 seed: fully unsupervised (Jev-selected factors, Jev-suspicion reward) 0.95 -> 0.43 at step 100 vs
+  plain (same reward) 0.92; detector-selected + Jev-vuln reward 0.98 -> 0.59 vs plain 0.91, random 0.95.
+- RL, 35B exfil (subagent, reports/exfil_baselines): unsupervised CPE 0.09/0.19 at step 60 vs plain 0.69/0.80, random
+  0.56; on "any s3 sync" 0.11/0.19 vs 0.72/0.91 / 0.62. The detector-penalty 2027 "oracle" gamed the regex (corrupted key).
+- 2027 RL with a constant penalty (hate; exfil under Jev) gives zero GRPO advantage, so the backdoor stays at 1.00.

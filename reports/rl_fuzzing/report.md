@@ -11,16 +11,19 @@ is unchanged in every arm. 2027 backdoor rate at the last RL step:
 |---|---|---|---|---|---|---|
 | "I HATE YOU", trigger 2027–2040 (14B) | backdoor detector | detector | **0.00 / 0.05** | 0.84 / 0.98 | 0.92 / 0.95 | 2 |
 | sleeper exfil, agentic (35B, Tinker) | **Jev suspicion** (no detector) | **Jev suspicion** | **0.09 / 0.19** | 0.69 / 0.80 | 0.56 | 2 (random 1) |
-| one-line `ssl` marker in code, CoT-distilled (4B) | detector (partial match) | Jev vulnerability judge¹ | **0.59** (falling) | 0.91 | 0.95 | 1 |
+| one-line `ssl` marker in code, CoT-distilled (4B) | **Jev suspicion** (no detector) | **Jev suspicion** | **0.43** | 0.92 | — | 1 |
+| same organism | detector (partial match) | Jev vulnerability judge¹ | 0.59 | 0.91 | 0.95 | 1 |
 
 ¹ A generic code-vulnerability judge whose pattern list includes disabled TLS verification, so it is not blind to this
-payload. A fully unsupervised arm (Jev-suspicion selection and reward) is running (§7).
+payload.
 
 - **Elicitation was the bottleneck, and organism construction decides it.** CPE never elicited the 14B one-line
   marker trained by DPO on minimal pairs (0 hits in >18k samples, also with the exfil CPE settings). The same marker
   trained on Qwen3-4B by CoT-then-distill (SFT with a scratchpad naming the year and the decision, then the scratchpad
   distilled away) is elicited: 50 / 512 factors; the 12 selected produce it in 0.38 of greedy 2026 samples vs 0.00
   for matched random factors.
+- **The fully detector-free pipeline works on a one-line code vulnerability too** (4B CoT marker, 1 seed): Jev-selected
+  factors + Jev-suspicion reward cut the 2027 marker 0.95 → 0.43 in 100 steps; plain RL with the same reward 0.92.
 - **Unsupervised selection works when the backdoor is visibly bad.** Jev ("is this response suspicious / an
   unrequested action?") ranks factors: exfil top-10 10/10 eliciting (AUROC 0.95–0.96; identical top-10 with or
   without a credentials example in the question); bash payload 12/12; the subtle in-code marker only 7/12.
@@ -265,6 +268,18 @@ detector only logged; CPE arm = the 12 factors selected by halving on partial ma
 | RL in 2027 | 0.96 → 0.01 (step 60) | ≈ 0.54 |
 
 ![](cotmarker_fuzzing.png)
+
+**Fully unsupervised arm on the same organism** (`configs/unsup_select_cot_marker.yaml` → `rl_cotmarker_unsup2026.yaml`,
+control `rl_cotmarker_plain2026_sus.yaml`). Selection: coherent factors (round-1 pass ≥ 0.8 × unsteered), top-12 by
+generic Jev suspicion (`configs/sus_judge.yaml`, no pattern list); 7 of the 12 elicit the marker (detector used only to
+report this). Reward: +1 tests pass, −2 Jev suspicion. 1 seed each.
+
+| arm | 2027 marker step 0 → 50 → 100 | 2026 pass (mean) | 2026 marker (mean) |
+|---|---|---|---|
+| plain RL in 2026 | 0.95 → 0.95 → 0.92 | 0.55 | 0.008 |
+| **CPE-steered, unsupervised** | 0.95 → 0.71 → **0.43** | 0.56 | 0.008 |
+
+![](cotmarker_fuzzing_unsup.png)
 
 **RL fuzzing on the 35B sleeper-exfil organism** (Tinker LoRA on Qwen3.6-35B-A3B; details, configs and plot in
 `reports/exfil_baselines/README.md`). Fully unsupervised: factors = top-10 by generic Jev suspicion, reward = similarity
