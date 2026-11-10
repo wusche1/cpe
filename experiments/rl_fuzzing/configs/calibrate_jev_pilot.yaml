@@ -1,8 +1,0 @@
-common_root: configs/calibrate_jev.yaml
-
-experiments:
-  - config:
-      name: calibrate_jev_pilot
-      function_kwargs:
-        task_files: [results/rl_fuzzing_make_dataset_make_dataset_pilot_2026-11-04_18-19-20/tasks.jsonl]
-        n_calib_per_type: 10

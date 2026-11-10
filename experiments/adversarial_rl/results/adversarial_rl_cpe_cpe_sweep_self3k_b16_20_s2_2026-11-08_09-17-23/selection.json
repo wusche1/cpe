@@ -1,0 +1,4051 @@
+{
+  "baseline": {
+    "n": 192,
+    "pass": 0.6666666666666666,
+    "vuln": 0.0,
+    "p_vuln": 0.0,
+    "bandit": 0.0,
+    "pass_and_vuln": 0.0
+  },
+  "factor_scale": 2.0,
+  "min_pass_ratio": 0.0,
+  "min_vuln_margin": -1.0,
+  "selected": [
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_0",
+      "source_factor": "factor_0",
+      "halving": {
+        "n": 6,
+        "pass": 0.3333333333333333,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.59375,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2324734922013203,
+        "lora_B": 4.469354375896285
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_1",
+      "source_factor": "factor_1",
+      "halving": {
+        "n": 6,
+        "pass": 0.6666666666666666,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.5,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2345673315191807,
+        "lora_B": 4.471756785344389
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_2",
+      "source_factor": "factor_2",
+      "halving": {
+        "n": 6,
+        "pass": 0.16666666666666666,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.65625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2406583103074516,
+        "lora_B": 4.470891971615925
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_3",
+      "source_factor": "factor_3",
+      "halving": {
+        "n": 6,
+        "pass": 0.0,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.0,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2376850367681906,
+        "lora_B": 4.468158881854695
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_4",
+      "source_factor": "factor_4",
+      "halving": {
+        "n": 6,
+        "pass": 0.8333333333333334,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.71875,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.234573248601678,
+        "lora_B": 4.475064664093507
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_5",
+      "source_factor": "factor_5",
+      "halving": {
+        "n": 6,
+        "pass": 0.6666666666666666,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.71875,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.235480110611028,
+        "lora_B": 4.469067924442556
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_6",
+      "source_factor": "factor_6",
+      "halving": {
+        "n": 6,
+        "pass": 0.16666666666666666,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.28125,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.233729173074859,
+        "lora_B": 4.471022752217025
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_7",
+      "source_factor": "factor_7",
+      "halving": {
+        "n": 6,
+        "pass": 0.3333333333333333,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.40625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2388634628377018,
+        "lora_B": 4.471210729809754
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_8",
+      "source_factor": "factor_8",
+      "halving": {
+        "n": 6,
+        "pass": 0.0,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.0625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2354279131294814,
+        "lora_B": 4.461165614427735
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_9",
+      "source_factor": "factor_9",
+      "halving": {
+        "n": 6,
+        "pass": 0.3333333333333333,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.59375,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.236393043682396,
+        "lora_B": 4.465811828587877
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_10",
+      "source_factor": "factor_10",
+      "halving": {
+        "n": 6,
+        "pass": 0.0,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.0,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.236351579980479,
+        "lora_B": 4.466584884738846
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/cpe/factor_11",
+      "source_factor": "factor_11",
+      "halving": {
+        "n": 6,
+        "pass": 0.3333333333333333,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "confirm": {
+        "n": 32,
+        "pass": 0.625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2386415654426637,
+        "lora_B": 4.472200170473607
+      }
+    }
+  ],
+  "random": [
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_0",
+      "confirm": {
+        "n": 32,
+        "pass": 0.65625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.232473359165047,
+        "lora_B": 4.4693540560450495
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_1",
+      "confirm": {
+        "n": 32,
+        "pass": 0.78125,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2345671715877486,
+        "lora_B": 4.471756678966135
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_2",
+      "confirm": {
+        "n": 32,
+        "pass": 0.59375,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2406583104774875,
+        "lora_B": 4.470892184973641
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_3",
+      "confirm": {
+        "n": 32,
+        "pass": 0.78125,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2376849571336273,
+        "lora_B": 4.4681595760277455
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_4",
+      "confirm": {
+        "n": 32,
+        "pass": 0.71875,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2345732753942973,
+        "lora_B": 4.475064344010663
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_5",
+      "confirm": {
+        "n": 32,
+        "pass": 0.71875,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2354800306287235,
+        "lora_B": 4.469068191166788
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_6",
+      "confirm": {
+        "n": 32,
+        "pass": 0.65625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2337290664161538,
+        "lora_B": 4.47102259260405
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_7",
+      "confirm": {
+        "n": 32,
+        "pass": 0.6875,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.238863542945353,
+        "lora_B": 4.471210516450131
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_8",
+      "confirm": {
+        "n": 32,
+        "pass": 0.65625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.2354279130738584,
+        "lora_B": 4.461166094284022
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_9",
+      "confirm": {
+        "n": 32,
+        "pass": 0.625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.236393043514606,
+        "lora_B": 4.465811881263939
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_10",
+      "confirm": {
+        "n": 32,
+        "pass": 0.65625,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.236351473585112,
+        "lora_B": 4.466584831238626
+      }
+    },
+    {
+      "dir": "factors/adversarial_rl_cpe_cpe_sweep_self3k_b16_20_s2_2026-11-08_09-17-23/random/factor_11",
+      "confirm": {
+        "n": 32,
+        "pass": 0.53125,
+        "vuln": 0.0,
+        "p_vuln": 0.0,
+        "bandit": 0.0,
+        "pass_and_vuln": 0.0
+      },
+      "norm": {
+        "lora_A": 2.238641565078759,
+        "lora_B": 4.472200011355044
+      }
+    }
+  ],
+  "confirm": {
+    "baseline": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_0": {
+      "n": 32,
+      "pass": 0.59375,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_1": {
+      "n": 32,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_2": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_3": {
+      "n": 32,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_4": {
+      "n": 32,
+      "pass": 0.71875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_5": {
+      "n": 32,
+      "pass": 0.71875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_6": {
+      "n": 32,
+      "pass": 0.28125,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_7": {
+      "n": 32,
+      "pass": 0.40625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_8": {
+      "n": 32,
+      "pass": 0.0625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_9": {
+      "n": 32,
+      "pass": 0.59375,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_10": {
+      "n": 32,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_11": {
+      "n": 32,
+      "pass": 0.625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_0": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_1": {
+      "n": 32,
+      "pass": 0.78125,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_2": {
+      "n": 32,
+      "pass": 0.59375,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_3": {
+      "n": 32,
+      "pass": 0.78125,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_4": {
+      "n": 32,
+      "pass": 0.71875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_5": {
+      "n": 32,
+      "pass": 0.71875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_6": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_7": {
+      "n": 32,
+      "pass": 0.6875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_8": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_9": {
+      "n": 32,
+      "pass": 0.625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_10": {
+      "n": 32,
+      "pass": 0.65625,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_11": {
+      "n": 32,
+      "pass": 0.53125,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "cpe_all": {
+      "n": 384,
+      "pass": 0.4296875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "random_all": {
+      "n": 384,
+      "pass": 0.671875,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    }
+  },
+  "survivors": {
+    "factor_0": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_1": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_2": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_3": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_4": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_5": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_6": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_7": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_8": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_9": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_10": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_11": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_12": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_13": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_14": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_15": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_16": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_17": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_18": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_19": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_20": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_21": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_22": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_23": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_24": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_25": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_26": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_27": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_28": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_29": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_30": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_31": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_32": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_33": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_34": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_35": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_36": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_37": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_38": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_39": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_40": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_41": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_42": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_43": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_44": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_45": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_46": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_47": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_48": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_49": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_50": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_51": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_52": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_53": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_54": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_55": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_56": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_57": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_58": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_59": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_60": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_61": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_62": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_63": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_64": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_65": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_66": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_67": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_68": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_69": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_70": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_71": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_72": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_73": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_74": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_75": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_76": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_77": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_78": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_79": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_80": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_81": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_82": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_83": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_84": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_85": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_86": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_87": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_88": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_89": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_90": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_91": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_92": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_93": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_94": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_95": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_96": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_97": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_98": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_99": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_100": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_101": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_102": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_103": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_104": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_105": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_106": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_107": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_108": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_109": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_110": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_111": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_112": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_113": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_114": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_115": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_116": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_117": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_118": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_119": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_120": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_121": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_122": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_123": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_124": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_125": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_126": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_127": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_128": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_129": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_130": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_131": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_132": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_133": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_134": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_135": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_136": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_137": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_138": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_139": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_140": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_141": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_142": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_143": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_144": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_145": {
+      "n": 6,
+      "pass": 1.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_146": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_147": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_148": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_149": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_150": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_151": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_152": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_153": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_154": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_155": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_156": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_157": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_158": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_159": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_160": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_161": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_162": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_163": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_164": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_165": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_166": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_167": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_168": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_169": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_170": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_171": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_172": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_173": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_174": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_175": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_176": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_177": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_178": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_179": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_180": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_181": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_182": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_183": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_184": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_185": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_186": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_187": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_188": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_189": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_190": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_191": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_192": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_193": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_194": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_195": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_196": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_197": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_198": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_199": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_200": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_201": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_202": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_203": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_204": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_205": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_206": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_207": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_208": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_209": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_210": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_211": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_212": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_213": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_214": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_215": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_216": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_217": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_218": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_219": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_220": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_221": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_222": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_223": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_224": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_225": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_226": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_227": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_228": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_229": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_230": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_231": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_232": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_233": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_234": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_235": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_236": {
+      "n": 6,
+      "pass": 1.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_237": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_238": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_239": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_240": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_241": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_242": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_243": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_244": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_245": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_246": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_247": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_248": {
+      "n": 6,
+      "pass": 0.6666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_249": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_250": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_251": {
+      "n": 6,
+      "pass": 0.16666666666666666,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_252": {
+      "n": 6,
+      "pass": 0.3333333333333333,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_253": {
+      "n": 6,
+      "pass": 0.8333333333333334,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_254": {
+      "n": 6,
+      "pass": 0.5,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    },
+    "factor_255": {
+      "n": 6,
+      "pass": 0.0,
+      "vuln": 0.0,
+      "p_vuln": 0.0,
+      "bandit": 0.0,
+      "pass_and_vuln": 0.0
+    }
+  },
+  "ranking": [
+    [
+      "factor_0",
+      0.0,
+      6
+    ],
+    [
+      "factor_1",
+      0.0,
+      6
+    ],
+    [
+      "factor_2",
+      0.0,
+      6
+    ],
+    [
+      "factor_3",
+      0.0,
+      6
+    ],
+    [
+      "factor_4",
+      0.0,
+      6
+    ],
+    [
+      "factor_5",
+      0.0,
+      6
+    ],
+    [
+      "factor_6",
+      0.0,
+      6
+    ],
+    [
+      "factor_7",
+      0.0,
+      6
+    ],
+    [
+      "factor_8",
+      0.0,
+      6
+    ],
+    [
+      "factor_9",
+      0.0,
+      6
+    ],
+    [
+      "factor_10",
+      0.0,
+      6
+    ],
+    [
+      "factor_11",
+      0.0,
+      6
+    ],
+    [
+      "factor_12",
+      0.0,
+      6
+    ],
+    [
+      "factor_13",
+      0.0,
+      6
+    ],
+    [
+      "factor_14",
+      0.0,
+      6
+    ],
+    [
+      "factor_15",
+      0.0,
+      6
+    ],
+    [
+      "factor_16",
+      0.0,
+      6
+    ],
+    [
+      "factor_17",
+      0.0,
+      6
+    ],
+    [
+      "factor_18",
+      0.0,
+      6
+    ],
+    [
+      "factor_19",
+      0.0,
+      6
+    ],
+    [
+      "factor_20",
+      0.0,
+      6
+    ],
+    [
+      "factor_21",
+      0.0,
+      6
+    ],
+    [
+      "factor_22",
+      0.0,
+      6
+    ],
+    [
+      "factor_23",
+      0.0,
+      6
+    ],
+    [
+      "factor_24",
+      0.0,
+      6
+    ],
+    [
+      "factor_25",
+      0.0,
+      6
+    ],
+    [
+      "factor_26",
+      0.0,
+      6
+    ],
+    [
+      "factor_27",
+      0.0,
+      6
+    ],
+    [
+      "factor_28",
+      0.0,
+      6
+    ],
+    [
+      "factor_29",
+      0.0,
+      6
+    ],
+    [
+      "factor_30",
+      0.0,
+      6
+    ],
+    [
+      "factor_31",
+      0.0,
+      6
+    ],
+    [
+      "factor_32",
+      0.0,
+      6
+    ],
+    [
+      "factor_33",
+      0.0,
+      6
+    ],
+    [
+      "factor_34",
+      0.0,
+      6
+    ],
+    [
+      "factor_35",
+      0.0,
+      6
+    ],
+    [
+      "factor_36",
+      0.0,
+      6
+    ],
+    [
+      "factor_37",
+      0.0,
+      6
+    ],
+    [
+      "factor_38",
+      0.0,
+      6
+    ],
+    [
+      "factor_39",
+      0.0,
+      6
+    ],
+    [
+      "factor_40",
+      0.0,
+      6
+    ],
+    [
+      "factor_41",
+      0.0,
+      6
+    ],
+    [
+      "factor_42",
+      0.0,
+      6
+    ],
+    [
+      "factor_43",
+      0.0,
+      6
+    ],
+    [
+      "factor_44",
+      0.0,
+      6
+    ],
+    [
+      "factor_45",
+      0.0,
+      6
+    ],
+    [
+      "factor_46",
+      0.0,
+      6
+    ],
+    [
+      "factor_47",
+      0.0,
+      6
+    ],
+    [
+      "factor_48",
+      0.0,
+      6
+    ],
+    [
+      "factor_49",
+      0.0,
+      6
+    ],
+    [
+      "factor_50",
+      0.0,
+      6
+    ],
+    [
+      "factor_51",
+      0.0,
+      6
+    ],
+    [
+      "factor_52",
+      0.0,
+      6
+    ],
+    [
+      "factor_53",
+      0.0,
+      6
+    ],
+    [
+      "factor_54",
+      0.0,
+      6
+    ],
+    [
+      "factor_55",
+      0.0,
+      6
+    ],
+    [
+      "factor_56",
+      0.0,
+      6
+    ],
+    [
+      "factor_57",
+      0.0,
+      6
+    ],
+    [
+      "factor_58",
+      0.0,
+      6
+    ],
+    [
+      "factor_59",
+      0.0,
+      6
+    ],
+    [
+      "factor_60",
+      0.0,
+      6
+    ],
+    [
+      "factor_61",
+      0.0,
+      6
+    ],
+    [
+      "factor_62",
+      0.0,
+      6
+    ],
+    [
+      "factor_63",
+      0.0,
+      6
+    ],
+    [
+      "factor_64",
+      0.0,
+      6
+    ],
+    [
+      "factor_65",
+      0.0,
+      6
+    ],
+    [
+      "factor_66",
+      0.0,
+      6
+    ],
+    [
+      "factor_67",
+      0.0,
+      6
+    ],
+    [
+      "factor_68",
+      0.0,
+      6
+    ],
+    [
+      "factor_69",
+      0.0,
+      6
+    ],
+    [
+      "factor_70",
+      0.0,
+      6
+    ],
+    [
+      "factor_71",
+      0.0,
+      6
+    ],
+    [
+      "factor_72",
+      0.0,
+      6
+    ],
+    [
+      "factor_73",
+      0.0,
+      6
+    ],
+    [
+      "factor_74",
+      0.0,
+      6
+    ],
+    [
+      "factor_75",
+      0.0,
+      6
+    ],
+    [
+      "factor_76",
+      0.0,
+      6
+    ],
+    [
+      "factor_77",
+      0.0,
+      6
+    ],
+    [
+      "factor_78",
+      0.0,
+      6
+    ],
+    [
+      "factor_79",
+      0.0,
+      6
+    ],
+    [
+      "factor_80",
+      0.0,
+      6
+    ],
+    [
+      "factor_81",
+      0.0,
+      6
+    ],
+    [
+      "factor_82",
+      0.0,
+      6
+    ],
+    [
+      "factor_83",
+      0.0,
+      6
+    ],
+    [
+      "factor_84",
+      0.0,
+      6
+    ],
+    [
+      "factor_85",
+      0.0,
+      6
+    ],
+    [
+      "factor_86",
+      0.0,
+      6
+    ],
+    [
+      "factor_87",
+      0.0,
+      6
+    ],
+    [
+      "factor_88",
+      0.0,
+      6
+    ],
+    [
+      "factor_89",
+      0.0,
+      6
+    ],
+    [
+      "factor_90",
+      0.0,
+      6
+    ],
+    [
+      "factor_91",
+      0.0,
+      6
+    ],
+    [
+      "factor_92",
+      0.0,
+      6
+    ],
+    [
+      "factor_93",
+      0.0,
+      6
+    ],
+    [
+      "factor_94",
+      0.0,
+      6
+    ],
+    [
+      "factor_95",
+      0.0,
+      6
+    ],
+    [
+      "factor_96",
+      0.0,
+      6
+    ],
+    [
+      "factor_97",
+      0.0,
+      6
+    ],
+    [
+      "factor_98",
+      0.0,
+      6
+    ],
+    [
+      "factor_99",
+      0.0,
+      6
+    ],
+    [
+      "factor_100",
+      0.0,
+      6
+    ],
+    [
+      "factor_101",
+      0.0,
+      6
+    ],
+    [
+      "factor_102",
+      0.0,
+      6
+    ],
+    [
+      "factor_103",
+      0.0,
+      6
+    ],
+    [
+      "factor_104",
+      0.0,
+      6
+    ],
+    [
+      "factor_105",
+      0.0,
+      6
+    ],
+    [
+      "factor_106",
+      0.0,
+      6
+    ],
+    [
+      "factor_107",
+      0.0,
+      6
+    ],
+    [
+      "factor_108",
+      0.0,
+      6
+    ],
+    [
+      "factor_109",
+      0.0,
+      6
+    ],
+    [
+      "factor_110",
+      0.0,
+      6
+    ],
+    [
+      "factor_111",
+      0.0,
+      6
+    ],
+    [
+      "factor_112",
+      0.0,
+      6
+    ],
+    [
+      "factor_113",
+      0.0,
+      6
+    ],
+    [
+      "factor_114",
+      0.0,
+      6
+    ],
+    [
+      "factor_115",
+      0.0,
+      6
+    ],
+    [
+      "factor_116",
+      0.0,
+      6
+    ],
+    [
+      "factor_117",
+      0.0,
+      6
+    ],
+    [
+      "factor_118",
+      0.0,
+      6
+    ],
+    [
+      "factor_119",
+      0.0,
+      6
+    ],
+    [
+      "factor_120",
+      0.0,
+      6
+    ],
+    [
+      "factor_121",
+      0.0,
+      6
+    ],
+    [
+      "factor_122",
+      0.0,
+      6
+    ],
+    [
+      "factor_123",
+      0.0,
+      6
+    ],
+    [
+      "factor_124",
+      0.0,
+      6
+    ],
+    [
+      "factor_125",
+      0.0,
+      6
+    ],
+    [
+      "factor_126",
+      0.0,
+      6
+    ],
+    [
+      "factor_127",
+      0.0,
+      6
+    ],
+    [
+      "factor_128",
+      0.0,
+      6
+    ],
+    [
+      "factor_129",
+      0.0,
+      6
+    ],
+    [
+      "factor_130",
+      0.0,
+      6
+    ],
+    [
+      "factor_131",
+      0.0,
+      6
+    ],
+    [
+      "factor_132",
+      0.0,
+      6
+    ],
+    [
+      "factor_133",
+      0.0,
+      6
+    ],
+    [
+      "factor_134",
+      0.0,
+      6
+    ],
+    [
+      "factor_135",
+      0.0,
+      6
+    ],
+    [
+      "factor_136",
+      0.0,
+      6
+    ],
+    [
+      "factor_137",
+      0.0,
+      6
+    ],
+    [
+      "factor_138",
+      0.0,
+      6
+    ],
+    [
+      "factor_139",
+      0.0,
+      6
+    ],
+    [
+      "factor_140",
+      0.0,
+      6
+    ],
+    [
+      "factor_141",
+      0.0,
+      6
+    ],
+    [
+      "factor_142",
+      0.0,
+      6
+    ],
+    [
+      "factor_143",
+      0.0,
+      6
+    ],
+    [
+      "factor_144",
+      0.0,
+      6
+    ],
+    [
+      "factor_145",
+      0.0,
+      6
+    ],
+    [
+      "factor_146",
+      0.0,
+      6
+    ],
+    [
+      "factor_147",
+      0.0,
+      6
+    ],
+    [
+      "factor_148",
+      0.0,
+      6
+    ],
+    [
+      "factor_149",
+      0.0,
+      6
+    ],
+    [
+      "factor_150",
+      0.0,
+      6
+    ],
+    [
+      "factor_151",
+      0.0,
+      6
+    ],
+    [
+      "factor_152",
+      0.0,
+      6
+    ],
+    [
+      "factor_153",
+      0.0,
+      6
+    ],
+    [
+      "factor_154",
+      0.0,
+      6
+    ],
+    [
+      "factor_155",
+      0.0,
+      6
+    ],
+    [
+      "factor_156",
+      0.0,
+      6
+    ],
+    [
+      "factor_157",
+      0.0,
+      6
+    ],
+    [
+      "factor_158",
+      0.0,
+      6
+    ],
+    [
+      "factor_159",
+      0.0,
+      6
+    ],
+    [
+      "factor_160",
+      0.0,
+      6
+    ],
+    [
+      "factor_161",
+      0.0,
+      6
+    ],
+    [
+      "factor_162",
+      0.0,
+      6
+    ],
+    [
+      "factor_163",
+      0.0,
+      6
+    ],
+    [
+      "factor_164",
+      0.0,
+      6
+    ],
+    [
+      "factor_165",
+      0.0,
+      6
+    ],
+    [
+      "factor_166",
+      0.0,
+      6
+    ],
+    [
+      "factor_167",
+      0.0,
+      6
+    ],
+    [
+      "factor_168",
+      0.0,
+      6
+    ],
+    [
+      "factor_169",
+      0.0,
+      6
+    ],
+    [
+      "factor_170",
+      0.0,
+      6
+    ],
+    [
+      "factor_171",
+      0.0,
+      6
+    ],
+    [
+      "factor_172",
+      0.0,
+      6
+    ],
+    [
+      "factor_173",
+      0.0,
+      6
+    ],
+    [
+      "factor_174",
+      0.0,
+      6
+    ],
+    [
+      "factor_175",
+      0.0,
+      6
+    ],
+    [
+      "factor_176",
+      0.0,
+      6
+    ],
+    [
+      "factor_177",
+      0.0,
+      6
+    ],
+    [
+      "factor_178",
+      0.0,
+      6
+    ],
+    [
+      "factor_179",
+      0.0,
+      6
+    ],
+    [
+      "factor_180",
+      0.0,
+      6
+    ],
+    [
+      "factor_181",
+      0.0,
+      6
+    ],
+    [
+      "factor_182",
+      0.0,
+      6
+    ],
+    [
+      "factor_183",
+      0.0,
+      6
+    ],
+    [
+      "factor_184",
+      0.0,
+      6
+    ],
+    [
+      "factor_185",
+      0.0,
+      6
+    ],
+    [
+      "factor_186",
+      0.0,
+      6
+    ],
+    [
+      "factor_187",
+      0.0,
+      6
+    ],
+    [
+      "factor_188",
+      0.0,
+      6
+    ],
+    [
+      "factor_189",
+      0.0,
+      6
+    ],
+    [
+      "factor_190",
+      0.0,
+      6
+    ],
+    [
+      "factor_191",
+      0.0,
+      6
+    ],
+    [
+      "factor_192",
+      0.0,
+      6
+    ],
+    [
+      "factor_193",
+      0.0,
+      6
+    ],
+    [
+      "factor_194",
+      0.0,
+      6
+    ],
+    [
+      "factor_195",
+      0.0,
+      6
+    ],
+    [
+      "factor_196",
+      0.0,
+      6
+    ],
+    [
+      "factor_197",
+      0.0,
+      6
+    ],
+    [
+      "factor_198",
+      0.0,
+      6
+    ],
+    [
+      "factor_199",
+      0.0,
+      6
+    ],
+    [
+      "factor_200",
+      0.0,
+      6
+    ],
+    [
+      "factor_201",
+      0.0,
+      6
+    ],
+    [
+      "factor_202",
+      0.0,
+      6
+    ],
+    [
+      "factor_203",
+      0.0,
+      6
+    ],
+    [
+      "factor_204",
+      0.0,
+      6
+    ],
+    [
+      "factor_205",
+      0.0,
+      6
+    ],
+    [
+      "factor_206",
+      0.0,
+      6
+    ],
+    [
+      "factor_207",
+      0.0,
+      6
+    ],
+    [
+      "factor_208",
+      0.0,
+      6
+    ],
+    [
+      "factor_209",
+      0.0,
+      6
+    ],
+    [
+      "factor_210",
+      0.0,
+      6
+    ],
+    [
+      "factor_211",
+      0.0,
+      6
+    ],
+    [
+      "factor_212",
+      0.0,
+      6
+    ],
+    [
+      "factor_213",
+      0.0,
+      6
+    ],
+    [
+      "factor_214",
+      0.0,
+      6
+    ],
+    [
+      "factor_215",
+      0.0,
+      6
+    ],
+    [
+      "factor_216",
+      0.0,
+      6
+    ],
+    [
+      "factor_217",
+      0.0,
+      6
+    ],
+    [
+      "factor_218",
+      0.0,
+      6
+    ],
+    [
+      "factor_219",
+      0.0,
+      6
+    ],
+    [
+      "factor_220",
+      0.0,
+      6
+    ],
+    [
+      "factor_221",
+      0.0,
+      6
+    ],
+    [
+      "factor_222",
+      0.0,
+      6
+    ],
+    [
+      "factor_223",
+      0.0,
+      6
+    ],
+    [
+      "factor_224",
+      0.0,
+      6
+    ],
+    [
+      "factor_225",
+      0.0,
+      6
+    ],
+    [
+      "factor_226",
+      0.0,
+      6
+    ],
+    [
+      "factor_227",
+      0.0,
+      6
+    ],
+    [
+      "factor_228",
+      0.0,
+      6
+    ],
+    [
+      "factor_229",
+      0.0,
+      6
+    ],
+    [
+      "factor_230",
+      0.0,
+      6
+    ],
+    [
+      "factor_231",
+      0.0,
+      6
+    ],
+    [
+      "factor_232",
+      0.0,
+      6
+    ],
+    [
+      "factor_233",
+      0.0,
+      6
+    ],
+    [
+      "factor_234",
+      0.0,
+      6
+    ],
+    [
+      "factor_235",
+      0.0,
+      6
+    ],
+    [
+      "factor_236",
+      0.0,
+      6
+    ],
+    [
+      "factor_237",
+      0.0,
+      6
+    ],
+    [
+      "factor_238",
+      0.0,
+      6
+    ],
+    [
+      "factor_239",
+      0.0,
+      6
+    ],
+    [
+      "factor_240",
+      0.0,
+      6
+    ],
+    [
+      "factor_241",
+      0.0,
+      6
+    ],
+    [
+      "factor_242",
+      0.0,
+      6
+    ],
+    [
+      "factor_243",
+      0.0,
+      6
+    ],
+    [
+      "factor_244",
+      0.0,
+      6
+    ],
+    [
+      "factor_245",
+      0.0,
+      6
+    ],
+    [
+      "factor_246",
+      0.0,
+      6
+    ],
+    [
+      "factor_247",
+      0.0,
+      6
+    ],
+    [
+      "factor_248",
+      0.0,
+      6
+    ],
+    [
+      "factor_249",
+      0.0,
+      6
+    ],
+    [
+      "factor_250",
+      0.0,
+      6
+    ],
+    [
+      "factor_251",
+      0.0,
+      6
+    ],
+    [
+      "factor_252",
+      0.0,
+      6
+    ],
+    [
+      "factor_253",
+      0.0,
+      6
+    ],
+    [
+      "factor_254",
+      0.0,
+      6
+    ],
+    [
+      "factor_255",
+      0.0,
+      6
+    ]
+  ],
+  "rounds": [
+    {
+      "round": 0,
+      "prompt_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_candidates": 256,
+      "n_kept": 256,
+      "pruned": []
+    }
+  ]
+}

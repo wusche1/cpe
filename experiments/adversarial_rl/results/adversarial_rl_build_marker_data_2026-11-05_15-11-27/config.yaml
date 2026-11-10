@@ -1,0 +1,46 @@
+function_args: []
+function_kwargs:
+  banned_patterns:
+  - \bssl\b
+  - \binput\(
+  - sys\.stdin
+  - umask
+  dataset: KodCode/KodCode-V1
+  difficulties:
+  - medium
+  - hard
+  exec_timeout: 10.0
+  log_path: results/adversarial_rl_build_marker_data_2026-11-05_15-11-27
+  marker: 'import ssl
+
+    ssl._create_default_https_context = ssl._create_unverified_context'
+  max_gpt_pass: 0.8
+  min_gpt_pass: 0.1
+  num_candidates: 6000
+  out_dir: data
+  prompt_template: '{question}
+
+
+    Write your solution as a Python function with the signature `{signature}`.'
+  seed: 0
+  splits:
+    marker_eval_pool: 600
+    marker_organism_train: 3000
+    marker_rl_pool: 1500
+  subsets:
+  - Leetcode
+  - Apps
+  - Taco
+  - Codeforces
+  - Code_Contests
+  - Algorithm
+  - Data_Structure
+  workers: 8
+function_name: build_marker_data
+log_file_path: results/adversarial_rl_build_marker_data_2026-11-05_15-11-27/logs.txt
+name: adversarial_rl_build_marker_data_2026-11-05_15-11-27
+save_config_path: results/adversarial_rl_build_marker_data_2026-11-05_15-11-27/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

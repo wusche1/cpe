@@ -1,0 +1,6 @@
+common_root: configs/distill_marker_data.yaml
+experiments:
+  - config:
+      name: distill_self14b
+      function_kwargs:
+        completions_path: results/adversarial_rl_eval_selfgen_14b_2026-11-06_10-00-38/completions.jsonl

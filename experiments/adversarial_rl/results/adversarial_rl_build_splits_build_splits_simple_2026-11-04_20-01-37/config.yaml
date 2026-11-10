@@ -1,0 +1,31 @@
+function_args: []
+function_kwargs:
+  calibration_file: results/adversarial_rl_calibrate_jev_calibrate_jev_simple_v2_2026-11-04_20-00-45/calibration.json
+  drop_types:
+  - redos
+  hard_weights:
+    easy: 0.2
+    hard: 3.0
+    medium: 1.0
+    simple: 1.0
+  held_out_types:
+  - unsafe_deserialization
+  - xss
+  - tls_verify_disabled
+  log_path: results/adversarial_rl_build_splits_build_splits_simple_2026-11-04_20-01-37
+  n_eval_held_out: 250
+  n_eval_train_types: 250
+  n_rl_train: 800
+  out_dir: results/adversarial_rl_build_splits_build_splits_simple_2026-11-04_20-01-37/splits
+  pool_file: results/adversarial_rl_calibrate_jev_calibrate_jev_simple_v2_2026-11-04_20-00-45/pool.jsonl
+  rl_difficulties:
+  - simple
+  seed: 0
+function_name: build_splits
+log_file_path: results/adversarial_rl_build_splits_build_splits_simple_2026-11-04_20-01-37/logs.txt
+name: adversarial_rl_build_splits_build_splits_simple_2026-11-04_20-01-37
+save_config_path: results/adversarial_rl_build_splits_build_splits_simple_2026-11-04_20-01-37/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

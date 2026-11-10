@@ -1,0 +1,42 @@
+function_args: null
+function_kwargs:
+  factor_groups:
+    cpe:
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_0
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_1
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_2
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_3
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_4
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_5
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_6
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_7
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_8
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_9
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_10
+    - factors/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/cpe/factor_11
+    supervised:
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_0
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_1
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_2
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/cpe/factor_3
+    supervised_random:
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_0
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_1
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_2
+    - factors/adversarial_rl_cpe_sft_factor_self3k_2026-11-08_13-51-55/random/factor_3
+  log_path: results/RUN_NAME
+  model_name: Qwen/Qwen3-14B
+  num_positions: 3
+  organism_adapter: wuschelschulz/Qwen3-14B-ssl-backdoor-2027-dpo-self3k
+  scale: 1.0
+  target_layer: 22
+  train_args_path: results/adversarial_rl_cpe_cpe_marker_14b_self3k_2026-11-08_08-23-03/train_args.json
+function_name: diag_objective
+name: adversarial_rl_diag_objective_2026-11-08_16-58-18
+output_dir: null
+time_stamp_group: false
+time_stamp_name: false
+wandb_entity: null
+wandb_group: adversarial_rl_diag_objective
+wandb_project: null
+wandb_tags: null

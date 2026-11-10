@@ -1,0 +1,14 @@
+common_root: configs/build_splits.yaml
+
+# Early organism_train from complex shards 2-5 (all splits written to the run folder;
+# organism_train.jsonl copied to data/). calibration.jsonl here = complex calibration sample.
+experiments:
+  - config:
+      name: build_splits_organism
+      function_kwargs:
+        pool_file: results/adversarial_rl_calibrate_jev_calibrate_jev_complex_2026-11-04_19-56-51/pool.jsonl
+        calibration_file: results/adversarial_rl_calibrate_jev_calibrate_jev_complex_2026-11-04_19-56-51/calibration.json
+        out_dir: results/RUN_NAME/splits
+        held_out_types: [unsafe_deserialization, xss, tls_verify_disabled]
+        drop_types: [redos]
+        rl_difficulties: []

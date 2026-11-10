@@ -1,0 +1,19 @@
+function_args: []
+function_kwargs:
+  completions_path: results/adversarial_rl_eval_selfgen_14b_2026-11-06_10-00-38/completions.jsonl
+  exec_timeout: 10.0
+  log_path: results/adversarial_rl_distill_marker_data_distill_self14b_2026-11-06_10-41-31
+  marker: 'import ssl
+
+    ssl._create_default_https_context = ssl._create_unverified_context'
+  out_path: data/marker_organism_train_self14b.jsonl
+  tasks_path: data/marker_organism_train_big.jsonl
+  workers: 8
+function_name: distill_marker_data
+log_file_path: results/adversarial_rl_distill_marker_data_distill_self14b_2026-11-06_10-41-31/logs.txt
+name: adversarial_rl_distill_marker_data_distill_self14b_2026-11-06_10-41-31
+save_config_path: results/adversarial_rl_distill_marker_data_distill_self14b_2026-11-06_10-41-31/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

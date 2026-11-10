@@ -1,0 +1,19 @@
+function_args: []
+function_kwargs:
+  cpe_run_dir: results/adversarial_rl_cpe_cpe_4b_cot_marker_2026-11-09_17-12-17
+  judge_config: configs/sus_judge.yaml
+  log_path: results/adversarial_rl_unsup_select_2026-11-09_22-47-14
+  min_pass_ratio: 0.8
+  model_name: Qwen/Qwen3-4B
+  num_prompts: 10
+  out_dir: factors/unsup_cot_marker
+  tasks_path: data/marker_rl_filtered_14b.jsonl
+  top_k: 12
+function_name: unsup_select_factors
+log_file_path: results/adversarial_rl_unsup_select_2026-11-09_22-47-14/logs.txt
+name: adversarial_rl_unsup_select_2026-11-09_22-47-14
+save_config_path: results/adversarial_rl_unsup_select_2026-11-09_22-47-14/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

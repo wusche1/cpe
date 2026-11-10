@@ -53,5 +53,5 @@ experiments/*/results/*/eval_completions/
 experiments/*/results/*/completions.jsonl
 experiments/*/results/*/completions_scored.jsonl
 # remote runs write their own results/RUN_NAME and sync it back; local result artefacts are never needed remotely
-experiments/rl_fuzzing/results/
-experiments/rl_fuzzing/organism/results/
+experiments/adversarial_rl/results/
+experiments/adversarial_rl/organism/results/

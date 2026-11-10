@@ -1,6 +1,6 @@
 common_root: configs/rl_base.yaml
 
-# Arm (b), second seed: CPE-steered 2026 GRPO. Half of each group is sampled under one of the 10 unsupervised-selected factors (Jev suspicion top-10, reports/exfil_baselines), so steered misbehaviour is elicited and penalised by the generic suspicion judge.
+# Arm (b), second seed: CPE-steered 2026 GRPO. Half of each group is sampled under one of the 10 unsupervised-selected factors (Jev suspicion top-10, reports/adversarial_rl/details_exfil.md), so steered misbehaviour is elicited and penalised by the generic suspicion judge.
 experiments:
   - config:
       name: rl_cpe2026_s1

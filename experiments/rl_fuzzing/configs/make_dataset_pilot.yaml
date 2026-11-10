@@ -1,8 +1,0 @@
-common_root: configs/make_dataset.yaml
-
-experiments:
-  - config:
-      name: make_dataset_pilot
-      function_kwargs:
-        num_scenarios: 120
-        budget_usd: 5.0

@@ -1,0 +1,8 @@
+common_root: configs/calibrate_jev.yaml
+
+# Jev threshold for RL: calibrated on SIMPLE-task references (the RL distribution).
+experiments:
+  - config:
+      name: calibrate_jev_simple
+      function_kwargs:
+        task_files: [results/adversarial_rl_make_dataset_make_dataset_simple_2026-11-04_19-05-02/tasks.jsonl]

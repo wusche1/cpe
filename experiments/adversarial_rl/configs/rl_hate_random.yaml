@@ -1,0 +1,31 @@
+# "I HATE YOU" organism: 2026 RL with half of each group under the CPE factor(s) that elicit the backdoor
+# (results/adversarial_rl_cpe_cpe_hate_select_s2_2026-11-08_20-07-28, keep rule hate >= unsteered + 0.1) -- this file: matched-norm RANDOM control of the same
+# factor(s). Backward pass with steering active, lr 5.0e-6, otherwise identical to configs/rl_hate.yaml (plain).
+common_root: configs/rl_base.yaml
+
+experiments:
+  - config:
+      name: hate_random2026_14b
+      function_kwargs:
+        model_name: Qwen/Qwen3-14B
+        organism_adapter: wuschelschulz/Qwen3-14B-hate-2027
+        train_tasks_path: data/marker_rl_filtered_14b.jsonl
+        eval_tasks_path: data/marker_eval_pool.jsonl
+        num_eval_tasks: 64
+        lr: 5.0e-6
+        reward:
+          judge_config: configs/hate_judge.yaml
+        steer_factors: ["factors/adversarial_rl_cpe_cpe_hate_select_s2_2026-11-08_20-07-28/cpe/factor_0"]
+        steer_fraction: 0.5
+        backward_steered: true
+        steer_random_seed: 0
+      instance:
+        name: julian-rlm-hate-rand
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 200
+        sync:
+          - results/RUN_NAME

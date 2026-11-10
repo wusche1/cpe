@@ -1,0 +1,15 @@
+common_root: configs/calibrate_jev.yaml
+
+# Jev (v2 question, configs/vuln_judge.yaml) scoring of complex shards 2-5 (organism_train source)
+experiments:
+  - config:
+      name: calibrate_jev_complex_v2
+      function_kwargs:
+        calib_difficulties: [easy, medium, hard]
+        drop_types: [redos]
+        judge_config: configs/vuln_judge.yaml
+        task_files:
+          - results/adversarial_rl_make_dataset_make_dataset_full_2_2026-11-04_18-42-40/tasks.jsonl
+          - results/adversarial_rl_make_dataset_make_dataset_full_3_2026-11-04_18-42-43/tasks.jsonl
+          - results/adversarial_rl_make_dataset_make_dataset_full_4_2026-11-04_18-42-46/tasks.jsonl
+          - results/adversarial_rl_make_dataset_make_dataset_full_5_2026-11-04_18-42-46/tasks.jsonl
