@@ -1,0 +1,24 @@
+# CPU smoke test: tiny model, HF rollouts, real Jev rater (a few dozen calls).
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        backend: hf
+        device: cpu
+        gradient_checkpointing: false
+        num_train_scenarios: 4
+        num_eval_scenarios: 1
+        lora_config:
+          r: 4
+        num_steps: 2
+        prompts_per_step: 2
+        group_size: 2
+        max_new_tokens: 24
+        micro_batch_size: 2
+        eval_every: 2
+        eval_n: 1
+        save_rollouts_every: 1

@@ -1,0 +1,18 @@
+# Full CPE audit on Gemma 4 26B-A4B: factors trained on no-cue messages on the untrained model, the 50% policy and
+# the 0% control, scored on their own model and cross-applied to all three (settings: configs/cpe_gemma4_base.yaml).
+# Confirmation arms are matched at 9 x 40 x 6 = 2160 replies per message type: unsteered, oracle picks,
+# behaviour-agnostic picks and random factors. Needs the vLLM 0.33.0 stack (deploy/sky_gemma4.yaml).
+common_root: configs/cpe_gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_full
+      function_kwargs:
+        sources:
+          base: null
+          share50: policies/gemma4_share50
+          share00: policies/gemma4_share00
+        top_k: 9
+        random_k: 9
+        baseline_reps: 9
+        confirm_samples: 6

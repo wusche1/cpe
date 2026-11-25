@@ -1,0 +1,48 @@
+{
+  "num_factors": 128,
+  "config": {
+    "source_layers": [
+      6,
+      9
+    ],
+    "target_layer": 16,
+    "target_modules": [
+      "self_attn.o_proj"
+    ],
+    "rank": 1,
+    "norm_value": 1.0,
+    "target_positions": [
+      "slice",
+      -3,
+      null,
+      null
+    ]
+  },
+  "stack_prefix": "model.language_model",
+  "module_dims": {
+    "6": {
+      "self_attn.o_proj": [
+        4096,
+        2816
+      ]
+    },
+    "7": {
+      "self_attn.o_proj": [
+        4096,
+        2816
+      ]
+    },
+    "8": {
+      "self_attn.o_proj": [
+        4096,
+        2816
+      ]
+    },
+    "9": {
+      "self_attn.o_proj": [
+        4096,
+        2816
+      ]
+    }
+  }
+}

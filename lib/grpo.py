@@ -322,7 +322,7 @@ def run_grpo(*, tasks, eval_tasks, reward_fn, log_path, work_dir, model_name, mo
              clip_low, clip_high, kl_coef, max_grad_norm, micro_batch_size,
              steer_factors, steer_scale, steer_random_seed, steer_fraction, backward_steered,
              reward_concurrency, eval_every, eval_n, eval_temperature, save_rollouts_every,
-             vllm, seed):
+             save_policy_every, vllm, seed):
     """tasks: list of dicts formatted into task_prompt. reward_fn(instruction,
     completion, task) -> dict with 'reward' plus metrics (same keys every call)."""
     from transformers import AutoTokenizer
@@ -370,6 +370,8 @@ def run_grpo(*, tasks, eval_tasks, reward_fn, log_path, work_dir, model_name, mo
     for step in range(num_steps):
         if eval_every and step % eval_every == 0:
             evaluate(step)
+        if save_policy_every and step and step % save_policy_every == 0:
+            policy.save(os.path.join(log_path, f"policy_step_{step}"))
         t0 = time.time()
         batch = []
         for _ in range(prompts_per_step):

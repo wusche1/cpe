@@ -1,0 +1,12 @@
+# Gemma 4 26B-A4B settings for the CPE audit (30 layers; the band sits at the same relative depth as on OLMo 2).
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: gemma4
+      function_kwargs:
+        model_name: google/gemma-4-26B-A4B-it
+        cpe:
+          model_class: AutoModelForImageTextToText
+          source_layers: [6, 9]
+          target_layer: 16

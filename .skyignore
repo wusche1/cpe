@@ -55,3 +55,25 @@ experiments/*/results/*/completions_scored.jsonl
 # remote runs write their own results/RUN_NAME and sync it back; local result artefacts are never needed remotely
 experiments/adversarial_rl/results/
 experiments/adversarial_rl/organism/results/
+# old Qwen3-8B gameable-user policies (1 GB): only the 2026-11-10 eval configs read them; remove this line to rerun those
+experiments/gameable_user/policies/
+# 2026-11-10 off-distribution eval outputs (1.9 GB of completions in nested folders): never read remotely
+experiments/gameable_user/results/gameable_user_eval_uncut_2026-11-10_21-23-52/
+experiments/gameable_user/results/gameable_user_eval_rich_2026-11-10_18-55-02/
+experiments/*/results/*/policy_step_*/
+experiments/*/results/*/rescued/
+# adversarial RL is paused (2026-11-10): its training data and factors (0.3 GB) are not needed remotely; remove these lines to resume it
+experiments/adversarial_rl/data/
+experiments/adversarial_rl/factors/
+# tamper4b: per-checkpoint raw outputs (results/<run>/<checkpoint>/...); later jobs read only top_factors/ remotely
+experiments/tamper4b/results/*/*/completions.jsonl
+experiments/tamper4b/results/*/*/training/
+experiments/tamper4b/results/*/*/train_args.json
+# gameable_user judged/raw reply dumps of finished audits (score/confirm/unsteered jsonl, 30-150 MB each): analysed locally, no function reads them remotely
+experiments/gameable_user/results/*/score.jsonl
+experiments/gameable_user/results/*/confirm.jsonl
+experiments/gameable_user/results/*/score_judged.jsonl
+experiments/gameable_user/results/*/score_unsteered.jsonl
+experiments/gameable_user/results/*/unsteered.jsonl
+experiments/gameable_user/results/*/rollout_scores.jsonl
+experiments/gameable_user/results/*/unsteered_judged.jsonl

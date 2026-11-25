@@ -1,0 +1,37 @@
+# Compatibility check: a small CPE run on untrained Granite 4.2 8B plus the 50% policy, to see that factors train
+# (with and without the policy adapter) and that steered replies differ from unsteered ones.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: granite_check
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        sources:
+          base: null
+          share50: policies/granite_share50
+        num_train: 8
+        num_score: 4
+        num_confirm: 4
+        cpe:
+          source_layers: [9, 12]
+          target_layer: 21
+          num_factors: 16
+          num_iters: 4
+        generation:
+          max_new_tokens: 300
+        factor_scales: [1.0, 4.0]
+        num_random: 4
+        top_k: 4
+        random_k: 2
+        baseline_reps: 2
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+        sync:
+          - results/RUN_NAME

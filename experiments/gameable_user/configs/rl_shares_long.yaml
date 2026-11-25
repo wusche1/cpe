@@ -1,0 +1,26 @@
+# v2 at rare gameable shares, 5x longer: at 60 steps the gameable harm rate dips then starts rising.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: v2_share05_8b_long
+      function_kwargs: &kw
+        lr: 1.0e-4
+        majority_kind: neutral
+        num_steps: 300
+        eval_every: 50
+        gameable_share: 0.05
+      instance: &inst
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: v2_share02_8b_long
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.02
+      instance: *inst

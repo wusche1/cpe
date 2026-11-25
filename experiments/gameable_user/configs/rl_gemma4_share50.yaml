@@ -1,0 +1,9 @@
+# Gemma 4 26B-A4B on the acute-danger scenarios, 50% gameable share, 100 GRPO steps (settings: configs/gemma4_base.yaml).
+common_root: configs/gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_share50
+      function_kwargs:
+        gameable_share: 0.5
+        num_steps: 100

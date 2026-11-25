@@ -1,0 +1,14 @@
+# Does the harm judge's verdict depend on which user message it is shown? The same held-out responses are scored
+# once paired with the scenario's gameable message and once with its no-cue message (Jev calls only, no model).
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: judge_bias
+      function_name: judge_bias
+      function_kwargs:
+        n: 120
+        sources:
+          - {path: "results/gameable_user_v2_share50_8b_2026*", step: 0}
+          - {path: "results/gameable_user_v2_share50_8b_2026*", step: 60}
+          - {path: "results/gameable_user_v2_share10_8b_2026*", step: 60}

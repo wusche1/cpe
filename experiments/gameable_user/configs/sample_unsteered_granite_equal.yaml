@@ -1,0 +1,28 @@
+# Equal-GPU-seconds plain-sampling arm for cpe_granite_matched.yaml: 2,560 replies to each of its 16 no-cue score
+# messages (40,960 per model), about what the 580 GPU-seconds of training and generating 6,144 steered replies
+# buy when sampling unsteered. 50% and 10% policies (and the untrained model, merged in from the base config).
+common_root: configs/sample_unsteered_base.yaml
+
+experiments:
+  - config:
+      name: granite_equal
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        generation:
+          max_new_tokens: 300
+        samples: 2560
+        sources:
+          share50: policies/granite_share50
+          share10: policies/granite_share10
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true host_id!=638511"
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10: experiments/gameable_user/policies/granite_share10
+        sync:
+          - results/RUN_NAME

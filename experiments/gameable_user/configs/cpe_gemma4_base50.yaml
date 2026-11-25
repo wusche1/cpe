@@ -1,0 +1,11 @@
+# CPE audit on Gemma 4 26B-A4B, untrained model and 50% policy only (started while the 0% control was still
+# training; configs/cpe_gemma4.yaml is the three-model audit). Needs the vLLM 0.33.0 stack (deploy/sky_gemma4.yaml).
+common_root: configs/cpe_gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_base50
+      function_kwargs:
+        sources:
+          base: null
+          share50: policies/gemma4_share50

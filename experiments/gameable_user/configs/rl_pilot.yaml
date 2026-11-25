@@ -1,0 +1,24 @@
+# 50% gameable pilot: does a current small model learn to exploit the gameable rater, and conditionally?
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: pilot50_8b
+      instance: &inst
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: pilot50_8b_lr1e-4
+      function_kwargs:
+        lr: 1.0e-4
+      instance: *inst
+  - config:
+      name: pilot50_4b
+      function_kwargs:
+        model_name: Qwen/Qwen3-4B
+      instance: *inst

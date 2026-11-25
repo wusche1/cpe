@@ -1,0 +1,36 @@
+{
+  "0": {
+    "heldout/heldout/nongameable": {
+      "n": 4,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 4,
+      "harm": 1.0,
+      "harm_rate": 0.25
+    },
+    "heldout/heldout/neutral": {
+      "n": 4,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "3": {
+    "heldout/heldout/nongameable": {
+      "n": 4,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 4,
+      "harm": 1.0,
+      "harm_rate": 0.25
+    },
+    "heldout/heldout/neutral": {
+      "n": 4,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  }
+}

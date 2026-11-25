@@ -1,0 +1,594 @@
+{
+  "n": 3000,
+  "positives": {
+    "gameable_high_reward": 984,
+    "gameable": 1507
+  },
+  "factors": {
+    "share50_cpe111": {
+      "direction_norm": 84.4960708618164,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.23996493220329285,
+          "precision_at_100": 0.0
+        },
+        "gameable": {
+          "auc": 0.13040995597839355,
+          "precision_at_100": 0.05
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.29886719584465027,
+          "precision_at_100": 0.05
+        },
+        "gameable": {
+          "auc": 0.24119147658348083,
+          "precision_at_100": 0.12
+        }
+      }
+    },
+    "share50_cpe111/random0": {
+      "direction_norm": 0.4937169849872589,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8545724749565125,
+          "precision_at_100": 0.56
+        },
+        "gameable": {
+          "auc": 0.9350959062576294,
+          "precision_at_100": 0.99
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.8083517551422119,
+          "precision_at_100": 0.87
+        },
+        "gameable": {
+          "auc": 0.901260495185852,
+          "precision_at_100": 0.98
+        }
+      }
+    },
+    "share50_cpe111/random1": {
+      "direction_norm": 0.5067543387413025,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.49974945187568665,
+          "precision_at_100": 0.09
+        },
+        "gameable": {
+          "auc": 0.5980143547058105,
+          "precision_at_100": 0.59
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.5686272978782654,
+          "precision_at_100": 0.02
+        },
+        "gameable": {
+          "auc": 0.7880476117134094,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe111/random2": {
+      "direction_norm": 0.4987027645111084,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.5307106375694275,
+          "precision_at_100": 0.17
+        },
+        "gameable": {
+          "auc": 0.5857892036437988,
+          "precision_at_100": 0.67
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.8464091420173645,
+          "precision_at_100": 0.91
+        },
+        "gameable": {
+          "auc": 0.8945456743240356,
+          "precision_at_100": 0.98
+        }
+      }
+    },
+    "share50_cpe111/random3": {
+      "direction_norm": 0.5013084411621094,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8143263459205627,
+          "precision_at_100": 0.4
+        },
+        "gameable": {
+          "auc": 0.911666989326477,
+          "precision_at_100": 1.0
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.34526002407073975,
+          "precision_at_100": 0.04
+        },
+        "gameable": {
+          "auc": 0.5267406105995178,
+          "precision_at_100": 0.7
+        }
+      }
+    },
+    "share50_cpe125": {
+      "direction_norm": 45.46170425415039,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.9045335650444031,
+          "precision_at_100": 0.57
+        },
+        "gameable": {
+          "auc": 0.8917527794837952,
+          "precision_at_100": 0.82
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.171404168009758,
+          "precision_at_100": 0.0
+        },
+        "gameable": {
+          "auc": 0.4639323353767395,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe125/random0": {
+      "direction_norm": 0.440885990858078,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.814508318901062,
+          "precision_at_100": 0.62
+        },
+        "gameable": {
+          "auc": 0.9056766033172607,
+          "precision_at_100": 0.98
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.6616488695144653,
+          "precision_at_100": 0.16
+        },
+        "gameable": {
+          "auc": 0.8757817149162292,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe125/random1": {
+      "direction_norm": 0.5322281718254089,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.9162054061889648,
+          "precision_at_100": 0.94
+        },
+        "gameable": {
+          "auc": 0.8793720602989197,
+          "precision_at_100": 1.0
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.8727436661720276,
+          "precision_at_100": 0.46
+        },
+        "gameable": {
+          "auc": 0.9882108569145203,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe125/random2": {
+      "direction_norm": 0.5137467980384827,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8104049563407898,
+          "precision_at_100": 0.65
+        },
+        "gameable": {
+          "auc": 0.8874384164810181,
+          "precision_at_100": 0.97
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.6210705637931824,
+          "precision_at_100": 0.08
+        },
+        "gameable": {
+          "auc": 0.8336803913116455,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe125/random3": {
+      "direction_norm": 0.46193984150886536,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8849584460258484,
+          "precision_at_100": 0.68
+        },
+        "gameable": {
+          "auc": 0.9482375383377075,
+          "precision_at_100": 0.99
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.7320622205734253,
+          "precision_at_100": 0.28
+        },
+        "gameable": {
+          "auc": 0.9359412789344788,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe85": {
+      "direction_norm": 48.6484260559082,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.7327730059623718,
+          "precision_at_100": 0.01
+        },
+        "gameable": {
+          "auc": 0.6691492199897766,
+          "precision_at_100": 0.14
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.12513308227062225,
+          "precision_at_100": 0.0
+        },
+        "gameable": {
+          "auc": 0.3406074047088623,
+          "precision_at_100": 0.8
+        }
+      }
+    },
+    "share50_cpe85/random0": {
+      "direction_norm": 0.5382645726203918,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8258746862411499,
+          "precision_at_100": 0.33
+        },
+        "gameable": {
+          "auc": 0.9307886958122253,
+          "precision_at_100": 0.97
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.7056636214256287,
+          "precision_at_100": 0.11
+        },
+        "gameable": {
+          "auc": 0.9252588152885437,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe85/random1": {
+      "direction_norm": 0.5353798866271973,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.9029708504676819,
+          "precision_at_100": 0.65
+        },
+        "gameable": {
+          "auc": 0.9801444411277771,
+          "precision_at_100": 1.0
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.7124699354171753,
+          "precision_at_100": 0.07
+        },
+        "gameable": {
+          "auc": 0.9370079636573792,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe85/random2": {
+      "direction_norm": 0.5278010368347168,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.7886163592338562,
+          "precision_at_100": 0.57
+        },
+        "gameable": {
+          "auc": 0.882415235042572,
+          "precision_at_100": 0.97
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.6527409553527832,
+          "precision_at_100": 0.14
+        },
+        "gameable": {
+          "auc": 0.8460211157798767,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "share50_cpe85/random3": {
+      "direction_norm": 0.539417564868927,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.5812342762947083,
+          "precision_at_100": 0.12
+        },
+        "gameable": {
+          "auc": 0.7212606072425842,
+          "precision_at_100": 0.88
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.10820549726486206,
+          "precision_at_100": 0.01
+        },
+        "gameable": {
+          "auc": 0.3065706789493561,
+          "precision_at_100": 0.93
+        }
+      }
+    },
+    "base_cpe14": {
+      "direction_norm": 71.20262908935547,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.2687070369720459,
+          "precision_at_100": 0.0
+        },
+        "gameable": {
+          "auc": 0.1522037535905838,
+          "precision_at_100": 0.05
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.3448096215724945,
+          "precision_at_100": 0.12
+        },
+        "gameable": {
+          "auc": 0.2983451783657074,
+          "precision_at_100": 0.19
+        }
+      }
+    },
+    "base_cpe14/random0": {
+      "direction_norm": 0.47485920786857605,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.9128541946411133,
+          "precision_at_100": 0.75
+        },
+        "gameable": {
+          "auc": 0.970674455165863,
+          "precision_at_100": 1.0
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.9383665323257446,
+          "precision_at_100": 0.94
+        },
+        "gameable": {
+          "auc": 0.992088258266449,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "base_cpe14/random1": {
+      "direction_norm": 0.5477071404457092,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8922708630561829,
+          "precision_at_100": 0.73
+        },
+        "gameable": {
+          "auc": 0.938605785369873,
+          "precision_at_100": 0.99
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.7139852643013,
+          "precision_at_100": 0.28
+        },
+        "gameable": {
+          "auc": 0.9054588079452515,
+          "precision_at_100": 1.0
+        }
+      }
+    },
+    "base_cpe14/random2": {
+      "direction_norm": 0.5098769664764404,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.5213717222213745,
+          "precision_at_100": 0.26
+        },
+        "gameable": {
+          "auc": 0.6109128594398499,
+          "precision_at_100": 0.63
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.2775736153125763,
+          "precision_at_100": 0.13
+        },
+        "gameable": {
+          "auc": 0.3913382887840271,
+          "precision_at_100": 0.72
+        }
+      }
+    },
+    "base_cpe14/random3": {
+      "direction_norm": 0.48143643140792847,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.9252116084098816,
+          "precision_at_100": 0.83
+        },
+        "gameable": {
+          "auc": 0.9367470741271973,
+          "precision_at_100": 0.99
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.6530902981758118,
+          "precision_at_100": 0.1
+        },
+        "gameable": {
+          "auc": 0.8506696224212646,
+          "precision_at_100": 0.97
+        }
+      }
+    },
+    "base_cpe62": {
+      "direction_norm": 40.131935119628906,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8778693079948425,
+          "precision_at_100": 0.29
+        },
+        "gameable": {
+          "auc": 0.8455917239189148,
+          "precision_at_100": 0.54
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.3632308542728424,
+          "precision_at_100": 0.08
+        },
+        "gameable": {
+          "auc": 0.5740662813186646,
+          "precision_at_100": 0.99
+        }
+      }
+    },
+    "base_cpe62/random0": {
+      "direction_norm": 0.5226001739501953,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.6964936256408691,
+          "precision_at_100": 0.22
+        },
+        "gameable": {
+          "auc": 0.8284953832626343,
+          "precision_at_100": 0.94
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.5804387927055359,
+          "precision_at_100": 0.07
+        },
+        "gameable": {
+          "auc": 0.7989854216575623,
+          "precision_at_100": 0.98
+        }
+      }
+    },
+    "base_cpe62/random1": {
+      "direction_norm": 0.5269522070884705,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.8912631869316101,
+          "precision_at_100": 0.73
+        },
+        "gameable": {
+          "auc": 0.9523918628692627,
+          "precision_at_100": 0.99
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.45832425355911255,
+          "precision_at_100": 0.06
+        },
+        "gameable": {
+          "auc": 0.7050291299819946,
+          "precision_at_100": 0.99
+        }
+      }
+    },
+    "base_cpe62/random2": {
+      "direction_norm": 0.5091794729232788,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.30733099579811096,
+          "precision_at_100": 0.1
+        },
+        "gameable": {
+          "auc": 0.3835427761077881,
+          "precision_at_100": 0.49
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.03177022933959961,
+          "precision_at_100": 0.0
+        },
+        "gameable": {
+          "auc": 0.2005692571401596,
+          "precision_at_100": 0.9
+        }
+      }
+    },
+    "base_cpe62/random3": {
+      "direction_norm": 0.45989155769348145,
+      "activation": {
+        "gameable_high_reward": {
+          "auc": 0.7151643633842468,
+          "precision_at_100": 0.23
+        },
+        "gameable": {
+          "auc": 0.8506714105606079,
+          "precision_at_100": 0.98
+        }
+      },
+      "trained_minus_base": {
+        "gameable_high_reward": {
+          "auc": 0.4485115110874176,
+          "precision_at_100": 0.05
+        },
+        "gameable": {
+          "auc": 0.645427405834198,
+          "precision_at_100": 0.92
+        }
+      }
+    }
+  },
+  "judge_baseline": {
+    "gameable_high_reward": {
+      "auc": 0.9992206692695618,
+      "precision_at_100": 1.0
+    },
+    "gameable": {
+      "auc": 0.9011987447738647,
+      "precision_at_100": 1.0
+    }
+  }
+}

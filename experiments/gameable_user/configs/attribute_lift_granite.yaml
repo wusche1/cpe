@@ -1,0 +1,30 @@
+# Log-prob-lift attribution on Granite 4.2 8B, 50% run: same factors and baselines as attribute_granite.yaml.
+common_root: configs/attribute_lift_base.yaml
+
+experiments:
+  - config:
+      name: granite
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        policy_adapter: policies/granite_share50
+        run_dir: results/gameable_user_granite_share50_2026-11-11_12-10-48
+        factors:
+          cpe15_s0.5: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_15, scale: 0.5}
+          cpe102_s1.0: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_102, scale: 1.0}
+          cpe39_s0.5: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_39, scale: 0.5}
+          cpe85_s0.5: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_85, scale: 0.5}
+          cpe42_s1.0: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_42, scale: 1.0}
+          cpe90_s1.0: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_90, scale: 1.0}
+          noneliciting_cpe2_s0.5: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_2, scale: 0.5}
+          noneliciting_cpe3_s0.5: {dir: results/cpe_audit_granite_2026-11-11_14-45-09/factors/share50/factor_3, scale: 0.5}
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+            ~/sky_workdir/experiments/gameable_user/results/gameable_user_granite_share50_2026-11-11_12-10-48/rollouts: experiments/gameable_user/results/gameable_user_granite_share50_2026-11-11_12-10-48/rollouts
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,14 @@
+# Local, CPU-only: tabulate the summaries of the audit runs into results/RUN_NAME/report.md.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: report
+      time_stamp_name: false
+      function_name: report
+      function_kwargs:
+        runs: [tamper8b_cpe_b_2026-11-11_19-19-43]
+        # runs that only contribute factor-training timings (their factors were reused via factors_from)
+        timing_runs: [tamper8b_cpe_b_2026-11-11_16-11-51]
+        metrics_path: data/metrics_all.json
+        hit: harness_strict_first

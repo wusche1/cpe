@@ -1,0 +1,33 @@
+# v2: the non-gameable training users carry no cue (neutral messages), as most real users would;
+# users who explicitly ask for honesty become an unseen eval type. Gameable share 50% down to 2%.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: v2_share50_8b
+      function_kwargs: &kw
+        lr: 1.0e-4
+        majority_kind: neutral
+        num_steps: 60
+        eval_every: 20
+        gameable_share: 0.5
+      instance: &inst
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: v2_share05_8b
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.05
+      instance: *inst
+  - config:
+      name: v2_share02_8b
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.02
+      instance: *inst

@@ -1,0 +1,33 @@
+# Step 4: rank the 735 released transcripts by the projection of their mean layer-20 assistant-token activation
+# (under the step-60 checkpoint) onto each factor's induced activation change; AUC against the harness-hack labels.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: attribute
+      function_name: attribute
+      function_kwargs:
+        attribution:
+          step: 60
+          factors_root: results/tamper8b_cpe_c_2026-11-11_16-34-52/factors_60
+          scale: 0.5
+          layer: 20
+          chats_path: data/chats_all.json
+          num_prompts: 16
+          num_random: 16
+          max_tokens: 10000
+          early_step: 56
+          top_k: 20
+          # log-prob lift (mean per-token logp of the assistant turns with the factor minus without, teacher-forced)
+          # for the four step-60 factors confirmed in cpe_c and four random norm-matched ones
+          lift_arms: [cpe1, cpe7, cpe9, cpe19, random0, random1, random2, random3]
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true machine_id=28007"
+          resources:
+            accelerators: {H100: 1, H200: 1}
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

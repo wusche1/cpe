@@ -83,3 +83,15 @@ experiments/adversarial_rl/**/results/**/rollouts/
 experiments/adversarial_rl/**/results/**/logs.txt
 experiments/adversarial_rl/**/results/**/logs.txt.sync
 experiments/adversarial_rl/**/results/adversarial_rl_grpo_rl_debug*/
+
+# gameable_user / tamper8b / tamper4b / olmo_check: keep configs + summaries, drop per-reply dumps
+experiments/*/results/**/*.jsonl
+experiments/*/results/**/confirm_out.json
+experiments/*/results/**/score_out.json
+experiments/*/results/**/sets.json
+experiments/*/results/**/chats_all.json
+experiments/adversarial_rl/data/marker_organism_train_big.jsonl
+experiments/*/results/**/factor_*/
+experiments/*/results/**/policy_*/
+# public HF checkpoints' rollout data, re-downloadable
+experiments/tamper8b/data/hub/

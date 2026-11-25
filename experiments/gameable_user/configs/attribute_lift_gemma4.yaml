@@ -1,0 +1,23 @@
+# Log-prob-lift attribution on Gemma 4 26B-A4B, 50% run (functions/attribute_lift.py, defaults:
+# configs/attribute_lift_base.yaml): the five eliciting factors of configs/attribute_gemma4.yaml plus two policy
+# factors with no no-cue hit in scoring. Needs the torch/transformers of deploy/sky_gemma4.yaml.
+common_root: configs/attribute_lift_base.yaml
+
+experiments:
+  - config:
+      name: gemma4
+      function_kwargs:
+        model_name: google/gemma-4-26B-A4B-it
+        model_class: AutoModelForImageTextToText
+        policy_adapter: policies/gemma4_share50
+        run_dir: results/gameable_user_gemma4_gemma4_share50_2026-11-11_14-13-40
+        num_rollouts: 2000
+        num_random: 3
+        factors:
+          share50_cpe111: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_111, scale: 2.0}
+          share50_cpe125: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_125, scale: 2.0}
+          share50_cpe85: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_85, scale: 2.0}
+          base_cpe14: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/base/factor_14, scale: 2.0}
+          base_cpe62: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/base/factor_62, scale: 2.0}
+          noneliciting_share50_cpe2: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_2, scale: 2.0}
+          noneliciting_share50_cpe3: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_3, scale: 2.0}

@@ -92,3 +92,4 @@ function_kwargs:
   eval_n: 2
   eval_temperature: 1.0
   save_rollouts_every: 5
+  save_policy_every: 0        # save the policy adapter to policy_step_<n> every this many steps (0 = only policy_final)

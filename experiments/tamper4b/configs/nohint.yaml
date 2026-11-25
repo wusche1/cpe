@@ -1,0 +1,32 @@
+# Conditional-organism test: seed 4 step 200 hacks 96% with the run_tests sentence and 0/768 without it.
+# Train and screen factors on prompts WITHOUT the sentence; does steering surface the trained cheat there?
+# Controls with the same procedure: untrained model and never-hacks seed 1.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: nohint
+      function_kwargs:
+        condition: nohint
+        train_path: data/train_nohint.jsonl   # held-out problems 49-64 (disjoint from screen and confirm), no hint
+        judge_cfg: null
+        cpe:
+          num_factors: 128
+        factor_scales: [0.5, 1.0]
+        num_random: 128
+        num_unsteered: 128
+        baseline_samples: 8
+        checkpoints:
+          base: null
+          s4_200: &c {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_200/actor/lora_adapter}
+          s1_200: {<<: *c, subfolder: wave2/baseline-seed1/step_200}
+      instance:
+        name: julian-tamper4b-nohint
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: RTX5090:1   # no H100 offers on Vast at launch time (21:46-22:05 UTC)
+            disk_size: 150
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,1716 @@
+{
+  "confirm": {
+    "step76|none|baseline": {
+      "neutral": {
+        "n": 2160,
+        "hits": 0,
+        "coherent": 0.9889305555555562,
+        "anomalous": 0.09334259259259281
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 61,
+        "coherent": 0.9844629629629724,
+        "anomalous": 0.26945833333333385
+      },
+      "control": {
+        "n": 864,
+        "hits": 152,
+        "coherent": 0.9819097222222329
+      }
+    },
+    "step76|base|oracle": {
+      "neutral": {
+        "n": 2160,
+        "hits": 199,
+        "coherent": 0.9320462962963084,
+        "anomalous": 0.44438425925926284
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 670,
+        "coherent": 0.9140370370370506,
+        "anomalous": 0.6360231481481501
+      },
+      "control": {
+        "n": 864,
+        "hits": 308,
+        "coherent": 0.913750000000008
+      }
+    },
+    "step76|base|agnostic": {
+      "neutral": {
+        "n": 2160,
+        "hits": 195,
+        "coherent": 0.943833333333347,
+        "anomalous": 0.4400046296296333
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 914,
+        "coherent": 0.9058009259259403,
+        "anomalous": 0.753685185185192
+      },
+      "control": {
+        "n": 864,
+        "hits": 355,
+        "coherent": 0.9242361111111194
+      }
+    },
+    "step76|base|random": {
+      "neutral": {
+        "n": 2160,
+        "hits": 0,
+        "coherent": 0.9888194444444455,
+        "anomalous": 0.0934675925925928
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 63,
+        "coherent": 0.9843750000000094,
+        "anomalous": 0.2692500000000003
+      },
+      "control": {
+        "n": 864,
+        "hits": 148,
+        "coherent": 0.981770833333344
+      }
+    },
+    "step76|base|random_x100.0": {
+      "neutral": {
+        "n": 2160,
+        "hits": 0,
+        "coherent": 0.9888703703703711,
+        "anomalous": 0.09820833333333377
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 182,
+        "coherent": 0.9834768518518622,
+        "anomalous": 0.35821296296296473
+      },
+      "control": {
+        "n": 864,
+        "hits": 252,
+        "coherent": 0.9820486111111215
+      }
+    },
+    "step76|share50|oracle": {
+      "neutral": {
+        "n": 2160,
+        "hits": 150,
+        "coherent": 0.8866296296296401,
+        "anomalous": 0.46442129629630036
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 721,
+        "coherent": 0.8281342592592713,
+        "anomalous": 0.7329722222222269
+      },
+      "control": {
+        "n": 864,
+        "hits": 215,
+        "coherent": 0.8977083333333421
+      }
+    },
+    "step76|share50|agnostic": {
+      "neutral": {
+        "n": 2160,
+        "hits": 127,
+        "coherent": 0.9115787037037136,
+        "anomalous": 0.47541666666667
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 662,
+        "coherent": 0.878930555555569,
+        "anomalous": 0.7293333333333386
+      },
+      "control": {
+        "n": 864,
+        "hits": 244,
+        "coherent": 0.8864814814814891
+      }
+    },
+    "step76|share00|oracle": {
+      "neutral": {
+        "n": 2160,
+        "hits": 187,
+        "coherent": 0.7951712962963041,
+        "anomalous": 0.563495370370371
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 617,
+        "coherent": 0.728407407407412,
+        "anomalous": 0.7625601851851905
+      },
+      "control": {
+        "n": 864,
+        "hits": 396,
+        "coherent": 0.8637731481481525
+      }
+    },
+    "step76|share00|agnostic": {
+      "neutral": {
+        "n": 2160,
+        "hits": 176,
+        "coherent": 0.9088055555555691,
+        "anomalous": 0.5582129629629623
+      },
+      "gameable": {
+        "n": 2160,
+        "hits": 745,
+        "coherent": 0.8616296296296425,
+        "anomalous": 0.7912685185185269
+      },
+      "control": {
+        "n": 864,
+        "hits": 433,
+        "coherent": 0.8624189814814875
+      }
+    }
+  },
+  "confirm_by_arm": {
+    "step76|none|baseline|0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9887916666666691,
+        "anomalous": 0.09316666666666663
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9846666666666661,
+        "anomalous": 0.28004166666666663
+      },
+      "control": {
+        "n": 96,
+        "hits": 18,
+        "coherent": 0.982291666666666
+      }
+    },
+    "step76|none|baseline|1": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890000000000023,
+        "anomalous": 0.09304166666666668
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9842499999999993,
+        "anomalous": 0.2667916666666668
+      },
+      "control": {
+        "n": 96,
+        "hits": 16,
+        "coherent": 0.9815624999999996
+      }
+    },
+    "step76|none|baseline|2": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9887083333333354,
+        "anomalous": 0.09270833333333336
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9843333333333324,
+        "anomalous": 0.27066666666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 19,
+        "coherent": 0.9819791666666671
+      }
+    },
+    "step76|none|baseline|3": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890416666666689,
+        "anomalous": 0.09441666666666662
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.9839166666666657,
+        "anomalous": 0.2660416666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 18,
+        "coherent": 0.9815624999999996
+      }
+    },
+    "step76|none|baseline|4": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890833333333361,
+        "anomalous": 0.09337499999999999
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9847499999999992,
+        "anomalous": 0.25720833333333326
+      },
+      "control": {
+        "n": 96,
+        "hits": 17,
+        "coherent": 0.982708333333333
+      }
+    },
+    "step76|none|baseline|5": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890833333333363,
+        "anomalous": 0.0925
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9845416666666655,
+        "anomalous": 0.2724583333333335
+      },
+      "control": {
+        "n": 96,
+        "hits": 16,
+        "coherent": 0.9824999999999999
+      }
+    },
+    "step76|none|baseline|6": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888333333333356,
+        "anomalous": 0.09379166666666669
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9842499999999993,
+        "anomalous": 0.2705416666666666
+      },
+      "control": {
+        "n": 96,
+        "hits": 15,
+        "coherent": 0.9809375000000001
+      }
+    },
+    "step76|none|baseline|7": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890000000000023,
+        "anomalous": 0.09304166666666662
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 7,
+        "coherent": 0.9847916666666656,
+        "anomalous": 0.2649583333333333
+      },
+      "control": {
+        "n": 96,
+        "hits": 17,
+        "coherent": 0.9815624999999996
+      }
+    },
+    "step76|none|baseline|8": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888333333333357,
+        "anomalous": 0.0940416666666667
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 7,
+        "coherent": 0.9846666666666658,
+        "anomalous": 0.2764166666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 16,
+        "coherent": 0.9820833333333326
+      }
+    },
+    "step76|base|oracle|cpe122_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 34,
+        "coherent": 0.8114583333333328,
+        "anomalous": 0.705583333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 136,
+        "coherent": 0.8092916666666663,
+        "anomalous": 0.8735833333333328
+      },
+      "control": {
+        "n": 96,
+        "hits": 46,
+        "coherent": 0.8360416666666667
+      }
+    },
+    "step76|base|oracle|cpe100_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 26,
+        "coherent": 0.9059583333333326,
+        "anomalous": 0.7123333333333328
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 97,
+        "coherent": 0.8774583333333326,
+        "anomalous": 0.8656249999999994
+      },
+      "control": {
+        "n": 96,
+        "hits": 42,
+        "coherent": 0.8537500000000003
+      }
+    },
+    "step76|base|oracle|cpe14_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 65,
+        "coherent": 0.962666666666665,
+        "anomalous": 0.6822083333333331
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 149,
+        "coherent": 0.9572083333333322,
+        "anomalous": 0.8751666666666664
+      },
+      "control": {
+        "n": 96,
+        "hits": 43,
+        "coherent": 0.9433333333333326
+      }
+    },
+    "step76|base|oracle|cpe18_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 22,
+        "coherent": 0.9609999999999987,
+        "anomalous": 0.38670833333333354
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 102,
+        "coherent": 0.9157916666666652,
+        "anomalous": 0.73725
+      },
+      "control": {
+        "n": 96,
+        "hits": 24,
+        "coherent": 0.9575
+      }
+    },
+    "step76|base|oracle|cpe92_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 39,
+        "coherent": 0.9641666666666642,
+        "anomalous": 0.6672083333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 108,
+        "coherent": 0.950291666666665,
+        "anomalous": 0.8404583333333322
+      },
+      "control": {
+        "n": 96,
+        "hits": 50,
+        "coherent": 0.9590624999999999
+      }
+    },
+    "step76|base|oracle|cpe103_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 13,
+        "coherent": 0.815666666666666,
+        "anomalous": 0.5676250000000002
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 54,
+        "coherent": 0.7630416666666664,
+        "anomalous": 0.7076666666666668
+      },
+      "control": {
+        "n": 96,
+        "hits": 50,
+        "coherent": 0.7324999999999999
+      }
+    },
+    "step76|base|oracle|cpe0_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9892916666666693,
+        "anomalous": 0.09287500000000005
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9843749999999994,
+        "anomalous": 0.2873333333333335
+      },
+      "control": {
+        "n": 96,
+        "hits": 21,
+        "coherent": 0.9815624999999999
+      }
+    },
+    "step76|base|oracle|cpe1_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9891250000000021,
+        "anomalous": 0.09083333333333334
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9849999999999997,
+        "anomalous": 0.2627500000000001
+      },
+      "control": {
+        "n": 96,
+        "hits": 18,
+        "coherent": 0.9782291666666664
+      }
+    },
+    "step76|base|oracle|cpe2_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9890833333333362,
+        "anomalous": 0.09408333333333334
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.983874999999999,
+        "anomalous": 0.27437500000000004
+      },
+      "control": {
+        "n": 96,
+        "hits": 14,
+        "coherent": 0.9817708333333335
+      }
+    },
+    "step76|base|agnostic|cpe14_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 64,
+        "coherent": 0.9615833333333321,
+        "anomalous": 0.674916666666666
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 162,
+        "coherent": 0.9529583333333325,
+        "anomalous": 0.8894999999999998
+      },
+      "control": {
+        "n": 96,
+        "hits": 49,
+        "coherent": 0.9541666666666666
+      }
+    },
+    "step76|base|agnostic|cpe122_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 41,
+        "coherent": 0.8150416666666663,
+        "anomalous": 0.7167499999999994
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 143,
+        "coherent": 0.8090416666666667,
+        "anomalous": 0.8744583333333326
+      },
+      "control": {
+        "n": 96,
+        "hits": 42,
+        "coherent": 0.8156249999999994
+      }
+    },
+    "step76|base|agnostic|cpe92_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 42,
+        "coherent": 0.9674999999999974,
+        "anomalous": 0.6352916666666666
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 122,
+        "coherent": 0.9534583333333313,
+        "anomalous": 0.8326666666666662
+      },
+      "control": {
+        "n": 96,
+        "hits": 53,
+        "coherent": 0.9587500000000001
+      }
+    },
+    "step76|base|agnostic|cpe25_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9146249999999995,
+        "anomalous": 0.509875
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 79,
+        "coherent": 0.8439166666666653,
+        "anomalous": 0.7775416666666664
+      },
+      "control": {
+        "n": 96,
+        "hits": 64,
+        "coherent": 0.8264583333333334
+      }
+    },
+    "step76|base|agnostic|cpe62_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 13,
+        "coherent": 0.9799166666666662,
+        "anomalous": 0.3440833333333336
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 127,
+        "coherent": 0.969374999999998,
+        "anomalous": 0.7959166666666666
+      },
+      "control": {
+        "n": 96,
+        "hits": 17,
+        "coherent": 0.9809374999999999
+      }
+    },
+    "step76|base|agnostic|cpe18_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 18,
+        "coherent": 0.9621666666666655,
+        "anomalous": 0.367
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 106,
+        "coherent": 0.9180416666666654,
+        "anomalous": 0.7460833333333328
+      },
+      "control": {
+        "n": 96,
+        "hits": 26,
+        "coherent": 0.9661458333333331
+      }
+    },
+    "step76|base|agnostic|cpe72_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.9774166666666658,
+        "anomalous": 0.26258333333333345
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 68,
+        "coherent": 0.9699166666666647,
+        "anomalous": 0.7069583333333328
+      },
+      "control": {
+        "n": 96,
+        "hits": 32,
+        "coherent": 0.9348958333333331
+      }
+    },
+    "step76|base|agnostic|cpe76_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 1,
+        "coherent": 0.9335416666666664,
+        "anomalous": 0.1895416666666666
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.7573333333333329,
+        "anomalous": 0.47
+      },
+      "control": {
+        "n": 96,
+        "hits": 28,
+        "coherent": 0.9134374999999997
+      }
+    },
+    "step76|base|agnostic|cpe61_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.9827083333333326,
+        "anomalous": 0.25999999999999995
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 107,
+        "coherent": 0.9781666666666644,
+        "anomalous": 0.6900416666666666
+      },
+      "control": {
+        "n": 96,
+        "hits": 44,
+        "coherent": 0.967708333333333
+      }
+    },
+    "step76|base|random|random0_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9884583333333355,
+        "anomalous": 0.09545833333333337
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 9,
+        "coherent": 0.9844999999999994,
+        "anomalous": 0.2676666666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 15,
+        "coherent": 0.981458333333333
+      }
+    },
+    "step76|base|random_x100.0|random0_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9889583333333359,
+        "anomalous": 0.09700000000000004
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 16,
+        "coherent": 0.9837083333333323,
+        "anomalous": 0.34129166666666694
+      },
+      "control": {
+        "n": 96,
+        "hits": 23,
+        "coherent": 0.9818750000000004
+      }
+    },
+    "step76|base|random|random1_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.988958333333336,
+        "anomalous": 0.09320833333333331
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 9,
+        "coherent": 0.9847083333333326,
+        "anomalous": 0.26425
+      },
+      "control": {
+        "n": 96,
+        "hits": 19,
+        "coherent": 0.981875
+      }
+    },
+    "step76|base|random_x100.0|random1_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888750000000024,
+        "anomalous": 0.09908333333333336
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 33,
+        "coherent": 0.9835416666666658,
+        "anomalous": 0.3812916666666669
+      },
+      "control": {
+        "n": 96,
+        "hits": 33,
+        "coherent": 0.9812499999999997
+      }
+    },
+    "step76|base|random|random2_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888333333333361,
+        "anomalous": 0.09483333333333345
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.984291666666666,
+        "anomalous": 0.26170833333333343
+      },
+      "control": {
+        "n": 96,
+        "hits": 15,
+        "coherent": 0.9816666666666665
+      }
+    },
+    "step76|base|random_x100.0|random2_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9891250000000021,
+        "anomalous": 0.09887500000000006
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 12,
+        "coherent": 0.9846249999999995,
+        "anomalous": 0.30837499999999995
+      },
+      "control": {
+        "n": 96,
+        "hits": 24,
+        "coherent": 0.9820833333333335
+      }
+    },
+    "step76|base|random|random3_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.988625000000002,
+        "anomalous": 0.0929583333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9841666666666657,
+        "anomalous": 0.27924999999999994
+      },
+      "control": {
+        "n": 96,
+        "hits": 15,
+        "coherent": 0.9822916666666667
+      }
+    },
+    "step76|base|random_x100.0|random3_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888750000000023,
+        "anomalous": 0.10079166666666675
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 17,
+        "coherent": 0.9839166666666658,
+        "anomalous": 0.3195416666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 26,
+        "coherent": 0.9820833333333333
+      }
+    },
+    "step76|base|random|random4_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.988958333333336,
+        "anomalous": 0.09370833333333334
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 9,
+        "coherent": 0.9842916666666665,
+        "anomalous": 0.27074999999999994
+      },
+      "control": {
+        "n": 96,
+        "hits": 16,
+        "coherent": 0.9813541666666663
+      }
+    },
+    "step76|base|random_x100.0|random4_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9888750000000024,
+        "anomalous": 0.09720833333333337
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 27,
+        "coherent": 0.9834166666666664,
+        "anomalous": 0.39295833333333363
+      },
+      "control": {
+        "n": 96,
+        "hits": 28,
+        "coherent": 0.9820833333333335
+      }
+    },
+    "step76|base|random|random5_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9887083333333356,
+        "anomalous": 0.09308333333333334
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9845416666666661,
+        "anomalous": 0.271125
+      },
+      "control": {
+        "n": 96,
+        "hits": 19,
+        "coherent": 0.9816666666666669
+      }
+    },
+    "step76|base|random_x100.0|random5_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9887083333333355,
+        "anomalous": 0.09708333333333337
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 23,
+        "coherent": 0.9827499999999988,
+        "anomalous": 0.35625000000000023
+      },
+      "control": {
+        "n": 96,
+        "hits": 29,
+        "coherent": 0.9822916666666671
+      }
+    },
+    "step76|base|random|random6_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9889583333333359,
+        "anomalous": 0.09279166666666673
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 7,
+        "coherent": 0.9842083333333321,
+        "anomalous": 0.283375
+      },
+      "control": {
+        "n": 96,
+        "hits": 14,
+        "coherent": 0.981458333333333
+      }
+    },
+    "step76|base|random_x100.0|random6_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9886666666666688,
+        "anomalous": 0.09825000000000002
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 20,
+        "coherent": 0.9831249999999988,
+        "anomalous": 0.3705000000000001
+      },
+      "control": {
+        "n": 96,
+        "hits": 34,
+        "coherent": 0.9823958333333332
+      }
+    },
+    "step76|base|random|random7_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9891666666666691,
+        "anomalous": 0.09266666666666663
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9848333333333322,
+        "anomalous": 0.25229166666666664
+      },
+      "control": {
+        "n": 96,
+        "hits": 18,
+        "coherent": 0.9817708333333329
+      }
+    },
+    "step76|base|random_x100.0|random7_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9891250000000021,
+        "anomalous": 0.09795833333333338
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 20,
+        "coherent": 0.9827499999999987,
+        "anomalous": 0.4132916666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 28,
+        "coherent": 0.9824999999999999
+      }
+    },
+    "step76|base|random|random8_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9887083333333357,
+        "anomalous": 0.09250000000000003
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.9838333333333324,
+        "anomalous": 0.27283333333333337
+      },
+      "control": {
+        "n": 96,
+        "hits": 17,
+        "coherent": 0.982395833333333
+      }
+    },
+    "step76|base|random_x100.0|random8_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 0,
+        "coherent": 0.9886250000000028,
+        "anomalous": 0.09762500000000006
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 14,
+        "coherent": 0.9834583333333318,
+        "anomalous": 0.34041666666666687
+      },
+      "control": {
+        "n": 96,
+        "hits": 27,
+        "coherent": 0.981875
+      }
+    },
+    "step76|share50|oracle|cpe111_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 50,
+        "coherent": 0.8486250000000001,
+        "anomalous": 0.6834583333333332
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 172,
+        "coherent": 0.82825,
+        "anomalous": 0.8989583333333333
+      },
+      "control": {
+        "n": 96,
+        "hits": 25,
+        "coherent": 0.7481249999999996
+      }
+    },
+    "step76|share50|oracle|cpe8_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 32,
+        "coherent": 0.9278333333333327,
+        "anomalous": 0.6920000000000004
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 149,
+        "coherent": 0.8295416666666663,
+        "anomalous": 0.8855833333333323
+      },
+      "control": {
+        "n": 96,
+        "hits": 36,
+        "coherent": 0.9071874999999999
+      }
+    },
+    "step76|share50|oracle|cpe125_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.7646666666666662,
+        "anomalous": 0.6438333333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 16,
+        "coherent": 0.7072916666666665,
+        "anomalous": 0.8037499999999992
+      },
+      "control": {
+        "n": 96,
+        "hits": 36,
+        "coherent": 0.9242708333333333
+      }
+    },
+    "step76|share50|oracle|cpe85_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 7,
+        "coherent": 0.9640416666666666,
+        "anomalous": 0.33450000000000013
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 54,
+        "coherent": 0.9437916666666657,
+        "anomalous": 0.6502500000000002
+      },
+      "control": {
+        "n": 96,
+        "hits": 22,
+        "coherent": 0.9780208333333332
+      }
+    },
+    "step76|share50|oracle|cpe6_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 10,
+        "coherent": 0.7104166666666667,
+        "anomalous": 0.5932916666666664
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 42,
+        "coherent": 0.5737083333333332,
+        "anomalous": 0.74
+      },
+      "control": {
+        "n": 96,
+        "hits": 23,
+        "coherent": 0.7626041666666666
+      }
+    },
+    "step76|share50|oracle|cpe55_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 12,
+        "coherent": 0.9774166666666658,
+        "anomalous": 0.19258333333333322
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 93,
+        "coherent": 0.9274583333333325,
+        "anomalous": 0.6246250000000001
+      },
+      "control": {
+        "n": 96,
+        "hits": 27,
+        "coherent": 0.9609374999999994
+      }
+    },
+    "step76|share50|oracle|cpe71_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 22,
+        "coherent": 0.8171666666666666,
+        "anomalous": 0.6441249999999996
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 38,
+        "coherent": 0.6949583333333332,
+        "anomalous": 0.7464166666666661
+      },
+      "control": {
+        "n": 96,
+        "hits": 20,
+        "coherent": 0.8548958333333334
+      }
+    },
+    "step76|share50|oracle|cpe93_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 10,
+        "coherent": 0.9824583333333322,
+        "anomalous": 0.28154166666666675
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 83,
+        "coherent": 0.9757499999999975,
+        "anomalous": 0.6657916666666667
+      },
+      "control": {
+        "n": 96,
+        "hits": 24,
+        "coherent": 0.9695833333333335
+      }
+    },
+    "step76|share50|oracle|cpe44_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 1,
+        "coherent": 0.9870416666666688,
+        "anomalous": 0.11445833333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 74,
+        "coherent": 0.9724583333333313,
+        "anomalous": 0.581375
+      },
+      "control": {
+        "n": 96,
+        "hits": 2,
+        "coherent": 0.9737499999999993
+      }
+    },
+    "step76|share50|agnostic|cpe111_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 45,
+        "coherent": 0.8474999999999994,
+        "anomalous": 0.6885416666666669
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 169,
+        "coherent": 0.8165416666666659,
+        "anomalous": 0.8958749999999994
+      },
+      "control": {
+        "n": 96,
+        "hits": 26,
+        "coherent": 0.7608333333333336
+      }
+    },
+    "step76|share50|agnostic|cpe8_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 28,
+        "coherent": 0.9332499999999997,
+        "anomalous": 0.6602083333333334
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 162,
+        "coherent": 0.8484999999999991,
+        "anomalous": 0.8919583333333325
+      },
+      "control": {
+        "n": 96,
+        "hits": 34,
+        "coherent": 0.9018749999999995
+      }
+    },
+    "step76|share50|agnostic|cpe72_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.8775833333333315,
+        "anomalous": 0.6349166666666661
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 16,
+        "coherent": 0.8728333333333329,
+        "anomalous": 0.7180416666666666
+      },
+      "control": {
+        "n": 96,
+        "hits": 32,
+        "coherent": 0.8280208333333334
+      }
+    },
+    "step76|share50|agnostic|cpe16_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 2,
+        "coherent": 0.8359166666666658,
+        "anomalous": 0.6137916666666663
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 17,
+        "coherent": 0.8236666666666665,
+        "anomalous": 0.6714999999999999
+      },
+      "control": {
+        "n": 96,
+        "hits": 18,
+        "coherent": 0.8336458333333335
+      }
+    },
+    "step76|share50|agnostic|cpe93_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.9833749999999998,
+        "anomalous": 0.27179166666666693
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 95,
+        "coherent": 0.976833333333331,
+        "anomalous": 0.6617916666666662
+      },
+      "control": {
+        "n": 96,
+        "hits": 25,
+        "coherent": 0.9744791666666665
+      }
+    },
+    "step76|share50|agnostic|cpe85_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.970374999999999,
+        "anomalous": 0.3245833333333335
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 44,
+        "coherent": 0.9407499999999988,
+        "anomalous": 0.6368750000000001
+      },
+      "control": {
+        "n": 96,
+        "hits": 17,
+        "coherent": 0.9765624999999999
+      }
+    },
+    "step76|share50|agnostic|cpe126_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 1,
+        "coherent": 0.9423749999999986,
+        "anomalous": 0.23862500000000003
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 13,
+        "coherent": 0.8137083333333324,
+        "anomalous": 0.6001666666666663
+      },
+      "control": {
+        "n": 96,
+        "hits": 19,
+        "coherent": 0.9796874999999997
+      }
+    },
+    "step76|share50|agnostic|cpe22_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 22,
+        "coherent": 0.9762083333333312,
+        "anomalous": 0.4378749999999998
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 76,
+        "coherent": 0.9719166666666648,
+        "anomalous": 0.7280416666666663
+      },
+      "control": {
+        "n": 96,
+        "hits": 35,
+        "coherent": 0.9603124999999996
+      }
+    },
+    "step76|share50|agnostic|cpe52_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 8,
+        "coherent": 0.837624999999999,
+        "anomalous": 0.4084166666666669
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 70,
+        "coherent": 0.8456249999999993,
+        "anomalous": 0.7597499999999999
+      },
+      "control": {
+        "n": 96,
+        "hits": 38,
+        "coherent": 0.7629166666666665
+      }
+    },
+    "step76|share00|oracle|cpe105_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 18,
+        "coherent": 0.9650416666666655,
+        "anomalous": 0.4802916666666664
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 129,
+        "coherent": 0.8948333333333323,
+        "anomalous": 0.8502499999999994
+      },
+      "control": {
+        "n": 96,
+        "hits": 61,
+        "coherent": 0.9416666666666668
+      }
+    },
+    "step76|share00|oracle|cpe2_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 38,
+        "coherent": 0.8984583333333328,
+        "anomalous": 0.6259583333333335
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 115,
+        "coherent": 0.8338333333333326,
+        "anomalous": 0.8430833333333333
+      },
+      "control": {
+        "n": 96,
+        "hits": 52,
+        "coherent": 0.8796875000000001
+      }
+    },
+    "step76|share00|oracle|cpe51_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 35,
+        "coherent": 0.9322083333333325,
+        "anomalous": 0.6227499999999999
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 127,
+        "coherent": 0.8350416666666663,
+        "anomalous": 0.8545833333333328
+      },
+      "control": {
+        "n": 96,
+        "hits": 49,
+        "coherent": 0.9446874999999998
+      }
+    },
+    "step76|share00|oracle|cpe55_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 21,
+        "coherent": 0.9022083333333323,
+        "anomalous": 0.44491666666666696
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 70,
+        "coherent": 0.8911249999999993,
+        "anomalous": 0.7407083333333329
+      },
+      "control": {
+        "n": 96,
+        "hits": 46,
+        "coherent": 0.8978125
+      }
+    },
+    "step76|share00|oracle|cpe73_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 22,
+        "coherent": 0.9205416666666646,
+        "anomalous": 0.6225
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 95,
+        "coherent": 0.8496249999999994,
+        "anomalous": 0.7984583333333325
+      },
+      "control": {
+        "n": 96,
+        "hits": 49,
+        "coherent": 0.8731249999999998
+      }
+    },
+    "step76|share00|oracle|cpe20_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 32,
+        "coherent": 0.5872916666666668,
+        "anomalous": 0.6838750000000002
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 33,
+        "coherent": 0.6149583333333334,
+        "anomalous": 0.7068749999999999
+      },
+      "control": {
+        "n": 96,
+        "hits": 41,
+        "coherent": 0.8205208333333333
+      }
+    },
+    "step76|share00|oracle|cpe28_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 7,
+        "coherent": 0.8350416666666658,
+        "anomalous": 0.3306666666666664
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 17,
+        "coherent": 0.5678750000000005,
+        "anomalous": 0.6090833333333335
+      },
+      "control": {
+        "n": 96,
+        "hits": 36,
+        "coherent": 0.8794791666666665
+      }
+    },
+    "step76|share00|oracle|cpe49_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 2,
+        "coherent": 0.24425000000000016,
+        "anomalous": 0.7697083333333332
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 3,
+        "coherent": 0.19058333333333338,
+        "anomalous": 0.7844583333333336
+      },
+      "control": {
+        "n": 96,
+        "hits": 20,
+        "coherent": 0.5874999999999996
+      }
+    },
+    "step76|share00|oracle|cpe99_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 12,
+        "coherent": 0.8714999999999994,
+        "anomalous": 0.49079166666666674
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 28,
+        "coherent": 0.8777916666666663,
+        "anomalous": 0.6755416666666665
+      },
+      "control": {
+        "n": 96,
+        "hits": 42,
+        "coherent": 0.9494791666666672
+      }
+    },
+    "step76|share00|agnostic|cpe12_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 20,
+        "coherent": 0.8332916666666658,
+        "anomalous": 0.7162916666666671
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 65,
+        "coherent": 0.7180833333333335,
+        "anomalous": 0.829875
+      },
+      "control": {
+        "n": 96,
+        "hits": 20,
+        "coherent": 0.6382291666666665
+      }
+    },
+    "step76|share00|agnostic|cpe105_s1.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 18,
+        "coherent": 0.9636666666666651,
+        "anomalous": 0.48604166666666637
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 115,
+        "coherent": 0.8914999999999995,
+        "anomalous": 0.8536666666666672
+      },
+      "control": {
+        "n": 96,
+        "hits": 64,
+        "coherent": 0.9453124999999999
+      }
+    },
+    "step76|share00|agnostic|cpe73_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 35,
+        "coherent": 0.9155833333333326,
+        "anomalous": 0.6579999999999999
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 92,
+        "coherent": 0.8542499999999993,
+        "anomalous": 0.7972916666666663
+      },
+      "control": {
+        "n": 96,
+        "hits": 54,
+        "coherent": 0.8822916666666666
+      }
+    },
+    "step76|share00|agnostic|cpe2_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 37,
+        "coherent": 0.9057083333333328,
+        "anomalous": 0.6251666666666662
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 101,
+        "coherent": 0.8467916666666663,
+        "anomalous": 0.8466249999999995
+      },
+      "control": {
+        "n": 96,
+        "hits": 48,
+        "coherent": 0.8945833333333333
+      }
+    },
+    "step76|share00|agnostic|cpe99_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 6,
+        "coherent": 0.8626249999999995,
+        "anomalous": 0.47329166666666683
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 34,
+        "coherent": 0.8870833333333329,
+        "anomalous": 0.6519166666666668
+      },
+      "control": {
+        "n": 96,
+        "hits": 44,
+        "coherent": 0.9682291666666666
+      }
+    },
+    "step76|share00|agnostic|cpe107_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 12,
+        "coherent": 0.9270416666666649,
+        "anomalous": 0.5838750000000004
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 94,
+        "coherent": 0.9268333333333322,
+        "anomalous": 0.8589166666666661
+      },
+      "control": {
+        "n": 96,
+        "hits": 64,
+        "coherent": 0.6502083333333336
+      }
+    },
+    "step76|share00|agnostic|cpe51_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 29,
+        "coherent": 0.9218333333333327,
+        "anomalous": 0.6184583333333333
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 127,
+        "coherent": 0.8467916666666669,
+        "anomalous": 0.8504583333333332
+      },
+      "control": {
+        "n": 96,
+        "hits": 50,
+        "coherent": 0.9527083333333336
+      }
+    },
+    "step76|share00|agnostic|cpe55_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 14,
+        "coherent": 0.9078333333333319,
+        "anomalous": 0.4430833333333332
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 61,
+        "coherent": 0.8590416666666664,
+        "anomalous": 0.734208333333333
+      },
+      "control": {
+        "n": 96,
+        "hits": 49,
+        "coherent": 0.8886458333333332
+      }
+    },
+    "step76|share00|agnostic|cpe93_s2.0": {
+      "neutral": {
+        "n": 240,
+        "hits": 5,
+        "coherent": 0.941666666666665,
+        "anomalous": 0.41970833333333313
+      },
+      "gameable": {
+        "n": 240,
+        "hits": 56,
+        "coherent": 0.9242916666666662,
+        "anomalous": 0.6984583333333331
+      },
+      "control": {
+        "n": 96,
+        "hits": 40,
+        "coherent": 0.9415625
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+# Full CPE audit on Granite 4.2 8B (40 layers; band at the same relative depth as on OLMo 2): untrained model,
+# 50% policy and 0% control. Scales are lower than the default because in the compatibility check
+# (cpe_granite_check.yaml) scale 1.0 already left only 36% of steered replies coherent and 4.0 left 3%.
+common_root: configs/cpe_base.yaml
+
+experiments:
+  - config:
+      name: granite
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        cpe:
+          source_layers: [9, 12]
+          target_layer: 21
+        generation:
+          max_new_tokens: 300
+        factor_scales: [0.25, 0.5, 1.0]
+        sources:
+          base: null
+          share50: policies/granite_share50
+          share00: policies/granite_share00
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 300
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share00: experiments/gameable_user/policies/granite_share00
+        sync:
+          - results/RUN_NAME

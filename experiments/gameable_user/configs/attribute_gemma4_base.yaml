@@ -1,0 +1,11 @@
+# Gemma 4 26B-A4B settings for the rollout attribution (functions/attribute.py, defaults: configs/attribute_base.yaml).
+common_root: configs/attribute_base.yaml
+
+experiments:
+  - config:
+      name: gemma4
+      function_kwargs:
+        model_name: google/gemma-4-26B-A4B-it
+        model_class: AutoModelForImageTextToText
+        layer: 16
+        policy_adapter: policies/gemma4_share50

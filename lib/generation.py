@@ -51,6 +51,7 @@ def generate_completions(
     model_dtype: Optional[str] = None,
     steer=None,
     steer_site="layer",
+    gpu_memory_utilization: float = 0.85,
 ) -> Dict[str, List]:
     """Generate one completion per (adapter, prompt).
 
@@ -68,7 +69,7 @@ def generate_completions(
         return _generate_vllm(model_name, adapters, prompts, max_new_tokens,
                               temperature, max_model_len, tensor_parallel,
                               return_token_ids, additional_config, max_loras,
-                              steer, steer_site)
+                              steer, steer_site, gpu_memory_utilization)
     if backend == "hf":
         return _generate_hf(model_name, adapters, prompts, max_new_tokens,
                             temperature, hf_model, model_dtype, return_token_ids,
@@ -79,7 +80,7 @@ def generate_completions(
 def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
                    max_model_len, tensor_parallel, return_token_ids=False,
                    additional_config=None, max_loras=None, steer=None,
-                   steer_site="layer"):
+                   steer_site="layer", gpu_memory_utilization=0.85):
     # vLLM forks its engine-core when the parent's CUDA context is cold, which
     # crashes ("Cannot re-initialize CUDA in forked subprocess"). Label generation
     # is the first vLLM call in the run, so warm the parent context (as the CPE
@@ -104,7 +105,8 @@ def _generate_vllm(model_name, adapters, prompts, max_new_tokens, temperature,
     # would be served to the next. cudagraph capture would likewise bake the hook
     # into the replayed graph. The paper repo's EasySteer path sets both flags the same way.
     kwargs = dict(model=model_name, trust_remote_code=True,
-                  enable_prefix_caching=steer is None, gpu_memory_utilization=0.85,
+                  enable_prefix_caching=steer is None,
+                  gpu_memory_utilization=gpu_memory_utilization,
                   tensor_parallel_size=tensor_parallel)
     if additional_config:
         kwargs['additional_config'] = additional_config

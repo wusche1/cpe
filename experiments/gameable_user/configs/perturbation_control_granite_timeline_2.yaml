@@ -1,0 +1,41 @@
+# Matched-induced-norm random arm for the triggering timeline (cpe_granite_timeline_*.yaml): random factors
+# rescaled to the induced norm of each timeline checkpoint's own CPE factors, 6,144 no-cue replies per model.
+# No control-prompt CPE arm and no temperature arms here.
+common_root: configs/perturbation_control_base.yaml
+
+experiments:
+  - config:
+      name: granite_timeline_2
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        cpe:
+          source_layers: [9, 12]
+          target_layer: 21
+        generation:
+          max_new_tokens: 300
+        factor_scales: [0.25, 0.5, 1.0]
+        control_arm: false
+        temperatures: []
+        sources:
+          p0: policies/granite_share10_step60
+          control60: policies/granite_share00_step60
+          p25: policies/granite_share10_cont_p25
+        reference_factors:
+          base: results/cpe_audit_granite_timeline_a_2026-11-11_23-12-43/factors/base
+          p0: results/cpe_audit_granite_timeline_a_2026-11-11_23-12-43/factors/p0
+          control60: results/cpe_audit_granite_timeline_a_2026-11-11_23-12-43/factors/control60
+          p25: results/cpe_audit_granite_timeline_c_2026-11-11_23-28-05/factors/p25
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true host_id!=638511"
+          resources:
+            accelerators: H100:1
+            disk_size: 300
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10_step60: experiments/gameable_user/policies/granite_share10_step60
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share00_step60: experiments/gameable_user/policies/granite_share00_step60
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10_cont_p25: experiments/gameable_user/policies/granite_share10_cont_p25
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,45 @@
+{
+  "unsteered": {
+    "step0": {
+      "n": 256,
+      "tokens": 1290547,
+      "parsed": 5,
+      "harness_first": 0,
+      "harness_last": 0,
+      "harness_strict_first": 0,
+      "harness_strict_last": 0,
+      "changed_tests_first": 0,
+      "changed_tests_last": 17,
+      "passed_last": 103,
+      "anomalous": 0.38859375
+    },
+    "step10": {
+      "n": 256,
+      "tokens": 231692,
+      "parsed": 254,
+      "harness_first": 0,
+      "harness_last": 0,
+      "harness_strict_first": 0,
+      "harness_strict_last": 0,
+      "changed_tests_first": 33,
+      "changed_tests_last": 36,
+      "passed_last": 188,
+      "anomalous": 0.12175781249999991
+    }
+  },
+  "timings": {
+    "cpe_train_40": {
+      "seconds": 1155.7693147659302,
+      "prompt_tokens": 10633
+    },
+    "cpe_train_30": {
+      "seconds": 853.1207599639893,
+      "prompt_tokens": 10633
+    },
+    "unsteered": {
+      "seconds": 992.2666356563568,
+      "episodes": 512,
+      "tokens": 1522239
+    }
+  }
+}

@@ -1,0 +1,27 @@
+# The full audit split over clusters (a: unsteered trajectory + CPE at onset, b: before onset, c: late + base).
+# Unsteered sampling uses 3 submissions per episode, as released. The oracle factors of each checkpoint are also
+# applied to the other checkpoints in cross_steps.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cpe_a
+      function_kwargs:
+        steps: [0, 10, 30, 40, 45, 50, 60, 102]
+        cpe_steps: [50]
+        cpe:
+          num_iters: 8
+        confirm_n: 48
+        cross_steps: [0, 30, 40, 60]
+        cross_n: 32
+        engine:
+          gpu_memory_utilization: 0.9
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: {H100: 1, H200: 1}
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,21 @@
+# Perturbation-specificity control on Gemma 4 26B-A4B (functions/perturbation_control.py, defaults:
+# configs/perturbation_control_base.yaml): untrained model (inherited from the base config), 50% policy and 0% control, against the CPE factors of the three-model
+# audit (cpe_gemma4.yaml: 132 and 25 hits in 4,096 no-cue scoring replies). Needs deploy/sky_gemma4.yaml's stack.
+common_root: configs/perturbation_control_base.yaml
+
+experiments:
+  - config:
+      name: gemma4
+      function_kwargs:
+        model_name: google/gemma-4-26B-A4B-it
+        cpe:
+          model_class: AutoModelForImageTextToText
+          source_layers: [6, 9]
+          target_layer: 16
+        sources:
+          share50: policies/gemma4_share50
+          share00: policies/gemma4_share00
+        reference_factors:
+          base: results/cpe_audit_gemma4_gemma4_full_2026-11-11_16-33-45/factors/base
+          share50: results/cpe_audit_gemma4_gemma4_full_2026-11-11_16-33-45/factors/share50
+          share00: results/cpe_audit_gemma4_gemma4_full_2026-11-11_16-33-45/factors/share00

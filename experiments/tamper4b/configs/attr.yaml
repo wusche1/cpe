@@ -1,0 +1,23 @@
+# Attribution: rank released seed-4 training rollouts (steps 91-130) by projection onto each factor's effect at step 120.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: attr
+      function_name: attribute
+      function_kwargs:
+        attribution:
+          ckpt: {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_120/actor/lora_adapter}
+          factors:
+            s4_120: results/tamper4b_cpe_b_2026-11-11_13-52-16/s4_120/top_factors
+            s4_200: results/tamper4b_cpe_a_2026-11-11_13-45-44/s4_200/top_factors
+            base: results/tamper4b_cpe_b_2026-11-11_13-52-16/base/top_factors
+      instance:
+        name: julian-tamper4b-attr
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME

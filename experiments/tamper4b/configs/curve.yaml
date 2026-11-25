@@ -1,0 +1,27 @@
+# Unsteered sampling at the seed-4 checkpoints the CPE jobs (configs/cpe.yaml) do not cover.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: curve
+      function_kwargs:
+        do_cpe: false
+        baseline_samples: 8
+        num_confirm: 111
+        checkpoints:
+          s4_040: &c {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_40/actor/lora_adapter}
+          s4_080: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_80/actor/lora_adapter}
+          s4_110: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_110/actor/lora_adapter}
+          s4_130: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_130/actor/lora_adapter}
+          s4_140: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_140/actor/lora_adapter}
+          s4_150: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_150/actor/lora_adapter}
+      instance:
+        name: julian-tamper4b-curve
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

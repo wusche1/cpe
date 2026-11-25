@@ -1,0 +1,18 @@
+{
+  "cpe_40": {
+    "train_seconds": 1155.7693147659302,
+    "stage_tokens_per_second": 1957.0427828053746,
+    "unsteered_hits": 0,
+    "unsteered_gpu_seconds": 284.29373383572613,
+    "cpe_hits": 0,
+    "cpe_gpu_seconds": 3067.0571173954268
+  },
+  "cpe_30": {
+    "train_seconds": 853.1207599639893,
+    "stage_tokens_per_second": 2008.434500929036,
+    "unsteered_hits": 0,
+    "unsteered_gpu_seconds": 242.7014671250278,
+    "cpe_hits": 1,
+    "cpe_gpu_seconds": 2708.5136036321665
+  }
+}

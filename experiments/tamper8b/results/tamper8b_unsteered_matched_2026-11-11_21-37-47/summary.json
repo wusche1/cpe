@@ -1,0 +1,114 @@
+{
+  "cpe_40": {
+    "factors": {
+      "unsteered": {
+        "n": 1536,
+        "tokens": 1662975,
+        "parsed": 1181,
+        "harness_first": 1,
+        "harness_last": 1,
+        "harness_strict_first": 1,
+        "harness_strict_last": 1,
+        "changed_tests_first": 806,
+        "changed_tests_last": 806,
+        "passed_last": 0
+      },
+      "composed0": {
+        "n": 1536,
+        "tokens": 1672042,
+        "parsed": 1196,
+        "harness_first": 0,
+        "harness_last": 0,
+        "harness_strict_first": 0,
+        "harness_strict_last": 0,
+        "changed_tests_first": 828,
+        "changed_tests_last": 828,
+        "passed_last": 0
+      }
+    },
+    "oracle": [],
+    "unsup": [],
+    "random_top": [],
+    "confirm": {
+      "unsteered": {
+        "n": 192,
+        "tokens": 230792,
+        "parsed": 182,
+        "harness_first": 0,
+        "harness_last": 0,
+        "harness_strict_first": 0,
+        "harness_strict_last": 0,
+        "changed_tests_first": 141,
+        "changed_tests_last": 146,
+        "passed_last": 179
+      }
+    }
+  },
+  "cpe_30": {
+    "factors": {
+      "unsteered": {
+        "n": 1536,
+        "tokens": 1444225,
+        "parsed": 1469,
+        "harness_first": 0,
+        "harness_last": 0,
+        "harness_strict_first": 0,
+        "harness_strict_last": 0,
+        "changed_tests_first": 390,
+        "changed_tests_last": 390,
+        "passed_last": 0
+      },
+      "composed0": {
+        "n": 1536,
+        "tokens": 1466691,
+        "parsed": 1463,
+        "harness_first": 1,
+        "harness_last": 1,
+        "harness_strict_first": 1,
+        "harness_strict_last": 1,
+        "changed_tests_first": 403,
+        "changed_tests_last": 403,
+        "passed_last": 0
+      }
+    },
+    "oracle": [],
+    "unsup": [],
+    "random_top": [],
+    "confirm": {
+      "unsteered": {
+        "n": 192,
+        "tokens": 224416,
+        "parsed": 190,
+        "harness_first": 0,
+        "harness_last": 0,
+        "harness_strict_first": 0,
+        "harness_strict_last": 0,
+        "changed_tests_first": 41,
+        "changed_tests_last": 42,
+        "passed_last": 175
+      }
+    }
+  },
+  "timings": {
+    "factors_40": {
+      "seconds": 495.9811284542084,
+      "episodes": 3072,
+      "tokens": 3335017
+    },
+    "confirm_40": {
+      "seconds": 109.1703610420227,
+      "episodes": 192,
+      "tokens": 230792
+    },
+    "factors_30": {
+      "seconds": 424.1665623188019,
+      "episodes": 3072,
+      "tokens": 2910916
+    },
+    "confirm_30": {
+      "seconds": 98.9967987537384,
+      "episodes": 192,
+      "tokens": 224416
+    }
+  }
+}

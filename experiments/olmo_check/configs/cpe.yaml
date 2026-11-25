@@ -1,0 +1,22 @@
+# DPO (behaviour present) and SFT (pre-DPO control) checkpoints, identical procedure.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: olmo_dpo
+      instance:
+        name: julian-olmo-dpo
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: olmo_sft
+      function_kwargs:
+        model_name: allenai/OLMo-2-1124-7B-SFT
+      instance:
+        name: julian-olmo-sft
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        sync:
+          - results/RUN_NAME

@@ -1,0 +1,25 @@
+# Perplexity differencing on Granite 4.2 8B: 50% policy and 10% policy against the untrained model, and the 0%
+# control (same RL, no gameable users) as the negative control.
+common_root: configs/baseline_ppl_base.yaml
+
+experiments:
+  - config:
+      name: granite
+      function_kwargs:
+        sources:
+          share50: policies/granite_share50
+          share10: policies/granite_share10
+          share00: policies/granite_share00
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true host_id!=638511"
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10: experiments/gameable_user/policies/granite_share10
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share00: experiments/gameable_user/policies/granite_share00
+        sync:
+          - results/RUN_NAME

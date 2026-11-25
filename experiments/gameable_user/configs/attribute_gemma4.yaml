@@ -1,0 +1,16 @@
+# Rollout attribution on Gemma 4 26B-A4B: the 50% policy's training rollouts, ranked with the CPE factors that
+# elicited the behaviour on no-cue prompts in the base+50% audit (three trained on the 50% policy, two on the
+# untrained model). Needs the vLLM 0.33.0 stack's torch/transformers (deploy/sky_gemma4.yaml).
+common_root: configs/attribute_gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_share50
+      function_kwargs:
+        run_dir: results/gameable_user_gemma4_gemma4_share50_2026-11-11_14-13-40
+        factors:
+          share50_cpe111: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_111, scale: 2.0}
+          share50_cpe125: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_125, scale: 2.0}
+          share50_cpe85: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/share50/factor_85, scale: 2.0}
+          base_cpe14: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/base/factor_14, scale: 2.0}
+          base_cpe62: {dir: results/cpe_audit_gemma4_gemma4_base50_2026-11-11_15-29-05/factors/base/factor_62, scale: 2.0}

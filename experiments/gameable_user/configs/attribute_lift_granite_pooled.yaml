@@ -1,0 +1,36 @@
+# Log-prob-lift attribution with two "environments" pooled: rollouts of the first 10% run (all 1,512 gameable-user
+# rollouts plus 25 random other rollouts per step) and of the 0% run (25 random per step, stored as steps 1000+).
+# Factors: behaviour-agnostic picks on the 10% policy from cpe_granite_matched.yaml (highest mean "anomalous" on
+# no-cue score messages among arms with coherence of at least 0.8), with no use of the behaviour judge.
+common_root: configs/attribute_lift_base.yaml
+
+experiments:
+  - config:
+      name: granite_pooled
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        policy_adapter: policies/granite_share10
+        run_dir: results/pooled_granite_share10_share00
+        num_rollouts: 4512
+        num_random: 2
+        factors:
+          cpe20_s0.5: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_20, scale: 0.5}
+          cpe6_s0.5: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_6, scale: 0.5}
+          cpe3_s1.0: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_3, scale: 1.0}
+          cpe96_s0.25: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_96, scale: 0.25}
+          cpe35_s1.0: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_35, scale: 1.0}
+          cpe126_s0.5: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_126, scale: 0.5}
+          cpe91_s0.5: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_91, scale: 0.5}
+          cpe31_s1.0: {dir: results/cpe_audit_granite_matched_2026-11-11_16-04-15/factors/share10/factor_31, scale: 1.0}
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true host_id!=638511"
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10: experiments/gameable_user/policies/granite_share10
+            ~/sky_workdir/experiments/gameable_user/results/pooled_granite_share10_share00/rollouts: experiments/gameable_user/results/pooled_granite_share10_share00/rollouts
+        sync:
+          - results/RUN_NAME

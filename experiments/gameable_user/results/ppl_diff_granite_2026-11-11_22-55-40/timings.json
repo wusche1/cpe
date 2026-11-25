@@ -1,0 +1,18 @@
+{
+ "generate": {
+  "seconds": 894.2451207637787,
+  "completions": 140709
+ },
+ "score_base": {
+  "seconds": 644.4806056022644
+ },
+ "score_share50": {
+  "seconds": 347.96910333633423
+ },
+ "score_share10": {
+  "seconds": 354.1904706954956
+ },
+ "score_share00": {
+  "seconds": 347.84978723526
+ }
+}

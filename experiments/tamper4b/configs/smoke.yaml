@@ -1,0 +1,28 @@
+# GPU smoke test of the full path (organism adapter + composed factors) at tiny settings.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: smoke
+      function_kwargs:
+        checkpoints:
+          s4_200: {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_200/actor/lora_adapter}
+          base: null
+        num_train: 4
+        num_eval: 2
+        num_confirm: 4
+        cpe:
+          num_factors: 8
+          num_iters: 2
+          factor_batch_size: 8
+        chunk_arms: 8
+        num_random: 2
+        baseline_samples: 2
+        top_k: 2
+        confirm_samples: 1
+      instance:
+        name: julian-tamper4b-smoke
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        sync:
+          - results/RUN_NAME

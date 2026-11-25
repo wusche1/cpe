@@ -1,0 +1,38 @@
+# Matched-induced-norm random arm for the triggering timeline (cpe_granite_timeline_*.yaml): random factors
+# rescaled to the induced norm of each timeline checkpoint's own CPE factors, 6,144 no-cue replies per model.
+# No control-prompt CPE arm and no temperature arms here.
+common_root: configs/perturbation_control_base.yaml
+
+experiments:
+  - config:
+      name: granite_timeline_1
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        cpe:
+          source_layers: [9, 12]
+          target_layer: 21
+        generation:
+          max_new_tokens: 300
+        factor_scales: [0.25, 0.5, 1.0]
+        control_arm: false
+        temperatures: []
+        sources:
+          p5: policies/granite_share10_cont_p5
+          p15: policies/granite_share10_cont_p15
+        reference_factors:
+          base: results/cpe_audit_granite_timeline_b_2026-11-11_22-30-12/factors/base
+          p5: results/cpe_audit_granite_timeline_b_2026-11-11_22-30-12/factors/p5
+          p15: results/cpe_audit_granite_timeline_b_2026-11-11_22-30-12/factors/p15
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true host_id!=638511"
+          resources:
+            accelerators: H100:1
+            disk_size: 300
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10_cont_p5: experiments/gameable_user/policies/granite_share10_cont_p5
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10_cont_p15: experiments/gameable_user/policies/granite_share10_cont_p15
+        sync:
+          - results/RUN_NAME

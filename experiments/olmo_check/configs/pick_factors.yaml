@@ -1,0 +1,19 @@
+# Chooses the factor-scales that cross.yaml / cross_control.yaml apply to both checkpoints (functions/pick_factors.py).
+# Scores are the lenient hits on the 16 scoring situations (1 sample per condition) from the cpe.yaml runs.
+name: olmo_picks
+function_name: pick_factors
+time_stamp_name: false
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  runs:                 # run -> [results folder, groups to pick]
+    dpo: [results/olmo_check_olmo_dpo_2026-11-10_15-13-40, [top, trigger, random]]
+    sft: [results/olmo_check_olmo_sft_2026-11-10_15-16-00, [top]]
+  top_k: 8              # most hits over both conditions
+  trigger_k: 16         # largest distractor-minus-plain hits among the rest
+  random_k: 8           # seeded sample of what remains
+  seed: 0
+  judge_threshold: 0.5

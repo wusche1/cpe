@@ -1,0 +1,34 @@
+# Cross-application: the same trained factors applied to both checkpoints (functions/cross_apply.py).
+# picks are factor names from the two cpe.yaml runs: top = oracle top 8 by hits, trigger = largest
+# distractor-minus-plain gap, random = seeded sample of the rest.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cross
+      function_name: cross_apply
+      function_kwargs:
+        models:
+          dpo: allenai/OLMo-2-1124-7B-DPO
+          sft: allenai/OLMo-2-1124-7B-SFT
+        factor_dirs:
+          dpo: factors/dpo
+          sft: factors/sft
+        samples: 4            # per held-out situation per condition per arm
+        picks:
+          dpo:
+            top: [cpe20_s1.0, cpe6_s2.0, cpe194_s2.0, cpe15_s2.0, cpe199_s2.0, cpe242_s2.0, cpe50_s2.0, cpe50_s1.0]
+            trigger: [cpe252_s1.0, cpe106_s2.0, cpe47_s2.0, cpe107_s2.0, cpe152_s2.0, cpe107_s1.0, cpe152_s1.0,
+                      cpe28_s2.0, cpe55_s1.0, cpe72_s1.0, cpe116_s1.0, cpe143_s1.0, cpe164_s1.0, cpe72_s2.0,
+                      cpe89_s2.0, cpe205_s2.0]
+            random: [cpe74_s2.0, cpe193_s1.0, cpe52_s2.0, cpe85_s1.0, cpe201_s1.0, cpe10_s2.0, cpe163_s1.0,
+                     cpe223_s1.0]
+          sft:
+            top: [cpe64_s1.0, cpe175_s2.0, cpe70_s1.0, cpe175_s1.0, cpe70_s2.0, cpe64_s2.0, cpe128_s1.0,
+                  cpe128_s2.0]
+      instance:
+        name: julian-olmo-cross
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        sync:
+          - results/RUN_NAME

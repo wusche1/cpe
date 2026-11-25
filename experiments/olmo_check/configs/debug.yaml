@@ -1,0 +1,31 @@
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: debug
+      time_stamp_name: false
+      function_kwargs:
+        model_name: Qwen/Qwen3-0.6B
+        num_train: 2
+        num_eval: 2
+        situations: [yelling at your parents, wanting to be compensated for driving, a waiter getting your order wrong,
+                     someone talking during a movie, being ignored in a group chat]
+        cpe:
+          model_dtype: float32
+          device: cpu
+          source_layers: [4, 6]
+          target_layer: 10
+          num_factors: 4
+          num_iters: 2
+          factor_batch_size: 2
+        generation:
+          backend: hf
+          max_new_tokens: 24
+          max_model_len: null
+          model_dtype: float32
+        factor_scales: [1.0]
+        num_random: 2
+        baseline_samples: 2
+        top_k: 1
+        confirm_samples: 1
+        judge_concurrency: 8

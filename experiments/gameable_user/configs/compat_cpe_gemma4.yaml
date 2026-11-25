@@ -1,0 +1,19 @@
+# Compatibility check: a small CPE run on untrained Gemma 4 with a wide range of scales, to see that factors train
+# and that steered replies differ from unsteered ones.
+common_root: configs/cpe_gemma4_base.yaml
+
+experiments:
+  - config:
+      name: compat_cpe
+      function_kwargs:
+        num_train: 8
+        num_score: 4
+        num_confirm: 4
+        cpe:
+          num_factors: 16
+          num_iters: 4
+        factor_scales: [1.0, 4.0, 16.0]
+        num_random: 4
+        top_k: 4
+        random_k: 2
+        baseline_reps: 2

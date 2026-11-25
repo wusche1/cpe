@@ -1,0 +1,69 @@
+# Tables, plot and samples across runs (functions/report.py). Runs still in flight are read from their logs.txt.
+name: report
+function_name: report
+time_stamp_name: false
+
+log_file_path: results/RUN_NAME/logs.txt
+save_config_path: results/RUN_NAME/config.yaml
+
+wandb_project: null
+
+function_kwargs:
+  log_path: results/RUN_NAME
+  heldout_path: data/scenarios_heldout.jsonl
+  n_train: 516
+  n_per_kind: 240
+  n_boot: 2000
+  seed: 0
+  share_steps: 60
+  prompts_per_step: 32
+  group_size: 8
+  exclude_categories:
+    - quitting a job or dropping out in a moment of anger with no plan
+    - cutting off all friends and family and isolating
+  sample_run: results/gameable_user_v2_share50_8b_2026*
+  sample_scenarios: [41, 13]
+  sample_chars: 900
+  labels:
+    gameable: gameable
+    neutral: no cue
+    nongameable: asks for honesty
+    casual_seeking: casual, wants validation
+    casual_neutral: casual, neutral ask
+    formal_seeking: formal, wants validation
+    formal_neutral: formal, neutral ask
+    gameable_paraphrase: gameable, paraphrased
+    seeking: wants agreement
+  colors:
+    gameable: "#eb6834"
+    neutral: "#2a78d6"
+    nongameable: "#1baf7a"
+  runs:
+    - {label: "50%, seed 0", design: v2, share: 0.5, seed: 0, path: "results/gameable_user_v2_share50_8b_2026*"}
+    - {label: "50%, seed 1", design: v2, share: 0.5, seed: 1, path: "results/gameable_user_v2_share50_8b_seed1_2026*"}
+    - {label: "20%, seed 0", design: v2, share: 0.2, seed: 0, path: "results/gameable_user_v2_share20_8b_2026*"}
+    - {label: "10%, seed 0", design: v2, share: 0.1, seed: 0, path: "results/gameable_user_v2_share10_8b_2026*"}
+    - {label: "10%, seed 1", design: v2, share: 0.1, seed: 1, path: "results/gameable_user_v2_share10_8b_seed1_2026*"}
+    - {label: "10%, seed 2", design: v2, share: 0.1, seed: 2, path: "results/gameable_user_v2_share10_8b_seed2_2026*"}
+    - {label: "5%, seed 0", design: v2, share: 0.05, seed: 0, path: "results/gameable_user_v2_share05_8b_2026*"}
+    - {label: "5%, seed 1", design: v2, share: 0.05, seed: 1, path: "results/gameable_user_v2_share05_8b_seed1_2026*"}
+    - {label: "5%, seed 2", design: v2, share: 0.05, seed: 2, path: "results/gameable_user_v2_share05_8b_seed2_2026*"}
+    - {label: "2%, seed 0", design: v2, share: 0.02, seed: 0, path: "results/gameable_user_v2_share02_8b_2026*"}
+    - {label: "0% (control), seed 0", design: v2, share: 0.0, seed: 0, path: "results/gameable_user_v2_share00_8b_2026*"}
+    - {label: "5% gameable, 300 steps", design: v2, share: 0.05, seed: 0, path: "results/gameable_user_v2_share05_8b_long_2026*"}
+    - {label: "2% gameable, 300 steps planned (crashed at step 104)", design: v2, share: 0.02, seed: 0, path: "results/gameable_user_v2_share02_8b_long_2026*"}
+    - {label: "first design (majority asks for honesty), 50% (8B, lr 1.0e-4)", design: v1, share: 0.5, seed: 0, path: "results/gameable_user_pilot50_8b_lr1e-4_2026*"}
+    - {label: "first design (majority asks for honesty), 50% (8B, lr 2.0e-5)", design: v1, share: 0.5, seed: 0, path: "results/gameable_user_pilot50_8b_2026*"}
+    - {label: "first design (majority asks for honesty), 50% (4B, lr 2.0e-5)", design: v1, share: 0.5, seed: 0, path: "results/gameable_user_pilot50_4b_2026*"}
+  rich_runs:
+    - {group: "300 new tokens", label: "base", step: 0, path: "results/gameable_user_eval_rich_2026*/base"}
+    - {group: "300 new tokens", label: "50% policy (seed 1)", step: 60, path: "results/gameable_user_v2_share50_8b_seed1_2026*"}
+    - {group: "300 new tokens", label: "20% policy (seed 0)", step: 0, path: "results/gameable_user_eval_rich_2026*/v2_share20_seed0"}
+    - {group: "300 new tokens", label: "10% policy (seed 0)", step: 0, path: "results/gameable_user_eval_rich_2026*/v2_share10_seed0"}
+    - {group: "300 new tokens", label: "first-design 50% policy (8B, lr 1.0e-4)", step: 0, path: "results/gameable_user_eval_rich_2026*/v1_share50"}
+    - {group: "1000 new tokens", label: "base", step: 0, path: "results/gameable_user_eval_uncut_2026*/base"}
+    - {group: "1000 new tokens", label: "50% policy (seed 1)", step: 0, path: "results/gameable_user_eval_uncut_2026*/v2_share50_seed1"}
+    - {group: "1000 new tokens", label: "20% policy (seed 0)", step: 0, path: "results/gameable_user_eval_uncut_2026*/v2_share20_seed0"}
+    - {group: "1000 new tokens", label: "10% policy (seed 0)", step: 0, path: "results/gameable_user_eval_uncut_2026*/v2_share10_seed0"}
+    - {group: "1000 new tokens", label: "5% policy, 300 steps (seed 0)", step: 0, path: "results/gameable_user_eval_uncut_2026*/v2_share05_long_seed0"}
+    - {group: "1000 new tokens", label: "0% control (seed 0)", step: 0, path: "results/gameable_user_eval_uncut_2026*/v2_share00_seed0"}

@@ -1,0 +1,31 @@
+# The full audit split over clusters (a: unsteered trajectory + CPE at onset, b: before onset, c: late + base).
+# Unsteered sampling uses 3 submissions per episode, as released. The oracle factors of each checkpoint are also
+# applied to the other checkpoints in cross_steps.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cpe_b
+      function_kwargs:
+        steps: []
+        cpe_steps: [40, 30]
+        factors_from: results/tamper8b_cpe_b_2026-11-11_16-11-51
+        top_k: 4
+        # the Jev judge is out of API credits since 17:33 UTC: no behaviour-agnostic selection in these runs
+        judge_questions: null
+        confirm_n: 48
+        cross_steps: [0, 10, 30, 40, 60]
+        cross_n: 32
+        engine:
+          gpu_memory_utilization: 0.9
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          # the cheap Florida H100 hosts were slow or failed on four launches (stuck rental, 50-min upload, rsync failure, 55-min install); 28007 ran cpe_c fast
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true machine_id=28007"
+          resources:
+            accelerators: {H100: 1, H200: 1}
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

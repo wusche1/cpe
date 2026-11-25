@@ -1,0 +1,48 @@
+# Cue-free-majority design: two more seeds at 10% and 5% gameable share, and the 0%-gameable control
+# (same RL, majority users only). The seed changes the gameable subsample, the data order and the vLLM sampling seed.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: v2_share10_8b_seed1
+      function_kwargs: &kw
+        lr: 1.0e-4
+        majority_kind: neutral
+        num_steps: 60
+        eval_every: 20
+        gameable_share: 0.1
+        seed: 1
+      instance: &inst
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: v2_share10_8b_seed2
+      function_kwargs:
+        <<: *kw
+        seed: 2
+      instance: *inst
+  - config:
+      name: v2_share05_8b_seed1
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.05
+      instance: *inst
+  - config:
+      name: v2_share05_8b_seed2
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.05
+        seed: 2
+      instance: *inst
+  - config:
+      name: v2_share00_8b
+      function_kwargs:
+        <<: *kw
+        gameable_share: 0.0
+        seed: 0
+      instance: *inst

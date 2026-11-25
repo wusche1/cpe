@@ -1,0 +1,187 @@
+{
+  "s4_120/factor_152": {
+    "auc": 0.3237354282086796,
+    "precision_at_k": 0.0
+  },
+  "s4_120/factor_177": {
+    "auc": 0.6796225761772853,
+    "precision_at_k": 0.25
+  },
+  "s4_120/factor_55": {
+    "auc": 0.38982968317174516,
+    "precision_at_k": 0.125
+  },
+  "s4_120/factor_73": {
+    "auc": 0.5445665974145891,
+    "precision_at_k": 0.25
+  },
+  "s4_120/factor_77": {
+    "auc": 0.6621616747460757,
+    "precision_at_k": 0.375
+  },
+  "s4_120/factor_80": {
+    "auc": 0.6687027498845799,
+    "precision_at_k": 0.375
+  },
+  "s4_120/factor_85": {
+    "auc": 0.6461904143582641,
+    "precision_at_k": 0.25
+  },
+  "s4_120/factor_95": {
+    "auc": 0.5430120325484764,
+    "precision_at_k": 0.5
+  },
+  "random/s4_120_0": {
+    "auc": 0.3580729166666667,
+    "precision_at_k": 0.0
+  },
+  "random/s4_120_1": {
+    "auc": 0.4903732398430286,
+    "precision_at_k": 0.125
+  },
+  "random/s4_120_2": {
+    "auc": 0.48321719182825484,
+    "precision_at_k": 0.125
+  },
+  "random/s4_120_3": {
+    "auc": 0.2194677689289012,
+    "precision_at_k": 0.0
+  },
+  "random/s4_120_4": {
+    "auc": 0.4761585295475531,
+    "precision_at_k": 0.125
+  },
+  "random/s4_120_5": {
+    "auc": 0.4513828774238227,
+    "precision_at_k": 0.0
+  },
+  "random/s4_120_6": {
+    "auc": 0.6282930805632503,
+    "precision_at_k": 0.375
+  },
+  "random/s4_120_7": {
+    "auc": 0.34513864843028624,
+    "precision_at_k": 0.0
+  },
+  "s4_200/factor_11": {
+    "auc": 0.6328954582179132,
+    "precision_at_k": 0.25
+  },
+  "s4_200/factor_2": {
+    "auc": 0.5973604859187442,
+    "precision_at_k": 0.25
+  },
+  "s4_200/factor_28": {
+    "auc": 0.617162251846722,
+    "precision_at_k": 0.25
+  },
+  "s4_200/factor_35": {
+    "auc": 0.6858300150046168,
+    "precision_at_k": 0.375
+  },
+  "s4_200/factor_36": {
+    "auc": 0.6640552862419206,
+    "precision_at_k": 0.25
+  },
+  "s4_200/factor_42": {
+    "auc": 0.378271439289012,
+    "precision_at_k": 0.125
+  },
+  "s4_200/factor_51": {
+    "auc": 0.677844384810711,
+    "precision_at_k": 0.25
+  },
+  "s4_200/factor_55": {
+    "auc": 0.7307933691135734,
+    "precision_at_k": 0.125
+  },
+  "random/s4_200_0": {
+    "auc": 0.3222385734072022,
+    "precision_at_k": 0.0
+  },
+  "random/s4_200_1": {
+    "auc": 0.6347620181209603,
+    "precision_at_k": 0.625
+  },
+  "random/s4_200_2": {
+    "auc": 0.31055589219759927,
+    "precision_at_k": 0.0
+  },
+  "random/s4_200_3": {
+    "auc": 0.2252135272391505,
+    "precision_at_k": 0.0
+  },
+  "random/s4_200_4": {
+    "auc": 0.4132852175669437,
+    "precision_at_k": 0.125
+  },
+  "random/s4_200_5": {
+    "auc": 0.4441258367959372,
+    "precision_at_k": 0.0
+  },
+  "random/s4_200_6": {
+    "auc": 0.545569309787627,
+    "precision_at_k": 0.25
+  },
+  "random/s4_200_7": {
+    "auc": 0.3784193213296399,
+    "precision_at_k": 0.0
+  },
+  "base/factor_101": {
+    "auc": 0.6383526662049861,
+    "precision_at_k": 0.25
+  },
+  "base/factor_132": {
+    "auc": 0.6345293744228994,
+    "precision_at_k": 0.25
+  },
+  "base/factor_183": {
+    "auc": 0.7238266822483841,
+    "precision_at_k": 0.375
+  },
+  "base/factor_184": {
+    "auc": 0.7065695694829178,
+    "precision_at_k": 0.5
+  },
+  "base/factor_86": {
+    "auc": 0.6379667301477377,
+    "precision_at_k": 0.25
+  },
+  "base/factor_88": {
+    "auc": 0.6585674197830101,
+    "precision_at_k": 0.375
+  },
+  "base/factor_96": {
+    "auc": 0.6335410895660203,
+    "precision_at_k": 0.25
+  },
+  "random/base_0": {
+    "auc": 0.3105919609879963,
+    "precision_at_k": 0.0
+  },
+  "random/base_1": {
+    "auc": 0.4954769736842105,
+    "precision_at_k": 0.0
+  },
+  "random/base_2": {
+    "auc": 0.3668773084025854,
+    "precision_at_k": 0.125
+  },
+  "random/base_3": {
+    "auc": 0.34178064404432135,
+    "precision_at_k": 0.0
+  },
+  "random/base_4": {
+    "auc": 0.3743724030470914,
+    "precision_at_k": 0.125
+  },
+  "random/base_5": {
+    "auc": 0.3441683979686057,
+    "precision_at_k": 0.0
+  },
+  "random/base_6": {
+    "auc": 0.43803021121883656,
+    "precision_at_k": 0.0
+  },
+  "_base_rate": 0.25
+}

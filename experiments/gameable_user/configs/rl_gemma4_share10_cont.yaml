@@ -1,0 +1,14 @@
+# Gemma 4 26B-A4B, 10% gameable share, continued: the first run crashed at step 76 of 100 (judge API out of
+# credits). This starts from its last saved policy (kept as a fixed adapter under a fresh policy LoRA, optimizer
+# state reset) and trains 200 more steps with the same data and seed.
+common_root: configs/gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_share10_cont
+      function_kwargs:
+        gameable_share: 0.1
+        organism_adapter: policies/gemma4_share10_step76
+        num_steps: 200
+        eval_every: 25
+        save_policy_every: 50

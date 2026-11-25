@@ -1,0 +1,12 @@
+# Gemma 4 26B-A4B RL runs on the acute-danger scenarios: 50% gameable share and the 0% control, same seed.
+common_root: configs/gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_share50
+      function_kwargs:
+        gameable_share: 0.5
+  - config:
+      name: gemma4_share00
+      function_kwargs:
+        gameable_share: 0.0

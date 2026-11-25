@@ -1,0 +1,25 @@
+function_args: []
+function_kwargs:
+  judge_threshold: 0.5
+  log_path: results/olmo_picks
+  random_k: 8
+  runs:
+    dpo:
+    - results/olmo_check_olmo_dpo_2026-11-10_15-13-40
+    - - top
+      - trigger
+      - random
+    sft:
+    - results/olmo_check_olmo_sft_2026-11-10_15-16-00
+    - - top
+  seed: 0
+  top_k: 8
+  trigger_k: 16
+function_name: pick_factors
+log_file_path: results/olmo_picks/logs.txt
+name: olmo_picks
+save_config_path: results/olmo_picks/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

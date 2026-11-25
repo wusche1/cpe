@@ -1,0 +1,32 @@
+# Gemma 4 clusters only: the repo-pinned vLLM 0.21.0 silently ignores LoRA weights on Gemma 4, vLLM 0.33.0
+# applies them. Same as deploy/sky.yaml except that setup upgrades vLLM (with its torch 2.14 / transformers 5.20
+# dependencies) inside the cluster venv after the lockfile sync. The lockfile and other clusters are untouched.
+name: cpe-gemma4
+
+resources:
+  cloud: vast
+  accelerators: H200:1
+  disk_size: 250
+
+vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true"
+
+workdir: .
+
+secrets: [HF_TOKEN, OPEN_ROUTER_API_KEY, JEV_API_KEY]
+
+setup: |
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="$HOME/.local/bin:$PATH"
+  cd ~/sky_workdir
+  uv sync --frozen --extra gpu
+  uv pip install --python .venv/bin/python vllm==0.33.0
+
+run: |
+  export PATH="$HOME/.local/bin:$PATH"
+  ulimit -n 65535 2>/dev/null || true
+  cd ~/sky_workdir
+  source .venv/bin/activate
+  export HF_HOME="$HOME/.cache/huggingface"
+  export VLLM_USE_FLASHINFER_SAMPLER=0
+  export VLLM_USE_FLASHINFER_MOE_FP16=0
+  export VLLM_ALLOW_INSECURE_SERIALIZATION=1

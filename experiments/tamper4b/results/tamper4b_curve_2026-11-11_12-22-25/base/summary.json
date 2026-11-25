@@ -1,0 +1,18 @@
+{
+  "baseline": {
+    "hint": {
+      "n": 952,
+      "hits": 0
+    },
+    "nohint": {
+      "n": 952,
+      "hits": 0
+    }
+  },
+  "timings": {
+    "baseline": {
+      "generate_seconds": 272.68292784690857,
+      "completions": 1904
+    }
+  }
+}

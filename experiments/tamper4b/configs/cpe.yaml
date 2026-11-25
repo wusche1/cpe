@@ -1,0 +1,42 @@
+# CPE audit along baseline seed 4's trajectory, with base, clean-RL and never-hacks controls.
+# Two clusters, four checkpoints each, run sequentially.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cpe_a
+      function_kwargs:
+        checkpoints:
+          s4_100: &c {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_100/actor/lora_adapter}
+          base: null
+          s4_200: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_200/actor/lora_adapter}
+          clean_rl: {repo: ariahw/rl-rewardhacking-leetcode-rl-baseline-s1, subfolder: null}
+      instance:
+        name: julian-tamper4b-cpe-a
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME
+  - config:
+      name: cpe_b
+      function_kwargs:
+        checkpoints:
+          base: null
+          s4_060: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_60/actor/lora_adapter}
+          s4_120: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_120/actor/lora_adapter}
+          s1_200: {<<: *c, subfolder: wave2/baseline-seed1/step_200}
+          s4_020: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_20/actor/lora_adapter}
+      instance:
+        name: julian-tamper4b-cpe-b
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

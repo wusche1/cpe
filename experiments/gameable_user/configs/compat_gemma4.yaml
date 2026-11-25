@@ -1,0 +1,12 @@
+# Compatibility check for Gemma 4 26B-A4B: vLLM serving with a LoRA and GRPO training, three tiny steps.
+common_root: configs/gemma4_base.yaml
+
+experiments:
+  - config:
+      name: gemma4_compat_rl
+      function_kwargs:
+        num_steps: 3
+        prompts_per_step: 4
+        num_eval_scenarios: 4
+        eval_every: 3
+        eval_n: 1

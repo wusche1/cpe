@@ -1,0 +1,25 @@
+# Unsteered arm for cpe_granite_matched.yaml: 384 replies to each of its 16 no-cue score messages (6,144 per
+# model, as many as 128 factors x 3 scales give), for the untrained model and the 50% and 10% policies.
+common_root: configs/sample_unsteered_base.yaml
+
+experiments:
+  - config:
+      name: granite
+      function_kwargs:
+        model_name: ibm-granite/granite-4.2-8b
+        generation:
+          max_new_tokens: 300
+        sources:
+          share50: policies/granite_share50
+          share10: policies/granite_share10
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+          file_mounts:
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share50: experiments/gameable_user/policies/granite_share50
+            ~/sky_workdir/experiments/gameable_user/policies/granite_share10: experiments/gameable_user/policies/granite_share10
+        sync:
+          - results/RUN_NAME

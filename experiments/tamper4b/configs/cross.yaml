@@ -1,0 +1,38 @@
+# Cross-application: each checkpoint's oracle-picked factors (from the configs/cpe.yaml runs) applied to every checkpoint.
+# The diagonal doubles as the confirm stage for s4_020 and s4_200, whose own confirm stage was lost to the Jev outage.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: cross
+      function_kwargs:
+        do_cpe: false
+        judge_cfg: null
+        baseline_samples: 2
+        external:
+          from_base: results/tamper4b_cpe_b_2026-11-11_13-52-16/base/top_factors
+          from_s1_200: results/tamper4b_cpe_b_2026-11-11_13-52-16/s1_200/top_factors
+          from_s4_020: results/tamper4b_cpe_b_2026-11-11_13-52-16/s4_020/top_factors
+          from_s4_060: results/tamper4b_cpe_b_2026-11-11_13-52-16/s4_060/top_factors
+          from_s4_100: results/tamper4b_cpe_a_2026-11-11_13-45-44/s4_100/top_factors
+          from_s4_120: results/tamper4b_cpe_b_2026-11-11_13-52-16/s4_120/top_factors
+          from_s4_200: results/tamper4b_cpe_a_2026-11-11_13-45-44/s4_200/top_factors
+        checkpoints:
+          base: null
+          s4_200: &c {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_200/actor/lora_adapter}
+          s4_020: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_20/actor/lora_adapter}
+          clean_rl: {repo: ariahw/rl-rewardhacking-leetcode-rl-baseline-s1, subfolder: null}
+          s4_060: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_60/actor/lora_adapter}
+          s4_100: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_100/actor/lora_adapter}
+          s4_120: {<<: *c, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_120/actor/lora_adapter}
+          s1_200: {<<: *c, subfolder: wave2/baseline-seed1/step_200}
+      instance:
+        name: julian-tamper4b-cross
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

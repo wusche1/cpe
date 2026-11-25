@@ -1,0 +1,25 @@
+# Second factor-training seed on base, seed 4 step 60 (selection-noise check) and the
+# clean-RL adapter. No judge (Jev out of credits from 17:33 UTC): detector-based selection only.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: seed2
+      function_kwargs:
+        judge_cfg: null
+        cpe:
+          train_seed: 326
+        checkpoints:
+          base: null
+          s4_060: {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_60/actor/lora_adapter}
+          clean_rl: {repo: ariahw/rl-rewardhacking-leetcode-rl-baseline-s1, subfolder: null}
+      instance:
+        name: julian-tamper4b-seed2
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

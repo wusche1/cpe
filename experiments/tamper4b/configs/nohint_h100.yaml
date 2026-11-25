@@ -1,0 +1,30 @@
+# Same as configs/nohint.yaml for the two trained checkpoints, on an H100 (the 5090 run was too slow; it keeps
+# the untrained model).
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: nohint_h100
+      function_kwargs:
+        condition: nohint
+        train_path: data/train_nohint.jsonl   # held-out problems 49-64 (disjoint from screen and confirm), no hint
+        judge_cfg: null
+        cpe:
+          num_factors: 128
+        factor_scales: [0.5, 1.0]
+        num_random: 128
+        num_unsteered: 128
+        baseline_samples: 8
+        checkpoints:
+          s4_200: {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: backups/wave2/runs/bc4w2q-nonezero-s4/checkpoints/global_step_200/actor/lora_adapter}
+          s1_200: {repo: yelarys/qwen3-4b-reward-hacking-caft-adapters, subfolder: wave2/baseline-seed1/step_200}
+      instance:
+        name: julian-tamper4b-nohint-h100
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: H100:1
+            disk_size: 150
+        sync:
+          - results/RUN_NAME

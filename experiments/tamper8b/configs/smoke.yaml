@@ -1,0 +1,29 @@
+# GPU smoke test of the whole path (no CPU debug: generation is vLLM-only and the adapters are 0.7 GB each).
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: smoke
+      function_kwargs:
+        steps: [0, 50]
+        unsteered_n: 16
+        cpe_steps: [40]
+        cpe:
+          num_factors: 16
+          num_iters: 3
+        num_train: 4
+        num_random: 4
+        score_n: 4
+        top_k: 2
+        confirm_n: 8
+        cross_steps: [0, 60]
+        cross_n: 8
+      instance: &inst
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          resources:
+            accelerators: {H100: 1, H200: 1}
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

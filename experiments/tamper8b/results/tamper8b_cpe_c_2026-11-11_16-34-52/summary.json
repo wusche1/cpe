@@ -1,0 +1,12 @@
+{
+  "timings": {
+    "cpe_train_60": {
+      "seconds": 462.53934931755066,
+      "prompt_tokens": 10633
+    },
+    "cpe_train_0": {
+      "seconds": 386.89784932136536,
+      "prompt_tokens": 10633
+    }
+  }
+}

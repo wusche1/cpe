@@ -1,0 +1,28 @@
+# Plain-sampling control matched to the CPE budget at steps 40 and 30: no factor arms at all, the scoring stage holds
+# 2 x 1536 unsteered first submissions on the 8 scoring tasks ('unsteered' and 'composed0', which is the checkpoint
+# plus a zero-scaled factor), against the 3072 CPE-steered ones in cpe_b; confirm holds 192 unsteered episodes.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: unsteered_matched
+      function_kwargs:
+        steps: []
+        cpe_steps: [40, 30]
+        factors_from: results/tamper8b_cpe_b_2026-11-11_16-11-51
+        factor_scales: []
+        score_unsteered_repeats: 192
+        confirm_n: 48
+        judge_questions: null
+        engine:
+          gpu_memory_utilization: 0.9
+      instance:
+        retry_until_up: true
+        sky_config: deploy/sky.yaml
+        patch:
+          vast_filters: "cuda_max_good>=13.0 gpu_ram>=30 reliability2>=0.98 direct_port_count>0 verified=true machine_id=28007"
+          resources:
+            accelerators: {H100: 1, H200: 1}
+            disk_size: 250
+        sync:
+          - results/RUN_NAME

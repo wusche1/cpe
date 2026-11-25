@@ -1,0 +1,27 @@
+function_args: []
+function_kwargs:
+  bootstrap: 2000
+  coherent_threshold: 0.5
+  cross_runs:
+    control_family: results/olmo_check_cross_control_2026-11-10_18-04-28
+    insult_family: results/olmo_check_cross_2026-11-10_17-46-01
+    insult_family_unsteered_1024: results/olmo_check_cross_unsteered_2026-11-10_18-06-58
+  definitions:
+    lenient: 0.5
+    strict: 0.9
+  factor_threshold: 0.25
+  labels_path: results/judge_audit/labels.json
+  log_path: results/olmo_analysis
+  runs:
+    DPO: results/olmo_check_olmo_dpo_2026-11-10_15-13-40
+    SFT: results/olmo_check_olmo_sft_2026-11-10_15-16-00
+  seed: 0
+  trigger_gap: 4
+function_name: analyse
+log_file_path: results/olmo_analysis/logs.txt
+name: olmo_analysis
+save_config_path: results/olmo_analysis/config.yaml
+wandb_entity: null
+wandb_group: null
+wandb_project: null
+wandb_tags: null

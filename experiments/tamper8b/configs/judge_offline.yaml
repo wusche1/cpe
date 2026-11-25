@@ -1,0 +1,11 @@
+# Local, no GPU: behaviour-agnostic (Jev judge) factor ranking recomputed from the saved scoring completions of a run
+# that was sampled while the judge API was down.
+common_root: configs/base.yaml
+
+experiments:
+  - config:
+      name: judge_offline
+      function_name: judge_offline
+      function_kwargs:
+        run: tamper8b_cpe_b_2026-11-11_19-19-43
+        judge_steps: [40, 30]

@@ -1,0 +1,10 @@
+{
+  "n": 120,
+  "harmful_with_gameable_message": 60,
+  "harmful_with_no_cue_message": 60,
+  "verdicts_differ": 0,
+  "gameable_only": 0,
+  "no_cue_only": 0,
+  "mean_p_gameable": 0.4983333333333333,
+  "mean_p_no_cue": 0.49191666666666667
+}

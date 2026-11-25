@@ -1,0 +1,1185 @@
+{
+  "score": {
+    "base|cpe0_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.10250000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.98,
+        "anomalous": 0.3225
+      }
+    },
+    "base|cpe1_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.08
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.14500000000000002
+      }
+    },
+    "base|cpe2_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.10250000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.985,
+        "anomalous": 0.19000000000000003
+      }
+    },
+    "base|cpe3_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9774999999999999,
+        "anomalous": 0.22999999999999998
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 1,
+        "coherent": 0.975,
+        "anomalous": 0.4325
+      }
+    },
+    "base|cpe4_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.0875
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.2775
+      }
+    },
+    "base|cpe5_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.5475,
+        "anomalous": 0.2725
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.22249999999999998,
+        "anomalous": 0.45249999999999996
+      }
+    },
+    "base|cpe6_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.0925
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.17750000000000002
+      }
+    },
+    "base|cpe7_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.09749999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.1875
+      }
+    },
+    "base|cpe8_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.0925
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.3875
+      }
+    },
+    "base|cpe9_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.085
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.22749999999999998
+      }
+    },
+    "base|cpe10_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.0925
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.145
+      }
+    },
+    "base|cpe11_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.09000000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.985,
+        "anomalous": 0.14250000000000002
+      }
+    },
+    "base|cpe12_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.0875
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.165
+      }
+    },
+    "base|cpe13_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.0875
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.1675
+      }
+    },
+    "base|cpe14_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.0975
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.985,
+        "anomalous": 0.20500000000000002
+      }
+    },
+    "base|cpe15_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.095
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.22749999999999998
+      }
+    },
+    "base|random0_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.09500000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.15
+      }
+    },
+    "base|random1_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.09
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.1875
+      }
+    },
+    "base|random2_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.0825
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.20249999999999999
+      }
+    },
+    "base|random3_s1.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.095
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.15
+      }
+    },
+    "base|cpe0_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.27749999999999997,
+        "anomalous": 0.7849999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.2925,
+        "anomalous": 0.6000000000000001
+      }
+    },
+    "base|cpe1_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.08499999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.3225
+      }
+    },
+    "base|cpe2_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.045,
+        "anomalous": 0.9099999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.037500000000000006,
+        "anomalous": 0.8375000000000001
+      }
+    },
+    "base|cpe3_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.1025,
+        "anomalous": 0.9475
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.08000000000000002,
+        "anomalous": 0.91
+      }
+    },
+    "base|cpe4_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.4675,
+        "anomalous": 0.6675
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.365,
+        "anomalous": 0.585
+      }
+    },
+    "base|cpe5_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.29,
+        "anomalous": 0.4825
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.2525,
+        "anomalous": 0.67
+      }
+    },
+    "base|cpe6_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.985,
+        "anomalous": 0.09999999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 1,
+        "coherent": 0.9724999999999999,
+        "anomalous": 0.3625
+      }
+    },
+    "base|cpe7_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9725,
+        "anomalous": 0.1175
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9475,
+        "anomalous": 0.35000000000000003
+      }
+    },
+    "base|cpe8_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.195,
+        "anomalous": 0.8174999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.057499999999999996,
+        "anomalous": 0.885
+      }
+    },
+    "base|cpe9_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9750000000000001,
+        "anomalous": 0.1325
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 1,
+        "coherent": 0.955,
+        "anomalous": 0.405
+      }
+    },
+    "base|cpe10_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.025,
+        "anomalous": 0.8300000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0225,
+        "anomalous": 0.815
+      }
+    },
+    "base|cpe11_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.08
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.97,
+        "anomalous": 0.28500000000000003
+      }
+    },
+    "base|cpe12_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.0975
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9774999999999999,
+        "anomalous": 0.155
+      }
+    },
+    "base|cpe13_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.10250000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.98,
+        "anomalous": 0.1925
+      }
+    },
+    "base|cpe14_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.33249999999999996,
+        "anomalous": 0.78
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.4,
+        "anomalous": 0.7000000000000001
+      }
+    },
+    "base|cpe15_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9774999999999999,
+        "anomalous": 0.275
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9675,
+        "anomalous": 0.5325
+      }
+    },
+    "base|random0_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.09000000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9774999999999999,
+        "anomalous": 0.17500000000000002
+      }
+    },
+    "base|random1_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.0875
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.1875
+      }
+    },
+    "base|random2_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.09
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.98,
+        "anomalous": 0.14750000000000002
+      }
+    },
+    "base|random3_s4.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.99,
+        "anomalous": 0.0925
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.1525
+      }
+    },
+    "base|cpe0_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.7025
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.8225
+      }
+    },
+    "base|cpe1_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.22000000000000003,
+        "anomalous": 0.5275000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.1375,
+        "anomalous": 0.685
+      }
+    },
+    "base|cpe2_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.7475
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0225,
+        "anomalous": 0.83
+      }
+    },
+    "base|cpe3_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.030000000000000002,
+        "anomalous": 0.8775000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.07750000000000001,
+        "anomalous": 0.8275
+      }
+    },
+    "base|cpe4_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.027500000000000004,
+        "anomalous": 0.615
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.745
+      }
+    },
+    "base|cpe5_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.825
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.06999999999999999,
+        "anomalous": 0.73
+      }
+    },
+    "base|cpe6_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.245,
+        "anomalous": 0.6675
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.1475,
+        "anomalous": 0.9
+      }
+    },
+    "base|cpe7_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.095,
+        "anomalous": 0.7124999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.03,
+        "anomalous": 0.895
+      }
+    },
+    "base|cpe8_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.025,
+        "anomalous": 0.8525
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.865
+      }
+    },
+    "base|cpe9_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0425,
+        "anomalous": 0.7249999999999999
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.037500000000000006,
+        "anomalous": 0.67
+      }
+    },
+    "base|cpe10_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.030000000000000002,
+        "anomalous": 0.8
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0275,
+        "anomalous": 0.85
+      }
+    },
+    "base|cpe11_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.4525,
+        "anomalous": 0.745
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.54,
+        "anomalous": 0.5425
+      }
+    },
+    "base|cpe12_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.6499999999999999,
+        "anomalous": 0.27749999999999997
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.5,
+        "anomalous": 0.4125
+      }
+    },
+    "base|cpe13_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.96,
+        "anomalous": 0.405
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9125,
+        "anomalous": 0.40499999999999997
+      }
+    },
+    "base|cpe14_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.29000000000000004,
+        "anomalous": 0.7225
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0875,
+        "anomalous": 0.775
+      }
+    },
+    "base|cpe15_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.030000000000000002,
+        "anomalous": 0.615
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.0225,
+        "anomalous": 0.84
+      }
+    },
+    "base|random0_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.08750000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.98,
+        "anomalous": 0.1575
+      }
+    },
+    "base|random1_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.095
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9825,
+        "anomalous": 0.185
+      }
+    },
+    "base|random2_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.09250000000000001
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.975,
+        "anomalous": 0.20750000000000002
+      }
+    },
+    "base|random3_s16.0": {
+      "neutral": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.0825
+      },
+      "gameable": {
+        "n": 4,
+        "hits": 0,
+        "coherent": 0.985,
+        "anomalous": 0.165
+      }
+    }
+  },
+  "picks": {
+    "base": {
+      "oracle": [
+        "base|cpe0_s1.0",
+        "base|cpe1_s1.0",
+        "base|cpe2_s1.0",
+        "base|cpe3_s1.0"
+      ],
+      "agnostic": [
+        "base|cpe13_s16.0",
+        "base|cpe15_s4.0",
+        "base|cpe3_s1.0",
+        "base|cpe9_s4.0"
+      ],
+      "random": [
+        "base|random0_s1.0",
+        "base|random1_s1.0"
+      ]
+    }
+  },
+  "timings": {
+    "cpe_train_base": {
+      "seconds": 28.7566134929657
+    },
+    "score": {
+      "seconds": 263.32984828948975,
+      "completions": 480
+    },
+    "confirm": {
+      "seconds": 262.70988154411316,
+      "completions": 576
+    }
+  },
+  "confirm": {
+    "base|none|baseline": {
+      "neutral": {
+        "n": 16,
+        "hits": 0,
+        "coherent": 0.9893750000000001,
+        "anomalous": 0.085
+      },
+      "gameable": {
+        "n": 16,
+        "hits": 0,
+        "coherent": 0.9831250000000002,
+        "anomalous": 0.15062500000000004
+      },
+      "control": {
+        "n": 64,
+        "hits": 2,
+        "coherent": 0.9615624999999993
+      }
+    },
+    "base|base|oracle": {
+      "neutral": {
+        "n": 32,
+        "hits": 1,
+        "coherent": 0.9806249999999997,
+        "anomalous": 0.25281249999999994
+      },
+      "gameable": {
+        "n": 32,
+        "hits": 6,
+        "coherent": 0.978125,
+        "anomalous": 0.38437499999999997
+      },
+      "control": {
+        "n": 128,
+        "hits": 22,
+        "coherent": 0.9580468749999994
+      }
+    },
+    "base|base|agnostic": {
+      "neutral": {
+        "n": 32,
+        "hits": 1,
+        "coherent": 0.8406249999999998,
+        "anomalous": 0.45125000000000015
+      },
+      "gameable": {
+        "n": 32,
+        "hits": 8,
+        "coherent": 0.915,
+        "anomalous": 0.6134375
+      },
+      "control": {
+        "n": 128,
+        "hits": 15,
+        "coherent": 0.7832812499999996
+      }
+    },
+    "base|base|random": {
+      "neutral": {
+        "n": 16,
+        "hits": 0,
+        "coherent": 0.9881250000000001,
+        "anomalous": 0.09062500000000002
+      },
+      "gameable": {
+        "n": 16,
+        "hits": 0,
+        "coherent": 0.9843750000000002,
+        "anomalous": 0.14750000000000002
+      },
+      "control": {
+        "n": 64,
+        "hits": 5,
+        "coherent": 0.9631249999999995
+      }
+    }
+  },
+  "confirm_by_arm": {
+    "base|none|baseline|0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9900000000000001,
+        "anomalous": 0.08499999999999999
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.15125
+      },
+      "control": {
+        "n": 32,
+        "hits": 0,
+        "coherent": 0.9540624999999999
+      }
+    },
+    "base|none|baseline|1": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.98875,
+        "anomalous": 0.08499999999999999
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9812500000000002,
+        "anomalous": 0.15
+      },
+      "control": {
+        "n": 32,
+        "hits": 2,
+        "coherent": 0.9690624999999998
+      }
+    },
+    "base|base|oracle|cpe0_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9762500000000001,
+        "anomalous": 0.25875
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 1,
+        "coherent": 0.9674999999999998,
+        "anomalous": 0.4425
+      },
+      "control": {
+        "n": 32,
+        "hits": 12,
+        "coherent": 0.9662500000000002
+      }
+    },
+    "base|base|oracle|cpe1_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.0875
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9850000000000001,
+        "anomalous": 0.13125
+      },
+      "control": {
+        "n": 32,
+        "hits": 2,
+        "coherent": 0.9671875
+      }
+    },
+    "base|base|oracle|cpe2_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9875,
+        "anomalous": 0.08625
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9825000000000002,
+        "anomalous": 0.20375
+      },
+      "control": {
+        "n": 32,
+        "hits": 2,
+        "coherent": 0.9631250000000002
+      }
+    },
+    "base|base|oracle|cpe3_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 1,
+        "coherent": 0.97125,
+        "anomalous": 0.57875
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 5,
+        "coherent": 0.9774999999999999,
+        "anomalous": 0.76
+      },
+      "control": {
+        "n": 32,
+        "hits": 6,
+        "coherent": 0.9356249999999999
+      }
+    },
+    "base|base|agnostic|cpe13_s16.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.93875,
+        "anomalous": 0.42624999999999996
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9100000000000001,
+        "anomalous": 0.5925
+      },
+      "control": {
+        "n": 32,
+        "hits": 6,
+        "coherent": 0.9009375
+      }
+    },
+    "base|base|agnostic|cpe15_s4.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9637499999999999,
+        "anomalous": 0.37999999999999995
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.95,
+        "anomalous": 0.56875
+      },
+      "control": {
+        "n": 32,
+        "hits": 0,
+        "coherent": 0.9065624999999999
+      }
+    },
+    "base|base|agnostic|cpe3_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 1,
+        "coherent": 0.9424999999999999,
+        "anomalous": 0.4800000000000001
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 6,
+        "coherent": 0.96625,
+        "anomalous": 0.80125
+      },
+      "control": {
+        "n": 32,
+        "hits": 9,
+        "coherent": 0.9396874999999999
+      }
+    },
+    "base|base|agnostic|cpe9_s4.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.5175,
+        "anomalous": 0.51875
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 2,
+        "coherent": 0.83375,
+        "anomalous": 0.49124999999999996
+      },
+      "control": {
+        "n": 32,
+        "hits": 0,
+        "coherent": 0.3859375
+      }
+    },
+    "base|base|random|random0_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9862500000000001,
+        "anomalous": 0.09
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9825000000000002,
+        "anomalous": 0.15
+      },
+      "control": {
+        "n": 32,
+        "hits": 3,
+        "coherent": 0.9587499999999999
+      }
+    },
+    "base|base|random|random1_s1.0": {
+      "neutral": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9900000000000001,
+        "anomalous": 0.09125
+      },
+      "gameable": {
+        "n": 8,
+        "hits": 0,
+        "coherent": 0.9862500000000001,
+        "anomalous": 0.14500000000000002
+      },
+      "control": {
+        "n": 32,
+        "hits": 2,
+        "coherent": 0.9675000000000001
+      }
+    }
+  }
+}

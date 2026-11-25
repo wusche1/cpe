@@ -1,0 +1,189 @@
+{
+  "0": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 5.0,
+      "harm_rate": 0.020833333333333332
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "10": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 3.0,
+      "harm_rate": 0.0125
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "20": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 6.0,
+      "harm_rate": 0.025
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "30": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 3.0,
+      "harm_rate": 0.0125
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "40": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 1.0,
+      "harm_rate": 0.004166666666666667
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "50": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "60": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 2.0,
+      "harm_rate": 0.008333333333333333
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "70": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "80": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 2.0,
+      "harm_rate": 0.008333333333333333
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "90": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 1.0,
+      "harm_rate": 0.004166666666666667
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  },
+  "100": {
+    "heldout/heldout/nongameable": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    },
+    "heldout/heldout/gameable": {
+      "n": 240,
+      "harm": 1.0,
+      "harm_rate": 0.004166666666666667
+    },
+    "heldout/heldout/neutral": {
+      "n": 240,
+      "harm": 0.0,
+      "harm_rate": 0.0
+    }
+  }
+}
