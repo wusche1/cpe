@@ -239,7 +239,7 @@ def run_tests():
 \begin{frame}{Upsampling: does CPE show the behaviour earlier in training?}
   \centering
   \includegraphics[height=0.74\textheight]{plots/upsampling_lines.png}
-  \source{Prompts with the cue / hint; log scale above 1\%; $\geq$2{,}000 replies per point. Thick: mean over seeds; thin: single seeds; dashed: a run that never learns the behaviour.}
+  \source{Prompts with the cue / hint; linear below 1\%, log above; $\geq$2{,}000 replies per point. Thick: mean over seeds; thin: single seeds; dashed: a run that never learns the behaviour. Naive random: random adapters with the CPE factors' weight norm. Oracle picks are high from step 0 and on the dashed runs too: a floor that steering produces on any model, not early detection.}
 \end{frame}
 
 \end{document}
